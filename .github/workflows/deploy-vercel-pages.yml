@@ -8,30 +8,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  prepare:
     runs-on: ubuntu-latest
-    env:
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      # Optional: set if deploying under a Team/Org (slug, e.g. "orvusmarketing")
-      VERCEL_TEAM_SLUG: ${{ secrets.VERCEL_TEAM_SLUG }}
-
+    outputs:
+      matrix: ${{ steps.collect.outputs.matrix }}
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Install Vercel CLI & jq
-        run: |
-          npm i -g vercel@latest
-          sudo apt-get update -y
-          sudo apt-get install -y jq
-
-      - name: Discover changed backlink folders
-        id: discover
+      - id: collect
         shell: bash
         run: |
           set -euo pipefail
 
-          # Determine changed files (fallback to all under vercel/ on first push)
           BEFORE="${{ github.event.before }}"
           if [ -n "${BEFORE}" ] && [ "${BEFORE}" != "0000000000000000000000000000000000000000" ]; then
             CHANGED="$(git diff --name-only "${BEFORE}" "${GITHUB_SHA}" -- 'vercel/**' || true)"
@@ -39,73 +27,70 @@ jobs:
             CHANGED="$(git ls-files 'vercel/**' || true)"
           fi
 
-          # Unique first-level subfolders (vercel/<folder>)
-          FOLDERS="$(
-            echo "${CHANGED}" \
-            | awk -F/ 'NF>=2 {print $1"/"$2}' \
-            | sort -u
-          )"
-
-          # Keep only folders that contain an index.html
-          FILTERED=()
-          for d in ${FOLDERS}; do
-            if [ -f "${d}/index.html" ]; then
-              echo "Will deploy: ${d}"
-              FILTERED+=("${d}")
+          # unique first-level subfolders: vercel/<folder>
+          declare -A SEEN=()
+          FOLDERS=()
+          while IFS= read -r path; do
+            [ -z "$path" ] && continue
+            folder="$(echo "$path" | awk -F/ 'NF>=2 {print $1"/"$2}')"
+            [ -z "$folder" ] && continue
+            if [ -f "$folder/index.html" ] && [ -z "${SEEN[$folder]:-}" ]; then
+              SEEN[$folder]=1
+              FOLDERS+=("$folder")
             fi
-          done
+          done <<< "$CHANGED"
 
-          if [ ${#FILTERED[@]} -eq 0 ]; then
-            echo "dirs_json=[]" >> "$GITHUB_OUTPUT"
-            echo "No changed backlink folders with index.html. Exiting."
+          if [ ${#FOLDERS[@]} -eq 0 ]; then
+            echo 'matrix={"folder":[]}' >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          # Output JSON array to GITHUB_OUTPUT
-          printf '%s\n' "${FILTERED[@]}" | jq -R . | jq -s . | sed -e 's/^/dirs_json=/' >> "$GITHUB_OUTPUT"
+          json="$(printf '%s\n' "${FOLDERS[@]}" | jq -R . | jq -s '{folder: .}')"
+          echo "matrix=$json" >> "$GITHUB_OUTPUT"
 
-      - name: Deploy each changed folder
-        if: steps.discover.outputs.dirs_json != '[]'
+  deploy:
+    needs: prepare
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      # Optional: set if you deploy under a Team/Org (slug, e.g. "orvusmarketing")
+      VERCEL_TEAM_SLUG: ${{ secrets.VERCEL_TEAM_SLUG }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Vercel CLI & jq
+        run: |
+          npm i -g vercel@latest
+          sudo apt-get update -y
+          sudo apt-get install -y jq
+
+      - name: Deploy ${{ matrix.folder }}
         shell: bash
-        env:
-          DIRS_JSON: ${{ steps.discover.outputs.dirs_json }}
         run: |
           set -euo pipefail
+          dir="${{ matrix.folder }}"
+          project="$(basename "$dir")"
+          echo "Deploying folder: $dir as project: $project"
 
-          echo "${DIRS_JSON}" | jq -r '.[]' | while read -r dir; do
-            PROJECT="$(basename "${dir}")"
-            echo "==> Deploying: ${dir}  (project: ${PROJECT})"
+          # Make sure no stale link exists
+          rm -rf "$dir/.vercel"
 
-            # Per-folder minimal config so Vercel won’t read a root vercel.json
-            cat > "${dir}/vercel.local.json" <<'JSON'
-{
-  "framework": null,
-  "buildCommand": "",
-  "installCommand": "",
-  "outputDirectory": "."
-}
-JSON
+          # Force a static/no-build deploy via a local config file
+          printf '%s\n' '{' '  "framework": null,' '  "buildCommand": "",' '  "installCommand": "",' '  "outputDirectory": "."' '}' > "$dir/vercel.local.json"
 
-            # Ensure no stale link
-            rm -rf "${dir}/.vercel"
+          if [ -n "${VERCEL_TEAM_SLUG:-}" ]; then
+            vercel link --cwd "$dir" --project "$project" --yes \
+              --token "$VERCEL_TOKEN" --scope "$VERCEL_TEAM_SLUG"
+            vercel deploy --cwd "$dir" --local-config "$dir/vercel.local.json" \
+              --prod --yes --token "$VERCEL_TOKEN" --scope "$VERCEL_TEAM_SLUG"
+          else
+            vercel link --cwd "$dir" --project "$project" --yes \
+              --token "$VERCEL_TOKEN"
+            vercel deploy --cwd "$dir" --local-config "$dir/vercel.local.json" \
+              --prod --yes --token "$VERCEL_TOKEN"
+          fi
 
-            # Link project name to this folder
-            if [ -n "${VERCEL_TEAM_SLUG:-}" ]; then
-              vercel link --cwd "${dir}" --project "${PROJECT}" --yes \
-                --token "${VERCEL_TOKEN}" --scope "${VERCEL_TEAM_SLUG}"
-            else
-              vercel link --cwd "${dir}" --project "${PROJECT}" --yes \
-                --token "${VERCEL_TOKEN}"
-            fi
-
-            # Deploy this folder only
-            if [ -n "${VERCEL_TEAM_SLUG:-}" ]; then
-              vercel deploy --cwd "${dir}" --local-config "${dir}/vercel.local.json" \
-                --prod --yes --token "${VERCEL_TOKEN}" --scope "${VERCEL_TEAM_SLUG}"
-            else
-              vercel deploy --cwd "${dir}" --local-config "${dir}/vercel.local.json" \
-                --prod --yes --token "${VERCEL_TOKEN}"
-            fi
-
-            echo "✅ Deployed ${PROJECT}"
-          done
+          echo "✅ Deployed $project"
