@@ -2,9 +2,7 @@ name: Deploy dyln/vercel/* folders to Vercel (changed only)
 
 on:
   push:
-    branches: [ main ]
-    paths:
-      - 'dyln/vercel/**'
+    branches: [ main ]   # run on every push to main
   workflow_dispatch:
 
 jobs:
@@ -26,8 +24,7 @@ jobs:
           ROOT="dyln/vercel"
           EVENT="$GITHUB_EVENT_PATH"
 
-          echo "Reading changed files from push payload: $EVENT"
-          # from push payload (added / modified / renamed)
+          # Get paths from push payload (added/modified/renamed)
           mapfile -t CHANGED < <(
             jq -r '
               [
@@ -35,44 +32,39 @@ jobs:
                 (.commits[].modified[]?),
                 (.commits[].renamed[]?.to?),
                 (.commits[].renamed[]?.from?)
-              ] | unique[]' "$EVENT" \
-            | grep -E "^${ROOT}/" || true
+              ] | unique[]' "$EVENT" 2>/dev/null \
+            | grep -E "^(${ROOT}|vercel)/" || true
           )
 
-          echo "Changed paths under ${ROOT}/:"
-          if ((${#CHANGED[@]})); then
-            printf '  - %s\n' "${CHANGED[@]}"
-          else
-            echo "  (none from payload; falling back to listing all under ${ROOT}/)"
-          fi
-
-          # Fallback: when triggered manually or payload empty (e.g. GH UI edits)
+          # Fallback (manual run, squash, etc.)
           if ((${#CHANGED[@]} == 0)); then
-            mapfile -t CHANGED < <(git ls-files "${ROOT}/" || true)
+            mapfile -t CHANGED < <(git ls-files "${ROOT}/" "vercel/" || true)
           fi
 
-          # Reduce to dyln/vercel/<slug> and require index.html (or Index.html)
           declare -A SEEN=()
           FOLDERS=()
           for p in "${CHANGED[@]}"; do
             [ -z "$p" ] && continue
-            folder="$(echo "$p" | cut -d/ -f1-3)"
+            # support both dyln/vercel/<slug>/… and vercel/<slug>/…
+            prefix="$(echo "$p" | cut -d/ -f1-2)"
+            case "$prefix" in
+              dyln/vercel|vercel) folder="$(echo "$p" | cut -d/ -f1-3)";;
+              *) continue;;
+            esac
             [ -z "$folder" ] && continue
-            if [ -z "${SEEN[$folder]:-}" ]; then
-              if [ -f "$folder/index.html" ] || [ -f "$folder/Index.html" ]; then
-                SEEN[$folder]=1
-                FOLDERS+=("$folder")
-              fi
+            # require index.html (accept Index.html)
+            if [ -z "${SEEN[$folder]:-}" ] && { [ -f "$folder/index.html" ] || [ -f "$folder/Index.html" ]; }; then
+              SEEN[$folder]=1
+              FOLDERS+=("$folder")
             fi
           done
 
-          echo "Deployable folders (have index.html):"
           if ((${#FOLDERS[@]})); then
-            printf '  - %s\n' "${FOLDERS[@]}"
+            printf 'Deployable folders:\n'; printf '  - %s\n' "${FOLDERS[@]}"
             json="$(printf '%s\n' "${FOLDERS[@]}" | jq -R . | jq -s '{folder: .}')"
             echo "matrix=$json" >> "$GITHUB_OUTPUT"
           else
-            echo "  (none) — emitting __skip__"
+            echo "No dyln/vercel/* (or vercel/*) folders with index.html changed."
             echo 'matrix={"folder":["__skip__"]}' >> "$GITHUB_OUTPUT"
           fi
 
@@ -84,8 +76,7 @@ jobs:
       matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
     env:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      # optional: if deploying to a Team scope
-      VERCEL_TEAM_SLUG: ${{ secrets.VERCEL_TEAM_SLUG }}
+      VERCEL_TEAM_SLUG: ${{ secrets.VERCEL_TEAM_SLUG }}   # optional
     steps:
       - uses: actions/checkout@v4
 
@@ -109,13 +100,13 @@ jobs:
           project="$(basename "$dir")"
           echo "Deploying: $dir (project: $project)"
 
-          # Normalize case if needed
+          # normalize case
           [ -f "$dir/Index.html" ] && [ ! -f "$dir/index.html" ] && mv "$dir/Index.html" "$dir/index.html"
           test -f "$dir/index.html" || { echo "Missing $dir/index.html"; exit 1; }
 
           rm -rf "$dir/.vercel"
 
-          # Force static/no-build behavior
+          # Force static/no-build
           cat > "$dir/vercel.local.json" <<'JSON'
           { "framework": null, "buildCommand": "", "installCommand": "", "outputDirectory": "." }
           JSON
