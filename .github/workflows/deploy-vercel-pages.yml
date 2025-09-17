@@ -2,12 +2,8 @@ name: Deploy dyln/vercel/* folders to Vercel (changed only)
 
 on:
   push:
-    branches: [ main ]   # ← no paths filter; we self-filter later
+    branches: [ main ]   # run on every push to main; we self-filter
   workflow_dispatch:
-
-concurrency:
-  group: vercel-deploy-${{ github.ref }}
-  cancel-in-progress: false
 
 jobs:
   prepare:
@@ -17,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0   # <-- full history so diffs always work
 
       - id: collect
         shell: bash
@@ -25,35 +21,62 @@ jobs:
           set -euo pipefail
 
           ROOT="dyln/vercel"
+          ZERO="0000000000000000000000000000000000000000"
           BEFORE="${{ github.event.before }}"
-          echo "GITHUB_SHA: ${GITHUB_SHA}"
-          echo "BEFORE    : ${BEFORE}"
+          HEAD_SHA="${GITHUB_SHA}"
 
-          if [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
-            echo "Using git diff between $BEFORE and $GITHUB_SHA"
-            CHANGED="$(git diff --name-only "$BEFORE" "${GITHUB_SHA}" -- "$ROOT/")"
+          echo "HEAD_SHA: $HEAD_SHA"
+          echo "BEFORE  : ${BEFORE:-<empty>}"
+
+          # Figure out a reliable diff range
+          RANGE=""
+          if [ -n "${BEFORE:-}" ] && [ "$BEFORE" != "$ZERO" ]; then
+            RANGE="${BEFORE}...${HEAD_SHA}"
+            echo "Using event range: $RANGE"
           else
-            echo "No 'before' SHA, listing all tracked files under $ROOT/"
-            CHANGED="$(git ls-files "$ROOT/")"
+            # Fallback 1: previous commit on this branch
+            if git rev-parse HEAD~1 >/dev/null 2>&1; then
+              PREV="$(git rev-parse HEAD~1)"
+              RANGE="${PREV}...${HEAD_SHA}"
+              echo "Using fallback previous-commit range: $RANGE"
+            else
+              # Fallback 2: first run — treat everything under ROOT as changed
+              echo "No previous commit; listing all files under $ROOT"
+              CHANGED="$(git ls-files "$ROOT/")"
+            fi
+          fi
+
+          if [ -n "${RANGE:-}" ]; then
+            # Use diff for the computed range (added/modified/renamed)
+            CHANGED="$(git diff --name-only --diff-filter=AMR $RANGE -- "$ROOT/")"
           fi
 
           echo "Changed paths under $ROOT/:"
-          echo "$CHANGED" | sed 's/^/  - /'
+          if [ -n "$CHANGED" ]; then
+            echo "$CHANGED" | sed 's/^/  - /'
+          else
+            echo "  (none)"
+          fi
 
+          # Collect unique top-level backlink folders: dyln/vercel/<slug>/
           declare -A SEEN=()
           FOLDERS=()
           while IFS= read -r path; do
             [ -z "$path" ] && continue
-            IFS='/' read -r a b c rest <<< "$path" || true
-            [ -z "${a:-}" ] || [ -z "${b:-}" ] || [ -z "${c:-}" ] && continue
-            folder="${a}/${b}/${c}"
-            if [ -f "$folder/index.html" ] && [ -z "${SEEN[$folder]:-}" ]; then
+            # ensure path starts with ROOT
+            case "$path" in
+              $ROOT/*) ;;
+              *) continue ;;
+            esac
+            folder="$(echo "$path" | cut -d/ -f1-3)"
+            # require an index file
+            if [ -z "${SEEN[$folder]:-}" ] && { [ -f "$folder/index.html" ] || [ -f "$folder/Index.html" ]; }; then
               SEEN[$folder]=1
               FOLDERS+=("$folder")
             fi
           done <<< "$CHANGED"
 
-          echo "Deployable folders (with index.html):"
+          echo "Deployable folders (with index.html or Index.html):"
           if [ ${#FOLDERS[@]} -eq 0 ]; then
             echo "  (none)"
             echo 'matrix={"folder":["__skip__"]}' >> "$GITHUB_OUTPUT"
@@ -62,6 +85,7 @@ jobs:
             printf '  - %s\n' "${FOLDERS[@]}"
           fi
 
+          # Emit matrix
           json="$(printf '%s\n' "${FOLDERS[@]}" | jq -R . | jq -s '{folder: .}')"
           echo "matrix=$json" >> "$GITHUB_OUTPUT"
 
@@ -81,14 +105,6 @@ jobs:
         if: matrix.folder == '__skip__'
         run: echo "No dyln/vercel/* folders with index.html changed — skipping."
 
-      - name: Check secrets
-        if: matrix.folder != '__skip__'
-        run: |
-          if [ -z "${VERCEL_TOKEN:-}" ]; then
-            echo "Missing VERCEL_TOKEN secret" >&2
-            exit 1
-          fi
-
       - name: Install Vercel CLI & jq
         if: matrix.folder != '__skip__'
         run: |
@@ -104,10 +120,17 @@ jobs:
           dir="${{ matrix.folder }}"
           project="$(basename "$dir")"
           echo "Deploying folder: $dir (project: $project)"
-          test -d "$dir" && test -f "$dir/index.html" || { echo "Missing $dir/index.html"; exit 1; }
+
+          # normalize to lower-case index if needed
+          if [ -f "$dir/Index.html" ] && [ ! -f "$dir/index.html" ]; then
+            mv "$dir/Index.html" "$dir/index.html"
+          fi
+
+          test -f "$dir/index.html" || { echo "Missing $dir/index.html"; exit 1; }
 
           rm -rf "$dir/.vercel"
 
+          # Force static/no-build behavior
           cat > "$dir/vercel.local.json" <<'JSON'
           { "framework": null, "buildCommand": "", "installCommand": "", "outputDirectory": "." }
           JSON
