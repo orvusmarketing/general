@@ -4,33 +4,43 @@ on:
   push:
     branches: [ main ]
     paths:
-      - "cloudflare/**"
+      - 'cloudflare/**'
   workflow_dispatch:
+
+env:
+  CF_PAGES_PROJECT: dyln               # <- your Pages project name
+  CF_PAGES_DIR: cloudflare             # <- root folder to publish (contains all backlink subfolders)
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    env:
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      CF_PAGES_PROJECT: dyln        # choose a name; visible in CF dashboard
-      CF_PAGES_DIR: cloudflare            # deploy exactly this folder
     steps:
       - uses: actions/checkout@v4
 
       - name: Install wrangler
-        run: npm i -g wrangler@3
+        run: npm i -g wrangler
 
-      # Create project if it doesn't exist; safe to run every time
-      - name: Ensure Pages project exists
+      # Create the Pages project if it doesn't exist yet
+      - name: Ensure Cloudflare Pages project exists
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          wrangler pages project create "$CF_PAGES_PROJECT" \
-            --production-branch=main \
-            --framework=none \
-            --build-command="" \
-            --build-output-directory="$CF_PAGES_DIR" || true
+          set -e
+          # list existing projects; create if not found
+          if ! wrangler pages project list | grep -E "^\s*${CF_PAGES_PROJECT}\b" >/dev/null 2>&1; then
+            echo "Creating Pages project ${CF_PAGES_PROJECT}…"
+            wrangler pages project create "${CF_PAGES_PROJECT}" --production-branch=main
+          else
+            echo "Pages project ${CF_PAGES_PROJECT} already exists."
+          fi
 
+      # Deploy the folder (all subfolders become routes, e.g. /backlink-001/index.html)
       - name: Deploy to Cloudflare Pages
-        run: wrangler pages deploy "$CF_PAGES_DIR" --project-name="$CF_PAGES_PROJECT" --branch=main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          wrangler pages deploy "${CF_PAGES_DIR}" \
+            --project-name="${CF_PAGES_PROJECT}" \
+            --branch=main
