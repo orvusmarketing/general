@@ -1,0 +1,155 @@
+name: Deploy changed backlink(s) to Netlify
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'dyln/netlify/**'
+  workflow_dispatch:
+
+env:
+  NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}   # required
+  NETLIFY_TEAM_SLUG:  ${{ secrets.NETLIFY_TEAM_SLUG }}    # optional (team/org slug)
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # need history for git diff
+
+      - name: Install Netlify CLI & tools
+        run: |
+          npm i -g netlify-cli@latest
+          sudo apt-get update -y
+          sudo apt-get install -y jq
+
+      - name: Show event SHAs (debug)
+        run: |
+          echo "event.before: ${{ github.event.before }}"
+          echo "event.after : ${{ github.sha }}"
+          git log -1 --pretty=fuller
+
+      - name: Compute changed backlink folders under dyln/netlify/
+        id: detect
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ROOT="dyln/netlify"
+          BEFORE="${{ github.event.before }}"
+          AFTER="${{ github.sha }}"
+
+          if [ "${{ github.event_name }}" = "push" ] && [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
+            echo "Using push diff: $BEFORE..$AFTER"
+            FILES=$(git diff --name-only "$BEFORE" "$AFTER" | grep "^${ROOT}/" || true)
+          else
+            echo "Fallback diff: HEAD^..HEAD (or list all if unavailable)"
+            FILES=$(git diff --name-only HEAD^ HEAD 2>/dev/null | grep "^${ROOT}/" || true)
+            if [ -z "$FILES" ]; then
+              FILES=$(git ls-files "${ROOT}" | grep -E "^${ROOT}/.+/.+" || true)
+            fi
+          fi
+
+          echo "Changed files:"
+          echo "$FILES"
+
+          # Derive subfolder paths: dyln/netlify/<slug>
+          FOLDERS=$(echo "$FILES" | awk -F/ 'NF>=3 {print $1"/"$2"/"$3}' | sort -u)
+
+          # Keep only folders that contain index.html (or Index.html)
+          FINAL=()
+          while read -r f; do
+            [ -z "$f" ] && continue
+            if [ -f "$f/index.html" ] || [ -f "$f/Index.html" ]; then
+              FINAL+=("$f")
+            fi
+          done <<< "$FOLDERS"
+
+          if [ ${#FINAL[@]} -eq 0 ]; then
+            echo "count=0" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          printf "%s\n" "${FINAL[@]}" > changed_folders.txt
+          echo "count=${#FINAL[@]}" >> "$GITHUB_OUTPUT"
+          echo "Will deploy:"
+          cat changed_folders.txt
+
+      - name: Stop if nothing to deploy
+        if: steps.detect.outputs.count == '0'
+        run: echo "No dyln/netlify/* folders with index.html changed — skipping."
+
+      - name: Deploy each changed folder to Netlify
+        if: steps.detect.outputs.count != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          BASE_API="https://api.netlify.com/api/v1"
+          TEAM_QS=""
+          if [ -n "${NETLIFY_TEAM_SLUG:-}" ]; then
+            TEAM_QS="?account_slug=${NETLIFY_TEAM_SLUG}"
+          fi
+
+          while read -r DIR; do
+            [ -z "$DIR" ] && continue
+            RAW_PROJECT="$(basename "$DIR")"
+            # sanitize to Netlify site name rules: lowercase letters, digits, hyphens
+            SITE_NAME="$(echo "$RAW_PROJECT" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9-]+/-/g')"
+
+            echo "::group::Deploying ${DIR} → ${SITE_NAME}.netlify.app"
+
+            # Normalize Index.html to index.html
+            if [ -f "${DIR}/Index.html" ] && [ ! -f "${DIR}/index.html" ]; then
+              mv "${DIR}/Index.html" "${DIR}/index.html"
+            fi
+            if [ ! -f "${DIR}/index.html" ]; then
+              echo "ERROR: ${DIR}/index.html not found. Skipping."
+              echo "::endgroup::"
+              continue
+            fi
+
+            # Ensure site exists: try to create, and if name taken, look it up
+            CREATE_STATUS=$(curl -sS -o /tmp/site.json -w "%{http_code}" \
+              -X POST "${BASE_API}/sites${TEAM_QS}" \
+              -H "Authorization: Bearer ${NETLIFY_AUTH_TOKEN}" \
+              -H "Content-Type: application/json" \
+              -d "$(jq -n --arg name "$SITE_NAME" '{name:$name}')" || true)
+
+            if [ "$CREATE_STATUS" = "201" ]; then
+              echo "Created Netlify site: ${SITE_NAME}"
+            else
+              # If already exists (422), or other non-201, find by name
+              echo "Create returned HTTP $CREATE_STATUS — fetching existing site by name (if any)…"
+              curl -sS "${BASE_API}/sites${TEAM_QS}" \
+                -H "Authorization: Bearer ${NETLIFY_AUTH_TOKEN}" > /tmp/sites.json
+              jq --arg n "$SITE_NAME" -r '.[] | select(.name==$n) | .id' /tmp/sites.json > /tmp/site_id.txt
+              if [ ! -s /tmp/site_id.txt ]; then
+                echo "ERROR: Could not find or create site ${SITE_NAME}. Skipping."
+                echo "::endgroup::"
+                continue
+              fi
+              jq --arg id "$(cat /tmp/site_id.txt)" -n '{id:$id}' > /tmp/site.json
+            fi
+
+            SITE_ID="$(jq -r '.id' /tmp/site.json)"
+            if [ -z "$SITE_ID" ] || [ "$SITE_ID" = "null" ]; then
+              echo "ERROR: Missing site id for ${SITE_NAME}. Skipping."
+              echo "::endgroup::"
+              continue
+            fi
+            echo "Site ID: $SITE_ID"
+
+            # Deploy the folder as production
+            netlify deploy \
+              --auth "${NETLIFY_AUTH_TOKEN}" \
+              --site "${SITE_ID}" \
+              --prod \
+              --dir "${DIR}" \
+              --message "GitHub Actions ${GITHUB_SHA} — ${DIR}"
+
+            echo "::endgroup::"
+            sleep 1
+          done < changed_folders.txt
