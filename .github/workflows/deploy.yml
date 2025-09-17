@@ -20,19 +20,19 @@ jobs:
       - name: Install wrangler
         run: npm i -g wrangler
 
-      # Create the Pages project if it doesn't exist yet
+      # Check if Pages project exists, create only if missing
       - name: Ensure Cloudflare Pages project exists
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_PAGES_PROJECT: ${{ env.CF_PAGES_PROJECT }}
         run: |
           set -e
-          # list existing projects; create if not found
-          if ! wrangler pages project list | grep -E "^\s*${CF_PAGES_PROJECT}\b" >/dev/null 2>&1; then
-            echo "Creating Pages project ${CF_PAGES_PROJECT}…"
-            wrangler pages project create "${CF_PAGES_PROJECT}" --production-branch=main
+          if wrangler pages project info "$CF_PAGES_PROJECT" >/dev/null 2>&1; then
+            echo "Pages project $CF_PAGES_PROJECT already exists."
           else
-            echo "Pages project ${CF_PAGES_PROJECT} already exists."
+            echo "Creating Pages project $CF_PAGES_PROJECT…"
+            wrangler pages project create "$CF_PAGES_PROJECT" --production-branch=main
           fi
 
       # Deploy the folder (all subfolders become routes, e.g. /backlink-001/index.html)
@@ -40,7 +40,9 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_PAGES_PROJECT: ${{ env.CF_PAGES_PROJECT }}
+          CF_PAGES_DIR: ${{ env.CF_PAGES_DIR }}
         run: |
-          wrangler pages deploy "${CF_PAGES_DIR}" \
-            --project-name="${CF_PAGES_PROJECT}" \
+          wrangler pages deploy "$CF_PAGES_DIR" \
+            --project-name="$CF_PAGES_PROJECT" \
             --branch=main
