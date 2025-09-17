@@ -21,13 +21,12 @@ jobs:
           set -euo pipefail
 
           BEFORE="${{ github.event.before }}"
-          if [ -n "${BEFORE}" ] && [ "${BEFORE}" != "0000000000000000000000000000000000000000" ]; then
-            CHANGED="$(git diff --name-only "${BEFORE}" "${GITHUB_SHA}" -- 'vercel/**' || true)"
+          if [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
+            CHANGED="$(git diff --name-only "$BEFORE" "${GITHUB_SHA}" -- 'vercel/**' || true)"
           else
             CHANGED="$(git ls-files 'vercel/**' || true)"
           fi
 
-          # unique first-level subfolders: vercel/<folder>
           declare -A SEEN=()
           FOLDERS=()
           while IFS= read -r path; do
@@ -41,7 +40,8 @@ jobs:
           done <<< "$CHANGED"
 
           if [ ${#FOLDERS[@]} -eq 0 ]; then
-            echo 'matrix={"folder":[]}' >> "$GITHUB_OUTPUT"
+            # Always output a non-empty matrix to satisfy GitHub's planner
+            echo 'matrix={"folder":["__skip__"]}' >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -53,21 +53,28 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
+      # Provide a safe default if prepare produced nothing; planner always gets a non-empty array
+      matrix: ${{ fromJson(needs.prepare.outputs.matrix || '{"folder":["__skip__"]}') }}
     env:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      # Optional: set if you deploy under a Team/Org (slug, e.g. "orvusmarketing")
+      # Optional: set if deploying under a Team/Org (slug, e.g. "orvusmarketing")
       VERCEL_TEAM_SLUG: ${{ secrets.VERCEL_TEAM_SLUG }}
     steps:
       - uses: actions/checkout@v4
 
+      - name: Skip when no changed folders
+        if: matrix.folder == '__skip__'
+        run: echo "No vercel/* folders with index.html changed — skipping."
+
       - name: Install Vercel CLI & jq
+        if: matrix.folder != '__skip__'
         run: |
           npm i -g vercel@latest
           sudo apt-get update -y
           sudo apt-get install -y jq
 
       - name: Deploy ${{ matrix.folder }}
+        if: matrix.folder != '__skip__'
         shell: bash
         run: |
           set -euo pipefail
@@ -75,10 +82,10 @@ jobs:
           project="$(basename "$dir")"
           echo "Deploying folder: $dir as project: $project"
 
-          # Make sure no stale link exists
+          # Ensure no stale link
           rm -rf "$dir/.vercel"
 
-          # Force a static/no-build deploy via a local config file
+          # Local config to force static/no-build deploy
           printf '%s\n' '{' '  "framework": null,' '  "buildCommand": "",' '  "installCommand": "",' '  "outputDirectory": "."' '}' > "$dir/vercel.local.json"
 
           if [ -n "${VERCEL_TEAM_SLUG:-}" ]; then
