@@ -1,4 +1,4 @@
-name: Deploy vercel/backlink folders to Vercel
+name: Deploy subfolders in vercel/ to Vercel (team-scoped)
 
 on:
   push:
@@ -11,71 +11,74 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      # Tokens from GitHub Secrets
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      # Optional: your team/org ID (omit or leave empty for personal)
-      VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
+      # REQUIRED: put these in your repo secrets
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}         # personal token is fine
+      VERCEL_TEAM_SLUG: ${{ secrets.VERCEL_TEAM_SLUG }} # e.g. "orvusmarketing"
 
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install CLIs
+      - name: Install tools
         run: |
           npm i -g vercel@latest
           sudo apt-get update -y
-          sudo apt-get install -y jq
+          sudo apt-get install -y jq curl
+
+      - name: Resolve Vercel Team ID from slug
+        id: team
+        shell: bash
+        run: |
+          set -e
+          if [ -z "$VERCEL_TEAM_SLUG" ]; then
+            echo "Missing VERCEL_TEAM_SLUG secret"; exit 1
+          fi
+          # Ask Vercel for teams and pick the one matching the slug
+          TEAM_JSON=$(vercel teams ls --token "$VERCEL_TOKEN" --json)
+          TEAM_ID=$(echo "$TEAM_JSON" | jq -r '.teams[] | select(.slug=="'"$VERCEL_TEAM_SLUG"'") | .id')
+          if [ -z "$TEAM_ID" ] || [ "$TEAM_ID" = "null" ]; then
+            echo "Could not find team with slug '$VERCEL_TEAM_SLUG'"; echo "$TEAM_JSON"; exit 1
+          fi
+          echo "team_id=$TEAM_ID" >> "$GITHUB_OUTPUT"
 
       - name: Discover backlink folders under vercel/
         id: discover
         shell: bash
         run: |
           set -e
-          # Collect immediate subfolders of vercel/ that contain an index.html
           mapfile -t DIRS < <(find vercel -mindepth 1 -maxdepth 1 -type d -print | sort)
-
+          # keep only dirs that contain index.html
           FILTERED=()
           for d in "${DIRS[@]}"; do
-            if [ -f "$d/index.html" ]; then
-              echo "Found: $d"
-              FILTERED+=("$d")
-            fi
+            [ -f "$d/index.html" ] && FILTERED+=("$d")
           done
+          printf '%s\n' "${FILTERED[@]}" | jq -R . | jq -s . > dirs.json
+          echo "dirs_json=$(cat dirs.json)" >> "$GITHUB_OUTPUT"
+          echo "Found $(jq 'length' dirs.json) deployable folders."
 
-          if [ ${#FILTERED[@]} -eq 0 ]; then
-            JSON='[]'
-          else
-            # Build a proper JSON array string: ["vercel/a","vercel/b",...]
-            JSON="$(printf '%s\n' "${FILTERED[@]}" | jq -R -s 'split("\n") | map(select(length>0))')"
-          fi
-
-          {
-            echo 'dirs_json<<__JSON__'
-            echo "$JSON"
-            echo '__JSON__'
-          } >> "$GITHUB_OUTPUT"
-
-      - name: Ensure projects & deploy each folder
+      - name: Ensure & deploy each folder (team scope)
         if: steps.discover.outputs.dirs_json != '[]'
         shell: bash
         env:
           DIRS_JSON: ${{ steps.discover.outputs.dirs_json }}
+          TEAM_ID: ${{ steps.team.outputs.team_id }}
         run: |
           set -e
           baseUrl="https://api.vercel.com"
-          teamQS=""
-          [ -n "$VERCEL_TEAM_ID" ] && teamQS="?teamId=$VERCEL_TEAM_ID"
+          teamQS="?teamId=$TEAM_ID"
 
           echo "$DIRS_JSON" | jq -r '.[]' | while read -r dir; do
+            [ -f "$dir/index.html" ] || { echo "Skip $dir (no index.html)"; continue; }
+
             PROJECT="$(basename "$dir")"
             echo "==> Processing: $dir  (project: $PROJECT)"
 
-            # 1) Ensure project exists (with static build & public dir)
+            # Ensure project exists in TEAM scope
             if ! curl -fsS "$baseUrl/v9/projects/$PROJECT$teamQS" \
                  -H "Authorization: Bearer $VERCEL_TOKEN" \
                  -o /tmp/proj.json 2>/dev/null; then
-              echo "Creating Vercel project: $PROJECT"
-              # For static HTML, no framework, and root public dir (index.html at project root)
+              echo "Creating Vercel project: $PROJECT (team: $TEAM_ID)"
+              # NOTE: include teamId here to avoid 403
               curl -fsS -X POST "$baseUrl/v9/projects$teamQS" \
                 -H "Authorization: Bearer $VERCEL_TOKEN" \
                 -H "Content-Type: application/json" \
@@ -85,28 +88,18 @@ jobs:
               echo "Project $PROJECT exists."
             fi
 
-            PROJ_ID="$(jq -r '.id' /tmp/proj.json)"
-            # Clear any rootDirectory so we can deploy from the folder directly
-            ROOT_DIR="$(jq -r '.rootDirectory // empty' /tmp/proj.json)"
-            if [ -n "$ROOT_DIR" ]; then
-              echo "Clearing rootDirectory ($ROOT_DIR) for $PROJECT"
-              curl -fsS -X PATCH "$baseUrl/v10/projects/$PROJ_ID$teamQS" \
-                -H "Authorization: Bearer $VERCEL_TOKEN" \
-                -H "Content-Type: application/json" \
-                -d '{"rootDirectory": null}' >/dev/null
-            fi
-
-            # 2) Remove any stale local link and deploy from the subfolder
+            # Always deploy with team scope; unlink any personal link
             rm -rf "$dir/.vercel"
 
-            echo "==> Deploying $dir to Vercel (production)…"
-            if [ -n "$VERCEL_TEAM_ID" ]; then
-              vercel deploy --cwd "$dir" --prod --yes \
-                --token "$VERCEL_TOKEN" --scope "$VERCEL_TEAM_ID"
-            else
-              vercel deploy --cwd "$dir" --prod --yes \
-                --token "$VERCEL_TOKEN"
-            fi
+            echo "==> Linking (team scope)"
+            vercel link --cwd "$dir" --yes \
+              --token "$VERCEL_TOKEN" \
+              --scope "$VERCEL_TEAM_SLUG" || true
+
+            echo "==> Deploying $dir (production, team scope)…"
+            vercel deploy --cwd "$dir" --prod --yes \
+              --token "$VERCEL_TOKEN" \
+              --scope "$VERCEL_TEAM_SLUG"
 
             echo "✅ Deployed $PROJECT"
           done
