@@ -24,28 +24,32 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y jq
 
-      - name: Discover backlink folders under vercel/
-        id: discover
-        shell: bash
-        run: |
-          set -e
-          mapfile -t DIRS < <(find vercel -mindepth 1 -maxdepth 1 -type d -print | sort)
-          FILTERED=()
-          for d in "${DIRS[@]}"; do
-            if [ -f "$d/index.html" ]; then
-              FILTERED+=("$d")
-            fi
-          done
+ - name: Discover backlink folders under vercel/
+  id: discover
+  shell: bash
+  run: |
+    set -e
+    mapfile -t DIRS < <(find vercel -mindepth 1 -maxdepth 1 -type d -print | sort)
 
-          if [ ${#FILTERED[@]} -eq 0 ]; then
-            echo "No backlink folders with index.html found under vercel/. Nothing to deploy."
-            echo "dirs_json=[]" >> $GITHUB_OUTPUT
-            exit 0
-          fi
+    FILTERED=()
+    for d in "${DIRS[@]}"; do
+      if [ -f "$d/index.html" ]; then
+        echo "Found: $d"
+        FILTERED+=("$d")
+      fi
+    done
 
-          printf '%s\0' "${FILTERED[@]}" | xargs -0 -n1 echo "Found: "
-          printf -v JSON '%s' "$(printf '%s\n' "${FILTERED[@]}" | jq -R . | jq -s .)"
-          echo "dirs_json=$JSON" >> $GITHUB_OUTPUT
+    if [ ${#FILTERED[@]} -eq 0 ]; then
+      JSON='[]'
+    else
+      JSON="$(printf '%s\n' "${FILTERED[@]}" | jq -R -s 'split("\n")[:-1]')"
+    fi
+
+    {
+      echo 'dirs_json<<__JSON__'
+      echo "$JSON"
+      echo '__JSON__'
+    } >> "$GITHUB_OUTPUT"
 
       - name: Ensure projects & deploy each folder
         if: steps.discover.outputs.dirs_json != '[]'
