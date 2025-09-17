@@ -1,10 +1,10 @@
-name: Deploy vercel/backlink folders (changed only)
+name: Deploy dyln/vercel/* folders to Vercel (changed only)
 
 on:
   push:
     branches: [ main ]
     paths:
-      - 'vercel/**'
+      - 'dyln/vercel/**'
   workflow_dispatch:
 
 jobs:
@@ -14,24 +14,28 @@ jobs:
       matrix: ${{ steps.collect.outputs.matrix }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2   # ensure previous commit is present for diff
 
       - id: collect
         shell: bash
         run: |
           set -euo pipefail
 
+          ROOT="dyln/vercel"
           BEFORE="${{ github.event.before }}"
           if [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
-            CHANGED="$(git diff --name-only "$BEFORE" "${GITHUB_SHA}" -- 'vercel/**' || true)"
+            CHANGED="$(git diff --name-only "$BEFORE" "${GITHUB_SHA}" -- "$ROOT/**" || true)"
           else
-            CHANGED="$(git ls-files 'vercel/**' || true)"
+            CHANGED="$(git ls-files "$ROOT/**" || true)"
           fi
 
           declare -A SEEN=()
           FOLDERS=()
           while IFS= read -r path; do
             [ -z "$path" ] && continue
-            folder="$(echo "$path" | awk -F/ 'NF>=2 {print $1"/"$2}')"
+            # Expect paths like dyln/vercel/<slug>/index.html -> keep first 3 segments
+            folder="$(echo "$path" | awk -F/ 'NF>=3 {print $1"/"$2"/"$3}')"
             [ -z "$folder" ] && continue
             if [ -f "$folder/index.html" ] && [ -z "${SEEN[$folder]:-}" ]; then
               SEEN[$folder]=1
@@ -40,7 +44,6 @@ jobs:
           done <<< "$CHANGED"
 
           if [ ${#FOLDERS[@]} -eq 0 ]; then
-            # Always output a non-empty matrix to satisfy GitHub's planner
             echo 'matrix={"folder":["__skip__"]}' >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -53,18 +56,17 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      # Provide a safe default if prepare produced nothing; planner always gets a non-empty array
       matrix: ${{ fromJson(needs.prepare.outputs.matrix || '{"folder":["__skip__"]}') }}
     env:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      # Optional: set if deploying under a Team/Org (slug, e.g. "orvusmarketing")
+      # optional if deploying under a team/org
       VERCEL_TEAM_SLUG: ${{ secrets.VERCEL_TEAM_SLUG }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Skip when no changed folders
         if: matrix.folder == '__skip__'
-        run: echo "No vercel/* folders with index.html changed — skipping."
+        run: echo "No dyln/vercel/* folders with index.html changed — skipping."
 
       - name: Install Vercel CLI & jq
         if: matrix.folder != '__skip__'
@@ -79,14 +81,20 @@ jobs:
         run: |
           set -euo pipefail
           dir="${{ matrix.folder }}"
-          project="$(basename "$dir")"
-          echo "Deploying folder: $dir as project: $project"
+          project="$(basename "$dir")"   # project is the <slug> folder name
+          echo "Deploying: $dir  (project: $project)"
 
-          # Ensure no stale link
           rm -rf "$dir/.vercel"
 
-          # Local config to force static/no-build deploy
-          printf '%s\n' '{' '  "framework": null,' '  "buildCommand": "",' '  "installCommand": "",' '  "outputDirectory": "."' '}' > "$dir/vercel.local.json"
+          # Force static/no-build behavior
+          cat > "$dir/vercel.local.json" <<'JSON'
+          {
+            "framework": null,
+            "buildCommand": "",
+            "installCommand": "",
+            "outputDirectory": "."
+          }
+          JSON
 
           if [ -n "${VERCEL_TEAM_SLUG:-}" ]; then
             vercel link --cwd "$dir" --project "$project" --yes \
