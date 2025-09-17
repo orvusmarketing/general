@@ -1,23 +1,85 @@
-name: Deploy one subfolder to Cloudflare Pages
+name: Deploy changed backlink to Cloudflare Pages
 
 on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'cloudflare/**'
   workflow_dispatch:
-    inputs:
-      project:        # Full Pages project name you want (e.g. dyln-my-backlink)
-        description: "Cloudflare Pages project name"
-        required: true
-        type: string
-      dir:            # Relative folder that contains index.html (e.g. cloudflare/my-backlink)
-        description: "Directory to deploy"
-        required: true
-        type: string
 
 jobs:
-  deploy:
+  detect-and-deploy:
     runs-on: ubuntu-latest
     env:
-      CF_PROJECT: ${{ inputs.project }}
-      CF_DIR: ${{ inputs.dir }}
+      # base repo settings
+      CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CF_API_TOKEN:  ${{ secrets.CLOUDFLARE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install wrangler
+        run: npm i -g wrangler
+
+      # Find which subfolders under cloudflare/ changed in this commit range
+      - name: Find changed backlink folders
+        id: changed
+        run: |
+          set -e
+          # Compare with previous commit on main (handles single-commit pushes well)
+          BASE_SHA="$(git rev-parse HEAD^ || echo '')"
+          if [ -z "$BASE_SHA" ]; then
+            # first commit on branch or squash merge—fallback: just use current tree
+            CHANGED=$(git ls-tree -r --name-only HEAD | grep '^cloudflare/' || true)
+          else
+            CHANGED=$(git diff --name-only "$BASE_SHA" HEAD | grep '^cloudflare/' || true)
+          fi
+
+          # Derive unique top-level subfolders directly under cloudflare/
+          FOLDERS=$(echo "$CHANGED" \
+            | awk -F/ 'NF>=2 {print $2}' \
+            | sort -u)
+
+          if [ -z "$FOLDERS" ]; then
+            echo "No changed subfolders under cloudflare/."
+            echo "folders=" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "Changed backlink folders:"
+          echo "$FOLDERS"
+          # Pass as a JSON array to matrix
+          JSON=$(printf '%s\n' "$FOLDERS" | jq -R . | jq -s .)
+          echo "folders=$JSON" >> $GITHUB_OUTPUT
+
+      - name: Set matrix (dynamic)
+        id: set-matrix
+        run: |
+          if [ -z "${{ steps.changed.outputs.folders }}" ]; then
+            echo '{"include":[]}' > matrix.json
+          else
+            # Build include list: each item has folder & project name
+            echo '${{ steps.changed.outputs.folders }}' | \
+            jq '[.[] | {folder:., project: ("dyln-" + (. | ascii_downcase | gsub("[^a-z0-9-]"; "-"))) }]' \
+            > matrix.json
+          fi
+          echo "matrix=$(cat matrix.json)" >> $GITHUB_OUTPUT
+
+      - name: Show matrix
+        run: cat matrix.json
+
+  deploy:
+    # run once per changed folder
+    needs: [detect-and-deploy]
+    if: needs.detect-and-deploy.outputs.matrix != ''
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.detect-and-deploy.outputs.matrix) }}
+    env:
+      CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CF_API_TOKEN:  ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CF_DIR: cloudflare/${{ matrix.folder }}
+      CF_PROJECT: ${{ matrix.project }}
     steps:
       - uses: actions/checkout@v4
 
@@ -25,9 +87,6 @@ jobs:
         run: npm i -g wrangler
 
       - name: Ensure Pages project exists
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           set -e
           if ! wrangler pages project list | grep -E "^\s*${CF_PROJECT}\b" >/dev/null 2>&1; then
@@ -44,10 +103,7 @@ jobs:
             mv "${CF_DIR}/Index.html" "${CF_DIR}/index.html"
           fi
 
-      - name: Deploy
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Deploy ${CF_DIR} → ${CF_PROJECT}
         run: |
           set -e
           wrangler pages deploy "${CF_DIR}" \
