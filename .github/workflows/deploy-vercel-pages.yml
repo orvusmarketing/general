@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2   # ensure previous commit is present for diff
+          fetch-depth: 2  # we need the previous commit to diff against
 
       - id: collect
         shell: bash
@@ -24,30 +24,49 @@ jobs:
 
           ROOT="dyln/vercel"
           BEFORE="${{ github.event.before }}"
+          echo "GITHUB_SHA: ${GITHUB_SHA}"
+          echo "BEFORE    : ${BEFORE}"
+
+          # Get changed files under ROOT; if no BEFORE (new workflow, force run), fall back to all tracked files
           if [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
-            CHANGED="$(git diff --name-only "$BEFORE" "${GITHUB_SHA}" -- "$ROOT/**" || true)"
+            echo "Using git diff between $BEFORE and $GITHUB_SHA"
+            CHANGED="$(git diff --name-only "$BEFORE" "${GITHUB_SHA}" -- "$ROOT/")"
           else
-            CHANGED="$(git ls-files "$ROOT/**" || true)"
+            echo "No 'before' SHA, listing all tracked files under $ROOT/"
+            CHANGED="$(git ls-files "$ROOT/")"
           fi
 
+          echo "Changed paths under $ROOT/:"
+          echo "$CHANGED" | sed 's/^/  - /'
+
+          # Build a unique list of dyln/vercel/<slug> that have index.html
           declare -A SEEN=()
           FOLDERS=()
+
           while IFS= read -r path; do
             [ -z "$path" ] && continue
-            # Expect paths like dyln/vercel/<slug>/index.html -> keep first 3 segments
-            folder="$(echo "$path" | awk -F/ 'NF>=3 {print $1"/"$2"/"$3}')"
-            [ -z "$folder" ] && continue
+            # Expect paths like dyln/vercel/<slug>/index.html (we keep first 3 segments)
+            # Split by '/', require at least 3 segments, produce dyln/vercel/<slug>
+            IFS='/' read -r a b c rest <<< "$path" || true
+            [ -z "${a:-}" ] || [ -z "${b:-}" ] || [ -z "${c:-}" ] && continue
+            folder="${a}/${b}/${c}"
+            # Only accept if it actually contains an index.html (present in the checkout)
             if [ -f "$folder/index.html" ] && [ -z "${SEEN[$folder]:-}" ]; then
               SEEN[$folder]=1
               FOLDERS+=("$folder")
             fi
           done <<< "$CHANGED"
 
+          echo "Deployable folders (with index.html):"
           if [ ${#FOLDERS[@]} -eq 0 ]; then
+            echo "  (none)"
             echo 'matrix={"folder":["__skip__"]}' >> "$GITHUB_OUTPUT"
             exit 0
+          else
+            printf '  - %s\n' "${FOLDERS[@]}"
           fi
 
+          # Emit matrix JSON: { "folder": ["dyln/vercel/slug1", "dyln/vercel/slug2", ...] }
           json="$(printf '%s\n' "${FOLDERS[@]}" | jq -R . | jq -s '{folder: .}')"
           echo "matrix=$json" >> "$GITHUB_OUTPUT"
 
@@ -56,10 +75,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(needs.prepare.outputs.matrix || '{"folder":["__skip__"]}') }}
+      matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
     env:
+      # Required
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      # optional if deploying under a team/org
+      # Optional: if deploying under a Vercel team/org, set this secret to the team slug
       VERCEL_TEAM_SLUG: ${{ secrets.VERCEL_TEAM_SLUG }}
     steps:
       - uses: actions/checkout@v4
@@ -67,6 +87,16 @@ jobs:
       - name: Skip when no changed folders
         if: matrix.folder == '__skip__'
         run: echo "No dyln/vercel/* folders with index.html changed — skipping."
+
+      - name: Check secrets
+        if: matrix.folder != '__skip__'
+        shell: bash
+        run: |
+          set -e
+          if [ -z "${VERCEL_TOKEN:-}" ]; then
+            echo "Missing VERCEL_TOKEN secret" >&2
+            exit 1
+          fi
 
       - name: Install Vercel CLI & jq
         if: matrix.folder != '__skip__'
@@ -81,12 +111,17 @@ jobs:
         run: |
           set -euo pipefail
           dir="${{ matrix.folder }}"
-          project="$(basename "$dir")"   # project is the <slug> folder name
-          echo "Deploying: $dir  (project: $project)"
+          project="$(basename "$dir")"   # project == <slug>
+          echo "Deploying folder: $dir"
+          echo "Vercel project  : $project"
 
+          # Ensure the folder exists and has index.html
+          test -d "$dir" && test -f "$dir/index.html" || { echo "Missing $dir/index.html"; exit 1; }
+
+          # Avoid stale links
           rm -rf "$dir/.vercel"
 
-          # Force static/no-build behavior
+          # Force static/no-build behavior for this subfolder only
           cat > "$dir/vercel.local.json" <<'JSON'
           {
             "framework": null,
@@ -96,6 +131,7 @@ jobs:
           }
           JSON
 
+          # Link & deploy non-interactively
           if [ -n "${VERCEL_TEAM_SLUG:-}" ]; then
             vercel link --cwd "$dir" --project "$project" --yes \
               --token "$VERCEL_TOKEN" --scope "$VERCEL_TEAM_SLUG"
