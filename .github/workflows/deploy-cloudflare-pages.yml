@@ -1,4 +1,4 @@
-name: Deploy changed backlink to Cloudflare Pages
+name: Deploy changed backlink(s) to Cloudflare Pages
 
 on:
   push:
@@ -7,105 +7,106 @@ on:
       - 'cloudflare/**'
   workflow_dispatch:
 
+env:
+  CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+  CF_API_TOKEN:  ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
 jobs:
-  detect-and-deploy:
-    runs-on: ubuntu-latest
-    env:
-      # base repo settings
-      CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      CF_API_TOKEN:  ${{ secrets.CLOUDFLARE_API_TOKEN }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install wrangler
-        run: npm i -g wrangler
-
-      # Find which subfolders under cloudflare/ changed in this commit range
-      - name: Find changed backlink folders
-        id: changed
-        run: |
-          set -e
-          # Compare with previous commit on main (handles single-commit pushes well)
-          BASE_SHA="$(git rev-parse HEAD^ || echo '')"
-          if [ -z "$BASE_SHA" ]; then
-            # first commit on branch or squash merge—fallback: just use current tree
-            CHANGED=$(git ls-tree -r --name-only HEAD | grep '^cloudflare/' || true)
-          else
-            CHANGED=$(git diff --name-only "$BASE_SHA" HEAD | grep '^cloudflare/' || true)
-          fi
-
-          # Derive unique top-level subfolders directly under cloudflare/
-          FOLDERS=$(echo "$CHANGED" \
-            | awk -F/ 'NF>=2 {print $2}' \
-            | sort -u)
-
-          if [ -z "$FOLDERS" ]; then
-            echo "No changed subfolders under cloudflare/."
-            echo "folders=" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          echo "Changed backlink folders:"
-          echo "$FOLDERS"
-          # Pass as a JSON array to matrix
-          JSON=$(printf '%s\n' "$FOLDERS" | jq -R . | jq -s .)
-          echo "folders=$JSON" >> $GITHUB_OUTPUT
-
-      - name: Set matrix (dynamic)
-        id: set-matrix
-        run: |
-          if [ -z "${{ steps.changed.outputs.folders }}" ]; then
-            echo '{"include":[]}' > matrix.json
-          else
-            # Build include list: each item has folder & project name
-            echo '${{ steps.changed.outputs.folders }}' | \
-            jq '[.[] | {folder:., project: ("dyln-" + (. | ascii_downcase | gsub("[^a-z0-9-]"; "-"))) }]' \
-            > matrix.json
-          fi
-          echo "matrix=$(cat matrix.json)" >> $GITHUB_OUTPUT
-
-      - name: Show matrix
-        run: cat matrix.json
-
   deploy:
-    # run once per changed folder
-    needs: [detect-and-deploy]
-    if: needs.detect-and-deploy.outputs.matrix != ''
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJSON(needs.detect-and-deploy.outputs.matrix) }}
-    env:
-      CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      CF_API_TOKEN:  ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      CF_DIR: cloudflare/${{ matrix.folder }}
-      CF_PROJECT: ${{ matrix.project }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # we need history for git diff
 
       - name: Install wrangler
         run: npm i -g wrangler
 
-      - name: Ensure Pages project exists
+      - name: Show event SHAs (debug)
         run: |
-          set -e
-          if ! wrangler pages project list | grep -E "^\s*${CF_PROJECT}\b" >/dev/null 2>&1; then
-            echo "Creating Pages project ${CF_PROJECT}…"
-            wrangler pages project create "${CF_PROJECT}" --production-branch=main
+          echo "event.before: ${{ github.event.before }}"
+          echo "event.after : ${{ github.sha }}"
+          git log -1 --pretty=fuller
+
+      - name: Compute changed backlink folders under cloudflare/
+        id: detect
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # 1) Prefer GitHub-provided SHAs on push
+          BEFORE="${{ github.event.before }}"
+          AFTER="${{ github.sha }}"
+
+          if [ "${{ github.event_name }}" = "push" ] && [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
+            echo "Using push diff: $BEFORE..$AFTER"
+            FILES=$(git diff --name-only "$BEFORE" "$AFTER" | grep '^cloudflare/' || true)
           else
-            echo "Pages project ${CF_PROJECT} already exists."
+            # 2) Fallbacks (workflow_dispatch, first run, squash, etc.)
+            echo "Fallback diff: HEAD^..HEAD (or list all if unavailable)"
+            FILES=$(git diff --name-only HEAD^ HEAD 2>/dev/null | grep '^cloudflare/' || true)
+            if [ -z "$FILES" ]; then
+              FILES=$(git ls-files cloudflare | grep -E '^cloudflare/.+/.+' || true)
+            fi
           fi
 
-      - name: Normalize index filename
-        run: |
-          set -e
-          if [ -f "${CF_DIR}/Index.html" ] && [ ! -f "${CF_DIR}/index.html" ]; then
-            mv "${CF_DIR}/Index.html" "${CF_DIR}/index.html"
-          fi
+          echo "Changed files:"
+          echo "$FILES"
 
-      - name: Deploy ${CF_DIR} → ${CF_PROJECT}
+          # Derive first-level subfolders: cloudflare/<handle>/
+          FOLDERS=$(echo "$FILES" | awk -F/ 'NF>=2 {print $2}' | sort -u)
+          echo "Changed folders:"
+          echo "$FOLDERS"
+
+          # Save as a newline list & as JSON
+          printf "%s\n" $FOLDERS > changed_folders.txt
+          jq -R . < changed_folders.txt | jq -s . > folders.json
+
+          COUNT=$(wc -l < changed_folders.txt | tr -d ' ')
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+
+      - name: Stop if nothing to deploy
+        if: steps.detect.outputs.count == '0'
+        run: echo "No changed backlink folders under cloudflare/. Nothing to deploy."
+
+      - name: Deploy each changed folder
+        if: steps.detect.outputs.count != '0'
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ env.CF_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN:  ${{ env.CF_API_TOKEN }}
+        shell: bash
         run: |
-          set -e
-          wrangler pages deploy "${CF_DIR}" \
-            --project-name="${CF_PROJECT}" \
-            --branch=main
+          set -euo pipefail
+          while read -r FOLDER; do
+            [ -z "$FOLDER" ] && continue
+            CF_DIR="cloudflare/$FOLDER"
+            CF_PROJECT="dyln-$(echo "$FOLDER" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9-]+/-/g')"
+
+            echo "::group::Deploying $CF_DIR → $CF_PROJECT"
+
+            # Ensure project exists (idempotent)
+            if ! wrangler pages project list | grep -E "^\s*${CF_PROJECT}\b" >/dev/null 2>&1; then
+              wrangler pages project create "$CF_PROJECT" --production-branch=main
+            else
+              echo "Project $CF_PROJECT exists."
+            fi
+
+            # Normalize filename: Index.html → index.html (Cloudflare expects index.html)
+            if [ -f "${CF_DIR}/Index.html" ] && [ ! -f "${CF_DIR}/index.html" ]; then
+              mv "${CF_DIR}/Index.html" "${CF_DIR}/index.html"
+            fi
+
+            # Sanity: ensure index.html exists in the subfolder
+            if [ ! -f "${CF_DIR}/index.html" ]; then
+              echo "ERROR: ${CF_DIR}/index.html not found. Skipping."
+              echo "::endgroup::"
+              continue
+            fi
+
+            # Deploy the subfolder as its own Pages project (URLs: https://<project>.pages.dev/<files>)
+            wrangler pages deploy "$CF_DIR" \
+              --project-name="$CF_PROJECT" \
+              --branch=main
+
+            echo "::endgroup::"
+          done < changed_folders.txt
