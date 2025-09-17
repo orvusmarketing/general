@@ -1,48 +1,55 @@
-name: Deploy dyln/cloudflare to Cloudflare Pages
+name: Deploy one subfolder to Cloudflare Pages
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'cloudflare/**'
   workflow_dispatch:
-
-env:
-  CF_PAGES_PROJECT: dyln               # <- your Pages project name
-  CF_PAGES_DIR: cloudflare             # <- root folder to publish (contains all backlink subfolders)
+    inputs:
+      project:        # Full Pages project name you want (e.g. dyln-my-backlink)
+        description: "Cloudflare Pages project name"
+        required: true
+        type: string
+      dir:            # Relative folder that contains index.html (e.g. cloudflare/my-backlink)
+        description: "Directory to deploy"
+        required: true
+        type: string
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      CF_PROJECT: ${{ inputs.project }}
+      CF_DIR: ${{ inputs.dir }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Install wrangler
         run: npm i -g wrangler
 
-      # Check if Pages project exists, create only if missing
-      - name: Ensure Cloudflare Pages project exists
+      - name: Ensure Pages project exists
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CF_PAGES_PROJECT: ${{ env.CF_PAGES_PROJECT }}
         run: |
           set -e
-          if wrangler pages project info "$CF_PAGES_PROJECT" >/dev/null 2>&1; then
-            echo "Pages project $CF_PAGES_PROJECT already exists."
+          if ! wrangler pages project list | grep -E "^\s*${CF_PROJECT}\b" >/dev/null 2>&1; then
+            echo "Creating Pages project ${CF_PROJECT}…"
+            wrangler pages project create "${CF_PROJECT}" --production-branch=main
           else
-            echo "Creating Pages project $CF_PAGES_PROJECT…"
-            wrangler pages project create "$CF_PAGES_PROJECT" --production-branch=main
+            echo "Pages project ${CF_PROJECT} already exists."
           fi
 
-      # Deploy the folder (all subfolders become routes, e.g. /backlink-001/index.html)
-      - name: Deploy to Cloudflare Pages
+      - name: Normalize index filename
+        run: |
+          set -e
+          if [ -f "${CF_DIR}/Index.html" ] && [ ! -f "${CF_DIR}/index.html" ]; then
+            mv "${CF_DIR}/Index.html" "${CF_DIR}/index.html"
+          fi
+
+      - name: Deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CF_PAGES_PROJECT: ${{ env.CF_PAGES_PROJECT }}
-          CF_PAGES_DIR: ${{ env.CF_PAGES_DIR }}
         run: |
-          wrangler pages deploy "$CF_PAGES_DIR" \
-            --project-name="$CF_PAGES_PROJECT" \
+          set -e
+          wrangler pages deploy "${CF_DIR}" \
+            --project-name="${CF_PROJECT}" \
             --branch=main
