@@ -11,14 +11,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      # Read tokens from GitHub Secrets
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      # Optional: your team/org ID (leave empty if deploying to personal scope)
-      VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
+      VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }} # optional
 
     steps:
       - name: Checkout repo
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Install CLIs
         run: |
@@ -31,7 +29,6 @@ jobs:
         shell: bash
         run: |
           set -e
-          # Collect immediate subfolders of vercel/ that contain an index.html
           mapfile -t DIRS < <(find vercel -mindepth 1 -maxdepth 1 -type d -print | sort)
           FILTERED=()
           for d in "${DIRS[@]}"; do
@@ -47,7 +44,6 @@ jobs:
           fi
 
           printf '%s\0' "${FILTERED[@]}" | xargs -0 -n1 echo "Found: "
-          # Store as JSON array for next step
           printf -v JSON '%s' "$(printf '%s\n' "${FILTERED[@]}" | jq -R . | jq -s .)"
           echo "dirs_json=$JSON" >> $GITHUB_OUTPUT
 
@@ -58,17 +54,14 @@ jobs:
           DIRS_JSON: ${{ steps.discover.outputs.dirs_json }}
         run: |
           set -e
-
           baseUrl="https://api.vercel.com"
           teamQS=""
           [ -n "$VERCEL_TEAM_ID" ] && teamQS="?teamId=$VERCEL_TEAM_ID"
 
-          # Iterate folders
           echo "$DIRS_JSON" | jq -r '.[]' | while read -r dir; do
             PROJECT="$(basename "$dir")"
             echo "==> Processing folder: $dir  (project: $PROJECT)"
 
-            # 1) Ensure project exists (no rootDirectory)
             if ! curl -fsS "$baseUrl/v9/projects/$PROJECT$teamQS" \
                  -H "Authorization: Bearer $VERCEL_TOKEN" \
                  -o /tmp/proj.json 2>/dev/null; then
@@ -92,7 +85,6 @@ jobs:
                 -d '{"rootDirectory": null}' >/dev/null
             fi
 
-            # 2) Remove any stale local link and deploy from the subfolder
             rm -rf "$dir/.vercel"
 
             echo "==> Deploying $dir to Vercel (production)…"
