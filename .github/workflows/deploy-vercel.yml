@@ -1,0 +1,116 @@
+name: Deploy subfolders to Vercel
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'vercel/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }} # optional; empty = personal account
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Vercel CLI
+        run: npm i -g vercel@latest
+
+      - name: Find changed vercel subfolders
+        id: changes
+        shell: bash
+        run: |
+          set -e
+          # Collect unique first-level subfolders under "vercel/"
+          git diff --name-only HEAD~1 HEAD | \
+            awk -F/ '/^vercel\//{print $1"/"$2}' | sort -u > folders.txt || true
+
+          # Fallback: if running manually or no diff found, deploy all subfolders present
+          if [ ! -s folders.txt ]; then
+            find vercel -mindepth 1 -maxdepth 1 -type d | sort -u > folders.txt || true
+          fi
+
+          echo "Folders to deploy:"
+          cat folders.txt
+          FOLDERS_JSON=$(jq -R -s -c 'split("\n") | map(select(length>0))' folders.txt)
+          echo "folders=$FOLDERS_JSON" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy each folder
+        if: ${{ steps.changes.outputs.folders != '[]' }}
+        shell: bash
+        run: |
+          set -e
+
+          folders='${{ steps.changes.outputs.folders }}'
+          echo "Deploying folders: $folders"
+
+          for dir in $(echo "$folders" | jq -r '.[]'); do
+            if [ ! -f "$dir/index.html" ] && [ ! -f "$dir/Index.html" ]; then
+              echo "Skip $dir (no index.html found)"
+              continue
+            fi
+
+            # Project name = folder basename (sanitized, lowercase, a-z0-9- only)
+            raw="$(basename "$dir")"
+            PROJECT=$(echo "$raw" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9-]+/-/g')
+
+            echo "==> Ensuring Vercel project: $PROJECT (rootDirectory: $dir)"
+
+            # Create project if missing (Vercel REST API)
+            # We try GET first; if 404, we create it.
+            set +e
+            if [ -n "$VERCEL_TEAM_ID" ]; then
+              curl -fsS "https://api.vercel.com/v9/projects/$PROJECT?teamId=$VERCEL_TEAM_ID" \
+                -H "Authorization: Bearer $VERCEL_TOKEN" >/dev/null 2>&1
+              exists=$?
+            else
+              curl -fsS "https://api.vercel.com/v9/projects/$PROJECT" \
+                -H "Authorization: Bearer $VERCEL_TOKEN" >/dev/null 2>&1
+              exists=$?
+            fi
+            set -e
+
+            if [ $exists -ne 0 ]; then
+              echo "Creating Vercel project: $PROJECT"
+              if [ -n "$VERCEL_TEAM_ID" ]; then
+                curl -fsS -X POST "https://api.vercel.com/v9/projects?teamId=$VERCEL_TEAM_ID" \
+                  -H "Authorization: Bearer $VERCEL_TOKEN" \
+                  -H "Content-Type: application/json" \
+                  -d "$(jq -n --arg name "$PROJECT" --arg rd "$dir" '{
+                        name: $name,
+                        framework: null,
+                        rootDirectory: $rd,
+                        buildCommand: null,
+                        outputDirectory: null,
+                        gitRepository: { type: "github", repo: "'"${{ github.repository }}"'" }
+                      }')"
+              else
+                curl -fsS -X POST "https://api.vercel.com/v9/projects" \
+                  -H "Authorization: Bearer $VERCEL_TOKEN" \
+                  -H "Content-Type: application/json" \
+                  -d "$(jq -n --arg name "$PROJECT" --arg rd "$dir" '{
+                        name: $name,
+                        framework: null,
+                        rootDirectory: $rd,
+                        buildCommand: null,
+                        outputDirectory: null,
+                        gitRepository: { type: "github", repo: "'"${{ github.repository }}"'" }
+                      }')"
+              fi
+              echo
+            else
+              echo "Project $PROJECT already exists."
+            fi
+
+            echo "==> Deploying $dir to Vercel (production)…"
+            # --scope selects team when provided; omit if personal
+            if [ -n "$VERCEL_TEAM_ID" ]; then
+              vercel deploy "$dir" --prod --yes --token "$VERCEL_TOKEN" --scope "$VERCEL_TEAM_ID" --name "$PROJECT"
+            else
+              vercel deploy "$dir" --prod --yes --token "$VERCEL_TOKEN" --name "$PROJECT"
+            fi
+            echo "Done: $PROJECT"
+          done
