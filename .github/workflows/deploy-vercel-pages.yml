@@ -2,10 +2,12 @@ name: Deploy dyln/vercel/* folders to Vercel (changed only)
 
 on:
   push:
-    branches: [ main ]
-    paths:
-      - 'dyln/vercel/**'
+    branches: [ main ]   # ← no paths filter; we self-filter later
   workflow_dispatch:
+
+concurrency:
+  group: vercel-deploy-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   prepare:
@@ -15,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2  # we need the previous commit to diff against
+          fetch-depth: 2
 
       - id: collect
         shell: bash
@@ -27,7 +29,6 @@ jobs:
           echo "GITHUB_SHA: ${GITHUB_SHA}"
           echo "BEFORE    : ${BEFORE}"
 
-          # Get changed files under ROOT; if no BEFORE (new workflow, force run), fall back to all tracked files
           if [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
             echo "Using git diff between $BEFORE and $GITHUB_SHA"
             CHANGED="$(git diff --name-only "$BEFORE" "${GITHUB_SHA}" -- "$ROOT/")"
@@ -39,18 +40,13 @@ jobs:
           echo "Changed paths under $ROOT/:"
           echo "$CHANGED" | sed 's/^/  - /'
 
-          # Build a unique list of dyln/vercel/<slug> that have index.html
           declare -A SEEN=()
           FOLDERS=()
-
           while IFS= read -r path; do
             [ -z "$path" ] && continue
-            # Expect paths like dyln/vercel/<slug>/index.html (we keep first 3 segments)
-            # Split by '/', require at least 3 segments, produce dyln/vercel/<slug>
             IFS='/' read -r a b c rest <<< "$path" || true
             [ -z "${a:-}" ] || [ -z "${b:-}" ] || [ -z "${c:-}" ] && continue
             folder="${a}/${b}/${c}"
-            # Only accept if it actually contains an index.html (present in the checkout)
             if [ -f "$folder/index.html" ] && [ -z "${SEEN[$folder]:-}" ]; then
               SEEN[$folder]=1
               FOLDERS+=("$folder")
@@ -66,7 +62,6 @@ jobs:
             printf '  - %s\n' "${FOLDERS[@]}"
           fi
 
-          # Emit matrix JSON: { "folder": ["dyln/vercel/slug1", "dyln/vercel/slug2", ...] }
           json="$(printf '%s\n' "${FOLDERS[@]}" | jq -R . | jq -s '{folder: .}')"
           echo "matrix=$json" >> "$GITHUB_OUTPUT"
 
@@ -77,10 +72,8 @@ jobs:
       fail-fast: false
       matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
     env:
-      # Required
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      # Optional: if deploying under a Vercel team/org, set this secret to the team slug
-      VERCEL_TEAM_SLUG: ${{ secrets.VERCEL_TEAM_SLUG }}
+      VERCEL_TEAM_SLUG: ${{ secrets.VERCEL_TEAM_SLUG }} # optional
     steps:
       - uses: actions/checkout@v4
 
@@ -90,9 +83,7 @@ jobs:
 
       - name: Check secrets
         if: matrix.folder != '__skip__'
-        shell: bash
         run: |
-          set -e
           if [ -z "${VERCEL_TOKEN:-}" ]; then
             echo "Missing VERCEL_TOKEN secret" >&2
             exit 1
@@ -111,35 +102,23 @@ jobs:
         run: |
           set -euo pipefail
           dir="${{ matrix.folder }}"
-          project="$(basename "$dir")"   # project == <slug>
-          echo "Deploying folder: $dir"
-          echo "Vercel project  : $project"
-
-          # Ensure the folder exists and has index.html
+          project="$(basename "$dir")"
+          echo "Deploying folder: $dir (project: $project)"
           test -d "$dir" && test -f "$dir/index.html" || { echo "Missing $dir/index.html"; exit 1; }
 
-          # Avoid stale links
           rm -rf "$dir/.vercel"
 
-          # Force static/no-build behavior for this subfolder only
           cat > "$dir/vercel.local.json" <<'JSON'
-          {
-            "framework": null,
-            "buildCommand": "",
-            "installCommand": "",
-            "outputDirectory": "."
-          }
+          { "framework": null, "buildCommand": "", "installCommand": "", "outputDirectory": "." }
           JSON
 
-          # Link & deploy non-interactively
           if [ -n "${VERCEL_TEAM_SLUG:-}" ]; then
             vercel link --cwd "$dir" --project "$project" --yes \
               --token "$VERCEL_TOKEN" --scope "$VERCEL_TEAM_SLUG"
             vercel deploy --cwd "$dir" --local-config "$dir/vercel.local.json" \
               --prod --yes --token "$VERCEL_TOKEN" --scope "$VERCEL_TEAM_SLUG"
           else
-            vercel link --cwd "$dir" --project "$project" --yes \
-              --token "$VERCEL_TOKEN"
+            vercel link --cwd "$dir" --project "$project" --yes --token "$VERCEL_TOKEN"
             vercel deploy --cwd "$dir" --local-config "$dir/vercel.local.json" \
               --prod --yes --token "$VERCEL_TOKEN"
           fi
