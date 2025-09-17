@@ -1,0 +1,108 @@
+name: Deploy vercel/backlink folders to Vercel
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'vercel/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      # Read tokens from GitHub Secrets
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      # Optional: your team/org ID (leave empty if deploying to personal scope)
+      VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
+
+    steps:
+      - name: Checkout repo
+      - uses: actions/checkout@v4
+
+      - name: Install CLIs
+        run: |
+          npm i -g vercel@latest
+          sudo apt-get update -y
+          sudo apt-get install -y jq
+
+      - name: Discover backlink folders under vercel/
+        id: discover
+        shell: bash
+        run: |
+          set -e
+          # Collect immediate subfolders of vercel/ that contain an index.html
+          mapfile -t DIRS < <(find vercel -mindepth 1 -maxdepth 1 -type d -print | sort)
+          FILTERED=()
+          for d in "${DIRS[@]}"; do
+            if [ -f "$d/index.html" ]; then
+              FILTERED+=("$d")
+            fi
+          done
+
+          if [ ${#FILTERED[@]} -eq 0 ]; then
+            echo "No backlink folders with index.html found under vercel/. Nothing to deploy."
+            echo "dirs_json=[]" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          printf '%s\0' "${FILTERED[@]}" | xargs -0 -n1 echo "Found: "
+          # Store as JSON array for next step
+          printf -v JSON '%s' "$(printf '%s\n' "${FILTERED[@]}" | jq -R . | jq -s .)"
+          echo "dirs_json=$JSON" >> $GITHUB_OUTPUT
+
+      - name: Ensure projects & deploy each folder
+        if: steps.discover.outputs.dirs_json != '[]'
+        shell: bash
+        env:
+          DIRS_JSON: ${{ steps.discover.outputs.dirs_json }}
+        run: |
+          set -e
+
+          baseUrl="https://api.vercel.com"
+          teamQS=""
+          [ -n "$VERCEL_TEAM_ID" ] && teamQS="?teamId=$VERCEL_TEAM_ID"
+
+          # Iterate folders
+          echo "$DIRS_JSON" | jq -r '.[]' | while read -r dir; do
+            PROJECT="$(basename "$dir")"
+            echo "==> Processing folder: $dir  (project: $PROJECT)"
+
+            # 1) Ensure project exists (no rootDirectory)
+            if ! curl -fsS "$baseUrl/v9/projects/$PROJECT$teamQS" \
+                 -H "Authorization: Bearer $VERCEL_TOKEN" \
+                 -o /tmp/proj.json 2>/dev/null; then
+              echo "Creating Vercel project: $PROJECT"
+              curl -fsS -X POST "$baseUrl/v9/projects$teamQS" \
+                -H "Authorization: Bearer $VERCEL_TOKEN" \
+                -H "Content-Type: application/json" \
+                -d "$(jq -n --arg name "$PROJECT" '{name: $name, framework: null}')" \
+                -o /tmp/proj.json
+            else
+              echo "Project $PROJECT exists."
+            fi
+
+            PROJ_ID="$(jq -r '.id' /tmp/proj.json)"
+            ROOT_DIR="$(jq -r '.rootDirectory // empty' /tmp/proj.json)"
+            if [ -n "$ROOT_DIR" ]; then
+              echo "Clearing rootDirectory ($ROOT_DIR) for $PROJECT"
+              curl -fsS -X PATCH "$baseUrl/v10/projects/$PROJ_ID$teamQS" \
+                -H "Authorization: Bearer $VERCEL_TOKEN" \
+                -H "Content-Type: application/json" \
+                -d '{"rootDirectory": null}' >/dev/null
+            fi
+
+            # 2) Remove any stale local link and deploy from the subfolder
+            rm -rf "$dir/.vercel"
+
+            echo "==> Deploying $dir to Vercel (production)…"
+            if [ -n "$VERCEL_TEAM_ID" ]; then
+              vercel deploy --cwd "$dir" --prod --yes \
+                --token "$VERCEL_TOKEN" --scope "$VERCEL_TEAM_ID"
+            else
+              vercel deploy --cwd "$dir" --prod --yes \
+                --token "$VERCEL_TOKEN"
+            fi
+
+            echo "✅ Deployed $PROJECT"
+          done
