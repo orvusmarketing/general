@@ -1,0 +1,35 @@
+name: Deploy dyln backlinks to Cloudflare Pages
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "cloudflare/**"     # only run when stuff in /cloudflare changes
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CF_PAGES_PROJECT: dyln         # name it as you like (shown in CF dashboard)
+      CF_PAGES_DIR: cloudflare             # deploy this folder (contains all backlink subfolders)
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Wrangler
+        run: npm i -g wrangler@3
+
+      # Safe if already exists; creates if missing
+      - name: Ensure Pages project exists
+        run: |
+          wrangler pages project create "$CF_PAGES_PROJECT" \
+            --production-branch=main \
+            --framework=none \
+            --build-command="" \
+            --build-output-directory="$CF_PAGES_DIR" || true
+
+      - name: Deploy folder to Pages
+        run: wrangler pages deploy "$CF_PAGES_DIR" --project-name="$CF_PAGES_PROJECT" --branch=main
