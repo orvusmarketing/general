@@ -1,4 +1,4 @@
-name: Deploy subfolders in vercel/ to Vercel (team-scoped)
+name: Deploy vercel/backlink folders to Vercel
 
 on:
   push:
@@ -11,95 +11,77 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      # REQUIRED: put these in your repo secrets
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}         # personal token is fine
-      VERCEL_TEAM_SLUG: ${{ secrets.VERCEL_TEAM_SLUG }} # e.g. "orvusmarketing"
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_TEAM_SLUG: ${{ secrets.VERCEL_TEAM_SLUG }} # optional; omit if personal
 
     steps:
-      - name: Checkout
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Install tools
-        run: |
-          npm i -g vercel@latest
-          sudo apt-get update -y
-          sudo apt-get install -y jq curl
+      - name: Install Vercel CLI
+        run: npm i -g vercel@latest
 
-      - name: Resolve Vercel Team ID from slug
-        id: team
-        shell: bash
-        run: |
-          set -e
-          if [ -z "$VERCEL_TEAM_SLUG" ]; then
-            echo "Missing VERCEL_TEAM_SLUG secret"; exit 1
-          fi
-          # Ask Vercel for teams and pick the one matching the slug
-          TEAM_JSON=$(vercel teams ls --token "$VERCEL_TOKEN" --json)
-          TEAM_ID=$(echo "$TEAM_JSON" | jq -r '.teams[] | select(.slug=="'"$VERCEL_TEAM_SLUG"'") | .id')
-          if [ -z "$TEAM_ID" ] || [ "$TEAM_ID" = "null" ]; then
-            echo "Could not find team with slug '$VERCEL_TEAM_SLUG'"; echo "$TEAM_JSON"; exit 1
-          fi
-          echo "team_id=$TEAM_ID" >> "$GITHUB_OUTPUT"
-
-      - name: Discover backlink folders under vercel/
+      - name: Find backlink folders (must contain index.html)
         id: discover
         shell: bash
         run: |
           set -e
-          mapfile -t DIRS < <(find vercel -mindepth 1 -maxdepth 1 -type d -print | sort)
-          # keep only dirs that contain index.html
+          mapfile -t DIRS < <(find vercel -mindepth 1 -maxdepth 1 -type d | sort)
           FILTERED=()
           for d in "${DIRS[@]}"; do
             [ -f "$d/index.html" ] && FILTERED+=("$d")
           done
-          printf '%s\n' "${FILTERED[@]}" | jq -R . | jq -s . > dirs.json
-          echo "dirs_json=$(cat dirs.json)" >> "$GITHUB_OUTPUT"
-          echo "Found $(jq 'length' dirs.json) deployable folders."
 
-      - name: Ensure & deploy each folder (team scope)
-        if: steps.discover.outputs.dirs_json != '[]'
+          if [ ${#FILTERED[@]} -eq 0 ]; then
+            echo "No backlink folders with index.html under vercel/."
+            echo "count=0" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Join with newlines and set as a multi-line output
+          {
+            echo "dirs<<EOF"
+            printf "%s\n" "${FILTERED[@]}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+          echo "count=${#FILTERED[@]}" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy each folder
+        if: steps.discover.outputs.count != '0'
         shell: bash
         env:
-          DIRS_JSON: ${{ steps.discover.outputs.dirs_json }}
-          TEAM_ID: ${{ steps.team.outputs.team_id }}
+          DIRS: ${{ steps.discover.outputs.dirs }}
         run: |
           set -e
-          baseUrl="https://api.vercel.com"
-          teamQS="?teamId=$TEAM_ID"
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "❌ Missing VERCEL_TOKEN secret"; exit 1
+          fi
 
-          echo "$DIRS_JSON" | jq -r '.[]' | while read -r dir; do
-            [ -f "$dir/index.html" ] || { echo "Skip $dir (no index.html)"; continue; }
-
+          while IFS= read -r dir; do
+            [ -z "$dir" ] && continue
             PROJECT="$(basename "$dir")"
-            echo "==> Processing: $dir  (project: $PROJECT)"
+            echo "==> Deploying: $dir  (project: $PROJECT)"
 
-            # Ensure project exists in TEAM scope
-            if ! curl -fsS "$baseUrl/v9/projects/$PROJECT$teamQS" \
-                 -H "Authorization: Bearer $VERCEL_TOKEN" \
-                 -o /tmp/proj.json 2>/dev/null; then
-              echo "Creating Vercel project: $PROJECT (team: $TEAM_ID)"
-              # NOTE: include teamId here to avoid 403
-              curl -fsS -X POST "$baseUrl/v9/projects$teamQS" \
-                -H "Authorization: Bearer $VERCEL_TOKEN" \
-                -H "Content-Type: application/json" \
-                -d "$(jq -n --arg name "$PROJECT" '{name: $name, framework: null}')" \
-                -o /tmp/proj.json
-            else
-              echo "Project $PROJECT exists."
-            fi
-
-            # Always deploy with team scope; unlink any personal link
+            # Ensure a clean link per folder
             rm -rf "$dir/.vercel"
 
-            echo "==> Linking (team scope)"
-            vercel link --cwd "$dir" --yes \
-              --token "$VERCEL_TOKEN" \
-              --scope "$VERCEL_TEAM_SLUG" || true
+            # Link the folder to a Vercel project (creates the project if needed)
+            if [ -n "$VERCEL_TEAM_SLUG" ]; then
+              vercel link --cwd "$dir" --project "$PROJECT" --yes \
+                --token "$VERCEL_TOKEN" --scope "$VERCEL_TEAM_SLUG"
+            else
+              vercel link --cwd "$dir" --project "$PROJECT" --yes \
+                --token "$VERCEL_TOKEN"
+            fi
 
-            echo "==> Deploying $dir (production, team scope)…"
-            vercel deploy --cwd "$dir" --prod --yes \
-              --token "$VERCEL_TOKEN" \
-              --scope "$VERCEL_TEAM_SLUG"
+            # Deploy static content
+            if [ -n "$VERCEL_TEAM_SLUG" ]; then
+              vercel deploy --cwd "$dir" --prod --yes \
+                --token "$VERCEL_TOKEN" --scope "$VERCEL_TEAM_SLUG"
+            else
+              vercel deploy --cwd "$dir" --prod --yes \
+                --token "$VERCEL_TOKEN"
+            fi
 
             echo "✅ Deployed $PROJECT"
-          done
+          done <<< "$DIRS"
