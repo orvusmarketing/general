@@ -1,4 +1,4 @@
-name: Deploy vercel/backlink folders to Vercel
+name: Deploy vercel/backlink folders (changed only)
 
 on:
   push:
@@ -12,60 +12,85 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      VERCEL_TEAM_SLUG: ${{ secrets.VERCEL_TEAM_SLUG }} # optional; omit if personal
+      # If you deploy under a team/org, set this secret (slug, not ID). Otherwise leave empty.
+      VERCEL_TEAM_SLUG: ${{ secrets.VERCEL_TEAM_SLUG }}
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Install Vercel CLI
-        run: npm i -g vercel@latest
+      - name: Install Vercel CLI & jq
+        run: |
+          npm i -g vercel@latest
+          sudo apt-get update -y
+          sudo apt-get install -y jq
 
-      - name: Find backlink folders (must contain index.html)
+      # Find ONLY vercel/<handle>/ folders that changed in this push and contain index.html
+      - name: Discover changed backlink folders
         id: discover
         shell: bash
         run: |
           set -e
-          mapfile -t DIRS < <(find vercel -mindepth 1 -maxdepth 1 -type d | sort)
+          # Determine changed paths (fallback to all under vercel/ if before SHA is missing)
+          BEFORE="${{ github.event.before }}"
+          if [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
+            CHANGED=$(git diff --name-only "$BEFORE" "$GITHUB_SHA" -- 'vercel/**')
+          else
+            CHANGED=$(git ls-files 'vercel/**')
+          fi
+
+          # Reduce to unique top-level subfolders under vercel/
+          FOLDERS=$(
+            echo "$CHANGED" \
+            | awk -F/ 'NF>=2 {print $1"/"$2}' \
+            | sort -u
+          )
+
+          # Keep only those that actually contain an index.html
           FILTERED=()
-          for d in "${DIRS[@]}"; do
-            [ -f "$d/index.html" ] && FILTERED+=("$d")
+          for d in $FOLDERS; do
+            if [ -f "$d/index.html" ]; then
+              FILTERED+=("$d")
+              echo "Will deploy: $d"
+            fi
           done
 
           if [ ${#FILTERED[@]} -eq 0 ]; then
-            echo "No backlink folders with index.html under vercel/."
-            echo "count=0" >> $GITHUB_OUTPUT
+            echo "dirs_json=[]" >> $GITHUB_OUTPUT
+            echo "No changed backlink folders with index.html. Exiting."
             exit 0
           fi
 
-          # Join with newlines and set as a multi-line output
-          {
-            echo "dirs<<EOF"
-            printf "%s\n" "${FILTERED[@]}"
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
-          echo "count=${#FILTERED[@]}" >> "$GITHUB_OUTPUT"
+          printf -v JSON '%s' "$(printf '%s\n' "${FILTERED[@]}" | jq -R . | jq -s .)"
+          echo "dirs_json=$JSON" >> $GITHUB_OUTPUT
 
-      - name: Deploy each folder
-        if: steps.discover.outputs.count != '0'
+      - name: Deploy each changed folder
+        if: steps.discover.outputs.dirs_json != '[]'
         shell: bash
         env:
-          DIRS: ${{ steps.discover.outputs.dirs }}
+          DIRS_JSON: ${{ steps.discover.outputs.dirs_json }}
         run: |
           set -e
-          if [ -z "$VERCEL_TOKEN" ]; then
-            echo "❌ Missing VERCEL_TOKEN secret"; exit 1
-          fi
 
-          while IFS= read -r dir; do
-            [ -z "$dir" ] && continue
+          echo "$DIRS_JSON" | jq -r '.[]' | while read -r dir; do
             PROJECT="$(basename "$dir")"
             echo "==> Deploying: $dir  (project: $PROJECT)"
 
-            # Ensure a clean link per folder
+            # Make a per-folder minimal config so Vercel doesn’t read any root vercel.json
+            # This declares a pure static output at the folder root.
+            cat > "$dir/vercel.local.json" <<'JSON'
+{
+  "framework": null,
+  "buildCommand": "",
+  "installCommand": "",
+  "outputDirectory": "."
+}
+JSON
+
+            # Ensure no stale link from previous runs
             rm -rf "$dir/.vercel"
 
-            # Link the folder to a Vercel project (creates the project if needed)
+            # Link project name to this folder (scoped if team slug provided)
             if [ -n "$VERCEL_TEAM_SLUG" ]; then
               vercel link --cwd "$dir" --project "$PROJECT" --yes \
                 --token "$VERCEL_TOKEN" --scope "$VERCEL_TEAM_SLUG"
@@ -74,14 +99,14 @@ jobs:
                 --token "$VERCEL_TOKEN"
             fi
 
-            # Deploy static content
+            # Deploy the folder itself (only its contents), using the local config
             if [ -n "$VERCEL_TEAM_SLUG" ]; then
-              vercel deploy --cwd "$dir" --prod --yes \
-                --token "$VERCEL_TOKEN" --scope "$VERCEL_TEAM_SLUG"
+              vercel deploy --cwd "$dir" --local-config "$dir/vercel.local.json" \
+                --prod --yes --token "$VERCEL_TOKEN" --scope "$VERCEL_TEAM_SLUG"
             else
-              vercel deploy --cwd "$dir" --prod --yes \
-                --token "$VERCEL_TOKEN"
+              vercel deploy --cwd "$dir" --local-config "$dir/vercel.local.json" \
+                --prod --yes --token "$VERCEL_TOKEN"
             fi
 
             echo "✅ Deployed $PROJECT"
-          done <<< "$DIRS"
+          done
