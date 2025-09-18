@@ -89,8 +89,6 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ env.NETLIFY_AUTH_TOKEN }}
         shell: bash
         run: |
-          set -euo pipefail
-
           # Initialize counters and arrays for summary
           TOTAL_FOLDERS=$(wc -l < changed_folders.txt | tr -d ' ')
           CURRENT_FOLDER=0
@@ -106,8 +104,13 @@ jobs:
           echo "DEBUG: End of folder list"
           echo "================================================"
 
-          while read -r FOLDER; do
-            [ -z "$FOLDER" ] && continue
+          # Convert folder list to array for reliable processing
+          mapfile -t FOLDER_ARRAY < changed_folders.txt
+          echo "DEBUG: Created array with ${#FOLDER_ARRAY[@]} folders"
+
+          # Process each folder using array-based loop
+          for FOLDER in "${FOLDER_ARRAY[@]}"; do
+            [ -z "$FOLDER" ] && echo "DEBUG: Skipping empty folder" && continue
             CURRENT_FOLDER=$((CURRENT_FOLDER + 1))
             NETLIFY_DIR="netlify/$FOLDER"
             NETLIFY_SITE_NAME="$(echo "$FOLDER" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9-]+/-/g')"
@@ -177,9 +180,10 @@ jobs:
             
             echo "::endgroup::"
             echo "DEBUG: Completed processing folder $CURRENT_FOLDER of $TOTAL_FOLDERS: $FOLDER"
-          done < changed_folders.txt
+          done
 
           echo "DEBUG: Loop completed. Processed $CURRENT_FOLDER folders total."
+          echo "DEBUG: Expected to process $TOTAL_FOLDERS folders."
 
           # Print deployment summary
           echo ""
