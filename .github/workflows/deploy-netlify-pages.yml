@@ -1,0 +1,112 @@
+name: Deploy changed backlink(s) to Netlify
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "netlify/**"
+  workflow_dispatch:
+
+env:
+  NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # we need history for git diff
+
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+
+      - name: Show event SHAs (debug)
+        run: |
+          echo "event.before: ${{ github.event.before }}"
+          echo "event.after : ${{ github.sha }}"
+          git log -1 --pretty=fuller
+
+      - name: Compute changed backlink folders under netlify/
+        id: detect
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # 1) Prefer GitHub-provided SHAs on push
+          BEFORE="${{ github.event.before }}"
+          AFTER="${{ github.sha }}"
+
+          if [ "${{ github.event_name }}" = "push" ] && [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
+            echo "Using push diff: $BEFORE..$AFTER"
+            FILES=$(git diff --name-only "$BEFORE" "$AFTER" | grep '^netlify/' || true)
+          else
+            # 2) Fallbacks (workflow_dispatch, first run, squash, etc.)
+            echo "Fallback diff: HEAD^..HEAD (or list all if unavailable)"
+            FILES=$(git diff --name-only HEAD^ HEAD 2>/dev/null | grep '^netlify/' || true)
+            if [ -z "$FILES" ]; then
+              FILES=$(git ls-files netlify | grep -E '^netlify/.+/.+' || true)
+            fi
+          fi
+
+          echo "Changed files:"
+          echo "$FILES"
+
+          # Derive first-level subfolders: netlify/<handle>/
+          FOLDERS=$(echo "$FILES" | awk -F/ 'NF>=2 {print $2}' | sort -u)
+          echo "Changed folders:"
+          echo "$FOLDERS"
+
+          # Save as a newline list & as JSON
+          printf "%s\n" $FOLDERS > changed_folders.txt
+          jq -R . < changed_folders.txt | jq -s . > folders.json
+
+          COUNT=$(wc -l < changed_folders.txt | tr -d ' ')
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+
+      - name: Stop if nothing to deploy
+        if: steps.detect.outputs.count == '0'
+        run: echo "No changed backlink folders under netlify/. Nothing to deploy."
+
+      - name: Deploy each changed folder
+        if: steps.detect.outputs.count != '0'
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ env.NETLIFY_AUTH_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          while read -r FOLDER; do
+            [ -z "$FOLDER" ] && continue
+            NETLIFY_DIR="netlify/$FOLDER"
+            NETLIFY_SITE_NAME="$(echo "$FOLDER" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9-]+/-/g')"
+
+            echo "::group::Deploying $NETLIFY_DIR → $NETLIFY_SITE_NAME"
+
+            # Normalize filename: Index.html → index.html (Netlify expects index.html)
+            if [ -f "${NETLIFY_DIR}/Index.html" ] && [ ! -f "${NETLIFY_DIR}/index.html" ]; then
+              mv "${NETLIFY_DIR}/Index.html" "${NETLIFY_DIR}/index.html"
+            fi
+
+            # Sanity: ensure index.html exists in the subfolder
+            if [ ! -f "${NETLIFY_DIR}/index.html" ]; then
+              echo "ERROR: ${NETLIFY_DIR}/index.html not found. Skipping."
+              echo "::endgroup::"
+              continue
+            fi
+
+            # Check if site exists, create if not
+            if ! netlify sites:list | grep -E "^\s*${NETLIFY_SITE_NAME}\b" >/dev/null 2>&1; then
+              echo "Creating new Netlify site: $NETLIFY_SITE_NAME"
+              SITE_ID=$(netlify sites:create --name="$NETLIFY_SITE_NAME" --json | jq -r '.id')
+              echo "Created site with ID: $SITE_ID"
+            else
+              echo "Site $NETLIFY_SITE_NAME already exists."
+              SITE_ID=$(netlify sites:list --json | jq -r ".[] | select(.name==\"$NETLIFY_SITE_NAME\") | .id")
+            fi
+
+            # Deploy the subfolder to the site
+            netlify deploy --dir="$NETLIFY_DIR" --prod --site="$SITE_ID"
+
+            echo "Deployed to: https://$NETLIFY_SITE_NAME.netlify.app"
+            echo "::endgroup::"
+          done < changed_folders.txt
