@@ -83,133 +83,77 @@ jobs:
         if: steps.detect.outputs.count == '0'
         run: echo "No changed backlink folders under netlify/. Nothing to deploy."
 
-      - name: Deploy each changed folder
+      - name: Deploy changed folder(s)
         if: steps.detect.outputs.count != '0'
         env:
           NETLIFY_AUTH_TOKEN: ${{ env.NETLIFY_AUTH_TOKEN }}
         shell: bash
         run: |
-          # Initialize counters and arrays for summary
-          TOTAL_FOLDERS=$(wc -l < changed_folders.txt | tr -d ' ')
-          CURRENT_FOLDER=0
-          SUCCESSFUL_DEPLOYS=()
-          FAILED_DEPLOYS=()
+          # Read the first (and likely only) folder from the file
+          FOLDER=$(head -n 1 changed_folders.txt | tr -d '\n\r')
 
-          echo "🚀 Starting deployment of $TOTAL_FOLDERS folder(s) to Netlify..."
-          echo "================================================"
-
-          # Debug: Show what we're about to process
-          echo "DEBUG: About to process these folders:"
-          cat changed_folders.txt
-          echo "DEBUG: End of folder list"
-          echo "================================================"
-
-          # Convert folder list to array for reliable processing
-          mapfile -t FOLDER_ARRAY < changed_folders.txt
-          echo "DEBUG: Created array with ${#FOLDER_ARRAY[@]} folders"
-
-          # Process each folder using array-based loop
-          for FOLDER in "${FOLDER_ARRAY[@]}"; do
-            [ -z "$FOLDER" ] && echo "DEBUG: Skipping empty folder" && continue
-            CURRENT_FOLDER=$((CURRENT_FOLDER + 1))
-            NETLIFY_DIR="netlify/$FOLDER"
-            NETLIFY_SITE_NAME="$(echo "$FOLDER" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9-]+/-/g')"
-
-            echo "::group::[$CURRENT_FOLDER/$TOTAL_FOLDERS] Deploying $NETLIFY_DIR → $NETLIFY_SITE_NAME"
-            echo "DEBUG: Processing folder $CURRENT_FOLDER of $TOTAL_FOLDERS: $FOLDER"
-
-            # Normalize filename: Index.html → index.html (Netlify expects index.html)
-            if [ -f "${NETLIFY_DIR}/Index.html" ] && [ ! -f "${NETLIFY_DIR}/index.html" ]; then
-              echo "📝 Normalizing Index.html → index.html"
-              mv "${NETLIFY_DIR}/Index.html" "${NETLIFY_DIR}/index.html"
-            fi
-
-            # Sanity: ensure index.html exists in the subfolder
-            if [ ! -f "${NETLIFY_DIR}/index.html" ]; then
-              echo "❌ ERROR: ${NETLIFY_DIR}/index.html not found. Skipping."
-              FAILED_DEPLOYS+=("$FOLDER (missing index.html)")
-              echo "::endgroup::"
-              continue
-            fi
-
-            # Check if site exists, create if not
-            if ! netlify sites:list --auth="$NETLIFY_AUTH_TOKEN" | grep -E "^\s*${NETLIFY_SITE_NAME}\b" >/dev/null 2>&1; then
-              echo "🆕 Creating new Netlify site: $NETLIFY_SITE_NAME"
-              # Create site with proper flags: --auth, --disable-linking, --debug
-              if netlify sites:create --name="$NETLIFY_SITE_NAME" --auth="$NETLIFY_AUTH_TOKEN" --disable-linking --debug 2>&1; then
-                echo "✅ Created site: $NETLIFY_SITE_NAME"
-                # Get the site ID after creation
-                SITE_ID=$(netlify sites:list --auth="$NETLIFY_AUTH_TOKEN" --json | jq -r ".[] | select(.name==\"$NETLIFY_SITE_NAME\") | .id")
-              else
-                echo "❌ Failed to create site: $NETLIFY_SITE_NAME"
-                echo "Debug: Checking if site was created despite error..."
-                # Sometimes the site gets created even if the command reports failure
-                SITE_ID=$(netlify sites:list --auth="$NETLIFY_AUTH_TOKEN" --json | jq -r ".[] | select(.name==\"$NETLIFY_SITE_NAME\") | .id")
-                if [ -n "$SITE_ID" ] && [ "$SITE_ID" != "null" ]; then
-                  echo "✅ Site was actually created: $NETLIFY_SITE_NAME (ID: $SITE_ID)"
-                else
-                  FAILED_DEPLOYS+=("$FOLDER (site creation failed)")
-                  echo "::endgroup::"
-                  continue
-                fi
-              fi
-            else
-              echo "ℹ️  Site $NETLIFY_SITE_NAME already exists."
-              # Get the site ID for existing site
-              SITE_ID=$(netlify sites:list --auth="$NETLIFY_AUTH_TOKEN" --json | jq -r ".[] | select(.name==\"$NETLIFY_SITE_NAME\") | .id")
-            fi
-
-            # Verify we have a valid site ID
-            if [ -z "$SITE_ID" ] || [ "$SITE_ID" = "null" ]; then
-              echo "❌ ERROR: Could not find site ID for $NETLIFY_SITE_NAME. Skipping."
-              FAILED_DEPLOYS+=("$FOLDER (site ID not found)")
-              echo "::endgroup::"
-              continue
-            fi
-            echo "🔑 Using site ID: $SITE_ID"
-
-            # Deploy the subfolder to the site
-            echo "🚀 Deploying to Netlify..."
-            if netlify deploy --dir="$NETLIFY_DIR" --prod --site="$SITE_ID" --auth="$NETLIFY_AUTH_TOKEN"; then
-              echo "✅ Successfully deployed to: https://$NETLIFY_SITE_NAME.netlify.app"
-              SUCCESSFUL_DEPLOYS+=("$FOLDER → https://$NETLIFY_SITE_NAME.netlify.app")
-            else
-              echo "❌ Deployment failed for $NETLIFY_SITE_NAME"
-              FAILED_DEPLOYS+=("$FOLDER (deployment failed)")
-            fi
-            
-            echo "::endgroup::"
-            echo "DEBUG: Completed processing folder $CURRENT_FOLDER of $TOTAL_FOLDERS: $FOLDER"
-          done
-
-          echo "DEBUG: Loop completed. Processed $CURRENT_FOLDER folders total."
-          echo "DEBUG: Expected to process $TOTAL_FOLDERS folders."
-
-          # Print deployment summary
-          echo ""
-          echo "================================================"
-          echo "📊 DEPLOYMENT SUMMARY"
-          echo "================================================"
-          echo "Total folders processed: $TOTAL_FOLDERS"
-          echo "Successful deployments: ${#SUCCESSFUL_DEPLOYS[@]}"
-          echo "Failed deployments: ${#FAILED_DEPLOYS[@]}"
-          echo ""
-
-          if [ ${#SUCCESSFUL_DEPLOYS[@]} -gt 0 ]; then
-            echo "✅ SUCCESSFUL DEPLOYMENTS:"
-            for deploy in "${SUCCESSFUL_DEPLOYS[@]}"; do
-              echo "  • $deploy"
-            done
-            echo ""
-          fi
-
-          if [ ${#FAILED_DEPLOYS[@]} -gt 0 ]; then
-            echo "❌ FAILED DEPLOYMENTS:"
-            for deploy in "${FAILED_DEPLOYS[@]}"; do
-              echo "  • $deploy"
-            done
-            echo ""
+          if [ -z "$FOLDER" ]; then
+            echo "❌ No folder found to deploy"
             exit 1
           fi
 
-          echo "🎉 All deployments completed successfully!"
+          NETLIFY_DIR="netlify/$FOLDER"
+          NETLIFY_SITE_NAME="$(echo "$FOLDER" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9-]+/-/g')"
+
+          echo "🚀 Deploying $NETLIFY_DIR → $NETLIFY_SITE_NAME"
+          echo "================================================"
+
+          # Normalize filename: Index.html → index.html (Netlify expects index.html)
+          if [ -f "${NETLIFY_DIR}/Index.html" ] && [ ! -f "${NETLIFY_DIR}/index.html" ]; then
+            echo "📝 Normalizing Index.html → index.html"
+            mv "${NETLIFY_DIR}/Index.html" "${NETLIFY_DIR}/index.html"
+          fi
+
+          # Sanity: ensure index.html exists in the subfolder
+          if [ ! -f "${NETLIFY_DIR}/index.html" ]; then
+            echo "❌ ERROR: ${NETLIFY_DIR}/index.html not found. Exiting."
+            exit 1
+          fi
+
+          # Check if site exists, create if not
+          if ! netlify sites:list --auth="$NETLIFY_AUTH_TOKEN" | grep -E "^\s*${NETLIFY_SITE_NAME}\b" >/dev/null 2>&1; then
+            echo "🆕 Creating new Netlify site: $NETLIFY_SITE_NAME"
+            # Create site with proper flags: --auth, --disable-linking, --debug
+            if netlify sites:create --name="$NETLIFY_SITE_NAME" --auth="$NETLIFY_AUTH_TOKEN" --disable-linking --debug 2>&1; then
+              echo "✅ Created site: $NETLIFY_SITE_NAME"
+              # Get the site ID after creation
+              SITE_ID=$(netlify sites:list --auth="$NETLIFY_AUTH_TOKEN" --json | jq -r ".[] | select(.name==\"$NETLIFY_SITE_NAME\") | .id")
+            else
+              echo "❌ Failed to create site: $NETLIFY_SITE_NAME"
+              echo "Debug: Checking if site was created despite error..."
+              # Sometimes the site gets created even if the command reports failure
+              SITE_ID=$(netlify sites:list --auth="$NETLIFY_AUTH_TOKEN" --json | jq -r ".[] | select(.name==\"$NETLIFY_SITE_NAME\") | .id")
+              if [ -n "$SITE_ID" ] && [ "$SITE_ID" != "null" ]; then
+                echo "✅ Site was actually created: $NETLIFY_SITE_NAME (ID: $SITE_ID)"
+              else
+                echo "❌ Site creation failed completely. Exiting."
+                exit 1
+              fi
+            fi
+          else
+            echo "ℹ️  Site $NETLIFY_SITE_NAME already exists."
+            # Get the site ID for existing site
+            SITE_ID=$(netlify sites:list --auth="$NETLIFY_AUTH_TOKEN" --json | jq -r ".[] | select(.name==\"$NETLIFY_SITE_NAME\") | .id")
+          fi
+
+          # Verify we have a valid site ID
+          if [ -z "$SITE_ID" ] || [ "$SITE_ID" = "null" ]; then
+            echo "❌ ERROR: Could not find site ID for $NETLIFY_SITE_NAME. Exiting."
+            exit 1
+          fi
+          echo "🔑 Using site ID: $SITE_ID"
+
+          # Deploy the subfolder to the site
+          echo "🚀 Deploying to Netlify..."
+          if netlify deploy --dir="$NETLIFY_DIR" --prod --site="$SITE_ID" --auth="$NETLIFY_AUTH_TOKEN"; then
+            echo "✅ Successfully deployed to: https://$NETLIFY_SITE_NAME.netlify.app"
+            echo "🎉 Deployment completed successfully!"
+          else
+            echo "❌ Deployment failed for $NETLIFY_SITE_NAME"
+            exit 1
+          fi
