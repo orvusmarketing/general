@@ -68,11 +68,16 @@ jobs:
           echo "$FOLDERS"
 
           # Save as a newline list & as JSON
-          printf "%s\n" $FOLDERS > changed_folders.txt
+          echo "$FOLDERS" | tr ' ' '\n' > changed_folders.txt
           jq -R . < changed_folders.txt | jq -s . > folders.json
 
           COUNT=$(wc -l < changed_folders.txt | tr -d ' ')
           echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+
+          # Debug: Show contents of changed_folders.txt
+          echo "DEBUG: Contents of changed_folders.txt:"
+          cat changed_folders.txt
+          echo "DEBUG: Number of lines in changed_folders.txt: $COUNT"
 
       - name: Stop if nothing to deploy
         if: steps.detect.outputs.count == '0'
@@ -93,6 +98,12 @@ jobs:
           FAILED_DEPLOYS=()
 
           echo "🚀 Starting deployment of $TOTAL_FOLDERS folder(s) to Netlify..."
+          echo "================================================"
+
+          # Debug: Show what we're about to process
+          echo "DEBUG: About to process these folders:"
+          cat changed_folders.txt
+          echo "DEBUG: End of folder list"
           echo "================================================"
 
           while read -r FOLDER; do
