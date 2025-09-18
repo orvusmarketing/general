@@ -113,8 +113,11 @@ jobs:
             # Check if site exists, create if not
             if ! netlify sites:list | grep -E "^\s*${NETLIFY_SITE_NAME}\b" >/dev/null 2>&1; then
               echo "🆕 Creating new Netlify site: $NETLIFY_SITE_NAME"
-              if netlify sites:create --name="$NETLIFY_SITE_NAME"; then
-                echo "✅ Created site: $NETLIFY_SITE_NAME"
+              # Use --json to avoid interactive prompts and get site ID directly
+              SITE_CREATE_OUTPUT=$(netlify sites:create --name="$NETLIFY_SITE_NAME" --json 2>/dev/null || echo "")
+              if [ -n "$SITE_CREATE_OUTPUT" ] && echo "$SITE_CREATE_OUTPUT" | jq -e '.id' >/dev/null 2>&1; then
+                SITE_ID=$(echo "$SITE_CREATE_OUTPUT" | jq -r '.id')
+                echo "✅ Created site: $NETLIFY_SITE_NAME (ID: $SITE_ID)"
               else
                 echo "❌ Failed to create site: $NETLIFY_SITE_NAME"
                 FAILED_DEPLOYS+=("$FOLDER (site creation failed)")
@@ -123,10 +126,11 @@ jobs:
               fi
             else
               echo "ℹ️  Site $NETLIFY_SITE_NAME already exists."
+              # Get the site ID for existing site
+              SITE_ID=$(netlify sites:list --json | jq -r ".[] | select(.name==\"$NETLIFY_SITE_NAME\") | .id")
             fi
 
-            # Get the site ID for deployment
-            SITE_ID=$(netlify sites:list --json | jq -r ".[] | select(.name==\"$NETLIFY_SITE_NAME\") | .id")
+            # Verify we have a valid site ID
             if [ -z "$SITE_ID" ] || [ "$SITE_ID" = "null" ]; then
               echo "❌ ERROR: Could not find site ID for $NETLIFY_SITE_NAME. Skipping."
               FAILED_DEPLOYS+=("$FOLDER (site ID not found)")
