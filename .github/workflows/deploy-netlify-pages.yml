@@ -107,8 +107,6 @@ jobs:
           echo "================================================"
 
           while read -r FOLDER; do
-            # Temporarily disable exit on error for this loop iteration
-            set +e
             [ -z "$FOLDER" ] && continue
             CURRENT_FOLDER=$((CURRENT_FOLDER + 1))
             NETLIFY_DIR="netlify/$FOLDER"
@@ -178,10 +176,10 @@ jobs:
             fi
             
             echo "::endgroup::"
-            
-            # Re-enable exit on error for the next iteration
-            set -e
+            echo "DEBUG: Completed processing folder $CURRENT_FOLDER of $TOTAL_FOLDERS: $FOLDER"
           done < changed_folders.txt
+
+          echo "DEBUG: Loop completed. Processed $CURRENT_FOLDER folders total."
 
           # Print deployment summary
           echo ""
