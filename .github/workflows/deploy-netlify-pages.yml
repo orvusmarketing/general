@@ -118,21 +118,47 @@ jobs:
           # Check if site exists, create if not
           if ! netlify sites:list --auth="$NETLIFY_AUTH_TOKEN" | grep -E "^\s*${NETLIFY_SITE_NAME}\b" >/dev/null 2>&1; then
             echo "🆕 Creating new Netlify site: $NETLIFY_SITE_NAME"
-            # Create site with proper flags: --auth, --disable-linking, --debug
-            if netlify sites:create --name="$NETLIFY_SITE_NAME" --auth="$NETLIFY_AUTH_TOKEN" --disable-linking --debug 2>&1; then
-              echo "✅ Created site: $NETLIFY_SITE_NAME"
-              # Get the site ID after creation
-              SITE_ID=$(netlify sites:list --auth="$NETLIFY_AUTH_TOKEN" --json | jq -r ".[] | select(.name==\"$NETLIFY_SITE_NAME\") | .id")
-            else
-              echo "❌ Failed to create site: $NETLIFY_SITE_NAME"
-              echo "Debug: Checking if site was created despite error..."
-              # Sometimes the site gets created even if the command reports failure
-              SITE_ID=$(netlify sites:list --auth="$NETLIFY_AUTH_TOKEN" --json | jq -r ".[] | select(.name==\"$NETLIFY_SITE_NAME\") | .id")
-              if [ -n "$SITE_ID" ] && [ "$SITE_ID" != "null" ]; then
-                echo "✅ Site was actually created: $NETLIFY_SITE_NAME (ID: $SITE_ID)"
+            
+            # Get account slug from existing sites to avoid team prompt
+            ACCOUNT_SLUG=$(netlify sites:list --auth="$NETLIFY_AUTH_TOKEN" --json | jq -r '.[0].account_slug // empty' 2>/dev/null || echo "")
+            
+            if [ -z "$ACCOUNT_SLUG" ]; then
+              echo "⚠️  Could not determine account slug, trying without it..."
+              # Create site with proper flags: --auth, --disable-linking, --debug
+              if netlify sites:create --name="$NETLIFY_SITE_NAME" --auth="$NETLIFY_AUTH_TOKEN" --disable-linking --debug 2>&1; then
+                echo "✅ Created site: $NETLIFY_SITE_NAME"
+                # Get the site ID after creation
+                SITE_ID=$(netlify sites:list --auth="$NETLIFY_AUTH_TOKEN" --json | jq -r ".[] | select(.name==\"$NETLIFY_SITE_NAME\") | .id")
               else
-                echo "❌ Site creation failed completely. Exiting."
-                exit 1
+                echo "❌ Failed to create site: $NETLIFY_SITE_NAME"
+                echo "Debug: Checking if site was created despite error..."
+                # Sometimes the site gets created even if the command reports failure
+                SITE_ID=$(netlify sites:list --auth="$NETLIFY_AUTH_TOKEN" --json | jq -r ".[] | select(.name==\"$NETLIFY_SITE_NAME\") | .id")
+                if [ -n "$SITE_ID" ] && [ "$SITE_ID" != "null" ]; then
+                  echo "✅ Site was actually created: $NETLIFY_SITE_NAME (ID: $SITE_ID)"
+                else
+                  echo "❌ Site creation failed completely. Exiting."
+                  exit 1
+                fi
+              fi
+            else
+              echo "🔑 Using account slug: $ACCOUNT_SLUG"
+              # Create site with account slug to avoid team prompt
+              if netlify sites:create --name="$NETLIFY_SITE_NAME" --auth="$NETLIFY_AUTH_TOKEN" --account-slug="$ACCOUNT_SLUG" --disable-linking --debug 2>&1; then
+                echo "✅ Created site: $NETLIFY_SITE_NAME"
+                # Get the site ID after creation
+                SITE_ID=$(netlify sites:list --auth="$NETLIFY_AUTH_TOKEN" --json | jq -r ".[] | select(.name==\"$NETLIFY_SITE_NAME\") | .id")
+              else
+                echo "❌ Failed to create site: $NETLIFY_SITE_NAME"
+                echo "Debug: Checking if site was created despite error..."
+                # Sometimes the site gets created even if the command reports failure
+                SITE_ID=$(netlify sites:list --auth="$NETLIFY_AUTH_TOKEN" --json | jq -r ".[] | select(.name==\"$NETLIFY_SITE_NAME\") | .id")
+                if [ -n "$SITE_ID" ] && [ "$SITE_ID" != "null" ]; then
+                  echo "✅ Site was actually created: $NETLIFY_SITE_NAME (ID: $SITE_ID)"
+                else
+                  echo "❌ Site creation failed completely. Exiting."
+                  exit 1
+                fi
               fi
             fi
           else
