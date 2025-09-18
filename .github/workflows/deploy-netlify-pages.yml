@@ -40,21 +40,24 @@ jobs:
           if [ "${{ github.event_name }}" = "push" ] && [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
             echo "Using push diff: $BEFORE..$AFTER"
             FILES=$(git diff --name-only "$BEFORE" "$AFTER" | grep '^netlify/' || true)
+            echo "Changed files:"
+            echo "$FILES"
+            
+            # If no files changed, deploy all folders (for initial setup or manual trigger)
+            if [ -z "$FILES" ]; then
+              echo "No files changed in netlify/, deploying all folders..."
+              FOLDERS=$(find netlify -maxdepth 1 -type d -name "*" | grep -v "^netlify$" | sed 's|netlify/||' | sort -u)
+            else
+              # Derive first-level subfolders: netlify/<handle>/
+              FOLDERS=$(echo "$FILES" | awk -F/ 'NF>=2 {print $2}' | sort -u)
+            fi
           else
             # 2) Fallbacks (workflow_dispatch, first run, squash, etc.)
-            echo "Fallback diff: HEAD^..HEAD (or list all if unavailable)"
-            FILES=$(git diff --name-only HEAD^ HEAD 2>/dev/null | grep '^netlify/' || true)
-            if [ -z "$FILES" ]; then
-              FILES=$(git ls-files netlify | grep -E '^netlify/.+/.+' || true)
-            fi
+            echo "Fallback: deploying all folders under netlify/"
+            FOLDERS=$(find netlify -maxdepth 1 -type d -name "*" | grep -v "^netlify$" | sed 's|netlify/||' | sort -u)
           fi
 
-          echo "Changed files:"
-          echo "$FILES"
-
-          # Derive first-level subfolders: netlify/<handle>/
-          FOLDERS=$(echo "$FILES" | awk -F/ 'NF>=2 {print $2}' | sort -u)
-          echo "Changed folders:"
+          echo "Folders to deploy:"
           echo "$FOLDERS"
 
           # Save as a newline list & as JSON
