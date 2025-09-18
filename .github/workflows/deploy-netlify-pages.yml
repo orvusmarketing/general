@@ -21,6 +21,13 @@ jobs:
       - name: Install Netlify CLI
         run: npm install -g netlify-cli
 
+      - name: Debug Netlify CLI
+        run: |
+          echo "Netlify CLI version:"
+          netlify --version
+          echo "Netlify CLI help for sites:create:"
+          netlify sites:create --help || echo "Help command failed"
+
       - name: Show event SHAs (debug)
         run: |
           echo "event.before: ${{ github.event.before }}"
@@ -111,23 +118,30 @@ jobs:
             fi
 
             # Check if site exists, create if not
-            if ! netlify sites:list | grep -E "^\s*${NETLIFY_SITE_NAME}\b" >/dev/null 2>&1; then
+            if ! netlify sites:list --auth="$NETLIFY_AUTH_TOKEN" | grep -E "^\s*${NETLIFY_SITE_NAME}\b" >/dev/null 2>&1; then
               echo "🆕 Creating new Netlify site: $NETLIFY_SITE_NAME"
-              # Use --json to avoid interactive prompts and get site ID directly
-              SITE_CREATE_OUTPUT=$(netlify sites:create --name="$NETLIFY_SITE_NAME" --json 2>/dev/null || echo "")
-              if [ -n "$SITE_CREATE_OUTPUT" ] && echo "$SITE_CREATE_OUTPUT" | jq -e '.id' >/dev/null 2>&1; then
-                SITE_ID=$(echo "$SITE_CREATE_OUTPUT" | jq -r '.id')
-                echo "✅ Created site: $NETLIFY_SITE_NAME (ID: $SITE_ID)"
+              # Create site with proper flags: --auth, --disable-linking, --debug
+              if netlify sites:create --name="$NETLIFY_SITE_NAME" --auth="$NETLIFY_AUTH_TOKEN" --disable-linking --debug 2>&1; then
+                echo "✅ Created site: $NETLIFY_SITE_NAME"
+                # Get the site ID after creation
+                SITE_ID=$(netlify sites:list --auth="$NETLIFY_AUTH_TOKEN" --json | jq -r ".[] | select(.name==\"$NETLIFY_SITE_NAME\") | .id")
               else
                 echo "❌ Failed to create site: $NETLIFY_SITE_NAME"
-                FAILED_DEPLOYS+=("$FOLDER (site creation failed)")
-                echo "::endgroup::"
-                continue
+                echo "Debug: Checking if site was created despite error..."
+                # Sometimes the site gets created even if the command reports failure
+                SITE_ID=$(netlify sites:list --auth="$NETLIFY_AUTH_TOKEN" --json | jq -r ".[] | select(.name==\"$NETLIFY_SITE_NAME\") | .id")
+                if [ -n "$SITE_ID" ] && [ "$SITE_ID" != "null" ]; then
+                  echo "✅ Site was actually created: $NETLIFY_SITE_NAME (ID: $SITE_ID)"
+                else
+                  FAILED_DEPLOYS+=("$FOLDER (site creation failed)")
+                  echo "::endgroup::"
+                  continue
+                fi
               fi
             else
               echo "ℹ️  Site $NETLIFY_SITE_NAME already exists."
               # Get the site ID for existing site
-              SITE_ID=$(netlify sites:list --json | jq -r ".[] | select(.name==\"$NETLIFY_SITE_NAME\") | .id")
+              SITE_ID=$(netlify sites:list --auth="$NETLIFY_AUTH_TOKEN" --json | jq -r ".[] | select(.name==\"$NETLIFY_SITE_NAME\") | .id")
             fi
 
             # Verify we have a valid site ID
@@ -141,7 +155,7 @@ jobs:
 
             # Deploy the subfolder to the site
             echo "🚀 Deploying to Netlify..."
-            if netlify deploy --dir="$NETLIFY_DIR" --prod --site="$SITE_ID"; then
+            if netlify deploy --dir="$NETLIFY_DIR" --prod --site="$SITE_ID" --auth="$NETLIFY_AUTH_TOKEN"; then
               echo "✅ Successfully deployed to: https://$NETLIFY_SITE_NAME.netlify.app"
               SUCCESSFUL_DEPLOYS+=("$FOLDER → https://$NETLIFY_SITE_NAME.netlify.app")
             else
