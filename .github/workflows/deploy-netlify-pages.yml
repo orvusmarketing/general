@@ -107,12 +107,15 @@ jobs:
           echo "================================================"
 
           while read -r FOLDER; do
+            # Temporarily disable exit on error for this loop iteration
+            set +e
             [ -z "$FOLDER" ] && continue
             CURRENT_FOLDER=$((CURRENT_FOLDER + 1))
             NETLIFY_DIR="netlify/$FOLDER"
             NETLIFY_SITE_NAME="$(echo "$FOLDER" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9-]+/-/g')"
 
             echo "::group::[$CURRENT_FOLDER/$TOTAL_FOLDERS] Deploying $NETLIFY_DIR → $NETLIFY_SITE_NAME"
+            echo "DEBUG: Processing folder $CURRENT_FOLDER of $TOTAL_FOLDERS: $FOLDER"
 
             # Normalize filename: Index.html → index.html (Netlify expects index.html)
             if [ -f "${NETLIFY_DIR}/Index.html" ] && [ ! -f "${NETLIFY_DIR}/index.html" ]; then
@@ -175,6 +178,9 @@ jobs:
             fi
             
             echo "::endgroup::"
+            
+            # Re-enable exit on error for the next iteration
+            set -e
           done < changed_folders.txt
 
           # Print deployment summary
