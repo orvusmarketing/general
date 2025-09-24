@@ -115,15 +115,11 @@ jobs:
             rm -rf "${DIR}/.vercel"
 
             # Minimal local config to force static/no-build behavior
-            cat > "${DIR}/vercel.local.json" <<'JSON'
-            { "framework": null, "buildCommand": "", "installCommand": "", "outputDirectory": "." }
-            JSON
+            cat > "${DIR}/vercel.local.json" <<'EOF' { "framework": null, "buildCommand": "", "installCommand": "", "outputDirectory": "." } EOF
 
             # Link (idempotent) then deploy
             vercel link --cwd "$DIR" --project "$PROJECT" --yes --token "$VERCEL_TOKEN" "${base_scope_args[@]}"
-            vercel deploy --cwd "$DIR" \
-              --local-config "${DIR}/vercel.local.json" \
-              --prod --yes --token "$VERCEL_TOKEN" "${base_scope_args[@]}"
+            vercel deploy --cwd "$DIR" --local-config "${DIR}/vercel.local.json" --prod --yes --token "$VERCEL_TOKEN" "${base_scope_args[@]}"
 
             echo "::endgroup::"
             # small pause to be gentle with API
