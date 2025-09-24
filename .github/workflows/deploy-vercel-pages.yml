@@ -2,14 +2,14 @@ name: Deploy changed backlink(s) to Vercel
 
 on:
   push:
-    branches: [ main ]         # run every push to main
+    branches: [main] # run every push to main
     paths:
-      - 'dyln/vercel/**'       # only trigger when these paths touched
+      - "vercel/**" # only trigger when these paths touched
   workflow_dispatch:
 
 env:
-  VERCEL_TOKEN:     ${{ secrets.VERCEL_TOKEN }}        # required
-  VERCEL_TEAM_SLUG: ${{ secrets.VERCEL_TEAM_SLUG }}    # optional (team/org scope)
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }} # required
+  VERCEL_TEAM_SLUG: ${{ secrets.VERCEL_TEAM_SLUG }} # optional (team/org scope)
 
 jobs:
   deploy:
@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0       # need history for git diff
+          fetch-depth: 0 # need history for git diff
 
       - name: Install Vercel CLI & jq
         run: |
@@ -31,13 +31,13 @@ jobs:
           echo "event.after : ${{ github.sha }}"
           git log -1 --pretty=fuller
 
-      - name: Compute changed backlink folders under dyln/vercel/
+      - name: Compute changed backlink folders under vercel/
         id: detect
         shell: bash
         run: |
           set -euo pipefail
 
-          ROOT="dyln/vercel"
+          ROOT="vercel"
           BEFORE="${{ github.event.before }}"
           AFTER="${{ github.sha }}"
 
@@ -55,7 +55,7 @@ jobs:
           echo "Changed files:"
           echo "$FILES"
 
-          # Derive subfolder slugs: dyln/vercel/<slug>/
+          # Derive subfolder slugs: vercel/<slug>/
           FOLDERS=$(echo "$FILES" | awk -F/ 'NF>=3 {print $1"/"$2"/"$3}' | sort -u)
           echo "Changed folders:"
           echo "$FOLDERS"
@@ -81,7 +81,7 @@ jobs:
 
       - name: Stop if nothing to deploy
         if: steps.detect.outputs.count == '0'
-        run: echo "No dyln/vercel/* folders with index.html changed — skipping."
+        run: echo "No vercel/* folders with index.html changed — skipping."
 
       - name: Deploy each changed folder to Vercel
         if: steps.detect.outputs.count != '0'
