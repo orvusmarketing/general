@@ -121,6 +121,15 @@ jobs:
           export SCW_DEFAULT_ORGANIZATION_ID="$SCW_DEFAULT_ORGANIZATION_ID"
           export SCW_DEFAULT_PROJECT_ID="$SCW_DEFAULT_PROJECT_ID"
 
+          # Initialize Scaleway CLI configuration
+          echo "Initializing Scaleway CLI..."
+          $HOME/go/bin/scw init \
+            --access-key="$SCW_ACCESS_KEY" \
+            --secret-key="$SCW_SECRET_KEY" \
+            --organization-id="$SCW_DEFAULT_ORGANIZATION_ID" \
+            --project-id="$SCW_DEFAULT_PROJECT_ID" \
+            --non-interactive || echo "CLI may already be configured"
+
           while read -r DIR; do
             [ -z "$DIR" ] && continue
             # project name = folder name, sanitized for Scaleway
@@ -150,8 +159,11 @@ jobs:
             BUCKET_NAME="dyln-static-sites"
             $HOME/go/bin/scw object bucket create name="$BUCKET_NAME" || echo "Bucket may already exist"
             
-            # Upload the file to object storage
-            $HOME/go/bin/scw object file upload "$TEMP_DIR/index.html" "s3://$BUCKET_NAME/projects/${PROJECT}/index.html"
+            # Upload the file to object storage using the correct syntax
+            $HOME/go/bin/scw object file upload \
+              bucket="$BUCKET_NAME" \
+              file="$TEMP_DIR/index.html" \
+              key="projects/${PROJECT}/index.html"
 
             # Clean up temp directory
             rm -rf "$TEMP_DIR"
