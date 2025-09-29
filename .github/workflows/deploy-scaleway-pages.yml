@@ -145,16 +145,19 @@ jobs:
             mkdir -p "$TEMP_DIR"
             cp "${DIR}/index.html" "$TEMP_DIR/"
 
-            # Upload using Scaleway CLI (using default bucket)
-            $HOME/go/bin/scw object file upload "$TEMP_DIR/index.html" "projects/${PROJECT}/index.html" \
-              --content-type "text/html" \
-              --acl public-read
+            # Upload using Scaleway CLI
+            # First, ensure we have a bucket - create if it doesn't exist
+            BUCKET_NAME="dyln-static-sites"
+            $HOME/go/bin/scw object bucket create name="$BUCKET_NAME" || echo "Bucket may already exist"
+            
+            # Upload the file to object storage
+            $HOME/go/bin/scw object file upload "$TEMP_DIR/index.html" "s3://$BUCKET_NAME/projects/${PROJECT}/index.html"
 
             # Clean up temp directory
             rm -rf "$TEMP_DIR"
 
             echo "Successfully deployed ${PROJECT} to Scaleway Object Storage"
-            echo "URL: https://your-default-bucket.s3.your-region.scw.cloud/projects/${PROJECT}/index.html"
+            echo "URL: https://$BUCKET_NAME.s3.fr-par.scw.cloud/projects/${PROJECT}/index.html"
             echo "::endgroup::"
             # small pause to be gentle with API
             sleep 1
