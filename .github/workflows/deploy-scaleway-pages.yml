@@ -1,0 +1,144 @@
+name: Deploy changed backlink(s) to Scaleway
+
+on:
+  push:
+    branches: [main] # run every push to main
+    paths:
+      - "scaleway/**" # only trigger when these paths touched
+  workflow_dispatch:
+
+env:
+  SCW_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY }} # required
+  SCW_SECRET_KEY: ${{ secrets.SCW_SECRET_KEY }} # required
+  SCW_DEFAULT_ORGANIZATION_ID: ${{ secrets.SCW_DEFAULT_ORGANIZATION_ID }} # required
+  SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCW_DEFAULT_PROJECT_ID }} # required
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # need history for git diff
+
+      - name: Install Scaleway CLI
+        run: |
+          curl -o scaleway-cli.deb https://github.com/scaleway/scaleway-cli/releases/latest/download/scaleway-cli_linux_amd64.deb
+          sudo dpkg -i scaleway-cli.deb
+          scaleway version
+
+      - name: Show event SHAs (debug)
+        run: |
+          echo "event.before: ${{ github.event.before }}"
+          echo "event.after : ${{ github.sha }}"
+          git log -1 --pretty=fuller
+
+      - name: Compute changed backlink folders under scaleway/
+        id: detect
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ROOT="scaleway"
+          BEFORE="${{ github.event.before }}"
+          AFTER="${{ github.sha }}"
+
+          if [ "${{ github.event_name }}" = "push" ] && [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
+            echo "Using push diff: $BEFORE..$AFTER"
+            FILES=$(git diff --name-only "$BEFORE" "$AFTER" | grep "^${ROOT}/" || true)
+          else
+            echo "Fallback diff: HEAD^..HEAD (or list all if unavailable)"
+            FILES=$(git diff --name-only HEAD^ HEAD 2>/dev/null | grep "^${ROOT}/" || true)
+            if [ -z "$FILES" ]; then
+              FILES=$(git ls-files "${ROOT}" | grep -E "^${ROOT}/.+/.+" || true)
+            fi
+          fi
+
+          echo "Changed files:"
+          echo "$FILES"
+
+          # Early exit if no files in scaleway/ directory were changed
+          if [ -z "$FILES" ]; then
+            echo "count=0" >> "$GITHUB_OUTPUT"
+            echo "No files in scaleway/ directory changed — skipping."
+            exit 0
+          fi
+
+          # Derive subfolder slugs: scaleway/<slug>/
+          FOLDERS=$(echo "$FILES" | awk -F/ 'NF>=3 {print $1"/"$2}' | sort -u)
+          echo "Changed folders:"
+          echo "$FOLDERS"
+
+          # Keep only folders that actually contain an index.html (or Index.html)
+          FINAL=()
+          while read -r f; do
+            [ -z "$f" ] && continue
+            if [ -f "$f/index.html" ] || [ -f "$f/Index.html" ]; then
+              FINAL+=("$f")
+            fi
+          done <<< "$FOLDERS"
+
+          if [ ${#FINAL[@]} -eq 0 ]; then
+            echo "count=0" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          printf "%s\n" "${FINAL[@]}" > changed_folders.txt
+          echo "count=${#FINAL[@]}" >> "$GITHUB_OUTPUT"
+          echo "Will deploy:"
+          cat changed_folders.txt
+
+      - name: Stop if nothing to deploy
+        if: steps.detect.outputs.count == '0'
+        run: echo "No scaleway/* folders with index.html changed — skipping."
+
+      - name: Deploy each changed folder to Scaleway
+        if: steps.detect.outputs.count != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Configure Scaleway CLI
+          export SCW_ACCESS_KEY="$SCW_ACCESS_KEY"
+          export SCW_SECRET_KEY="$SCW_SECRET_KEY"
+          export SCW_DEFAULT_ORGANIZATION_ID="$SCW_DEFAULT_ORGANIZATION_ID"
+          export SCW_DEFAULT_PROJECT_ID="$SCW_DEFAULT_PROJECT_ID"
+
+          while read -r DIR; do
+            [ -z "$DIR" ] && continue
+            # project name = folder name, sanitized for Scaleway
+            RAW_PROJECT="$(basename "$DIR")"
+            PROJECT="$(echo "$RAW_PROJECT" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9-]+/-/g')"
+
+            echo "::group::Deploying ${DIR} → ${PROJECT}"
+
+            # Normalize filename: Index.html → index.html
+            if [ -f "${DIR}/Index.html" ] && [ ! -f "${DIR}/index.html" ]; then
+              mv "${DIR}/Index.html" "${DIR}/index.html"
+            fi
+            if [ ! -f "${DIR}/index.html" ]; then
+              echo "ERROR: ${DIR}/index.html not found. Skipping."
+              echo "::endgroup::"
+              continue
+            fi
+
+            # Upload to Scaleway Object Storage
+            # Create a temporary directory for the project
+            TEMP_DIR="/tmp/${PROJECT}"
+            mkdir -p "$TEMP_DIR"
+            cp "${DIR}/index.html" "$TEMP_DIR/"
+
+            # Upload using Scaleway CLI (using default bucket)
+            scaleway object file upload "$TEMP_DIR/index.html" "projects/${PROJECT}/index.html" \
+              --content-type "text/html" \
+              --acl public-read
+
+            # Clean up temp directory
+            rm -rf "$TEMP_DIR"
+
+            echo "Successfully deployed ${PROJECT} to Scaleway Object Storage"
+            echo "URL: https://your-default-bucket.s3.your-region.scw.cloud/projects/${PROJECT}/index.html"
+            echo "::endgroup::"
+            # small pause to be gentle with API
+            sleep 1
+          done < changed_folders.txt
