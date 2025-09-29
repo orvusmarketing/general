@@ -21,7 +21,7 @@ jobs:
         with:
           fetch-depth: 0 # need history for git diff
 
-      - name: Install Scaleway CLI
+      - name: Install Scaleway CLI and AWS CLI
         run: |
           # Install Go if not already available
           if ! command -v go &> /dev/null; then
@@ -41,8 +41,15 @@ jobs:
           echo "$HOME/go/bin" >> $GITHUB_PATH
           export PATH=$PATH:$HOME/go/bin
 
-          # Verify installation
+          # Install AWS CLI for S3-compatible operations
+          echo "Installing AWS CLI..."
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+
+          # Verify installations
           $HOME/go/bin/scw version
+          aws --version
 
       - name: Show event SHAs (debug)
         run: |
@@ -124,8 +131,6 @@ jobs:
           # Initialize Scaleway CLI configuration
           echo "Initializing Scaleway CLI..."
           $HOME/go/bin/scw init \
-            --access-key="$SCW_ACCESS_KEY" \
-            --secret-key="$SCW_SECRET_KEY" \
             --organization-id="$SCW_DEFAULT_ORGANIZATION_ID" \
             --project-id="$SCW_DEFAULT_PROJECT_ID" \
             --non-interactive || echo "CLI may already be configured"
@@ -154,16 +159,24 @@ jobs:
             mkdir -p "$TEMP_DIR"
             cp "${DIR}/index.html" "$TEMP_DIR/"
 
-            # Upload using Scaleway CLI
+            # Upload using Scaleway CLI (S3-compatible)
             # First, ensure we have a bucket - create if it doesn't exist
             BUCKET_NAME="dyln-static-sites"
             $HOME/go/bin/scw object bucket create name="$BUCKET_NAME" || echo "Bucket may already exist"
             
-            # Upload the file to object storage using the correct syntax
-            $HOME/go/bin/scw object file upload \
-              bucket="$BUCKET_NAME" \
-              file="$TEMP_DIR/index.html" \
-              key="projects/${PROJECT}/index.html"
+            # Upload the file using S3-compatible API (as shown in Scaleway docs)
+            # Using the put-object command equivalent: aws s3api put-object --bucket BucketName --key dir-1/ObjectName --body ObjectName
+            $HOME/go/bin/scw object config install awscli || echo "AWS CLI config may already exist"
+            
+            # Use AWS CLI with Scaleway endpoint for S3-compatible upload
+            AWS_ACCESS_KEY_ID="$SCW_ACCESS_KEY" \
+            AWS_SECRET_ACCESS_KEY="$SCW_SECRET_KEY" \
+            aws s3api put-object \
+              --bucket "$BUCKET_NAME" \
+              --key "projects/${PROJECT}/index.html" \
+              --body "$TEMP_DIR/index.html" \
+              --content-type "text/html" \
+              --endpoint-url "https://s3.fr-par.scw.cloud"
 
             # Clean up temp directory
             rm -rf "$TEMP_DIR"
