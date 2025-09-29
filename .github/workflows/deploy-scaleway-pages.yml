@@ -23,8 +23,30 @@ jobs:
 
       - name: Install Scaleway CLI
         run: |
-          curl -o scaleway-cli.deb https://github.com/scaleway/scaleway-cli/releases/latest/download/scaleway-cli_linux_amd64.deb
-          sudo dpkg -i scaleway-cli.deb
+          # Download with retry and verification
+          for i in {1..3}; do
+            echo "Download attempt $i/3..."
+            if curl -L --fail --retry 3 --retry-delay 5 -o scaleway-cli.deb https://github.com/scaleway/scaleway-cli/releases/latest/download/scaleway-cli_linux_amd64.deb; then
+              # Verify file size and integrity
+              if [ -s scaleway-cli.deb ] && file scaleway-cli.deb | grep -q "Debian binary package"; then
+                echo "Download successful and file appears valid"
+                break
+              else
+                echo "Downloaded file is empty or invalid, retrying..."
+                rm -f scaleway-cli.deb
+              fi
+            else
+              echo "Download failed, retrying..."
+              rm -f scaleway-cli.deb
+            fi
+            if [ $i -eq 3 ]; then
+              echo "All download attempts failed"
+              exit 1
+            fi
+          done
+
+          # Install the package
+          sudo dpkg -i scaleway-cli.deb || (sudo apt-get update && sudo apt-get install -f)
           scaleway version
 
       - name: Show event SHAs (debug)
