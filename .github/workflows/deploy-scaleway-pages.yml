@@ -131,7 +131,6 @@ jobs:
           # Initialize Scaleway CLI configuration
           echo "Initializing Scaleway CLI..."
           $HOME/go/bin/scw init \
-            --organization-id="$SCW_DEFAULT_ORGANIZATION_ID" \
             --project-id="$SCW_DEFAULT_PROJECT_ID" \
             --non-interactive || echo "CLI may already be configured"
 
@@ -162,10 +161,18 @@ jobs:
             # Upload using Scaleway CLI (S3-compatible)
             # First, ensure we have a bucket - create if it doesn't exist
             BUCKET_NAME="dyln-static-sites"
+            
+            # Debug: Check if we can list buckets first
+            echo "Checking existing buckets..."
+            $HOME/go/bin/scw object bucket list || echo "Cannot list buckets, will try to create"
+            
+            # Try to create bucket
+            echo "Creating bucket $BUCKET_NAME..."
             $HOME/go/bin/scw object bucket create name="$BUCKET_NAME" || echo "Bucket may already exist"
             
             # Upload the file using S3-compatible API (as shown in Scaleway docs)
             # Using the put-object command equivalent: aws s3api put-object --bucket BucketName --key dir-1/ObjectName --body ObjectName
+            echo "Installing AWS CLI config for S3 compatibility..."
             $HOME/go/bin/scw object config install awscli || echo "AWS CLI config may already exist"
             
             # Use AWS CLI with Scaleway endpoint for S3-compatible upload
