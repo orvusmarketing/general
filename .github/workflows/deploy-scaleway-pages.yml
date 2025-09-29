@@ -130,9 +130,24 @@ jobs:
 
           # Initialize Scaleway CLI configuration
           echo "Initializing Scaleway CLI..."
-          $HOME/go/bin/scw init \
-            --project-id="$SCW_DEFAULT_PROJECT_ID" \
-            --non-interactive || echo "CLI may already be configured"
+          $HOME/go/bin/scw init --non-interactive || echo "CLI may already be configured"
+
+          # Verify project ID format
+          echo "Verifying project ID format..."
+          if [[ ! "$SCW_DEFAULT_PROJECT_ID" =~ ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$ ]]; then
+            echo "ERROR: SCW_DEFAULT_PROJECT_ID is not in valid UUID format"
+            echo "Expected format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+            echo "Current value: $SCW_DEFAULT_PROJECT_ID"
+            exit 1
+          fi
+
+          # Test CLI authentication
+          echo "Testing Scaleway CLI authentication..."
+          $HOME/go/bin/scw info || {
+            echo "ERROR: Scaleway CLI authentication failed"
+            echo "Please check your SCW_ACCESS_KEY, SCW_SECRET_KEY, SCW_DEFAULT_PROJECT_ID, and SCW_DEFAULT_ORGANIZATION_ID"
+            exit 1
+          }
 
           while read -r DIR; do
             [ -z "$DIR" ] && continue
