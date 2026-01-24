@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>How much will $100 grow in 20 years?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens (from provided style) */
+      --text-color: #ffffff; /* --fp-ink */
+      --accent: #e6bb5b; /* --fp-accent */
+      --accent-hover: color-mix(in srgb, var(--accent) 88%, #000 12%);
+      --line: rgba(255,255,255,.14); /* --fp-line */
+      --surface: #0f0f0f; /* --fp-bg */
+      --surface-2: #141414; /* --fp-panel */
+      --radius: 0px; /* --fp-radius */
+
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--accent);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #0f0f0f;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--accent);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--accent);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/compound-interest-calculator.jpg" alt="Compound interest calculator for $100 over 20 years" />
+        </div>
+        <h1 class="title">How much will $100 grow in 20 years?</h1>
+        <p class="subline">A clear walkthrough of what $100 can become over 20 years using compound interest, accounting for inflation, fees and taxes.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://financepolice.com/compound-interest-how-much-will-100-grow-in-20-years/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">This article walks through what happens to $100 over 20 years using compound interest, explains the roles of inflation, fees and taxes, and gives practical levers and step-by-step instructions so you can run your own 20-year scenarios with confidence.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">1. $100 invested at 7% for 20 years grows to about $386.97 &mdash; small rate changes compound into big differences.</span></div><div class="highlight-card"><span class="highlight-text">2. A 1% annual fee can reduce a 7% nominal path ($386.97) to about $320.71 over 20 years &mdash; fees quietly erode returns.</span></div><div class="highlight-card"><span class="highlight-text">3. FinancePolice data and guides show everyday choices &mdash; low-cost funds, steady contributions, and tax-smart accounts &mdash; often outperform chasing high returns.</span></div>
+     </div>
+  <p><b>How much will $100 grow in 20 years?</b> That question is the easiest way to see a powerful financial truth: <b>compound interest</b> is a slow, patient engine that turns modest sums into real progress - if you understand the rules and avoid the quiet drags that bite long-term growth.</p>
+<h2>Why $100 is the perfect thought experiment</h2>
+<p>$100 is small enough to feel familiar and large enough to reveal the mechanics of time, return, fees and inflation. The arithmetic is the same whether you start with $100 or $100,000: compound interest multiplies not linearly but exponentially. In plain terms, every percentage point of return matters because each year&rsquo;s gains build on the last.</p>
+<p>
+    <figure class="special-image-standalone">
+      <a href="https://financepolice.com/" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1MqGf4oUdM3_qqw1_FcWTOAhVpbssBwO9=s150" alt="Finance Police Logo" />
+      </a>
+    </figure></p>
+<h3>The basic formula (and how to use it)</h3>
+<p>The core math is simple and transparent: <b>A = P(1 + r)^t</b>. P is your starting principal, r is the annual rate as a decimal, t is time in years, and A is the amount at the end. This formula is the backbone of any <i>compound interest</i> projection.</p>
+<p>Plug in P = $100 and t = 20 and try different r values. That&rsquo;s the fastest way to see how much an extra percent of return matters after two decades.</p>
+<h2>Concrete 20-year examples</h2>
+<p>Here are a few real numbers you can keep in your head:</p>
+<p><b>At 1% nominal annual return:</b> $100 × (1.01)^20 ≈ $122.02.</p>
+<p><b>At 3% nominal annual return:</b> $100 × (1.03)^20 ≈ $180.61.</p>
+<p><b>At 5% nominal annual return:</b> $100 × (1.05)^20 ≈ $265.33.</p>
+<p><b>At 7% nominal annual return:</b> $100 × (1.07)^20 ≈ $386.97.</p>
+<p><b>At 10% nominal annual return:</b> $100 × (1.10)^20 ≈ $672.75.</p>
+<p>See how a few percentage points change the outcome dramatically? That&rsquo;s the nature of <b>compound interest</b> - small differences compound into large ones.</p>
+<p>If you want an easy way to test these numbers yourself or to place a data widget on your site, consider learning how FinancePolice partners and advertises - a simple entry point is available at <a href="https://financepolice.com/advertise/" target="_blank" rel="noopener">advertising opportunities on FinancePolice</a>. This is a practical, no-pressure option to access ready-made calculators and clear financial content for readers.</p>
+<h2>Don&rsquo;t forget purchasing power: the role of inflation</h2>
+<p>Numbers like $672.75 look impressive until you account for inflation. Real value - what your money can actually buy - is what matters. Use the real return formula:</p>
+<p><b>real return = (1 + nominal) / (1 + inflation) - 1</b></p>
+<p>Assuming 2% annual inflation, the earlier nominal outcomes become roughly:</p>
+<p>1% nominal → ~$82.10 in today&rsquo;s dollars.<br/>3% nominal → ~$121.60 in today&rsquo;s dollars.<br/>5% nominal → ~$178.60 in today&rsquo;s dollars.<br/>7% nominal → ~$260.40 in today&rsquo;s dollars.<br/>10% nominal → ~$453.00 in today&rsquo;s dollars.</p>
+<p>Translation: nominal growth matters, but real growth - after inflation - is the measure that tells you whether your future self can buy more, less, or the same amount as today.</p>
+<h2>Fees and taxes: the quiet compounding killers</h2>
+<p>Fees and taxes are the less glamorous side of compounding. They reduce your effective annual return, and over 20 years that reduction becomes significant.</p>
+<h3>How fees hurt</h3>
+<p>Imagine a fund that advertises a 7% nominal return but charges a 1% annual fee. Your net return is closer to 6%, and that gap adds up. On $100 over 20 years, 7% yields about $386.97 while 6% yields about $320.71 - a difference of more than $66 just from a single point of fees. Fees look small annually, but they compound just like returns.</p>
+<h3>How taxes matter</h3>
+<p>Taxes depend on timing and type. If you pay tax yearly on dividends or interest, that reduces the base that compounds. If you pay taxes at the end (for example, long-term capital gains taxed when you sell), the tax bite is applied to the gain rather than to yearly returns, which usually works in your favor.</p>
+<p>Example: $100 growing at 10% nominal becomes $672.75 in 20 years. If you then pay 15% tax on the gain ($572.75 × 0.15 ≈ $85.91), you&rsquo;d be left with about $586.84. If instead those returns were in a tax-deferred account, you would get the full pre-tax compounding benefit until withdrawal.</p>
+<h2>Picking assumptions: historical context vs. future uncertainty</h2>
+<p>U.S. stocks have historically delivered around 9&ndash;10% nominal returns over very long periods, but history is not destiny. Bond returns and savings rates have been lower. When planning, consider running multiple scenarios - conservative, moderate, aggressive - to see how sensitive outcomes are to assumptions. For longer-term budget context see the <a href="https://www.cbo.gov/publication/61270" target="_blank" rel="noopener">CBO long-term budget outlook</a>, and for market views consult <a href="https://www.blackrock.com/us/financial-professionals/insights/investing-in-2025" target="_blank" rel="noopener">BlackRock's Investing in 2025</a> and <a href="https://www.morningstar.com/economy/how-inflation-tariffs-more-could-impact-your-finances-2025" target="_blank" rel="noopener">Morningstar on inflation and tariffs</a>.</p>
+<h3>Scenario thinking</h3>
+<p>Three simple scenarios make planning clearer:</p>
+<p><b>Conservative:</b> 3% nominal return, 2% inflation, 0.5% fees.<br/><b>Moderate:</b> 5&ndash;7% nominal return, 2% inflation, 0.25% fees.<br/><b>Aggressive:</b> 8&ndash;10% nominal return, 2&ndash;3% inflation, higher fees and higher volatility.</p>
+<p>Run the numbers for each case and compare both nominal and real outcomes. The difference between conservative and moderate scenarios is often surprising.</p>
+<h2>Three practical levers you control</h2>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>You can&rsquo;t control markets, but you can control contributions, fees, and taxes. These three levers are the most reliable ways to improve long-term results.</p></div>
+      <a href="https://financepolice.com/category/crypto/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1UZ439dFYcoNCgCBbvsJ88F2TfedBUJjd=s1200" alt="Finance Police &ndash; Image 2" /></a>
+    </div>
+<h3>1) Put more in &mdash; contributions matter</h3>
+<p>Adding principal makes compound interest more powerful. Consider an annual contribution of $600 (about $50 a month) for 20 years:</p>
+<p>At 5% annual return (end-of-year contributions), the future value ≈ $19,840.<br/>At 7% annual return, future value ≈ $24,600.</p>
+<p>Those extra dollars each year compound and add substantially to the final pot. Contributions are fuel; returns are the engine.</p>
+<h3>2) Cut fees where it makes sense</h3>
+<p>Choose low-cost, diversified funds when they offer similar exposure to expensive funds. A 0.5% fee difference may sound tiny, but over 20 years it can cost thousands of dollars. Focus on net returns - the rate that actually lands in your account after fees.</p>
+<h3>3) Use tax-advantaged accounts</h3>
+<p>Tax-deferred and tax-free accounts change the compounding math. A retirement account that defers taxes allows compounding to occur without yearly tax erosion. Roth-style accounts let your money grow tax-free and avoid uncertainty at withdrawal, which can be especially valuable if you expect higher future tax rates. See our roundup of <a href="https://financepolice.com/best-business-bank-accounts/" target="_blank" rel="noopener">retirement and business account options</a> when choosing an account type.</p>
+<h2>A reminder: compound interest can work against you</h2>
+<p>Debt compounds too, and not in a good way. Credit cards and some consumer loans often carry interest rates of 15&ndash;25% or higher. Owing money at those rates and only making minimum payments is a guaranteed way to see compounding produce bad outcomes. Pay down high-interest debt before investing in many cases.</p>
+<h3>When paying debt first makes sense</h3>
+<p>If your credit-card rate is 18% and expected safe returns are 7%, paying off the card gives a risk-free return equal to the interest rate - in that case, it&rsquo;s a better, guaranteed &ldquo;investment&rdquo; than most market options.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-b8zgvy" class="faq-toggle" checked /><label for="faq-b8zgvy" class="faq-summary" role="button" tabindex="0">Can $100 really make a difference over 20 years, or is that just small change?</label><div class="faq-content"><p>Yes &mdash; $100 by itself might not transform your life, but it perfectly demonstrates how &lt;b&gt;compound interest&lt;/b&gt; works: over 20 years small sums grow by meaningful amounts when left to compound, and more importantly, the example reveals what levers (contributions, fees, tax treatment, inflation) actually change outcomes.</p></div></section>
+<h2>How to run your own 20-year projection (step-by-step)</h2>
+<p>Use a spreadsheet or an online <b>compound interest</b> calculator and follow these steps:</p>
+<p>1) Enter P = starting principal (e.g., $100).<br/>2) Enter r = expected annual nominal return as a decimal (e.g., 0.05 for 5%).<br/>3) Enter t = time in years (20).<br/>4) If you plan contributions, use a future-value-of-an-annuity field or formula.<br/>5) To get purchasing-power outcomes, calculate the real return using (1 + nominal)/(1 + inflation) - 1 and repeat the projection with that rate.<br/>6) Adjust for fees and taxes by subtracting expected fee percentages from nominal returns or modeling taxes on gains as appropriate.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Bring clear financial tools to your audience</h3><div class="cta-intro"><p>Using these steps you can quickly see how different choices change the final number. Try changing one variable at a time to see how sensitive outcomes are to that assumption - or visit our <a href="https://financepolice.com/advertise/" target="_blank" rel="noopener">partner page</a> to learn about adding calculators and widgets to your site.</p></div><a href="https://financepolice.com/advertise/" target="_blank" rel="noopener" class="cta-button">See advertising options</a></div>
+
+<h2>Examples that show common trade-offs</h2>
+<p>Compare two funds for $1,000 invested today:</p>
+<p>Fund A: 7% gross return, 0.25% fee → 6.75% net.<br/>Fund B: 8% gross return, 1.25% fee → 6.75% net.</p>
+<p>On paper Fund B promises a higher return, but fees erase that advantage. Always compare net returns - that&rsquo;s the actual growing rate in your account. This is a simple but vital application of the <b>compound interest</b> principle.</p>
+<h2>Behavioral tips: make compounding work for you</h2>
+<p>Compounding is powerful only when you stick with it. Here are practical behaviors that help:</p>
+<p>- Automate contributions so you&rsquo;re consistently adding fuel to the compounding engine. For help with budgeting and automating savings see our guide on <a href="https://financepolice.com/how-to-budget/" target="_blank" rel="noopener">how to budget</a>.<br/>- Avoid panic selling during market dips; time in market usually beats market timing.<br/>- Revisit fees annually and move to lower-cost options if you can do so without causing tax problems or poor asset allocation.<br/>- Use tax-advantaged accounts and check whether Roth or pre-tax makes sense for your situation.</p>
+<h2>Sample full scenarios for $100 and for regular contributions</h2>
+<p>Scenario A &mdash; One-time $100, 20 years, various net returns (nominal):</p>
+<p>1% → $122.02 nominal (~$82.10 real at 2% inflation).<br/>3% → $180.61 nominal (~$121.60 real).<br/>5% → $265.33 nominal (~$178.60 real).<br/>7% → $386.97 nominal (~$260.40 real).<br/>10% → $672.75 nominal (~$453.00 real).</p>
+<p>Scenario B &mdash; $50 monthly ($600/year) for 20 years, end-of-year contributions approximation:</p>
+<p>At 5% → ≈ $19,840.<br/>At 7% → ≈ $24,600.</p>
+<p>These examples show how contributions plus higher returns multiply the final total compared with a one-time deposit.</p>
+<h2>How to think about risk versus return</h2>
+<p>Higher expected returns usually mean higher volatility. That&rsquo;s the trade-off. For many readers, a balanced approach with diversified equity exposure and some bonds is appropriate. Younger investors with a long 20-year horizon can tolerate more volatility for potentially higher returns; near-term savers should be more conservative.</p>
+<h3>A rough allocation guide for different time horizons</h3>
+<p>- Long horizon (20 years+): heavier equity exposure for higher potential nominal returns.<br/>- Medium horizon (5&ndash;15 years): balanced mix of stocks and bonds.<br/>- Short horizon (0&ndash;5 years): conservative, lower volatility instruments.</p>
+<h2>Common questions people ask (brief answers)</h2>
+<p><b>What matters more: rate of return or contribution size?</b> Both matter. Contributions are the lever most people can control immediately; rates matter but usually involve taking more risk.</p>
+<p><b>How should I treat inflation in planning?</b> Use real returns to see purchasing power. Convert nominal returns into real returns using (1 + nominal)/(1 + inflation) - 1.</p>
+<p><b>How big a difference do fees make?</b> Small fee differences compound into large dollar differences over 20 years. Even 0.5% can mean thousands of dollars on larger balances.</p>
+<h2>Practical checklist before you run numbers</h2>
+<p>- Decide the horizon and whether you want nominal or real outcomes.<br/>- Pick at least three return assumptions (conservative, moderate, aggressive).<br/>- Pick an inflation rate (2% is common for long-term U.S. planning, but test higher numbers).<br/>- Estimate fees and tax treatment (tax-deferred, taxable, or tax-free).<br/>- Model both one-time and recurring contributions.</p>
+<h2>How FinancePolice can help</h2>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://financepolice.com/category/crypto/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1gK_xOXmHTWV05keaQPXWq2TWXREWMtxP=s1200" alt="Close up of laptop spreadsheet showing growth curves and numbers with coffee cup and pencil nearby highlighting compound interest calculations" /></a>
+      <div class="side-text"><p>At FinancePolice we translate this kind of math into practical steps for everyday readers - calculators, plain-language guides and scenario walkthroughs that help you decide what to change today. If you&rsquo;re interested in placing a calculator or partnering with FinancePolice to reach readers who want clear financial tools, check the options at our <a href="https://financepolice.com/advertise/" target="_blank" rel="noopener">partner page</a>. A small FinancePolice logo sits nearby as a friendly reminder of our tools.</p></div>
+    </div>
+<h2>Final practical exercise</h2>
+<p>Take three steps right now:</p>
+<p>1) Use a <b>compound interest</b> calculator and enter $100, 20 years, and three distinct rates. Observe the differences.<br/>2) Try adding $25 a month to see how contributions shift the result.<br/>3) Change fees by 0.5% and see the long-term hit.</p>
+<p>
+    <figure class="special-image-standalone">
+      <a href="https://financepolice.com/" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1MqGf4oUdM3_qqw1_FcWTOAhVpbssBwO9=s150" alt="Finance Police Logo" />
+      </a>
+    </figure></p>
+<h2>Key takeaways</h2>
+<p><b>Compound interest</b> rewards time, steady contributions, and low friction (fees and taxes). Small, routine actions - like increasing monthly savings, choosing low-cost funds, and using tax-advantaged accounts - often beat risky attempts to chase higher returns. And remember: compound interest can work against you when it shows up on debt.</p>
+<p>Two decades gives compounding a real opportunity to work. You don&rsquo;t need magic, just patience, smart choices and a steady hand.</p>
+<h3>Useful next steps</h3>
+<p>If you want help building your own 20-year plan, start with a free spreadsheet or an online calculator. Then compare a few realistic scenarios and pick the changes you can sustain for the long run.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-b1tf9z" class="faq-toggle" /><label for="faq-b1tf9z" class="faq-summary" role="button" tabindex="0">What is the simplest way to estimate how much $100 will grow in 20 years?</label><div class="faq-content"><p>Use the compound interest formula A = P(1 + r)^t or a compound interest calculator. Enter P = $100, pick an annual return r (as a decimal), and set t = 20. For purchasing-power estimates, convert nominal returns to real returns using (1 + nominal)/(1 + inflation) - 1.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-31qp10" class="faq-toggle" /><label for="faq-31qp10" class="faq-summary" role="button" tabindex="0">How much do fees and taxes actually change a 20-year outcome?</label><div class="faq-content"><p>They can change outcomes significantly. For example, a 1% annual fee on a 7% nominal return reduces the net return to about 6%, turning a $100 one-time investment from roughly $386.97 to $320.71 over 20 years. Taxes depend on timing, but paying tax yearly reduces compounding less favorably than deferring taxes until later or sheltering gains in tax-advantaged accounts.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-9nq8wr" class="faq-toggle" /><label for="faq-9nq8wr" class="faq-summary" role="button" tabindex="0">Should I pay off high-interest debt or invest for 20 years?</label><div class="faq-content"><p>Often, paying off high-interest consumer debt first is the best move because interest rates on debt (e.g., credit cards at 15&ndash;25%) typically exceed safe expected investment returns. Clearing high-interest debt gives a guaranteed, risk-free return equal to the interest rate, which can be preferable to investing while carrying expensive balances.</p></div></section>
+</section>
+
+<section class="article-ending">In one sentence: $100 grows much more with time, steady contributions and low drag from fees, taxes and inflation &mdash; use compound interest patiently and you&rsquo;ll be surprised what two decades can do. Thanks for reading, and here&rsquo;s to the quiet power of steady savings!</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://financepolice.com/advertise/" target="_blank" rel="noopener">https://financepolice.com/advertise/</a></li><li><a href="https://financepolice.com/best-business-bank-accounts/" target="_blank" rel="noopener">https://financepolice.com/best-business-bank-accounts/</a></li><li><a href="https://financepolice.com/how-to-budget/" target="_blank" rel="noopener">https://financepolice.com/how-to-budget/</a></li><li><a href="https://financepolice.com/best-micro-investment-apps/" target="_blank" rel="noopener">https://financepolice.com/best-micro-investment-apps/</a></li><li><a href="https://www.cbo.gov/publication/61270" target="_blank" rel="noopener">https://www.cbo.gov/publication/61270</a></li><li><a href="https://www.blackrock.com/us/financial-professionals/insights/investing-in-2025" target="_blank" rel="noopener">https://www.blackrock.com/us/financial-professionals/insights/investing-in-2025</a></li><li><a href="https://www.morningstar.com/economy/how-inflation-tariffs-more-could-impact-your-finances-2025" target="_blank" rel="noopener">https://www.morningstar.com/economy/how-inflation-tariffs-more-could-impact-your-finances-2025</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
