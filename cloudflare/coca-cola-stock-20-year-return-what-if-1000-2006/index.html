@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What if I invested $1000 in Coca-Cola 20 years ago?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff;               /* from --fp-ink */
+      --accent: #e6bb5b;                  /* from --fp-accent (gold) */
+      --accent-hover: color-mix(in srgb, var(--accent) 88%, #000 12%);
+      --secondary: #4aa568;               /* from --fp-secondary (green) */
+      --line: rgba(255,255,255,.14);      /* from --fp-line */
+      --surface: #0f0f0f;                 /* from --fp-bg (dark background) */
+      --surface-2: #141414;               /* from --fp-panel */
+      --radius: 0px;                      /* from --fp-radius */
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--secondary);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #0f0f0f;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--secondary);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    /* Scoped article helper styles derived from brand CSS */
+    .article-body .summary{
+      font-style: italic;
+      color: color-mix(in srgb, var(--text-color) 75%, transparent);
+      margin-bottom: 2rem;
+    }
+
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:1rem; margin:2.2rem 0; }
+    .article-body .highlight-card{
+      background: linear-gradient(180deg, var(--surface-2) 0%, var(--surface) 100%);
+      border: 1px solid rgba(255,255,255,.10);
+      border-left: 4px solid var(--secondary);
+      border-bottom: 3px solid var(--secondary);
+      padding: 1.15rem 1.35rem;
+      font-weight: 650;
+      box-shadow: 0 10px 26px rgba(0,0,0,.28);
+    }
+    .article-body .highlight-card:hover{ border-left-color: var(--accent); border-bottom-color: var(--accent); transform: translateY(-2px); }
+
+    .article-body .side-by-side{ display:flex; gap:clamp(16px,3vw,28px); align-items:flex-start; margin:2rem 0; width:100%; }
+    .article-body .side-by-side img{ flex:0 0 auto; max-width:min(100%,400px); box-shadow:0 8px 24px rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.10); }
+    .article-body .side-by-side .side-text{ flex:1 1 auto; padding:0 0.75rem; }
+    .article-body .side-by-side.image-2-right{ flex-direction:row-reverse; }
+    .article-body .side-by-side.special-image-left{ flex-direction:row; }
+
+    .article-body .cta-section{ background: linear-gradient(180deg, var(--surface-2) 0%, var(--surface) 100%); border:1px solid rgba(255,255,255,.10); border-left:4px solid var(--secondary); border-bottom:3px solid var(--secondary); padding:1.3rem; margin:2.3rem auto; max-width:520px; text-align:center; }
+    .article-body .cta-section .cta-headline{ font-size:1.15em; font-weight:900; margin-bottom:0.6rem; color: var(--secondary); }
+    .article-body .cta-section .cta-button{ background: var(--accent); color:#0f0f0f; padding:0.7em 1.6em; font-weight:900; display:inline-block; text-decoration:none; }
+    .article-body .cta-section .cta-button:hover{ background: var(--accent-hover); }
+
+    .article-body .article-ending{ margin-top:2.6rem; padding-top:1.2rem; border-top:1px solid var(--line); font-style: italic; }
+
+    .article-body .faq-accordion{ border:1px solid rgba(255,255,255,.12); border-left:4px solid var(--secondary); border-bottom:3px solid var(--secondary); background: linear-gradient(180deg, var(--surface-2) 0%, var(--surface) 100%); padding:0; margin-bottom:1.2rem; }
+    .article-body .faq-summary{ padding:1rem 1.25rem 1rem 2.5rem; font-weight:850; cursor:pointer; position:relative; color:var(--text-color); display:block; }
+    .article-body .faq-summary::before{ content:""; position:absolute; left:0.85rem; top:50%; transform:translateY(-50%); border-style:solid; border-width:6px 0 6px 8px; border-color: transparent transparent transparent var(--secondary); }
+    .article-body .faq-content{ display:block; padding:1rem 2.5rem; border-top:1px solid rgba(255,255,255,.12); }
+
+    @media (max-width: 768px){
+      .page-shell{ border-radius: 0; border-left: 0; border-right: 0; }
+      .content-wrapper{ padding-left: 0; padding-right: 0; }
+      .top, .cta-wrap, .main{ padding-left: clamp(14px, 4.6vw, 20px); padding-right: clamp(14px, 4.6vw, 20px); }
+      .article-body{ max-width: 100%; }
+      .article-body img{ max-width: 100% !important; }
+      .article-body .side-by-side{ flex-direction: column !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/coca-cola-stock-20-year-return.jpg" alt="Coca-Cola 20-year stock return banner" />
+        </div>
+        <h1 class="title">What if I invested $1000 in Coca-Cola 20 years ago?</h1>
+        <p class="subline">A reproducible guide showing what $1,000 invested in Coca-Cola on 2006-01-25 likely became by late January 2026.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://financepolice.com/coca-cola-stock-20-year-return-what-if-1000-2006/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">This article answers the seemingly simple question: what would $1,000 invested in Coca‑Cola (KO) on January 25, 2006 be worth by late January 2026? Instead of a single flashy number, you’ll get a clear method to reproduce the result, an illustrative range of plausible outcomes (conservative, central, optimistic), and step-by-step guidance on how to adjust for inflation, taxes, and fees so the figure reflects real investor experience.</div>
+          <div class="article-highlights">
+               <div class="highlight-card"><span class="highlight-text">1. A reasonable central estimate for $1,000 invested in KO on 2006‑01‑25 with dividends reinvested is in the mid‑$4,000s to low‑$5,000s by late January 2026.</span></div><div class="highlight-card"><span class="highlight-text">2. Small changes in total‑return CAGR (e.g., 7% vs 9%) over 20 years can swing the ending value by ~45% — demonstrating the power of compounding.</span></div><div class="highlight-card"><span class="highlight-text">3. FinancePolice emphasizes reproducibility: we recommend publishing the full dividend-and-price table so readers can verify any Coca‑Cola stock 20‑year return reconstruction.</span></div>
+             </div>
+          <h2>Coca‑Cola stock 20‑year return: why $1,000 in 2006 deserves more than a price chart</h2>
+          <p>What if I invested $1000 in Coca‑Cola 20 years ago? That question sounds simple, and yet it opens a wide, useful view onto long-term investing. In the two decades from January 25, 2006 to late January 2026, the real experience of an investor in KO is shaped almost as much by dividends and reinvestment as by the share price itself. <b>Understanding the Coca‑Cola stock 20-year return</b> means reconstructing cash flows, reinvestments, and corporate actions — not just reading a headline price change.</p>
+          <p>The following guide explains how to calculate a defensible total-return answer, why dividends matter for Coca‑Cola, how small methodological choices change results, and how to present transparent alternative scenarios (price-only, dividends reinvested, inflation-adjusted, after-tax). You’ll get a practical workflow, a worked illustration using plausible numbers, and step-by-step directions for reproducing the math in a spreadsheet or a simple script.</p>
+          <p>One helpful place to start if you want a printable, shareable framework for this kind of reconstruction is FinancePolice’s resources. For guidance on methodology and communication best practices, see FinancePolice’s guide to transparent investment reporting.</p>
+          <h3>Quick headline: a realistic range</h3>
+          <p>If you want one quick answer to "what would $1,000 invested in Coca‑Cola on 2006‑01‑25 be worth today?" use it as illustrative unless you reconstruct the full series. A reasonable total-return approach with dividends reinvested and modest assumptions about timing places the ending value in the <b>mid-$4,000s to low-$5,000s</b> by late January 2026. More conservative assumptions give roughly $3,800; more optimistic assumptions push toward $5,600. Those numbers come from mid- to high-single-digit total‑return CAGRs (roughly 7%–9% annualized) compounded over 20 years.</p>
+          <p>Why price-only numbers understate the story</p>
+          <p>Price charts are simple and familiar, but they miss a key part of the investor experience: dividends. Coca‑Cola is a classic dividend-paying stock. Over many long horizons, dividends — and, crucially, reinvesting those dividends — contribute a majority of the total return for investors who stay invested and use dividend cash to buy more shares.</p>
+          <p>Think of dividends as repeated small capital infusions. If you spend them, they’re gone from your compounding engine. If you keep them in cash, they sit idle. If you reinvest them immediately into more KO shares (including fractional shares), they themselves start earning future dividends and capital appreciation. Over 20 years, that compounding effect magnifies the ending value significantly.</p>
+          <h3>How to compute the exact total return: a practical workflow</h3>
+          <p>There are two rigorous approaches:</p>
+          <p><b>1) Use a trusted vendor total‑return series.</b> Professional data vendors (CRSP, Morningstar, Bloomberg) often provide total-return indices that already assume dividends are reinvested. These save time and reduce error if you accept their conventions. For a published total-return view you can check the KO Total Return Stock Chart at TotalRealReturns.</p>
+          <p><b>2) Reconstruct from primary data (preferred for transparency).</b> Pull historical closing prices, a full dividend schedule (ex-dates and payment dates and amounts), and the corporate action history (splits, spin-offs). Then step through each dividend event, reinvesting the cash at the market price on the chosen reinvestment date (payment date is a common, defensible choice) and updating your fractional share count. Adjust counts for splits. The final share count times the final closing price equals the ending market value.</p>
+          <h3>Step-by-step reconstruction</h3>
+          <p>Below is a practical, reproducible sequence for a spreadsheet or script:</p>
+          <p><b>1. Start date and purchase price.</b> Get KO’s closing price on 2006‑01‑25. Divide $1,000 by that close to get starting shares (accept fractional shares).</p>
+          <p><b>2. Build a dividend table.</b> For every dividend paid after 2006‑01‑25 up to your end date, record the ex‑date, payment date, and per‑share cash amount.</p>
+          <div class="side-by-side image-2-right">
+            <div class="side-text"><p><b>3. For each dividend payment:</b> use the payment date (or your chosen convention), find that day’s market price, multiply current share count by the per-share dividend to get cash received, then divide that cash by the market price to compute new shares bought. Add them to your running share total.</p></div>
+            <a href="https://financepolice.com/category/crypto/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/10krdhYgDdN7k4ATnatEOqkA0zEuPRa08=s1200" alt="Minimalist 2D vector desktop with laptop showing spreadsheet and a printed compounded growth chart and small generic red soda can as cue Coca-Cola stock 20-year return" /></a>
+          </div>
+          <p><b>4. Adjust for splits or corporate actions.</b> If a split occurs, multiply the share count by the split factor. Include share-distribution events exactly as described in company filings.</p>
+          <p><b>5. Final value.</b> Multiply the final share count by the closing market price on the terminal date. That’s the market value with dividends reinvested.</p>
+          <p><b>6. Convert to CAGR if desired.</b> Use the standard CAGR formula: (Ending Value / Beginning Value)^(1/Years) - 1.</p>
+          <h3>An illustrative worked example with plausible numbers</h3>
+          <p>Because small differences in timing and data source move the final number by a few percent, it helps to see a worked example. Suppose the investor bought KO on 2006‑01‑25 and the realized total‑return CAGR was 8.5% over 20 years. Using the CAGR formula, $1,000 grows to about <b>$5,110</b>. If total return were 7.0% annualized, the final value would be about <b>$3,870</b>. And if total return were 9.0% annually, the final amount would be roughly <b>$5,600</b>.</p>
+          <p>Those three scenarios — conservative (≈7.0%), central (≈8.5%), optimistic (≈9.0%) — illustrate why small shifts in annual return compound dramatically over two decades: moving from 7% to 9% over 20 years increases the ending value by nearly 45%.</p>
+          <h3>Price-only comparison</h3>
+          <p>If you ignore dividends entirely and only track price appreciation, Coca‑Cola’s price movement historically delivers lower annual returns in many long windows because the company returns cash through dividends rather than relying on explosive price growth. For the same 2006–2026 window, a price-only investor might have seen $1,000 become roughly $1,800–$2,500 depending on exact dates. That understates the reinvested-dividend outcome by a large margin.</p>
+          <h3>Inflation, taxes, and fees: three realistic refinements</h3>
+          <p>Raw nominal total return is a clean starting point, but for a real-world picture you should account for:</p>
+          <p><b>Inflation.</b> Convert the nominal ending value into constant dollars (e.g., 2006 dollars) using CPI‑U. A nominal $5,100 ending value might be roughly $3,400 in 2006 dollars depending on the exact inflation path. That changes the feel of the achievement: nominal dollar growth can look impressive while real purchasing power grows less rapidly.</p>
+          <p><b>Taxes.</b> Dividend cash is generally taxable when received unless held in a tax-advantaged account. Reinvesting dividends does not remove the tax bill; in a pre-tax model you reinvest 100% of the dividend, but in an after-tax model you reinvest only the after-tax portion. That reduces the effective reinvested amount and the ending value. For example, if dividends were taxed at 15% historically, every reinvestment would be 85% of the published dividend amount — cumulatively meaningful over 20 years.</p>
+          <p><b>Brokerage fees and DRIPs.</b> In 2006, trading commissions were commonly higher than today. If each dividend reinvestment incurred a fee, that lowers the reinvested principal. Many modern brokers offer free dividend reinvestment (DRIP), which eliminates per-trade fees and is a favorable assumption for long-term investors. State your fee assumption: zero-fee DRIP yields a higher ending value than a model that charges, say, $2–$5 per reinvestment event.</p>
+          <h3>Vendor choices: CRSP, Morningstar, Yahoo and why it matters</h3>
+          <p>For published work, pick a data source and document it. CRSP is the academic standard for U.S. stock historical series. Morningstar and Bloomberg are widely trusted in industry. Public services (Yahoo Finance, Google Finance) are convenient, but you must double-check how they treat dividends and "adjusted close." Some vendors back‑adjust prior prices to reflect dividends and splits; others publish explicit dividend series and leave the math to you. MarketScreener's total-return chart is a useful public reference.</p>
+          <p>Using a vendor total‑return series simplifies work but requires trusting the vendor’s reinvestment convention. Reconstructing from primary sources yields full transparency and lets readers audit your steps. For public-facing explanations, the transparent reconstruction is best practice and matches the values of FinancePolice: clarity, reproducibility, and practical usefulness.</p>
+          <h3>How a single dividend reinvestment works (tiny arithmetic, big result)</h3>
+          <p>Example: you hold 20.0000 shares. Company pays $0.25/share. You receive $5.00. If the market price that day is $40.00, you buy $5.00 / $40.00 = 0.1250 shares. Your new total is 20.1250 shares. Repeat this for every payment date. If a split occurs later, multiply share counts by the split factor. It’s simple arithmetic — but repeated hundreds of times it becomes the engine of compounding.</p>
+          <h3>How sensitive is the result to small dating differences?</h3>
+          <p>Timing matters, but not hugely. Reinvesting on the ex‑date vs payment date may move the final figure by a small percent per event; across many events these differences add up. That’s why careful work documents the convention used and, if possible, shows an alternate-convention sensitivity check (e.g., "reinvest on ex‑date" vs "reinvest on payment date"). For a 20‑year window with frequent dividends, differing conventions can shift the ending value by a few percent — meaningful for precision but not typically large enough to change the qualitative takeaway.</p>
+          <section class="faq-accordion"><input type="checkbox" id="faq-30w0wd" class="faq-toggle" checked /><label for="faq-30w0wd" class="faq-summary" role="button" tabindex="0">Would reinvesting Coca‑Cola dividends really change a 20-year result that much?</label><div class="faq-content"><p>Yes — reinvesting dividends materially changes the 20-year outcome. For Coca‑Cola, dividends are a large share of long-term investor return. Reinvested dividends buy fractional shares that earn future dividends and growth, and over 20 years that compounding often accounts for most of the total return compared with price-only gains.</p></div></section>
+          <h3>Practical tools, reproducibility, and a spreadsheet blueprint</h3>
+          <p>To do this yourself, use either a spreadsheet or a short script (Python, R, or even Google Sheets). The required data are a daily close price series, a complete dividend table, and the split history. The output should be a reproducible table with columns: date, closing price, dividend per share, shares before dividend, cash dividend received, shares purchased with dividend, shares after reinvestment, split multiplier (if any), and running cumulative shares.</p>
+          <p>If you don’t code, many online calculators let you enter a start date, invested amount, and ticker and they compute dividends‑reinvested totals — but check their conventions. For a convenient calculator and historical dividend comparison see the KO dividend returns history calculator at DRIPInvesting. For publication or careful analysis, I recommend reconstructing from primary sources (company filings + consolidated price series) and saving the full table so others can audit the math; see our investing resources for more information.</p>
+          <h3>What the numbers mean for everyday investors</h3>
+          <p>Three practical lessons:</p>
+          <p><b>1. Compounding income matters.</b> A business that returns steady cash and grows its dividend builds wealth gradually. Reinvesting those dividends accelerates that process.</p>
+          <p><b>2. Focus on investor outcomes, not price headlines.</b> A price-only chart misses an important part of the investor’s realized return when a company pays substantial dividends.</p>
+          <p><b>3. Small choices change results — so document them.</b> Data source, reinvestment convention, tax assumptions, and fee assumptions all matter. Being explicit about them is part of good financial communication.</p>
+          <h3>Common FAQs (short answers)</h3>
+          <p><b>How different are vendor results?</b> Typically a few percent if both vendors are high quality. Bigger differences happen when one vendor misdates dividends or uses an idiosyncratic reinvestment convention.</p>
+          <p><b>Should I show price-only and dividends-reinvested numbers?</b> Yes. Showing both highlights how much dividends add to longer-term returns.</p>
+          <p><b>How do I handle taxes in a public calculation?</b> Present a pre‑tax base case and an after‑tax scenario with clear tax-rate assumptions. State whether you treat dividends as qualified or ordinary and whether they are sheltered in tax-advantaged accounts.</p>
+          <h3>Putting the earlier headline numbers in context</h3>
+          <p>Remember the central estimate from earlier: a reasonable, transparent reconstruction suggests an ending value in the <b>mid-$4,000s to low-$5,000s</b> for $1,000 invested in KO on 2006‑01‑25 with dividends reinvested and modest, defensible assumptions about timing. That outcome is primarily a product of steady dividend growth and consistent reinvestment rather than dramatic price appreciation. Price-only figures give a smaller number and a different narrative.</p>
+          <h3>Risks and caveats</h3>
+          <p>This analysis is a methodological walkthrough and illustrative reconstruction — not investment advice. Past performance doesn’t guarantee future returns. Corporate actions, taxes, fees, and investor behavior (e.g., selling or spending dividends instead of reinvesting) change outcomes. If you want an exact number for publication, reconstruct the full series from primary sources and publish the reproducible table.</p>
+          <h3>How FinancePolice approaches transparent investment reconstructions</h3>
+          <div class="side-by-side special-image-left">
+            <a href="https://financepolice.com/category/crypto/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1SCsaxKf8veVJhLWPzRXXlB9oHmNVIQk2=s1200" alt="Close up infographic of coins morphing into Coca Cola bottles along an upward timeline on dark background using Finance Police green and gold accents depicting Coca Cola stock 20-year return" /></a>
+            <div class="side-text"><p>FinancePolice focuses on clear, reproducible explanations for everyday readers. That means giving the raw assumptions, the data sources, and a worked spreadsheet so readers can audit the work. Note: the FinancePolice logo helps readers recognize the brand.</p></div>
+          </div>
+          <p>If you want a precise reconstruction for the 2006–2026 KO window — with payment‑date reinvestment, explicit tax assumptions, and a downloadable spreadsheet showing every event — that’s something <a href="https://financepolice.com/" target="_blank" rel="noopener">FinancePolice</a> can prepare on request.</p>
+          <div class="cta-section"><h3 class="cta-headline">Request an audit-ready dividend reconstruction from FinancePolice</h3><div class="cta-intro"><p><b>Interested in a reproducible spreadsheet or a custom data run?</b> FinancePolice offers transparent, audit-ready reconstructions and can deliver a table that shows every dividend event, the running share count, and the final totals. Learn more about how to request a custom data run and reporting options at FinancePolice.</p></div><a href="https://financepolice.com/advertise/" target="_blank" rel="noopener" class="cta-button">Request a custom data run</a></div>
+          <h3>Clear takeaways</h3>
+          <p>1) Dividend reinvestment changes the story: the Coca‑Cola stock 20‑year return looks much stronger with dividends reinvested than with price-only measures. 2) Small methodological choices matter: data vendor, reinvestment timing, tax and fee assumptions all have measurable effects. 3) Reproducibility matters: publish the data and the table so readers can verify the math.</p>
+          <h3>Final - how to get a definitive number</h3>
+          <p>If you want a single, auditable figure, pick your conventions and data sources, reconstruct the series from primary sources, and publish the table. If you’d rather use a vendor’s total-return series, disclose the vendor and convention. Either approach is defensible when documented. If you’d like, FinancePolice can run the reconstruction and provide the annotated spreadsheet.</p>
+          <figure class="special-image-standalone">
+            <a href="https://financepolice.com/" target="_blank" rel="noopener">
+              <img src="https://lh3.googleusercontent.com/d/1MqGf4oUdM3_qqw1_FcWTOAhVpbssBwO9=s150" alt="Finance Police Logo" />
+            </a>
+          </figure>
+
+          <section class="faq-section" aria-label="Frequently Asked Questions">
+            <section class="faq-accordion"><input type="checkbox" id="faq-licw0f" class="faq-toggle" /><label for="faq-licw0f" class="faq-summary" role="button" tabindex="0">How much would $1,000 in Coca‑Cola (KO) on 2006‑01‑25 be worth today?</label><div class="faq-content"><p>Using conservative to optimistic total-return scenarios with dividends reinvested, a reasonable range for $1,000 invested in KO on 2006‑01‑25 is roughly $3,800 (conservative) to $5,600 (optimistic) by late January 2026. A central illustrative estimate sits in the mid‑$4,000s to low‑$5,000s. Exact values depend on data source, dividend-reinvestment timing (payment vs ex‑date), taxes, and fees.</p></div></section>
+            <section class="faq-accordion"><input type="checkbox" id="faq-bxrkyy" class="faq-toggle" /><label for="faq-bxrkyy" class="faq-summary" role="button" tabindex="0">Why do dividends matter so much for Coca‑Cola’s long-term return?</label><div class="faq-content"><p>Coca‑Cola is a steady dividend payer. When dividends are reinvested, each payout buys more shares that themselves earn future dividends and price appreciation. Over long horizons, those reinvested dividends can account for the majority of the total return, so price-only measures substantially understate the investor experience.</p></div></section>
+            <section class="faq-accordion"><input type="checkbox" id="faq-vymh4x" class="faq-toggle" /><label for="faq-vymh4x" class="faq-summary" role="button" tabindex="0">Can FinancePolice produce a precise, auditable reconstruction for this question?</label><div class="faq-content"><p>Yes. FinancePolice can run a transparent reconstruction using your chosen conventions (payment date or ex‑date reinvestment, pre‑tax or after‑tax modeling) and deliver an annotated spreadsheet showing every dividend event, running share count, and the final totals. Contact FinancePolice to request a custom data run.</p></div></section>
+          </section>
+
+          <section class="article-ending">If you’d invested $1,000 in Coca‑Cola on January 25, 2006 and faithfully reinvested dividends, your stake likely grew to the mid‑$4,000s to low‑$5,000s by late January 2026; thanks for reading — keep curious, keep reinvesting, and may your spreadsheets always balance!</section>
+
+          <section class="ba-refs">
+            <h3 class="ba-refs__title">References</h3>
+            <ul class="ba-refs__list">
+              <li><a href="https://totalrealreturns.com/n/KO" target="_blank" rel="noopener">https://totalrealreturns.com/n/KO</a></li><li><a href="https://www.marketscreener.com/quote/stock/THE-COCA-COLA-COMPANY-4819/graphics-total-return/" target="_blank" rel="noopener">https://www.marketscreener.com/quote/stock/THE-COCA-COLA-COMPANY-4819/graphics-total-return/</a></li><li><a href="https://www.dripinvesting.org/stocks/ko-dividend-returns-history-calculator/" target="_blank" rel="noopener">https://www.dripinvesting.org/stocks/ko-dividend-returns-history-calculator/</a></li><li><a href="https://financepolice.com/" target="_blank" rel="noopener">https://financepolice.com/</a></li><li><a href="https://financepolice.com/category/investing/" target="_blank" rel="noopener">https://financepolice.com/category/investing/</a></li>
+            </ul>
+          </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
