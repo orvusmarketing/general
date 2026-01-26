@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What is the 12 20 80 rule? A practical guide for new managers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens (from provided style) */
+      --text-color: #ffffff; /* --fp-ink */
+      --accent: #e6bb5b;    /* --fp-accent */
+      --accent-hover: #4aa568; /* using --fp-secondary as hover accent */
+      --line: rgba(255,255,255,.14); /* --fp-line */
+      --surface: #0f0f0f;   /* --fp-bg */
+      --surface-2: #141414; /* --fp-panel */
+      --radius: 0px;        /* --fp-radius */
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--accent);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--accent);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent-derived scoped CSS area */
+    .article-body .summary{ font-style: italic; color: color-mix(in srgb, var(--text-color) 75%, transparent); margin-bottom: 2rem; }
+    .article-highlights{ display:flex; flex-direction:column; gap:1rem; margin:2.2rem 0; }
+    .highlight-card{ background: linear-gradient(180deg, var(--surface-2) 0%, #101010 100%); border:1px solid rgba(255,255,255,.10); padding:1.15rem 1.35rem; border-left:4px solid #4aa568; font-weight:650; }
+    .side-by-side{ display:flex; gap:18px; align-items:flex-start; margin:2rem 0; }
+    .side-by-side img{ max-width:320px; height:auto; display:block; }
+    .product-image-right{ display:flex; flex-direction:column; align-items:center; text-align:center; max-width:520px; margin:2.3rem auto; padding:1.3rem; }
+    .faq-accordion{ margin-bottom:1.2rem; }
+    .faq-summary{ font-weight:850; color:var(--text-color); }
+    .tool-block{ max-width:620px; margin:2.3rem auto; padding:1.3rem; background:linear-gradient(180deg,var(--surface-2) 0%, #101010 100%); border:1px solid rgba(255,255,255,.10); }
+    .tool-calc-input{ background: rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.10); color:var(--text-color); padding:0.65rem 0.75rem; }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/how-to-start-a-hedge-fund.jpg" alt="What is the 12 20 80 rule? Header image" />
+        </div>
+        <h1 class="title">What is the 12 20 80 rule? A practical guide for new managers</h1>
+        <p class="subline">A concise practitioner guide to translating the 12-20-80 allocation into documented policy and governance steps.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://financepolice.com/how-to-start-a-hedge-fund-12-20-80-rule/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">The 12 20 80 rule often appears in practitioner discussions as a short way to describe a portfolio split into a liquidity buffer, concentrated convictions, and a diversified core. It is useful as an explanatory template, but it does not replace formal risk budgets or regulatory documentation.
+
+This guide explains what the numbers typically mean, how industry guidance treats simple heuristics, and what new managers should document and test when they consider how to start a hedge fund. Follow the checklist and governance steps to turn a shorthand into an operational policy.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">The 12 20 80 rule is a practitioner heuristic, not a formal regulatory standard.</span></div><div class="highlight-card"><span class="highlight-text">Translate any heuristic into documented limits, stress tests and clear governance before launch.</span></div><div class="highlight-card"><span class="highlight-text">Define whether percentages apply to NAV, gross exposure or a risk budget and record that choice.</span></div>
+     </div>
+  <h2>What the 12-20-80 rule means when you are learning how to start a hedge fund</h2><h3>A plain-language definition</h3><p>The 12-20-80 rule is commonly described in practitioner writing as a simple way to split a portfolio into a liquidity buffer, a set of higher-conviction positions, and a broader diversified core. It is usually offered as a starting template, not as a formal or regulatory standard. For background on common position sizing approaches that practitioners adapt into simple heuristics, see Investopedia on position sizing: <a href="https://www.investopedia.com/terms/p/position-sizing.asp" target="_blank" rel="noopener">Investopedia position sizing</a></p><p>Different managers mean different things when they say 12, 20 and 80. Those numbers can refer to percent of net asset value, percent of gross exposure, or percent of a defined risk budget. The choice changes how the figures translate to real dollar limits and trade sizing. A clear definition is the first operational step for anyone figuring out how to start a hedge fund.</p>
+
+<div class="tool-block tool-calculator tool-centered" data-tool-type="calculator" data-formula="LiquidityPct/100*NAV" data-output="LiquidityAmount" data-unit="USD">
+  <p class="tool-purpose">compare NAV versus gross exposure scenarios for a proposed split</p>
+  <div class="tool-calc-grid"><div class="tool-calc-field">
+    <label class="tool-calc-label">NAV</label>
+    <input class="tool-calc-input" type="number" value="1000000" data-field="NAV" />
+  </div><div class="tool-calc-field">
+    <label class="tool-calc-label">GrossExposure</label>
+    <input class="tool-calc-input" type="number" value="1200000" data-field="GrossExposure" />
+  </div><div class="tool-calc-field">
+    <label class="tool-calc-label">LiquidityPct</label>
+    <input class="tool-calc-input" type="number" value="12" data-field="LiquidityPct" />
+  </div><div class="tool-calc-field">
+    <label class="tool-calc-label">ConvictionPct</label>
+    <input class="tool-calc-input" type="number" value="20" data-field="ConvictionPct" />
+  </div><div class="tool-calc-field">
+    <label class="tool-calc-label">CorePct</label>
+    <input class="tool-calc-input" type="number" value="68" data-field="CorePct" />
+  </div></div>
+  <div class="tool-calc-output">
+    <span class="tool-calc-output-label">LiquidityAmount:</span>
+    <span class="tool-calc-output-value">-</span>
+    <span class="tool-calc-output-unit">USD</span>
+  </div>
+  <p class="tool-notes">use as a quick comparison, not a compliance model</p>
+</div>
+
+<h3>Why practitioners use simple numeric heuristics</h3><p>Practitioners favor short numeric rules because they help communicate allocations to colleagues and investors. A short rule gives a visible starting point for governance discussions and for initial sizing decisions. Documents that collect practitioner guidance show this tendency to use concise templates for discussion rather than fixed policies. For a view of industry reporting and practitioner templates, see the Preqin industry overview: <a href="https://www.preqin.com/insights/research/reports/global-hedge-fund-report-2024" target="_blank" rel="noopener">Preqin global hedge fund report</a> and <a href="https://www.cambridgeassociates.com/insight/hedge-fund-ing-the-pension-deficit/" target="_blank" rel="noopener">Cambridge Associates insight</a></p><p>When you consider how to start a hedge fund, use simple heuristics as conversation starters. Translate them into documented limits, stress tests and governance steps before they guide live trading. The provenance of the 12-20-80 label appears to be practitioner discourse rather than peer-reviewed literature, so treat the numbers as a draft to be validated.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://financepolice.com/" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1MqGf4oUdM3_qqw1_FcWTOAhVpbssBwO9=s150" alt="Finance Police Logo" />
+      </a>
+    </figure>
+
+<h2>Why industry guidance does not treat 12-20-80 as a formal standard</h2><h3>What trade bodies and industry reports emphasize instead</h3><p>Trade bodies and research reports tend to emphasise formal risk budgets, documented concentration limits and liquidity management rather than a single numeric split. These frameworks encourage explicit limits per position and per sector, and require governance for exceptions. AIMA sets out best practices focused on portfolio construction, liquidity and documented policy rather than on a single rule: <a href="https://www.aima.org/education/research/best-practices-hedge-fund-portfolio-construction-2025.html" target="_blank" rel="noopener">AIMA best practices</a></p><p>Industry reports also show wide variation in how managers implement simple heuristics. That variation is one reason a single numeric label rarely appears in formal guidance. If you are planning how to start a hedge fund, expect to find diverse implementations and be prepared to explain your own definitions to investors and service providers. See the Preqin report for examples of differing implementations across managers: <a href="https://www.preqin.com/insights/research/reports/global-hedge-fund-report-2024" target="_blank" rel="noopener">Preqin global hedge fund report</a></p><h3>Regulatory and reporting focus points</h3><p>Regulators and reporting frameworks look for clear disclosure about liquidity, leverage and concentration. For private funds, Form PF and related guidance emphasise liquidity management and reporting expectations that intersect with any cash buffer policy a manager might adopt. When you document a liquidity target you should be able to show how it supports redemption management and margin requirements. See the SEC guidance on Form PF topics: <a href="https://www.sec.gov/files/form-pf-guidance-2024.pdf" target="_blank" rel="noopener">SEC Form PF guidance</a> and see Deloitte on hedge accounting: <a href="https://dart.deloitte.com/USDART/home/codification/broad-transactions/asc815-10/hedge-accounting/chapter-2-hedge-accounting-requirements/2-5-hedge-effectiveness" target="_blank" rel="noopener">Deloitte hedge accounting</a></p><p>Regulatory expectations mean a neat heuristic cannot replace documented policy. Managers should map any simple split to compliance steps, recordkeeping, and reporting templates. That mapping reduces the risk that a heuristic will be misread as a rule for investors or regulators.</p><h2>The three-part framework behind a 12-20-80 style split</h2><h3>Component 1: liquidity or cash reserve</h3><p>One common reading of a 12-20-80 split places the first number into a liquidity buffer. This cash or highly liquid instruments bucket is meant to meet redemptions, margin calls or tactical opportunities. Industry guidance recommends explicit liquidity targets and testable assumptions when funds set aside cash or equivalents. AIMA guidance highlights liquidity management as a core component of portfolio construction: <a href="https://www.aima.org/education/research/best-practices-hedge-fund-portfolio-construction-2025.html" target="_blank" rel="noopener">AIMA best practices</a></p>
+    <div class="side-by-side special-image-left">
+      <a href="https://financepolice.com/category/crypto/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1hRxn8LohsLQFWixfLc1bWxpjHOyMYc0l=s1200" alt="Close up checklist on desk with pen and laptop displaying a spreadsheet, minimalist Finance Police scene about how to start a hedge fund" /></a>
+      <div class="side-text"><p>When you set a liquidity target, be explicit about the instruments allowed, holding period assumptions, and how the buffer interacts with leverage. That clarity matters because a percent of NAV in cash differs mechanically from the same percent of gross exposure. State your holding rules and rebalancing triggers in your policy documents.</p></div>
+    </div><h3>Component 2: conviction or tranche positions</h3><p>The second element often groups higher-conviction ideas into a tranche with larger per-position caps. In a 12-20-80 framing this might be where a manager allows bigger individual position sizes for concentrated bets, while still limiting absolute exposure. Position sizing literature explains how managers trade off concentration and diversification when they decide per-position caps. For accessible background on position sizing, see Investopedia on position sizing: <a href="https://www.investopedia.com/terms/p/position-sizing.asp" target="_blank" rel="noopener">Investopedia position sizing</a></p><p>If you use a conviction tranche, document the criteria that convert an idea into a tranche holding. Typical criteria include signal strength, liquidity of the underlying market, expected holding period and worst-case loss assumptions. These operational rules help governance teams assess overrides and exceptions.</p><h3>Component 3: diversified core exposure or risk budget</h3><p>The largest bucket in the simple split is usually a diversified core or broad risk budget. The core holds positions intended to reduce idiosyncratic risk and create a stable exposure profile. Industry practice prefers small per-position limits within this core to manage concentration risk. CFA Institute discussion of risk budgets and concentration suggests measured per-position caps and a formal risk budget approach: <a href="https://www.cfainstitute.org/en/research/foundation/2024/hedge-fund-portfolio-construction" target="_blank" rel="noopener">CFA Institute portfolio construction</a></p><p>Define whether your percentages apply to NAV, gross exposure, or to a risk budget expressed in volatility or VaR terms. That definitional choice changes trade sizing and reporting. Include scenario testing to show how the core behaves under stressed market moves and how much of the overall risk budget the core consumes.</p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Download the FinancePolice pre-launch checklist</h3><div class="cta-intro"><p>Read the FinancePolice pre-launch checklist and governance template to compare sample definitions and stress-test methods. Download the checklist, adapt it for your firm, and use it to document your final limits and governance steps.</p></div><a href="https://financepolice.com/advertise/" target="_blank" rel="noopener" class="cta-button">Get the checklist</a></div><h2>Position sizing theory and risk budgeting: what the academic and practitioner literature say</h2><h3>Kelly criterion and optimal bet sizing as background</h3><p>The Kelly criterion and related research provide a theoretical backdrop for thinking about optimal bet sizes and long-run growth trade offs. Kelly-style analysis helps managers understand how expected edge, win probability and volatility interact to determine a mathematically optimal stake, but it does not produce a universal 12-20-80 split to apply across managers. For a technical reference, see the Journal of Portfolio Management article on Kelly and position sizing: <a href="https://jpm.pm-research.com/content/45/6/78" target="_blank" rel="noopener">Journal of Portfolio Management on Kelly</a> (see <a href="https://financepolice.com/advanced-etf-trading-strategies/" target="_blank" rel="noopener">advanced ETF trading strategies</a> for a related practical guide on ETFs)</p><p>Kelly-based insights are useful when calibrating risk budgets, especially for systematic strategies with measurable edge. Many practitioners prefer conservative fractions of Kelly or alternative utility-based allocations depending on investor preferences, leverage limits and drawdown tolerance.</p><h3>How position sizing advice differs from a fixed-percentage heuristic</h3><p>Academic work tends to derive sizing from model assumptions and outcome objectives. Heuristics like 12-20-80 are simpler and designed for communication and quick decision making. Use theory to test and refine any heuristic, rather than to adopt a heuristic as a rule. Investopedia-style position sizing pages give practical rules that managers adapt into simpler templates: <a href="https://www.investopedia.com/terms/p/position-sizing.asp" target="_blank" rel="noopener">Investopedia position sizing</a>. See <a href="https://analystprep.com/study-notes/cfa-level-iii/heuristic-and-other-approaches-to-asset-allocation/" target="_blank" rel="noopener">AnalystPrep on heuristics and asset allocation</a>.</p><p>When you are deciding how to start a hedge fund, use theoretical insights as inputs into scenario tests. That will show whether a heuristic is defensible under different market conditions and parameter assumptions.</p><h2>How to operationalize a 12-20-80 style approach when you start a hedge fund</h2><h3>Practical checklist for governance and documentation</h3><p>Turn any heuristic into policy by writing clear definitions, limits and approval processes. Your checklist should begin by defining the denominator that the percentages apply to. That definition affects trade sizing, reporting and investor disclosure. AIMA guidance on portfolio construction recommends documented policies and governance for limits: <a href="https://www.aima.org/education/research/best-practices-hedge-fund-portfolio-construction-2025.html" target="_blank" rel="noopener">AIMA best practices</a></p><p>Key checklist items include define NAV or gross exposure, set maximum per-position and per-sector caps, list permitted cash instruments, set rolling holding-period assumptions, and specify who can approve overrides. Add required recordkeeping fields and reporting cadence. Consider including training options for staff and governance teams (see <a href="https://financepolice.com/short-term-certification-courses-in-finance/" target="_blank" rel="noopener">short-term certification courses in finance</a>).</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://financepolice.com/advertise/" target="_blank" rel="noopener">Finance Police Advertisement</a></div>
+      <a href="https://financepolice.com/advertise/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1ug1qbTayRj6EcDWjTNWpnRoUKcCRAWtj" alt="Finance Police Advertisement" /></a>
+    </div><h3>Sample internal controls and stress-test steps</h3><p>Run scenario P&L tests that apply shock moves to the conviction tranche and to the core separately. Show sample outputs to the governance board and keep snapshots in committee minutes. CFA Institute material on risk budgets and concentration provides practical framing for board-level review: <a href="https://www.cfainstitute.org/en/research/foundation/2024/hedge-fund-portfolio-construction" target="_blank" rel="noopener">CFA Institute portfolio construction</a></p><p>Document override procedures so exceptions are rare and recorded. Include attendee lists for approvals and require pre-specified rebalancing actions after a material override. These steps help ensure that a simple heuristic does not become an undocumented practice that increases concentration or liquidity risk.</p><h2>Regulatory, reporting and liquidity considerations to document</h2><h3>How liquidity buffers interact with reporting expectations</h3><p>Regulatory reporting and Form PF expectations focus on how funds manage liquidity and leverage. A stated liquidity buffer should be defensible in terms of how it supports redemption horizons and margin calls. The SEC guidance on Form PF highlights liquidity and leverage considerations that are directly relevant to a cash reserve policy: <a href="https://www.sec.gov/files/form-pf-guidance-2024.pdf" target="_blank" rel="noopener">SEC Form PF guidance</a></p>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>When you set a liquidity buffer, show how it will function in different stress scenarios. Describe eligible instruments and how quickly the buffer can be mobilised. That documentation makes reporting clearer and supports investor communication.</p></div>
+      <a href="https://financepolice.com/category/crypto/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1q4XPEbhjdtqmcBRd-XDvFco4QxumXOq1=s1200" alt="Vector diagram of three concentric circles with icons for buffer tranche and core illustrating how to start a hedge fund in Finance Police colors" /></a>
+    </div><h3>Leverage, transparency and investor protection points</h3><p>Leverage changes the economics of any split because gross exposures can exceed NAV. Document how leverage amplifies concentration and how margin obligations will be met without breaching your liquidity plan. Industry best practice encourages clear disclosure and conservative interim limits when a strategy is new. See AIMA for recommended governance and documentation practices: <a href="https://www.aima.org/education/research/best-practices-hedge-fund-portfolio-construction-2025.html" target="_blank" rel="noopener">AIMA best practices</a></p><p>Clear disclosure of concentration policies and liquidity plans helps align investor expectations and reduces the chance of later disputes. Include concise policy language in offering documents and in regular investor reporting.</p><h2>Common mistakes and pitfalls to avoid with a 12-20-80 approach</h2><h3>Frequent definitional errors and governance gaps</h3><p>A common mistake is an unclear denominator, for example saying percentages without saying whether they are of NAV or gross exposure. That gap can produce unintended concentration. Preqin analysis of manager practices shows variation and the need for clear definitions when presenting allocation templates: <a href="https://www.preqin.com/insights/research/reports/global-hedge-fund-report-2024" target="_blank" rel="noopener">Preqin global hedge fund report</a></p><p>Another frequent error is treating the numbers as hard limits without guardrails or governance for overrides. Without written procedures, an exception can become a new normal and increase risk. CFA Institute materials stress formal risk budgets and governance for concentration decisions: <a href="https://www.cfainstitute.org/en/research/foundation/2024/hedge-fund-portfolio-construction" target="_blank" rel="noopener">CFA Institute portfolio construction</a></p><section class="faq-accordion"><input type="checkbox" id="faq-q31eag" class="faq-toggle" checked /><label for="faq-q31eag" class="faq-summary" role="button" tabindex="0">How should a new manager use the 12 20 80 rule when deciding portfolio limits?</label><div class="faq-content"><p>Treat the 12 20 80 rule as a starting heuristic. Define whether percentages refer to NAV or gross exposure, set per-position and sector caps, run scenario and stress tests, formalise governance for overrides, and include concise disclosure language in investor documents.</p></div></section><h3>Behavioural traps and operational blind spots</h3><p>Managers can fall into behavioural traps like anchoring to the original heuristic even when market conditions change. Operational blind spots include execution timing that turns intended limits into higher realized exposure and underestimating liquidity of assets. AIMA guidance on portfolio construction and liquidity management highlights the importance of scenario testing and conservative assumptions: <a href="https://www.aima.org/education/research/best-practices-hedge-fund-portfolio-construction-2025.html" target="_blank" rel="noopener">AIMA best practices</a></p><p>Mitigate these risks by documenting assumptions, running reverse stress tests and setting conservative interim limits until you have a track record that supports change. Regular reviews reduce the chance that a convenience heuristic becomes a dangerous shortcut.</p><h2>Practical examples, a short worked approach and final checklist before launch</h2><h3>How to run a simple scenario P&L for a proposed split</h3><p>Run a few simple scenarios that shock prices and liquidity for your conviction tranche separately from shocks to the core. Use conservative liquidity assumptions for the conviction tranche and model redemption or margin events against the liquidity buffer. AIMA best practices discuss stress testing and scenario analysis as part of portfolio construction: <a href="https://www.aima.org/education/research/best-practices-hedge-fund-portfolio-construction-2025.html" target="_blank" rel="noopener">AIMA best practices</a></p><p>Keep the exercise non-prescriptive: the goal is to see whether your draft split produces plausible outcomes under stress and whether governance steps are sufficient to respond to breaches. Record results, decision rationales and required governance signoffs.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://financepolice.com/" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1MqGf4oUdM3_qqw1_FcWTOAhVpbssBwO9=s150" alt="Finance Police Logo" />
+      </a>
+    </figure>
+<h3>Final pre-launch checklist</h3><p>Final checklist items before launch should include defining the denominator, publishing per-position and per-sector caps, listing permitted cash instruments, running documented stress tests, setting override governance and including concise policy language in investor documents. CFA Institute work on risk budgets and concentration provides a useful structure for board or investor review: <a href="https://www.cfainstitute.org/en/research/foundation/2024/hedge-fund-portfolio-construction" target="_blank" rel="noopener">CFA Institute portfolio construction</a></p><p>Before you accept capital, validate that your operations, prime brokers and administrators can report on the definitions you will use and that your investors understand the concentration and liquidity policies. Use the checklist to align internal teams and to create clear investor disclosures. See options for setting up accounts before launch: <a href="https://financepolice.com/best-business-bank-accounts/" target="_blank" rel="noopener">best business bank accounts</a>.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-9la7r0" class="faq-toggle" /><label for="faq-9la7r0" class="faq-summary" role="button" tabindex="0">Is the 12 20 80 rule required by regulators?</label><div class="faq-content"><p>No. The 12 20 80 rule is a practitioner heuristic and not a regulatory standard. Managers should document their own limits and follow regulatory reporting requirements.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-6kgnly" class="faq-toggle" /><label for="faq-6kgnly" class="faq-summary" role="button" tabindex="0">Do the percentages in 12 20 80 always refer to NAV?</label><div class="faq-content"><p>Not necessarily. Managers may define the percentages relative to NAV, gross exposure or a risk budget. You should state the denominator clearly in policy documents.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-6khhbw" class="faq-toggle" /><label for="faq-6khhbw" class="faq-summary" role="button" tabindex="0">Can I use the 12 20 80 rule as a final policy?</label><div class="faq-content"><p>Use it as a starting template. Convert it into documented limits, run stress tests and set governance for overrides before relying on it in live portfolios.</p></div></section>
+</section><section class="article-ending">A short numeric template can speed early discussions, but responsible managers convert such heuristics into documented policy, testable scenarios and formal governance. Before accepting capital, make sure your definitions, stress tests and investor disclosures are aligned and recorded.
+
+Use the checklist, keep your assumptions transparent, and treat the 12 20 80 framing as a starting point to be validated by risk models and board review.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.investopedia.com/terms/p/position-sizing.asp" target="_blank" rel="noopener">https://www.investopedia.com/terms/p/position-sizing.asp</a></li><li><a href="https://www.preqin.com/insights/research/reports/global-hedge-fund-report-2024" target="_blank" rel="noopener">https://www.preqin.com/insights/research/reports/global-hedge-fund-report-2024</a></li><li><a href="https://www.aima.org/education/research/best-practices-hedge-fund-portfolio-construction-2025.html" target="_blank" rel="noopener">https://www.aima.org/education/research/best-practices-hedge-fund-portfolio-construction-2025.html</a></li><li><a href="https://www.sec.gov/files/form-pf-guidance-2024.pdf" target="_blank" rel="noopener">https://www.sec.gov/files/form-pf-guidance-2024.pdf</a></li><li><a href="https://www.cfainstitute.org/en/research/foundation/2024/hedge-fund-portfolio-construction" target="_blank" rel="noopener">https://www.cfainstitute.org/en/research/foundation/2024/hedge-fund-portfolio-construction</a></li><li><a href="https://jpm.pm-research.com/content/45/6/78" target="_blank" rel="noopener">https://jpm.pm-research.com/content/45/6/78</a></li><li><a href="https://financepolice.com/advanced-etf-trading-strategies/" target="_blank" rel="noopener">https://financepolice.com/advanced-etf-trading-strategies/</a></li><li><a href="https://analystprep.com/study-notes/cfa-level-iii/heuristic-and-other-approaches-to-asset-allocation/" target="_blank" rel="noopener">https://analystprep.com/study-notes/cfa-level-iii/heuristic-and-other-approaches-to-asset-allocation/</a></li><li><a href="https://financepolice.com/short-term-certification-courses-in-finance/" target="_blank" rel="noopener">https://financepolice.com/short-term-certification-courses-in-finance/</a></li><li><a href="https://financepolice.com/advertise/" target="_blank" rel="noopener">https://financepolice.com/advertise/</a></li><li><a href="https://dart.deloitte.com/USDART/home/codification/broad-transactions/asc815-10/hedge-accounting/chapter-2-hedge-accounting-requirements/2-5-hedge-effectiveness" target="_blank" rel="noopener">https://dart.deloitte.com/USDART/home/codification/broad-transactions/asc815-10/hedge-accounting/chapter-2-hedge-accounting-requirements/2-5-hedge-effectiveness</a></li><li><a href="https://www.cambridgeassociates.com/insight/hedge-fund-ing-the-pension-deficit/" target="_blank" rel="noopener">https://www.cambridgeassociates.com/insight/hedge-fund-ing-the-pension-deficit/</a></li><li><a href="https://financepolice.com/best-business-bank-accounts/" target="_blank" rel="noopener">https://financepolice.com/best-business-bank-accounts/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
