@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What is the 130 30 rule?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Derived brand tokens from provided style input */
+      --text-color: #ffffff; /* from --fp-ink */
+      --accent: #e6bb5b; /* from --fp-accent */
+      --accent-hover: #4aa568; /* from --fp-secondary (used as hover accent) */
+      --line: rgba(255,255,255,.14); /* from --fp-line */
+      --surface: #0f0f0f; /* from --fp-bg */
+      --surface-2: #141414; /* secondary surface derived from --fp-panel */
+      --radius: 0px; /* from --fp-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--accent);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      /* use brand hover accent when available */
+      background: var(--accent-hover);
+      filter: none;
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--accent);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--accent);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/crypto-hedge-fund-scale.jpg" alt="Illustration for What is the 130 30 rule?" />
+        </div>
+        <h1 class="title">What is the 130 30 rule?</h1>
+        <p class="subline">A practical primer on the 130/30 long-short framework, its construction, risks, and crypto-specific constraints.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://financepolice.com/crypto-hedge-fund-130-30-rule/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+<div class="summary">This article explains the 130 30 rule, a long-short approach that increases active exposure while keeping market direction similar to long-only portfolios. It is written for readers who want a clear, practical explanation of the construction, risks, and what changes when the strategy is applied in crypto.
+
+We keep the math simple, show operational steps, and point to research that explores performance and costs. Use this as a starting point for evaluating whether the approach might suit a managed fund or a crypto hedge fund with access to lending and derivatives.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">130 30 keeps net exposure near 100 percent while increasing gross exposure to 160 percent.</span></div><div class="highlight-card"><span class="highlight-text">Real-world benefits depend on security selection and whether extra returns cover borrow and transaction costs.</span></div><div class="highlight-card"><span class="highlight-text">Applying 130 30 to crypto adds constraints like limited token borrow, variable rates, and custody limits.</span></div>
+     </div>
+  <h2>What is the 130/30 rule? A clear definition and quick summary</h2>
+<h3>Short definition</h3>
+<p>The 130 30 rule describes a portfolio that holds 130% long exposure and 30% short exposure so gross exposure is 160% while net exposure stays around 100%. This lets managers keep a directional market stance similar to a long-only portfolio while increasing active overweight and short-expression capacity, a structure commonly explained in long-short equity literature <a href="https://www.investopedia.com/terms/1/130-30-strategy.asp" target="_blank" rel="noopener">Investopedia entry on 130/30</a>.</p>
+<h3>How net and gross exposure are calculated</h3>
+<p>Start with the terms: gross exposure is the sum of absolute long and short positions, and net exposure is longs minus shorts. With 130% long and 30% short, gross exposure is 160% and net exposure is about 100%, keeping market direction similar to long-only but with extra active exposure <a href="https://www.cfainstitute.org/en/research/foundation/2021/long-short-130-30" target="_blank" rel="noopener">CFA Institute guide on long-short equity and 130/30</a>.</p>
+<h3>One-sentence plain-language takeaway</h3>
+<p>Put simply, 130 30 lets a manager double-down on best ideas while also betting against weak names, using proceeds from shorts to finance extra long exposure and aiming to add active value without changing the portfolio's directional bias <a href="https://www.investopedia.com/terms/1/130-30-strategy.asp" target="_blank" rel="noopener">Investopedia entry on 130/30</a>.</p>
+<p>Math example, starting with 100 percent capital: sell short 30 percent of the portfolio, use the proceeds to buy an extra 30 percent of long exposure, and you end up with 130 percent long, 30 percent short, 160 percent gross. That simple construction explains why the net exposure remains near 100 percent <a href="https://www.cfainstitute.org/en/research/foundation/2021/long-short-130-30" target="_blank" rel="noopener">CFA Institute guide on long-short equity and 130/30</a>.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Advertise with FinancePolice</h3><div class="cta-intro"><p>Read on for practical steps to evaluate whether this approach could fit a manager or a crypto hedge fund with institutional access.</p></div><a href="https://financepolice.com/advertise/" target="_blank" rel="noopener" class="cta-button">See advertising options</a></div>
+
+<h2>How the 130/30 framework is constructed in practice</h2>
+<h3>Step-by-step construction math</h3>
+<p>1) Begin with 100 percent of capital in cash or assets. 2) Identify about 30 percent of holdings the manager wants to short. 3) Execute those shorts and use the proceeds to add 30 percent extra long exposure, yielding 130 percent long and 30 percent short. This preserves approximate 100 percent net market exposure while increasing gross exposure to 160 percent, a core construction taught in long-short equity resources <a href="https://www.investopedia.com/terms/1/130-30-strategy.asp" target="_blank" rel="noopener">Investopedia entry on 130/30</a>. See our investing category for related guides <a href="https://financepolice.com/category/investing/" target="_blank" rel="noopener">FinancePolice investing category</a>.</p>
+<h3>Operational requirements for execution</h3>
+<p>Turning the math into live trading requires access to margin facilities and a securities borrow market so shorts can be located and financed. Without those operational pieces the theoretical construction cannot be executed at scale <a href="https://www.cfainstitute.org/en/research/foundation/2021/long-short-130-30" target="_blank" rel="noopener">CFA Institute guide on long-short equity and 130/30</a>.</p>
+<h3>Margin, borrow, and financing basics</h3>
+<p>When a manager shorts a position they typically borrow the security, sell it, and post margin. The proceeds increase cash available for new longs, but the fund is now exposed to borrow fees and financing terms that can fluctuate and add cost to the strategy <a href="https://www.investopedia.com/terms/1/130-30-strategy.asp" target="_blank" rel="noopener">Investopedia entry on 130/30</a>.</p>
+
+<h2>Why managers use 130/30: potential benefits and strategy rationale</h2>
+<h3>Ways 130/30 changes portfolio tilts</h3>
+<p>Because funds can reinvest short proceeds into extra long positions, managers can overweight high-conviction longs beyond what a long-only fund could hold. This provides stronger portfolio tilts toward ideas the manager believes will outperform, while also allowing direct short bets on expected underperformers <a href="https://www.aqr.com/Insights/Research/Working-Papers/Do-130-30-Strategies-Add-Value" target="_blank" rel="noopener">AQR working paper on 130/30</a>.</p>
+<h3>When extra active exposure helps</h3>
+<p>Extra active exposure can help when a manager has repeatable security-selection skill and the capacity to identify both long and short opportunities. In that case, a 130/30 approach can amplify the impact of good decisions while keeping market direction intact <a href="https://www.aqr.com/Insights/Research/Working-Papers/Do-130-30-Strategies-Add-Value" target="_blank" rel="noopener">AQR working paper on 130/30</a>.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-w5f6x1" class="faq-toggle" checked /><label for="faq-w5f6x1" class="faq-summary" role="button" tabindex="0">What is the 130 30 rule and can a crypto hedge fund use it?</label><div class="faq-content"><p>The 130 30 rule is a long-short structure with 130 percent long and 30 percent short exposure, creating 160 percent gross and roughly 100 percent net exposure. A crypto hedge fund can in principle use the approach, but limited token borrow, variable borrow rates, fragmented liquidity, and custody constraints make implementation more complex and suitable mainly for managers with institutional access.</p></div></section>
+<p>Could this approach add value for managers with strong security-selection processes? The short answer is it depends on selection skill and whether incremental returns exceed added costs such as borrow and trading fees, which the literature shows can materially affect net outcomes <a href="https://www.aqr.com/Insights/Research/Working-Papers/Do-130-30-Strategies-Add-Value" target="_blank" rel="noopener">AQR working paper on 130/30</a>.</p>
+<h3>Limits of the theoretical benefits</h3>
+<p>The promise of higher active exposure can be offset by higher turnover, short-borrow costs, and financing expenses. Empirical evidence of consistent outperformance versus long-only benchmarks is mixed, meaning the approach is not a guaranteed improvement and depends on execution details <a href="https://jpm.pm-research.com/content/41/1/13030" target="_blank" rel="noopener">Journal of Portfolio Management review of 130/30</a>.</p>
+
+<h2>What the evidence says about performance and costs</h2>
+<h3>Empirical studies and working papers</h3>
+<p>Academic and industry analyses show mixed results: some managers add value after costs, others do not. The variation is driven by how much active selection skill can overcome the strategy's extra costs, a central conclusion of long-short studies <a href="https://www.aqr.com/Insights/Research/Working-Papers/Do-130-30-Strategies-Add-Value" target="_blank" rel="noopener">AQR working paper on 130/30</a>.</p>
+
+
+    <figure class="special-image-standalone">
+      <a href="https://financepolice.com/" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1MqGf4oUdM3_qqw1_FcWTOAhVpbssBwO9=s150" alt="Finance Police Logo" />
+      </a>
+    </figure>
+
+<h3>Top cost drivers: borrow, transaction, and turnover</h3>
+<p>The main cost items that reduce net returns are borrow or short interest fees, transaction costs from higher turnover, and slippage when executing larger gross positions; these costs are frequently highlighted as determinative for the strategy's net value <a href="https://jpm.pm-research.com/content/41/1/13030" target="_blank" rel="noopener">Journal of Portfolio Management review of 130/30</a>.</p>
+<h3>How costs change expected value</h3>
+<p>Higher turnover increases trading friction and may raise realized borrow rates if shorts concentrate on a few assets. That means theoretical active gains must be large enough to cover these predictable cost items for the strategy to outperform a long-only benchmark net of fees and execution costs <a href="https://www.aqr.com/Insights/Research/Working-Papers/Do-130-30-Strategies-Add-Value" target="_blank" rel="noopener">AQR working paper on 130/30</a>.</p>
+
+<h2>Key risks and practical risk management for 130/30</h2>
+<h3>Principal risk categories</h3>
+<p>Key risks include higher turnover, variable borrow and financing costs, leverage-related drawdowns, and liquidity risk when gross positions are larger than in long-only portfolios; these factors can erode expected gains if not controlled <a href="https://www.aqr.com/Insights/Research/Working-Papers/Do-130-30-Strategies-Add-Value" target="_blank" rel="noopener">AQR working paper on 130/30</a>.</p>
+<h3>Controls that experienced managers use</h3>
+<p>Experienced managers apply position limits, margin monitoring, borrow concentration limits, and policies for turnover to reduce the chance that costs or liquidity shocks wipe out incremental value; these operational controls are commonly recommended in long-short guidance <a href="https://www.cfainstitute.org/en/research/foundation/2021/long-short-130-30" target="_blank" rel="noopener">CFA Institute guide on long-short equity and 130/30</a>.</p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">margin and position monitoring dashboard</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-dmf654-0">
+                        <input id="tool-check-dmf654-0" type="checkbox" />
+                        <span>margin ratio</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-89gypz-1">
+                        <input id="tool-check-89gypz-1" type="checkbox" />
+                        <span>total gross exposure</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-ls8mhu-2">
+                        <input id="tool-check-ls8mhu-2" type="checkbox" />
+                        <span>top borrow concentrations</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-e1vhlr-3">
+                        <input id="tool-check-e1vhlr-3" type="checkbox" />
+                        <span>daily turnover</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-98l039-4">
+                        <input id="tool-check-98l039-4" type="checkbox" />
+                        <span>realized borrow rate</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-rcskvk-5">
+                        <input id="tool-check-rcskvk-5" type="checkbox" />
+                        <span>stress scenario flag</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">update daily</p>
+            </div>
+<h3>Stress testing and monitoring</h3>
+<p>Stress testing using scenario analysis and VaR helps show how leverage and borrow shocks could affect capital; regular margin and collateral checks reduce the risk of surprise liquidity-driven losses and support timely escalation if markets move suddenly <a href="https://www.cfainstitute.org/en/research/foundation/2021/long-short-130-30" target="_blank" rel="noopener">CFA Institute guide on long-short equity and 130/30</a>.</p>
+
+<h2>Applying 130/30 to crypto: feasibility and main constraints for a crypto hedge fund</h2>
+<h3>How token markets differ from equities</h3>
+<p>Token markets are more fragmented and many tokens do not have deep, centralized borrow markets. That fragmentation and uneven liquidity make applying a 130/30 framework operationally different from equities, and in many cases harder to execute cleanly <a href="https://www.coindesk.com/markets/2024/08/20/how-crypto-funds-use-long-short-strategies/" target="_blank" rel="noopener">CoinDesk review of crypto long-short use</a>. See FinancePolice's crypto category for related coverage <a href="https://financepolice.com/category/crypto/" target="_blank" rel="noopener">FinancePolice crypto category</a>.</p>
+<h3>Borrow availability and borrow cost issues</h3>
+<p>Many tokens lack reliable borrow supply and where borrow exists rates can be elevated and variable, increasing the cost and execution risk of sustained short positions compared with listed equities <a href="https://www.jbs.cam.ac.uk/ccaf/research/crypto-hedge-funds-report-2025.pdf" target="_blank" rel="noopener">CCAF report on crypto hedge funds</a>. For an example of borrow services see Figure Markets' borrow page <a href="https://www.figuremarkets.com/markets/democratized-prime/borrow/" target="_blank" rel="noopener">Figure Markets borrow</a>.</p>
+<h3>Custody and prime-brokerage limits</h3>
+<p>Custody, margin, and prime access infrastructure in crypto remains uneven, and some prime services impose limits that make sustained 130/30 implementations feasible mainly for managers with institutional relationships or access to derivatives and secured lending lines <a href="https://www.jbs.cam.ac.uk/ccaf/research/crypto-hedge-funds-report-2025.pdf" target="_blank" rel="noopener">CCAF report on crypto hedge funds</a>. See analysis of digital asset infrastructure from Talos for related context <a href="https://www.talos.com/insights/bridging-the-liquidity-gap-how-digital-asset-infrastructure-is-rising-to-meet-institutional-demands" target="_blank" rel="noopener">Talos on digital asset infrastructure</a>.</p>
+
+<h2>Practical implementation steps a crypto hedge fund would need</h2>
+<h3>Access routes for short exposure in crypto</h3>
+<p>Short exposure in crypto can come from borrow-and-short arrangements, derivatives such as futures or perpetual swaps, or structured secured lending that creates synthetic short positions; each route has tradeoffs in cost and counterparty reliance <a href="https://www.coindesk.com/markets/2024/08/20/how-crypto-funds-use-long-short-strategies/" target="_blank" rel="noopener">CoinDesk review of crypto long-short use</a>.</p>
+<h3>Operational setup: custody, prime access, and lending</h3>
+<p>Running a 130/30-style program requires custody that supports lending, prime access or counterparties for derivatives, and margin systems that monitor collateral and leverage in real time; without those pieces a crypto hedge fund will find the strategy hard to operate reliably <a href="https://www.jbs.cam.ac.uk/ccaf/research/crypto-hedge-funds-report-2025.pdf" target="_blank" rel="noopener">CCAF report on crypto hedge funds</a>. Galaxy Research's state of crypto lending provides additional context <a href="https://www.galaxy.com/insights/research/the-state-of-crypto-lending" target="_blank" rel="noopener">Galaxy Research state of crypto lending</a>.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://financepolice.com/advertise/" target="_blank" rel="noopener">Finance Police Advertisement</a></div>
+      <a href="https://financepolice.com/advertise/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1ug1qbTayRj6EcDWjTNWpnRoUKcCRAWtj" alt="Finance Police Advertisement" /></a>
+    </div>
+<h3>Monitoring and reporting requirements</h3>
+<p>Monitoring should include daily checks of borrow rates and availability across venues, margin thresholds, and liquidity conditions for targeted tokens. Regular reporting on borrow concentration and collateral usage is important for operational transparency and risk control <a href="https://www.jbs.cam.ac.uk/ccaf/research/crypto-hedge-funds-report-2025.pdf" target="_blank" rel="noopener">CCAF report on crypto hedge funds</a>.</p>
+
+<h2>Decision criteria: when a 130/30 approach might make sense</h2>
+<h3>Questions to ask about capacity and access</h3>
+<p>Ask whether you have reliable sources of borrow or derivatives, whether the tokens you plan to short have sufficient liquidity, and whether margin tolerance fits the expected volatility; these capacity checks determine whether a 130/30 approach is feasible <a href="https://www.coindesk.com/markets/2024/08/20/how-crypto-funds-use-long-short-strategies/" target="_blank" rel="noopener">CoinDesk review of crypto long-short use</a>.</p>
+<h3>Cost and return tradeoffs to estimate</h3>
+<p>Estimate realistic borrow costs, expected turnover, and likely slippage, then compare the incremental return you expect from extra active exposure against those costs; if expected net benefit is small the added complexity may not be worthwhile <a href="https://www.aqr.com/Insights/Research/Working-Papers/Do-130-30-Strategies-Add-Value" target="_blank" rel="noopener">AQR working paper on 130/30</a>.</p>
+<h3>Organizational and regulatory considerations</h3>
+<p>Consider regulatory and custody constraints in your jurisdiction and whether the firm has the operational capacity to manage counterparty and tax complexities. For crypto specifically, regulatory and tax treatment remains less standardized and should be checked with primary sources before launch <a href="https://www.jbs.cam.ac.uk/ccaf/research/crypto-hedge-funds-report-2025.pdf" target="_blank" rel="noopener">CCAF report on crypto hedge funds</a>.</p>
+
+<h2>Common implementation mistakes and pitfalls to avoid</h2>
+<h3>Underestimating borrow and transaction costs</h3>
+<p>A frequent error is planning around theoretical active returns without fully modeling borrow spikes and trading friction; real-world borrow rates and turnover effects can quickly remove expected gains <a href="https://jpm.pm-research.com/content/41/1/13030" target="_blank" rel="noopener">Journal of Portfolio Management review of 130/30</a>.</p>
+<h3>Ignoring liquidity and concentration risks</h3>
+<p>Shorting a small set of assets can create borrow concentration risk and execution slippage. Managers should avoid overconcentration and plan for scenarios where a key short becomes costly or impossible to roll <a href="https://www.aqr.com/Insights/Research/Working-Papers/Do-130-30-Strategies-Add-Value" target="_blank" rel="noopener">AQR working paper on 130/30</a>.</p>
+<h3>Poor monitoring of margin and collateral</h3>
+<p>Failing to monitor margin in real time or to document escalation paths for collateral calls is an operational mistake that can force unfavorable liquidations or very costly deleveraging in stressed markets <a href="https://www.cfainstitute.org/en/research/foundation/2021/long-short-130-30" target="_blank" rel="noopener">CFA Institute guide on long-short equity and 130/30</a>.</p>
+
+<h2>Worked examples: basic numeric scenarios for equity and crypto</h2>
+<h3>Equity example with simple returns and cost assumptions</h3>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://financepolice.com/category/crypto/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1mxhBu5R7QqopMqmsDe-lQyD18VeTx8vb=s1200" alt="Minimalist illustration of a 100 percent capital arrow splitting into a 130 percent long arrow and a 30 percent short arrow on dark background for crypto hedge fund" /></a>
+      <div class="side-text"><p>Start with 100 percent capital, build a 130/30 sleeve, and assume the long sleeve gains 6 percent while the short sleeve loses 2 percent before costs. The gross P&L is a weighted sum of those results, but net P&L must subtract borrow fees and transaction costs. Industry reviews stress that once realistic transaction and borrow costs are included, net advantage can shrink quickly <a href="https://jpm.pm-research.com/content/41/1/13030" target="_blank" rel="noopener">Journal of Portfolio Management review of 130/30</a>.</p></div>
+    </div>
+<h3>Crypto example showing borrow limits and higher costs</h3>
+<p>In crypto, suppose a fund can only borrow a small portion of an intended short, or borrow rates spike during stress. Higher and variable borrow rates plus venue fragmentation can turn a promising gross outcome into a neutral or negative net result, a pattern discussed in crypto fund research <a href="https://www.coindesk.com/markets/2024/08/20/how-crypto-funds-use-long-short-strategies/" target="_blank" rel="noopener">CoinDesk review of crypto long-short use</a>.</p>
+<h3>How results change when borrow or transaction costs increase</h3>
+<p>A simple sensitivity check shows that if borrow costs double or expected slippage rises by a few basis points, the incremental alpha required to justify 130/30 increases materially. That sensitivity to execution cost is a recurring conclusion in long-short analyses <a href="https://www.aqr.com/Insights/Research/Working-Papers/Do-130-30-Strategies-Add-Value" target="_blank" rel="noopener">AQR working paper on 130/30</a>.</p>
+
+<h2>How 130/30 compares to other long-short and leverage approaches</h2>
+<h3>130/30 versus long-only</h3>
+<p>Compared with long-only, 130/30 keeps a similar directional bias but adds active long and short positions to increase potential value from security selection. That raises gross exposure and potential volatility while preserving net market exposure near 100 percent <a href="https://www.cfainstitute.org/en/research/foundation/2021/long-short-130-30" target="_blank" rel="noopener">CFA Institute guide on long-short equity and 130/30</a>.</p>
+<h3>130/30 versus market-neutral</h3>
+<p>Market-neutral strategies typically aim for zero net exposure and remove market direction, while 130/30 keeps market direction and increases active exposure. The choice depends on an investor's directional view, risk appetite, and confidence in relative selection skill <a href="https://www.aqr.com/Insights/Research/Working-Papers/Do-130-30-Strategies-Add-Value" target="_blank" rel="noopener">AQR working paper on 130/30</a>.</p>
+<h3>When to prefer each approach</h3>
+<p>Prefer 130/30 if you want directional exposure plus extra active tilt and if you have modest leverage tolerance and strong selection skill. Prefer market-neutral when you want hedge away market direction and focus solely on relative performance among securities <a href="https://www.cfainstitute.org/en/research/foundation/2021/long-short-130-30" target="_blank" rel="noopener">CFA Institute guide on long-short equity and 130/30</a>.</p>
+
+<h2>Tax, regulatory and custody considerations for crypto long-short strategies</h2>
+<h3>Why tax and regulation matter for long-short crypto</h3>
+<p>Tax and regulatory treatment for crypto long-short strategies varies by jurisdiction and remains less standardized than equities, which can affect net returns and reporting complexity. Managers should verify local rules with primary sources before committing capital <a href="https://www.jbs.cam.ac.uk/ccaf/research/crypto-hedge-funds-report-2025.pdf" target="_blank" rel="noopener">CCAF report on crypto hedge funds</a>.</p>
+<h3>Custody and counterparty risk specifics</h3>
+<p>Custody arrangements that allow lending and prime access reduce operational risk. Relying on a single counterparty for borrow can create concentration risk, so diversification and documented onboarding policies help mitigate counterparty failure concerns <a href="https://www.jbs.cam.ac.uk/ccaf/research/crypto-hedge-funds-report-2025.pdf" target="_blank" rel="noopener">CCAF report on crypto hedge funds</a>.</p>
+<h3>Unresolved areas and open questions</h3>
+<p>Open research questions include standardized borrow rate data across centralized and decentralized venues and peer-reviewed performance comparisons of crypto 130/30 funds versus long-only crypto indices; these gaps make ongoing verification important for managers considering the approach <a href="https://www.coindesk.com/markets/2024/08/20/how-crypto-funds-use-long-short-strategies/" target="_blank" rel="noopener">CoinDesk review of crypto long-short use</a>.</p>
+
+<h2>A short checklist before launching a crypto 130/30 strategy</h2>
+<h3>Pre-launch checklist items</h3>
+<p>Verify borrow sources for each target token, run stress tests with realistic borrow spikes, confirm custody supports lending, and estimate realistic borrow and transaction costs across venues. These pre-launch checks reveal whether the theoretical construction translates into an executable program <a href="https://www.jbs.cam.ac.uk/ccaf/research/crypto-hedge-funds-report-2025.pdf" target="_blank" rel="noopener">CCAF report on crypto hedge funds</a>.</p>
+<h3>Monitoring and escalation steps</h3>
+<p>Set daily borrow-rate and liquidity checks, clear margin thresholds that trigger escalation, and maintain incident response plans for sudden borrow squeezes or counterparty failure. Regular drills help ensure teams respond promptly under stress <a href="https://www.cfainstitute.org/en/research/foundation/2021/long-short-130-30" target="_blank" rel="noopener">CFA Institute guide on long-short equity and 130/30</a>.</p>
+<h3>What to document</h3>
+<p>Document concentration limits, counterparty onboarding policies, stress testing assumptions, and a clear escalation path for margin calls and collateral shortages. Good documentation supports operational discipline and helps decision makers act under pressure <a href="https://www.aqr.com/Insights/Research/Working-Papers/Do-130-30-Strategies-Add-Value" target="_blank" rel="noopener">AQR working paper on 130/30</a>.</p>
+
+<h2>Conclusion: key takeaways and next steps for readers</h2>
+<h3>Three quick takeaways</h3>
+<p>130 30 keeps net exposure near 100 percent while increasing gross exposure to 160 percent, letting managers amplify long and short views <a href="https://www.investopedia.com/terms/1/130-30-strategy.asp" target="_blank" rel="noopener">Investopedia entry on 130/30</a>.</p>
+<p>Real-world outcomes depend on security selection, borrow and transaction costs, and effective risk controls; these factors determine whether incremental exposure yields net benefit <a href="https://www.aqr.com/Insights/Research/Working-Papers/Do-130-30-Strategies-Add-Value" target="_blank" rel="noopener">AQR working paper on 130/30</a>.</p>
+<p>For a crypto hedge fund, token borrow scarcity, higher variable borrow rates, fragmented liquidity, and custody limits make execution more complex and suitable mainly for managers with institutional access to derivatives or lending lines <a href="https://www.jbs.cam.ac.uk/ccaf/research/crypto-hedge-funds-report-2025.pdf" target="_blank" rel="noopener">CCAF report on crypto hedge funds</a>.</p>
+<h3>Suggested next steps and further reading</h3>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Run simple sensitivity checks on borrow and transaction costs, consult custody and prime services about feasibility for target tokens, and review primary sources cited here to form a view specific to your jurisdiction and assets. Use the guidance as a starting point, then verify details before implementing a strategy <a href="https://www.coindesk.com/markets/2024/08/20/how-crypto-funds-use-long-short-strategies/" target="_blank" rel="noopener">CoinDesk review of crypto long-short use</a>.</p></div>
+      <a href="https://financepolice.com/category/crypto/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1HCgf9B6rCWoDUFGf-Y-fXR-vuuj9YMiT=s1200" alt="Minimal 2D vector illustration of fragmented liquidity pools and borrow rate overlays for a crypto hedge fund on a dark Finance Police brand background" /></a>
+    </div>
+<p>FinancePolice provides plain-language primers on investing basics and operational considerations. Use these as an educational reference and follow up with primary sources and service providers as needed. Visit FinancePolice <a href="https://financepolice.com/" target="_blank" rel="noopener">https://financepolice.com/</a></p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-5np7yr" class="faq-toggle" /><label for="faq-5np7yr" class="faq-summary" role="button" tabindex="0">What does 130 30 mean in simple terms?</label><div class="faq-content"><p>It means holding 130 percent long exposure and 30 percent short exposure so gross exposure is 160 percent while net exposure remains about 100 percent, allowing extra active tilts without changing market direction.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-z1ezaf" class="faq-toggle" /><label for="faq-z1ezaf" class="faq-summary" role="button" tabindex="0">Can a small crypto fund run a 130 30 strategy?</label><div class="faq-content"><p>Typically not without institutional access. Many tokens lack reliable borrow or prime brokerage support, and elevated borrow rates and custody limits often make the approach practical mainly for larger or institutionally connected funds.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-5vwdc0" class="faq-toggle" /><label for="faq-5vwdc0" class="faq-summary" role="button" tabindex="0">What are the top costs to model before trying 130 30?</label><div class="faq-content"><p>Model borrow or short-interest fees, transaction and slippage costs from higher turnover, and any financing or margin-related charges, as these drive whether the strategy adds net value.</p></div></section>
+</section><section class="article-ending">If you are exploring a 130 30 approach, start with small sensitivity checks for borrow and transaction costs and validate operational feasibility with custody and prime services. FinancePolice offers educational primers to help you understand the mechanics; follow up with primary sources and service providers to confirm details for your jurisdiction and assets.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.investopedia.com/terms/1/130-30-strategy.asp" target="_blank" rel="noopener">https://www.investopedia.com/terms/1/130-30-strategy.asp</a></li><li><a href="https://www.cfainstitute.org/en/research/foundation/2021/long-short-130-30" target="_blank" rel="noopener">https://www.cfainstitute.org/en/research/foundation/2021/long-short-130-30</a></li><li><a href="https://www.aqr.com/Insights/Research/Working-Papers/Do-130-30-Strategies-Add-Value" target="_blank" rel="noopener">https://www.aqr.com/Insights/Research/Working-Papers/Do-130-30-Strategies-Add-Value</a></li><li><a href="https://jpm.pm-research.com/content/41/1/13030" target="_blank" rel="noopener">https://jpm.pm-research.com/content/41/1/13030</a></li><li><a href="https://www.coindesk.com/markets/2024/08/20/how-crypto-funds-use-long-short-strategies/" target="_blank" rel="noopener">https://www.coindesk.com/markets/2024/08/20/how-crypto-funds-use-long-short-strategies/</a></li><li><a href="https://www.jbs.cam.ac.uk/ccaf/research/crypto-hedge-funds-report-2025.pdf" target="_blank" rel="noopener">https://www.jbs.cam.ac.uk/ccaf/research/crypto-hedge-funds-report-2025.pdf</a></li><li><a href="https://financepolice.com/advertise/" target="_blank" rel="noopener">https://financepolice.com/advertise/</a></li><li><a href="https://financepolice.com/category/investing/" target="_blank" rel="noopener">https://financepolice.com/category/investing/</a></li><li><a href="https://financepolice.com/category/crypto/" target="_blank" rel="noopener">https://financepolice.com/category/crypto/</a></li><li><a href="https://www.figuremarkets.com/markets/democratized-prime/borrow/" target="_blank" rel="noopener">https://www.figuremarkets.com/markets/democratized-prime/borrow/</a></li><li><a href="https://www.talos.com/insights/bridging-the-liquidity-gap-how-digital-asset-infrastructure-is-rising-to-meet-institutional-demands" target="_blank" rel="noopener">https://www.talos.com/insights/bridging-the-liquidity-gap-how-digital-asset-infrastructure-is-rising-to-meet-institutional-demands</a></li><li><a href="https://www.galaxy.com/insights/research/the-state-of-crypto-lending" target="_blank" rel="noopener">https://www.galaxy.com/insights/research/the-state-of-crypto-lending</a></li><li><a href="https://financepolice.com/" target="_blank" rel="noopener">https://financepolice.com/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
