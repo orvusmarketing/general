@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What is an OnPage? A Practical Guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand tokens derived from provided style */
+      --text-color: rgba(244,231,197,0.86);
+      --accent: #C8A45D;
+      --accent-hover: #f6de9f;
+      --line: rgba(200,164,93,0.26);
+      --surface: #050d18;
+      --surface-2: #0c182b;
+      --radius: 12px;
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #050d18;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/15yg6Q6LL4Toq0fgugEy6F_lQjDpEzSIn" alt="Onpage guide illustration" />
+        </div>
+        <h1 class="title">What is an OnPage? A Practical Guide</h1>
+        <p class="subline">A practical guide to page-level HTML elements, snippets, and audit workflows.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://orvus.net/2026/01/27/onpage-what-is-guide/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">Onpage work is often the first practical step teams take to improve how pages appear in search. It concentrates on the elements you control on a single page: titles, headings, content, links, and speed.
+This guide unpacks what onpage means in a modern search architecture, shows which elements matter most, and gives a repeatable audit workflow operators can use to prioritize and measure changes.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Onpage focuses on page-level HTML and content elements that shape relevance and snippets.</span></div><div class="highlight-card"><span class="highlight-text">Combine field data from CrUX with Lighthouse lab diagnostics to prioritize speed fixes effectively.</span></div><div class="highlight-card"><span class="highlight-text">Turn audits into repeatable systems by batching changes, tracking CTR, and using simple dashboards.</span></div>
+     </div>
+  <h2>What onpage means: definition and context</h2><h3>A concise definition of onpage</h3><p>Onpage refers to the page-level elements and signals that determine how a single page matches search intent and how it is presented in search results, including snippet text and visible headings.</p><p>That definition reflects guidance from search engine documentation and practitioner guides that focus on HTML elements and content relevance, as a starting point for audits and fixes. <a href="https://developers.google.com/search/docs/fundamentals/seo-starter-guide" target="_blank" rel="noopener">Google Search Central</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure>
+<h3>How onpage fits inside search architecture and measurement</h3>
+<p>Onpage sits inside a larger search architecture that includes technical SEO, <a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">content strategy</a>, and measurement tied to outcomes. Teams often treat onpage work as the page-level layer that links content strategy to ranking and click performance.</p>
+<p>Practitioner guides describe onpage as one piece of an architecture where measurement connects relevance signals to business metrics like clicks and visibility. <a href="https://ahrefs.com/blog/on-page-seo/" target="_blank" rel="noopener">Ahrefs blog</a></p>
+<section class="faq-accordion"><input type="checkbox" id="faq-hdot4h" class="faq-toggle" checked /><label for="faq-hdot4h" class="faq-summary" role="button" tabindex="0">What is onpage and how should a team audit it?</label><div class="faq-content"><p>Onpage is the set of page-level HTML and content elements that determine relevance and presentation in search; teams should inventory pages, measure CTR and field speed, apply prioritized fixes to titles, headings, and content, and track outcomes over time.</p></div></section>
+<h3>Limits of what onpage can achieve (authority, external signals)</h3>
+<p>Onpage improves relevance and presentation, but outcomes such as high placement for competitive queries depend on external signals like backlinks and site authority; these remain outside pure page-level fixes.</p>
+<p>It is important to treat onpage as necessary but not always sufficient, and to frame expectations as context dependent rather than guaranteed.</p>
+<h2>Why onpage matters for relevance, snippets, and clicks</h2>
+<h3>Relevance signals versus ranking signals</h3>
+<p>Title tags, headings, and page content are core relevance signals that help search engines match queries to pages and assess topical intent.</p>
+<p>Google’s guidance highlights title tags and content as central to relevance, while other ranking factors include external authority and history. <a href="https://developers.google.com/search/docs/fundamentals/seo-starter-guide" target="_blank" rel="noopener">Google Search Central</a></p>
+<h3>Snippet generation and the role of title tags and meta descriptions</h3>
+<p>Title tags are a primary snippet and relevance signal that can influence how a result is shown and can affect click-through rate, while meta descriptions do not directly change ranking but influence click behavior in results.</p>
+<p>When optimizing for clicks, treat titles as both a relevance and a presentation control, and write meta descriptions to improve clarity and appeal. <a href="https://ahrefs.com/blog/on-page-seo/" target="_blank" rel="noopener">Ahrefs blog</a></p>
+<h3>User experience signals and why CTR and engagement matter</h3>
+<p>User experience signals such as page speed and engagement inform how users interact with results and can alter performance indirectly, especially when poor experience increases abandonment.</p>
+<p>Field data like CrUX and lab assessments from Lighthouse offer complementary measurements for experience and speed. <a href="https://web.dev/vitals/" target="_blank" rel="noopener">web.dev Core Web Vitals</a>. See the <a href="https://developers.google.com/codelabs/chrome-web-vitals-psi-crux" target="_blank" rel="noopener">PageSpeed Insights codelab</a>.</p>
+<h2>Core onpage elements to audit</h2>
+<h3>HTML and snippet elements: title, meta, canonical, headings</h3>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1PQ6p-yQWJCzQjxju8ZDFhDGZ0epfef7K=s1200" alt="Marketing team reviewing onpage audit checklist on a laptop showing spreadsheet columns for URL and title tags in a minimalist navy and gold office" /></a>
+      <div class="side-text"><p>Key HTML elements to check are title tags, meta descriptions, canonical links, and the heading hierarchy including a single clear H1 per page.</p></div>
+    </div>
+<p>These elements drive snippets, accessibility, and indexing and are consistently cited across authoritative guides on page-level optimization. <a href="https://ahrefs.com/blog/on-page-seo/" target="_blank" rel="noopener">Ahrefs blog</a></p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Get the onpage audit checklist for teams</h3><div class="cta-intro"><p>Copy or download a short audit checklist to confirm unique titles, logical H1s, and canonical correctness for a batch of pages.</p></div><a href="https://orvus.net/services" target="_blank" rel="noopener" class="cta-button">Download audit checklist</a></div>
+<h3>Content quality and topical depth</h3>
+<p>Assess content for coverage of the query intent, clarity, and sufficient depth to satisfy a knowledgeable user, rather than only matching keywords.</p>
+<p>Practitioner checklists recommend measuring topical depth against query intent and competitor pages to decide whether to expand or refine content. <a href="https://ahrefs.com/blog/on-page-seo/" target="_blank" rel="noopener">Ahrefs blog</a></p>
+<h3>Internal linking, URL structure, and canonicalization</h3>
+<p>Internal links and sensible URL structure help distribute relevance signals and set expectations for page purpose, while correct canonical tags prevent duplicate content confusion.</p>
+<p>Audit internal linking for contextual anchor text and check canonical tags for consistency across similar pages. <a href="https://moz.com/learn/seo/on-page-factors" target="_blank" rel="noopener">Moz learn SEO</a></p>
+<h3>Page speed and Core Web Vitals measurement</h3>
+<p>Measure page speed using both field and lab sources: CrUX for real user experiences and Lighthouse for prioritized lab diagnostics. See an in-depth guide at <a href="https://www.debugbear.com/blog/core-web-vitals-audit" target="_blank" rel="noopener">DebugBear</a>.</p>
+<p>Fixes should be prioritized by user impact rather than instrument scores alone, focusing first on the largest issues that affect real visitors. <a href="https://web.dev/vitals/" target="_blank" rel="noopener">web.dev Core Web Vitals</a> or <a href="https://seosly.com/blog/core-web-vitals-audit/" target="_blank" rel="noopener">a checklist</a>.</p>
+<h2>A repeatable onpage audit workflow</h2>
+<h3>Inventory and baseline measurement</h3>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Start with a page inventory that lists URLs, current title tags, H1s, canonical links, and measured performance metrics such as CTR and field speed data.</p></div>
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1sqICnCdl56uy2A3MHFRkPwAjuS903HTS=s1200" alt="Minimal 2D vector split infographic showing lab and field metrics with Core Web Vitals icons and a generic lighthouse style performance badge onpage" /></a>
+    </div>
+<p>Use Search Console to capture baseline CTR and visibility, and combine that with field Core Web Vitals for a realistic performance baseline. <a href="https://ahrefs.com/blog/on-page-seo/" target="_blank" rel="noopener">Ahrefs blog</a></p>
+<h3>Action list: quick wins, structural fixes, content work</h3>
+<p>Prioritize quick wins first: unique and descriptive titles, fixed missing H1s, correct canonical tags, and short content clarifications that align the page to intent.</p>
+<p>Audit checklists often separate quick changes from larger content projects so teams can capture wins while planning deeper rewrites. <a href="https://www.searchenginejournal.com/on-page-seo-checklist/" target="_blank" rel="noopener">Search Engine Journal</a></p>
+<h3>Validation and tracking changes</h3>
+<p>After changes, track CTR changes in Search Console, monitoring visibility and field Core Web Vitals over a few weeks to months; attribution to a single change can be uncertain, so rely on patterns not single data points.</p>
+<p>Combine ranking visibility checks with user behavior metrics to understand whether presentation and relevance adjustments led to sustained improvements. <a href="https://ahrefs.com/blog/on-page-seo/" target="_blank" rel="noopener">Ahrefs blog</a></p>
+<h2>How to prioritize onpage fixes: decision criteria</h2>
+<h3>Traffic and conversion exposure: who benefits most</h3>
+<p>Prioritize pages with existing traffic or conversion value where small gains in CTR or relevance have more impact than for zero-traffic pages.</p>
+<p>Use analytics to map pages by traffic and goal completion, then layer in snippet and speed issues to set priority. <a href="https://ahrefs.com/blog/on-page-seo/" target="_blank" rel="noopener">Ahrefs blog</a></p>
+<h3>Effort versus impact and risk assessment</h3>
+<p>A simple impact versus effort matrix helps choose whether a title rewrite, a heading restructure, or a deeper content project comes first.</p>
+<p>Quick title and meta cleanups usually score low effort and can be validated fast, while deep content work is higher effort and needs clearer ROI signals. <a href="https://www.searchenginejournal.com/on-page-seo-checklist/" target="_blank" rel="noopener">Search Engine Journal</a></p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://orvus.net/services" target="_blank" rel="noopener">Orvus Unique Services</a></div>
+      <a href="https://orvus.net/services" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1H_h1lsT61lq2b7T9TJp_cP-rw6fSFKSG" alt="Orvus Unique Services" /></a>
+    </div>
+<h3>Data quality and measurement constraints</h3>
+<p>Check the quality of your data before making big decisions: sampling in field datasets, delayed Search Console reporting, and noisy lab runs can mislead if not accounted for.</p>
+<p>When data quality is low, favor low-risk changes and improve instrumentation before broad rollouts. <a href="https://web.dev/vitals/" target="_blank" rel="noopener">web.dev Core Web Vitals</a></p>
+<h2>Common onpage mistakes and how to avoid them</h2>
+<h3>Duplicate or missing title tags and meta descriptions</h3>
+<p>Duplicate or empty titles and descriptions reduce clarity in SERPs and can lower CTR by creating unclear snippets for users.</p>
+<p>Prevent this by enforcing unique title templates in your CMS and auditing batches of pages for duplication. <a href="https://moz.com/learn/seo/on-page-factors" target="_blank" rel="noopener">Moz learn SEO</a></p>
+<h3>Broken or confusing heading structure</h3>
+<p>Poor heading semantics, such as missing H1s or multiple competing H1s, hurt accessibility and make topical intent harder to parse for crawlers and screen readers.</p>
+<p>Use a clear H1 per page and logical H2-H3 structure to reflect content hierarchy and topical focus. <a href="https://developers.google.com/search/docs/fundamentals/seo-starter-guide" target="_blank" rel="noopener">Google Search Central</a></p>
+<h3>Ignoring speed signals and relying only on lab data</h3>
+<p>Teams often fix only lab issues and assume user experience improves; field metrics can tell a different story about how real visitors experience the page.</p>
+<p>Combine Lighthouse diagnostics with CrUX field data to prioritize fixes that matter to actual users. <a href="https://web.dev/vitals/" target="_blank" rel="noopener">web.dev Core Web Vitals</a> or <a href="https://seosly.com/blog/core-web-vitals-audit/" target="_blank" rel="noopener">a checklist</a>.</p>
+<h2>Practical examples and scenario-based templates</h2>
+<h3>Example: ecommerce product page audit and fixes</h3>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>For a product page, inventory the title, H1, product description depth, canonical, structured data, internal links, and Lighthouse score.</p></div>
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1sqICnCdl56uy2A3MHFRkPwAjuS903HTS=s1200" alt="Minimal 2D vector split infographic showing lab and field metrics with Core Web Vitals icons and a generic lighthouse style performance badge onpage" /></a>
+    </div>
+<p>Quick wins include clarifying the title to match buying intent, ensuring a single H1 that describes the product, and fixing canonical inconsistencies for near-duplicate SKUs. <a href="https://ahrefs.com/blog/on-page-seo/" target="_blank" rel="noopener">Ahrefs blog</a></p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">export a page inventory and flag basic onpage issues</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-t19dv0-0">
+                        <input id="tool-check-t19dv0-0" type="checkbox" />
+                        <span>URL</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-twowsm-1">
+                        <input id="tool-check-twowsm-1" type="checkbox" />
+                        <span>Title present</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-tsy84b-2">
+                        <input id="tool-check-tsy84b-2" type="checkbox" />
+                        <span>H1 present</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-2cl3ns-3">
+                        <input id="tool-check-2cl3ns-3" type="checkbox" />
+                        <span>Canonical present</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-k1oxs2-4">
+                        <input id="tool-check-k1oxs2-4" type="checkbox" />
+                        <span>Lighthouse score</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-cpy7jv-5">
+                        <input id="tool-check-cpy7jv-5" type="checkbox" />
+                        <span>Internal link count</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Run this after a crawl for fast triage</p>
+            </div>
+<h3>Example: service landing page with low CTR</h3>
+<p>Diagnose low CTR by checking the title for intent mismatch, the meta description for clarity, and the SERP features that display alongside the result.</p>
+<p>Adjust titles to match the likely intent, rewrite meta descriptions to explain the unique proposition, and measure CTR changes in Search Console. <a href="https://www.searchenginejournal.com/on-page-seo-checklist/" target="_blank" rel="noopener">Search Engine Journal</a></p>
+<h3>Template snippets: title tag and meta description patterns</h3>
+<p>Use concise title templates that combine primary intent, qualifier, and brand where useful, and meta descriptions that preview the page outcome for a searcher.</p>
+<p>Templates make batch edits safer and ensure titles remain unique across similar pages. <a href="https://ahrefs.com/blog/on-page-seo/" target="_blank" rel="noopener">Ahrefs blog</a></p>
+<h2>Turning onpage work into a system: measurement and iteration</h2>
+<h3>Closing the loop: tracking changes and learning</h3>
+<p>Make changes in small groups and track CTR, ranking visibility, and Core Web Vitals field metrics over a regular cadence to learn what type of edits move the needle for your site.</p>
+<p>Document each change and its timing so correlation is clearer when reviewing trends across tools. <a href="https://ahrefs.com/blog/on-page-seo/" target="_blank" rel="noopener">Ahrefs blog</a></p>
+<h3>Dashboards and runbooks for repeatability</h3>
+<p>Build simple <a href="https://orvus.net" target="_blank" rel="noopener">dashboards</a> that surface pages with high impressions and low CTR, poor CrUX metrics, or missing canonical tags so teams can triage work each sprint.</p>
+<p>Runbooks reduce tribal knowledge by listing checks, owners, and validation steps for common fixes. <a href="https://web.dev/vitals/" target="_blank" rel="noopener">web.dev Core Web Vitals</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure>
+<h3>When to escalate from onpage to other channels</h3>
+<p>If repeated onpage improvements produce little change and diagnostics point to weak authority or offsite gaps, escalate to a channel-level plan that includes link acquisition, PR, or paid media testing.</p>
+<p>Escalation is a judgment call that depends on data, bandwidth, and the competitive landscape; treat it as a next diagnostic phase rather than a failure. <a href="https://ahrefs.com/blog/on-page-seo/" target="_blank" rel="noopener">Ahrefs blog</a></p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-jfv7qz" class="faq-toggle" /><label for="faq-jfv7qz" class="faq-summary" role="button" tabindex="0">What exactly counts as onpage work?</label><div class="faq-content"><p>Onpage work focuses on page-level elements such as title tags, meta descriptions, heading structure, page content, internal links, URL and canonical correctness, and page speed metrics.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-7ghpey" class="faq-toggle" /><label for="faq-7ghpey" class="faq-summary" role="button" tabindex="0">How quickly will onpage changes show results?</label><div class="faq-content"><p>Timing varies. Some presentation changes can alter CTR quickly, while content and speed effects may take weeks of measurement; attribution is often context dependent.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-04pims" class="faq-toggle" /><label for="faq-04pims" class="faq-summary" role="button" tabindex="0">Which metrics should I watch after an onpage update?</label><div class="faq-content"><p>Monitor Search Console CTR, ranking visibility, engagement metrics, and Core Web Vitals field data to understand the combined impact of changes.</p></div></section>
+</section><section class="article-ending">Onpage is a disciplined layer of work inside a broader search architecture. It clarifies intent, improves snippets, and often improves user experience when paired with solid measurement.
+Treat the guidance here as a system blueprint: inventory pages, apply prioritized fixes, and iterate with measurement rather than relying on single changes alone.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://developers.google.com/search/docs/fundamentals/seo-starter-guide" target="_blank" rel="noopener">https://developers.google.com/search/docs/fundamentals/seo-starter-guide</a></li><li><a href="https://ahrefs.com/blog/on-page-seo/" target="_blank" rel="noopener">https://ahrefs.com/blog/on-page-seo/</a></li><li><a href="https://web.dev/vitals/" target="_blank" rel="noopener">https://web.dev/vitals/</a></li><li><a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">https://orvus.net/category/useful-knowledge/</a></li><li><a href="https://developers.google.com/codelabs/chrome-web-vitals-psi-crux" target="_blank" rel="noopener">https://developers.google.com/codelabs/chrome-web-vitals-psi-crux</a></li><li><a href="https://www.debugbear.com/blog/core-web-vitals-audit" target="_blank" rel="noopener">https://www.debugbear.com/blog/core-web-vitals-audit</a></li><li><a href="https://seosly.com/blog/core-web-vitals-audit/" target="_blank" rel="noopener">https://seosly.com/blog/core-web-vitals-audit/</a></li><li><a href="https://moz.com/learn/seo/on-page-factors" target="_blank" rel="noopener">https://moz.com/learn/seo/on-page-factors</a></li><li><a href="https://www.searchenginejournal.com/on-page-seo-checklist/" target="_blank" rel="noopener">https://www.searchenginejournal.com/on-page-seo-checklist/</a></li><li><a href="https://orvus.net/services" target="_blank" rel="noopener">https://orvus.net/services</a></li><li><a href="https://orvus.net" target="_blank" rel="noopener">https://orvus.net</a></li><li><a href="https://orvus.net/about" target="_blank" rel="noopener">https://orvus.net/about</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
