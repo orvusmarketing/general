@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What city in America has the lowest cost of living? A method-first guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens (from provided style) */
+      --text-color: #ffffff;                 /* derived from --mc-ink */
+      --accent: #ae2736;                     /* derived from --mc-accent */
+      --accent-hover: #95212e;               /* darker accent for hover (derived) */
+      --line: rgba(255,255,255,.16);         /* derived from --mc-line */
+      --surface: #0b2664;                    /* derived from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);    /* derived from --mc-panel-2 */
+      --radius: 0px;                         /* derived from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease, background .14s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    /* Override links to match brand style: default white, hover accent */
+    .article-body a{
+      color: var(--text-color);
+      font-weight: 750;
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      transition: color 0.18s ease, text-decoration-color 0.18s ease, filter 0.18s ease;
+      word-break: break-word;
+    }
+    .article-body a:hover{
+      color: var(--accent);
+      text-decoration-color: var(--accent);
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area (only .article-body and .cta-button allowed here) */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/cheapest-cities-to-live-in-usa-midwest-downtown.jpg" alt="Downtown skyline representing cheapest cities to live in USA" />
+        </div>
+        <h1 class="title">What city in America has the lowest cost of living? A method-first guide</h1>
+        <p class="subline">A method-first guide to defining and comparing the cheapest U.S. cities using BEA, ACS and rent data.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/cheapest-cities-to-live-in-usa-method-guide/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">This guide helps readers understand what analysts mean by the cheapest cities to live in USA and how to produce a defensible comparison. It emphasizes primary sources and a repeatable method so readers can adapt results to their own household needs.
+
+The approach is method-first: anchor comparisons to BEA Regional Price Parities, add ACS housing and income context, and refine with rent trackers and the MIT Living Wage Calculator to build practical monthly budgets. The aim is clarity and reproducibility, not a single definitive top-10 list.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">BEA&#39;s Regional Price Parities are the authoritative anchor for cross-metro price comparisons.</span></div><div class="highlight-card"><span class="highlight-text">Housing metrics, especially median rent and owner values, explain most intercity cost differences.</span></div><div class="highlight-card"><span class="highlight-text">Combine BEA, ACS and current rent reports to build a reproducible cheapest-cities ranking.</span></div>
+     </div>
+  <h2>What we mean by "cheapest cities to live in USA"</h2>
+<p>When readers ask about the cheapest cities to live in USA they are usually comparing places by how expensive everyday goods, services and housing are for residents. An authoritative way to compare price levels across metros is to use BEA's Regional Price Parities, which measure relative price levels rather than incomes or wages. <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities</a> and <a href="https://fred.stlouisfed.org/series/DCMPRPPALL" target="_blank" rel="noopener">FRED's RPP series</a></p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">quick source checklist to define &quot;cheapest&quot; and pick geographic units</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-qehlce-0">
+                        <input id="tool-check-qehlce-0" type="checkbox" />
+                        <span>BEA RPP lookup</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-iip8l7-1">
+                        <input id="tool-check-iip8l7-1" type="checkbox" />
+                        <span>MIT Living Wage county page</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-v791o1-2">
+                        <input id="tool-check-v791o1-2" type="checkbox" />
+                        <span>ACS housing tables</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">check release dates for each source</p>
+            </div>
+<p>Price-level measures and household spending reports answer different questions. RPPs show whether local prices for a composite basket are above or below the national average. Household surveys such as the American Community Survey report median rent, owner values and incomes that show how much households are actually spending and earning in that place. Use RPPs to compare purchasing power and ACS to understand local wage and housing patterns. <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">ACS housing and income tables</a></p>
+<p>Another important definition is the geographic unit. A metropolitan area or MSA commonly used by BEA and the Census covers a central city and its commuting area, while a city limit or county can show very different price and housing profiles. For example, a low-cost small city inside a higher-cost metro may not register as low-cost at the MSA level. That choice of unit will change which places appear as the cheapest and should be selected to match the reader's decision frame.</p>
+<h2>Key data sources: BEA RPPs, ACS, MIT Living Wage and rent indices</h2>
+<p>Start with the primary sources that offer consistent comparisons. BEA's Regional Price Parities are the authoritative, comparable price-level measure across states and metropolitan areas; they are the right anchor when the goal is to compare local price levels across many metros. <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities</a> and a Regional Spotlight from the <a href="https://www.philadelphiafed.org/-/media/frbp/assets/economy/articles/economic-insights/2017/q4/rs_purchasing-power.pdf" target="_blank" rel="noopener">Philadelphia Fed</a></p>
+<p>The American Community Survey supplies household-level measures that explain why prices differ across places: median rent, owner-occupied housing values and household income distributions. Because housing accounts for a large share of household budgets, ACS housing tables are essential context for any affordability analysis. <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">American Community Survey</a></p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1QpvB0IHTCdUpBsrldO8MHeHB8qB0leMg=s1200" alt="Close up of laptop rent calculator and spreadsheet with blurred city skyline in background illustrating cheapest cities to live in usa" /></a>
+      <div class="side-text">For building sample monthly budgets at a county level, the MIT Living Wage Calculator provides line-item breakdowns for housing, food, transportation, healthcare and childcare that users can adapt to local conditions. Use it as a template to convert price indices into spendable budget lines. <a href="https://livingwage.mit.edu/" target="_blank" rel="noopener">MIT Living Wage Calculator</a></div>
+    </div>
+<p>Rent trackers and private rent reports help capture recent rental-market changes that may not yet be visible in survey data. Apartment List's rent reports are useful for short-term market signals, but treat them as timing-sensitive complements rather than substitutes for the BEA and ACS foundations. <a href="https://www.apartmentlist.com/research/rent-data" target="_blank" rel="noopener">Apartment List rent reports</a></p>
+<h2>How housing drives city-to-city cost differences</h2>
+<p>Housing is the single largest factor explaining city-to-city differences in overall living costs. Measures such as median rent and owner-occupied housing values account for most of the variance seen in price-level comparisons, so any defensible cheapest-cities ranking must prioritize housing metrics alongside broader price indices. <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">ACS housing tables</a></p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>Private rent indices can signal recent rental-market direction and are valuable for short-term adjustments when constructing lists. Apartment List provides timely rent estimates that often align with lower BEA price levels in smaller Midwest metros, but remember that rent trackers capture different samples and update cadences. <a href="https://www.apartmentlist.com/research/rent-data" target="_blank" rel="noopener">Apartment List rent reports</a></p>
+<p>When combining sources, cross-check median rent from the ACS with a current rent tracker and with owner-occupied values where relevant. ACS tends to lag but gives a broader household context, while rent trackers show market momentum. Together they form a clearer picture of how housing will affect a mover's monthly costs.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>A reproducible methodology for ranking cheapest cities</h2>
+<p>The first step is to choose the geographic unit and the time frame for the comparison. Decide whether you need city limits, a county, or a metropolitan area and pick data releases for the same period so that comparisons are consistent. For price-level comparisons across metros, use BEA RPPs as the baseline. <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA RPPs</a> and related methodology notes such as the World Bank discussion can be useful.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>Next layer in ACS housing and income data to capture how housing costs and wages shape affordability in that unit. Weight housing heavily in a composite affordability score because it explains most intercity variance. ACS median rent and owner values provide the household-side measures needed to translate price levels into likely monthly expenses. <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">American Community Survey</a></p>
+<p>Finally, refine with rent trackers and local wage context. Use a recent rent report to adjust housing inputs and consult local labor-market indicators when assessing whether lower prices are offset by lower median wages. Treat consumer-facing compiled rankings as secondary checks rather than the primary method. <a href="https://www.apartmentlist.com/research/rent-data" target="_blank" rel="noopener">Apartment List rent reports</a></p>
+<p>Weighting choices matter. A defensible composite might assign a high weight to housing, medium weight to BEA price levels and a lower weight to other components like utilities or groceries unless those components are unusually high for the place being evaluated.</p>
+<h2>Affordability tradeoffs to consider (wages, jobs, taxes, amenities)</h2>
+<p>Lower headline price levels do not always mean higher real affordability. Many low-cost metros also show lower median wages and a different mix of services and amenities, so relocation decisions should account for local wage and employment prospects before treating a low index value as a full measure of affordability. <a href="https://realestate.usnews.com/places/rankings/most-affordable-places-to-live" target="_blank" rel="noopener">U.S. News affordability analysis</a></p>
+<section class="faq-accordion"><input type="checkbox" id="faq-whuoju" class="faq-toggle" checked /><label for="faq-whuoju" class="faq-summary" role="button" tabindex="0">What city in America has the lowest cost of living?</label><div class="faq-content"><p>There is no single, final answer in part because rankings depend on geographic unit and methodology; BEA RPPs show many smaller Midwest and southern metros have below-average price levels, and housing costs are the primary driver of those differences.</p></div></section>
+<p>Assess local tax structures and employer wage scales as part of your research. Sales taxes, property taxes and state income tax regimes can materially affect take-home pay and household budgets, and local employers set the wage reality for most workers in a metro. Consider labor-market indicators in addition to price indices when deciding whether a low-cost place fits your needs. <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA RPPs</a></p>
+<p>Also weigh nonmonetary tradeoffs such as access to healthcare, public transit, schools and cultural amenities. These factors do not always show up in price indices but can influence monthly spending patterns and long-term quality of life.</p>
+<h2>How to build a practical monthly budget for a candidate city</h2>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text">Use the MIT Living Wage county budgets as a starting template for line items and then plug in local housing costs from ACS or a current rent tracker. The Living Wage Calculator breaks monthly needs into housing, food, transportation, healthcare and childcare, which you can adapt to household size and commuting patterns. <a href="https://livingwage.mit.edu/" target="_blank" rel="noopener">MIT Living Wage Calculator</a> Also see local resources on <a href="https://michaelcarbonara.com/affordable-healthcare/" target="_blank" rel="noopener">affordable healthcare</a>.</div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1LMUZBCnBZPMAWnJRFzXvi0EfnUl197og=s1200" alt="Minimalist 2D vector US map highlighting metropolitan areas shaded by relative price level showing cheapest cities to live in usa" /></a>
+    </div>
+<p>To adapt the template, replace the housing line with median rent or a local-market rent estimate for the neighborhood you are considering. If you are evaluating owner-occupied costs, use ACS owner-occupied values and local property tax rates to estimate monthly carrying costs. For rent-sensitive households, use a recent rent report to reflect current market pressures. <a href="https://www.apartmentlist.com/research/rent-data" target="_blank" rel="noopener">Apartment List rent reports</a></p>
+<p>Adjust nonhousing lines by local wage context. If local median wages are below your current earnings, scale discretionary and transportation lines conservatively. ACS income tables can show the local median wage distribution and help you decide whether to scale the living-wage template up or down. <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">ACS income tables</a></p>
+<h2>Common ranking mistakes and how to avoid them</h2>
+<p>One frequent error is mixing incompatible geographic units. Comparing a city-limit value to a metro-area price level will often misstate affordability; always align the unit across all data pulls. Cross-check your unit choices against the source documentation each time you pull data. <a href="https://wallethub.com/edu/cheapest-cities-to-live/48068" target="_blank" rel="noopener">WalletHub methodology notes</a></p>
+<p>Another mistake is relying on a single data source or a dated rent snapshot. Rent trackers and consumer lists can be useful, but treat them as complementary and verify with BEA and ACS where possible. </p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay informed and join the campaign community</h3><div class="cta-intro"><p>Before acting on a cheapest-city list, compare BEA, ACS and recent rent reports for the specific geographic unit you care about to avoid surprises.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the Campaign</a></div>
+<p>Validate tenure differences and wage context. Places with similar price levels may differ by the share of renters versus owners and by typical wages. A short checklist to validate a ranking: confirm the geographic unit, compare BEA RPPs, review ACS housing tables, and adjust housing with a current rent report before drawing conclusions. See the <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">about page</a> for more on approach.</p>
+<h2>Where to get updates and next research steps</h2>
+<p>Use BEA RPP releases as the anchor for periodic rechecks because they provide consistent cross-metro comparisons; when a new BEA metro release appears it will reset the baseline for multi-city comparisons. Monitor BEA publications and document release dates when you pull data. <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA RPP release</a> Check the site <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news</a> for updates.</p>
+<p>Refresh rent and wage inputs on a sensible cadence: rent trackers quarterly, ACS annually, and MIT county budgets when local conditions suggest material change. Apartment List and similar rent reports can be checked each quarter for market movement. <a href="https://www.apartmentlist.com/research/rent-data" target="_blank" rel="noopener">Apartment List rent reports</a></p>
+<p>Finally, archive date-stamped copies of each data pull and the weighting choices used so you can reproduce the ranking later or explain differences to readers. That practice also helps when consumer-facing compilations disagree, because you can show which inputs or weights produced the different outcomes.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-vbap6i" class="faq-toggle" /><label for="faq-vbap6i" class="faq-summary" role="button" tabindex="0">How does BEA&#39;s RPP differ from household spending measures?</label><div class="faq-content"><p>BEA&#39;s Regional Price Parities measure relative price levels across regions for a common price basket, while household spending measures report what households actually pay or earn. Use RPPs to compare price levels and ACS to understand spending and wages.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-eqidq4" class="faq-toggle" /><label for="faq-eqidq4" class="faq-summary" role="button" tabindex="0">Can I rely on rent trackers alone to pick a cheap city?</label><div class="faq-content"><p>No. Rent trackers are useful for recent market signals but should be combined with ACS housing tables and BEA price-level measures to avoid timing and sampling biases.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-eomh2t" class="faq-toggle" /><label for="faq-eomh2t" class="faq-summary" role="button" tabindex="0">Do low-cost cities always offer better affordability?</label><div class="faq-content"><p>Not always. Lower prices can coincide with lower median wages, different tax burdens and fewer amenities, so evaluate local wages and job prospects alongside price indices.</p></div></section>
+</section><section class="article-ending">Choosing where to live based on affordability requires more than a headline ranking. Use BEA, ACS and local rent data together, record your inputs and verify wages and job prospects before relocating.
+
+If you need ongoing updates, create a short refresh schedule for rent trackers and archive each data pull so you can reproduce or revise your conclusions later.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area</a></li><li><a href="https://fred.stlouisfed.org/series/DCMPRPPALL" target="_blank" rel="noopener">https://fred.stlouisfed.org/series/DCMPRPPALL</a></li><li><a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">https://www.census.gov/programs-surveys/acs</a></li><li><a href="https://livingwage.mit.edu/" target="_blank" rel="noopener">https://livingwage.mit.edu/</a></li><li><a href="https://www.apartmentlist.com/research/rent-data" target="_blank" rel="noopener">https://www.apartmentlist.com/research/rent-data</a></li><li><a href="https://www.philadelphiafed.org/-/media/frbp/assets/economy/articles/economic-insights/2017/q4/rs_purchasing-power.pdf" target="_blank" rel="noopener">https://www.philadelphiafed.org/-/media/frbp/assets/economy/articles/economic-insights/2017/q4/rs_purchasing-power.pdf</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://realestate.usnews.com/places/rankings/most-affordable-places-to-live" target="_blank" rel="noopener">https://realestate.usnews.com/places/rankings/most-affordable-places-to-live</a></li><li><a href="https://thedocs.worldbank.org/en/doc/475111539796688272-0050022018/original/ICPTFOGP03DOCS03SubNationalPPPsBA2.pdf" target="_blank" rel="noopener">https://thedocs.worldbank.org/en/doc/475111539796688272-0050022018/original/ICPTFOGP03DOCS03SubNationalPPPsBA2.pdf</a></li><li><a href="https://wallethub.com/edu/cheapest-cities-to-live/48068" target="_blank" rel="noopener">https://wallethub.com/edu/cheapest-cities-to-live/48068</a></li><li><a href="https://michaelcarbonara.com/affordable-healthcare/" target="_blank" rel="noopener">https://michaelcarbonara.com/affordable-healthcare/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
