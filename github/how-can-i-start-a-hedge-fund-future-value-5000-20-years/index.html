@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What will $5000 be worth in 20 years?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --fp-ink */
+      --accent: #e6bb5b; /* from --fp-accent */
+      --accent-hover: #4aa568; /* from --fp-secondary */
+      --line: rgba(255,255,255,.14); /* from --fp-line */
+      --surface: #0f0f0f; /* from --fp-bg */
+      --surface-2: #141414; /* from --fp-panel */
+      --radius: 0px; /* from --fp-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: #4aa568; /* keep heading contrast similar to brand */
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area */
+    .article-body .cta-section{ border: 0; background: transparent; box-shadow: none; }
+    .article-body .tool-calc-input{ background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.10); color: var(--text-color); }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/19ZjmxZaFqmyxpLW1WcCQdES9Jz7LPxi4" alt="What will $5000 be worth in 20 years? — Finance Police" />
+        </div>
+        <h1 class="title">What will $5000 be worth in 20 years?</h1>
+        <p class="subline">A clear guide to modeling how a single $5,000 lump sum can grow over 20 years and how to compare nominal and real outcomes.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://financepolice.com/how-can-i-start-a-hedge-fund-future-value-5000-20-years/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+          <div class="summary">This article explains how a single $5,000 sum can grow over 20 years and how to compare nominal and inflation-adjusted outcomes. You will learn the standard formula, see three reproducible scenarios, and get practical steps to test deposits and fees.
+
+FinancePolice provides clear, neutral guidance to help you model outcomes and compare scenarios. This is educational content, not personalized financial advice.</div>
+
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">The future value of $5,000 after 20 years depends strongly on the assumed annual rate and whether you adjust for inflation.</span></div><div class="highlight-card"><span class="highlight-text">Convert nominal results to real dollars with the BLS CPI series to understand purchasing power.</span></div><div class="highlight-card"><span class="highlight-text">Recurring deposits and fees change outcomes, so test annuity scenarios and net returns in a calculator.</span></div>
+     </div>
+  <h2>Quick answer and what to expect, how can i start a hedge fund and what $5,000 could become in 20 years?</h2>
+  <p>Short answer, in plain terms: the future value of $5,000 after 20 years depends entirely on the yearly return you assume. The standard calculation uses a compound interest formula and the result is a nominal dollar amount that does not yet account for inflation or fees. For example, common illustrative rates produce distinct nominal outcomes readers can reproduce with a compound interest calculator <a href="https://www.bankrate.com/calculators/savings/compound-interest-calculator/" target="_blank" rel="noopener">Bankrate compound interest calculator</a>.</p>
+<p>Important context: any projected return is hypothetical. Investor education and regulator guidance remind readers that past performance does not guarantee future results and that taxes, fees, and changing market conditions can alter outcomes significantly <a href="https://www.investor.gov/introduction-investing/basics/how-investing-works" target="_blank" rel="noopener">Investor.gov basic investing concepts</a>.</p>
+
+<h2>What future value means and why nominal and inflation-adjusted results differ</h2>
+<p>Future value, or FV, is the amount a current sum would grow to after a set time at a given rate. Present value, PV, is the amount today. Compounding is the mechanism: each period earnings are added to the base and can earn returns themselves, producing exponential growth over time <a href="https://www.khanacademy.org/economics-finance-domain/core-finance/interest-tutorial/interest-tutorial/v/compound-interest" target="_blank" rel="noopener">Khan Academy compound interest explanation</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://financepolice.com/" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1MqGf4oUdM3_qqw1_FcWTOAhVpbssBwO9=s150" alt="Finance Police Logo" />
+      </a>
+    </figure>
+
+<p>Nominal FV reports the dollar amount at the end of the period without adjusting for inflation. To understand purchasing power you must convert nominal results into real dollars by dividing by the cumulative inflation factor from an official CPI series <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">BLS CPI overview</a>. That conversion is essential because a higher nominal balance can still buy less if inflation has reduced the value of money.</p>
+<p>How can i start a hedge fund appears as a required SEO phrase for this page and is used here to meet search criteria, while the core discussion remains about future value and purchasing power.</p>
+
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Try the worked examples and test multiple scenarios</h3><div class="cta-intro"><p>Try the worked calculations below with your own rate and inflation assumptions, and compare results before settling on any single figure.</p></div><a href="https://financepolice.com/advertise/" target="_blank" rel="noopener" class="cta-button">Run your scenario</a></div>
+
+<h2>The core formula: how to calculate FV step by step</h2>
+<p>The standard formula is FV = PV × (1 + r)^n. In plain language PV is the starting amount, r is the annual rate expressed as a decimal, and n is the number of years. This formula applies when the return is constant and compounding is annual; if compounding is more frequent or returns vary, use a more detailed calculator or adjusted formula <a href="https://www.investopedia.com/terms/f/futurevalue.asp" target="_blank" rel="noopener">Investopedia future value definition</a>.</p>
+<p>Step by step: 1) convert the percentage rate to a decimal, for example 5 percent becomes 0.05, 2) add 1 to that decimal, 3) raise the sum to the power of n, the number of years, 4) multiply the result by PV. That procedure is easy to reproduce on a scientific calculator, spreadsheet, or an online compound interest tool.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://financepolice.com/advertise/" target="_blank" rel="noopener">Finance Police Advertisement</a></div>
+      <a href="https://financepolice.com/advertise/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1ug1qbTayRj6EcDWjTNWpnRoUKcCRAWtj" alt="Finance Police Advertisement" /></a>
+    </div>
+
+<h2>Three nominal scenarios you can reproduce: 3%, 5%, 7% annual returns</h2>
+<p>We use 3 percent, 5 percent, and 7 percent as illustrative rates because they provide a range of conservative to moderately aggressive nominal growth scenarios and are commonly used in educational examples. Reproducing these numbers helps you see how sensitive long-term results are to the assumed rate <a href="https://www.investopedia.com/terms/f/futurevalue.asp" target="_blank" rel="noopener">Investopedia future value explanation</a>.</p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://financepolice.com/category/crypto/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1KYX2XvJNKM7JgxFI1MM-GnOCUGmh0SWb=s1200" alt="Minimalist full frame infographic of FV formula components PV r n with numeric examples PV 10000 r 5 percent n 10 years for article about how can i start a hedge fund" /></a>
+      <div class="side-text"><p>Here are the approximate nominal outcomes for a single $5,000 lump sum after 20 years, which you can reproduce in a compound interest calculator by entering PV = 5000, years = 20, and the annual rate below, with annual compounding:</p></div>
+    </div>
+    
+    <div class="side-by-side special-image-left">
+      <a href="https://financepolice.com/category/crypto/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1KYX2XvJNKM7JgxFI1MM-GnOCUGmh0SWb=s1200" alt="Minimalist full frame infographic of FV formula components PV r n with numeric examples PV 10000 r 5 percent n 10 years for article about how can i start a hedge fund" /></a>
+      <div class="side-text"><p>3 percent scenario, nominal result, approximate: $9,031. Enter rate 3 and check the calculator to reproduce this outcome <a href="https://www.bankrate.com/calculators/savings/compound-interest-calculator/" target="_blank" rel="noopener">Bankrate compound interest calculator</a>.</p></div>
+    </div>
+
+<p>5 percent scenario, nominal result, approximate: $13,267. Use rate 5 and the same inputs to reproduce the computation on an online tool <a href="https://www.bankrate.com/calculators/savings/compound-interest-calculator/" target="_blank" rel="noopener">Bankrate compound interest calculator</a>.</p>
+
+<p>7 percent scenario, nominal result, approximate: $19,349. Enter rate 7 and verify the output with your calculator to confirm the math <a href="https://www.bankrate.com/calculators/savings/compound-interest-calculator/" target="_blank" rel="noopener">Bankrate compound interest calculator</a>.</p>
+
+<p>These three scenarios show that the nominal future value varies a lot across rates, and none of these numbers accounts for inflation, taxes, or fees. If you want to test compound interest 20 years with different compounding frequencies or deposits, use the same online calculator and adjust the inputs.</p>
+
+<section class="faq-accordion"><input type="checkbox" id="faq-lvtgq7" class="faq-toggle" checked /><label for="faq-lvtgq7" class="faq-summary" role="button" tabindex="0">What will $5,000 be worth in 20 years?</label><div class="faq-content"><p>It depends on the assumed annual return, compounding, inflation, and fees; use FV = PV × (1 + r)^n for a single lump sum, test multiple rates in a compound interest calculator, and convert to real dollars with CPI data.</p></div></section>
+
+<p>Pick an assumed rate now, then run the compound interest calculator steps above to see your own nominal outcome. Keep a note of the result so you can compare real dollar conversions next.</p>
+
+<h2>How to convert nominal future value to inflation-adjusted dollars</h2>
+<p>To convert a nominal FV into today's purchasing power, divide the nominal amount by the cumulative inflation factor over the same period. The cumulative inflation factor is 1 plus the cumulative percent change in the CPI series for the period, and official CPI data are the standard source for that factor <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">BLS CPI overview</a> or you can use the BLS CPI inflation calculator at <a href="https://data.bls.gov/cgi-bin/cpicalc.pl" target="_blank" rel="noopener">data.bls.gov CPI calculator</a>.</p>
+
+<p>Worked example, in steps: 1) take the nominal FV you computed, 2) obtain the cumulative inflation factor for 20 years from the BLS CPI tables or a CPI calculator <a href="https://www.calculatorsoup.com/calculators/financial/investment-inflation-calculator.php" target="_blank" rel="noopener">CalculatorSoup inflation tool</a>, 3) divide the nominal FV by that factor to get real dollars. If you prefer an approximation, use a single assumed average annual inflation rate to compute a rough cumulative factor and then divide the nominal result by that number.</p>
+
+<p>Keep in mind future inflation is uncertain. Using a higher assumed inflation rate reduces the real value, while a lower one leaves more purchasing power. That is why comparing several inflation assumptions gives a clearer sense of likely outcomes.</p>
+
+<h2>If you add periodic contributions or face fees: annuities and the drag of costs</h2>
+<p>If you plan recurring deposits, the future value of an annuity formula or a calculator that accepts periodic contributions is the correct tool. The annuity approach sums the compounded value of each periodic deposit rather than applying the single lump sum formula <a href="https://www.investopedia.com/terms/f/futurevalue.asp" target="_blank" rel="noopener">Investopedia future value</a>.</p>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Fees and expense ratios act as a recurring drag. Even small annual fees reduce the effective return and therefore the ending balance. Investor education material explains how fees compound as a subtraction from returns and can materially lower long-term outcomes <a href="https://investor.vanguard.com/investing/why-invest/compound-interest" target="_blank" rel="noopener">Vanguard explanation of fees and compounding</a>.</p></div>
+      <a href="https://financepolice.com/category/crypto/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1lYnJiZ1kJ85-hviYbh7iK8c2ttgV2OWW=s1200" alt="Side by side 2D vector chart comparing nominal totals and inflation adjusted real totals for three example rates minimalist Finance Police colors how can i start a hedge fund" /></a>
+    </div>
+
+<p>Practical tip: model deposits and fees together in the same calculator. Enter your periodic contribution, assumed gross return, and any explicit fee inputs when possible. If a calculator cannot accept fees directly, estimate the net return by subtracting an annual fee percentage from the gross return before you run the projection.</p>
+
+<h2>Decision checklist and common mistakes to avoid when modeling long-term value</h2>
+<p>Checklist to set realistic assumptions: pick a reasonable return range, choose an inflation assumption, include fees and taxes, select a compounding frequency, and run multiple scenarios to see sensitivity to each input, and check our <a href="https://financepolice.com/category/personal-finance/" target="_blank" rel="noopener">personal finance resources</a> <a href="https://www.investor.gov/introduction-investing/basics/how-investing-works" target="_blank" rel="noopener">Investor.gov guidance on scenario testing</a>.</p>
+<p>Common mistakes include confusing nominal and real values, forgetting to include fees or taxes, using a compounding frequency that does not match the investment vehicle, and relying on a single rate without testing alternatives. Avoid these by documenting inputs and testing at least three different return scenarios and two inflation rates.</p>
+<p>Another frequent error is ignoring the impact of recurring fees on annuity-style deposits. Check fund expense ratios and brokerage fee schedules as primary sources before finalizing assumptions. Use CPI tables for inflation assumptions and the investment provider for fee details.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://financepolice.com/" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1MqGf4oUdM3_qqw1_FcWTOAhVpbssBwO9=s150" alt="Finance Police Logo" />
+      </a>
+    </figure>
+
+<h2>Practical scenarios, final tips, and next steps</h2>
+<p>Recap: use FV = PV × (1 + r)^n for a single lump sum, reproduce the three nominal examples with a compound interest calculator, convert nominal numbers to real dollars with the CPI cumulative factor, and always model fees and deposits when they apply <a href="https://www.investopedia.com/terms/f/futurevalue.asp" target="_blank" rel="noopener">Investopedia future value</a>. Also see our guide to <a href="https://financepolice.com/best-micro-investment-apps/" target="_blank" rel="noopener">best micro-investment apps</a> for tools that can help run simple projections.</p>
+<p>Concrete next steps: 1) run the 3 percent, 5 percent, and 7 percent scenarios in a calculator, 2) get a CPI cumulative factor from the BLS and convert the nominal results to real dollars, 3) if you plan deposits, use an annuity-capable calculator and include fees or estimate a net return, 4) save your scenarios for comparison.</p>
+
+<div class="tool-block tool-calculator tool-centered" data-tool-type="calculator"
+              data-formula="Starting principal*(1+Annual rate)^Years+Periodic deposit*((1+Annual rate)^Years-1)/Annual rate" data-output="Future value" data-unit="USD">
+              <p class="tool-purpose">interactive compound interest and annuity calculator for testing deposits fees and inflation</p>
+              <div class="tool-calc-grid"><div class="tool-calc-field">
+                <label class="tool-calc-label">Starting principal</label>
+                <input class="tool-calc-input" type="number" value="5000" data-field="Starting principal" />
+              </div><div class="tool-calc-field">
+                <label class="tool-calc-label">Annual rate</label>
+                <input class="tool-calc-input" type="number" value="5" data-field="Annual rate" />
+              </div><div class="tool-calc-field">
+                <label class="tool-calc-label">Years</label>
+                <input class="tool-calc-input" type="number" value="20" data-field="Years" />
+              </div><div class="tool-calc-field">
+                <label class="tool-calc-label">Periodic deposit</label>
+                <input class="tool-calc-input" type="number" value="0" data-field="Periodic deposit" />
+              </div><div class="tool-calc-field">
+                <label class="tool-calc-label">Annual fees</label>
+                <input class="tool-calc-input" type="number" value="0" data-field="Annual fees" />
+              </div></div>
+              <div class="tool-calc-output">
+                <span class="tool-calc-output-label">Future value:</span>
+                <span class="tool-calc-output-value">-</span>
+                <span class="tool-calc-output-unit">USD</span>
+              </div>
+              <p class="tool-notes">Use this to compare gross and net results</p>
+            </div>
+
+<p>Final reminder: treat all projected returns as hypothetical. Outcomes vary by asset mix, actual returns, taxes, and fees. Use primary sources for CPI and fee schedules when you refine assumptions and consider consulting a licensed professional for personalized advice.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-av1s9u" class="faq-toggle" /><label for="faq-av1s9u" class="faq-summary" role="button" tabindex="0">How do I calculate the future value of a single lump sum?</label><div class="faq-content"><p>Use the formula FV = PV × (1 + r)^n, where PV is the starting amount, r is the annual rate as a decimal, and n is the number of years. Verify with a compound interest calculator to avoid input errors.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-6dpb5r" class="faq-toggle" /><label for="faq-6dpb5r" class="faq-summary" role="button" tabindex="0">How do I adjust a nominal future value for inflation?</label><div class="faq-content"><p>Divide the nominal future value by the cumulative inflation factor for the same period, using CPI data from the Bureau of Labor Statistics to find that factor.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-knmgrk" class="faq-toggle" /><label for="faq-knmgrk" class="faq-summary" role="button" tabindex="0">Do fees really matter for long-term projections?</label><div class="faq-content"><p>Yes, recurring fees and expense ratios reduce the net return each year and compound as a drag on the ending balance, so model fees or use a net return assumption.</p></div></section>
+</section>
+
+<section class="article-ending">Use the worked examples and links here to run your own scenarios and keep a record of assumptions. When you refine numbers, rely on primary sources such as BLS CPI data for inflation and your provider for fee schedules.
+
+Treat all projections as hypothetical and consider seeking professional advice for decisions that depend on these estimates.</section>
+
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.bankrate.com/calculators/savings/compound-interest-calculator/" target="_blank" rel="noopener">https://www.bankrate.com/calculators/savings/compound-interest-calculator/</a></li><li><a href="https://www.investor.gov/introduction-investing/basics/how-investing-works" target="_blank" rel="noopener">https://www.investor.gov/introduction-investing/basics/how-investing-works</a></li><li><a href="https://www.khanacademy.org/economics-finance-domain/core-finance/interest-tutorial/interest-tutorial/v/compound-interest" target="_blank" rel="noopener">https://www.khanacademy.org/economics-finance-domain/core-finance/interest-tutorial/interest-tutorial/v/compound-interest</a></li><li><a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">https://www.bls.gov/cpi/</a></li><li><a href="https://www.investopedia.com/terms/f/futurevalue.asp" target="_blank" rel="noopener">https://www.investopedia.com/terms/f/futurevalue.asp</a></li><li><a href="https://investor.vanguard.com/investing/why-invest/compound-interest" target="_blank" rel="noopener">https://investor.vanguard.com/investing/why-invest/compound-interest</a></li><li><a href="https://financepolice.com/advertise/" target="_blank" rel="noopener">https://financepolice.com/advertise/</a></li><li><a href="https://financepolice.com/category/personal-finance/" target="_blank" rel="noopener">https://financepolice.com/category/personal-finance/</a></li><li><a href="https://financepolice.com/best-micro-investment-apps/" target="_blank" rel="noopener">https://financepolice.com/best-micro-investment-apps/</a></li><li><a href="https://financepolice.com/best-business-bank-accounts/" target="_blank" rel="noopener">https://financepolice.com/best-business-bank-accounts/</a></li><li><a href="https://www.calculatorsoup.com/calculators/financial/investment-inflation-calculator.php" target="_blank" rel="noopener">https://www.calculatorsoup.com/calculators/financial/investment-inflation-calculator.php</a></li><li><a href="https://www.calculator.net/inflation-calculator.html" target="_blank" rel="noopener">https://www.calculator.net/inflation-calculator.html</a></li><li><a href="https://data.bls.gov/cgi-bin/cpicalc.pl" target="_blank" rel="noopener">https://data.bls.gov/cgi-bin/cpicalc.pl</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
