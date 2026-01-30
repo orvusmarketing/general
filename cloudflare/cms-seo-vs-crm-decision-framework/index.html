@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What is a CMS vs CRM? A practical guide for operators</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand tokens derived from provided style */
+      --text-color: #f4e7c5; /* --orvus-ink */
+      --accent: #C8A45D; /* --orvus-gold */
+      --accent-hover: #f6de9f; /* --orvus-gold-strong */
+      --line: rgba(200,164,93,0.26); /* --orvus-border-soft */
+      --surface: #050d18; /* --orvus-bg-soft */
+      --surface-2: #0b1628;
+      --radius: 12px;
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #050d18;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease, background .12s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      background: var(--accent-hover);
+      filter: none;
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/cms-seo-infographic.jpg" alt="What is a CMS vs CRM? — infographic" />
+        </div>
+        <h1 class="title">What is a CMS vs CRM? A practical guide for operators</h1>
+        <p class="subline">A concise framework explaining the boundary between content systems and customer systems for operators.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://orvus.net/2026/01/31/cms-seo-vs-crm-decision-framework/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">This guide explains the functional boundary between content systems and customer systems, and why that boundary matters operationally. It focuses on practical rules that operators and marketing teams can apply when deciding where to invest time and engineering effort.
+
+You will find clear decision rules, integration patterns, and step by step checklists aimed at teams that manage ecommerce or service businesses.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">CMS platforms manage the creation, organisation and publication of website content and separate content from presentation.</span></div><div class="highlight-card"><span class="highlight-text">CRMs centralise customer records and sales or service workflows to support pipeline management and reporting.</span></div><div class="highlight-card"><span class="highlight-text">Integrating CMS and CRM can enable personalization and better attribution but requires careful identifier alignment and consent handling.</span></div>
+     </div>
+  <h2>cms seo: definition and why it matters for operators</h2><h3>What we mean by CMS and by SEO</h3><p>A content management system is software for creating, organising and publishing website content, and for separating content from presentation. For a concise description of that role see the WordPress about page <a href="https://wordpress.org/about/" target="_blank" rel="noopener">WordPress about page</a>.</p><h3>How CMS and SEO interact in practice</h3><p>When teams talk about cms seo they mean the work inside the content system that shapes who finds a page and how it ranks. That includes editorial structure, URL design and the technical scaffolding that lets search engines index and interpret content. Usage data shows public web content is still largely run from CMS platforms, which is why editorial SEO commonly lives there <a href="https://w3techs.com/technologies/overview/content_management" target="_blank" rel="noopener">W3Techs CMS usage overview</a>.</p><h2>How a CMS works and why cms seo usually lives there</h2><h3>Core CMS features and editorial workflows</h3><p>Core capabilities of a CMS include content creation tools, templates, publishing workflows and the separation of content from presentation. These features let <a href="https://orvus.net/about" target="_blank" rel="noopener">teams</a> produce content at scale while keeping design and markup reusable, which reduces operational friction during iterations.</p><p>Because these capabilities directly shape published output, the CMS is often the primary place to control on page SEO settings such as metadata, canonical tags and URL structure. Popular CMS platforms provide interfaces or APIs to manage these elements as part of editorial workflows <a href="https://wordpress.org/about/" target="_blank" rel="noopener">WordPress about page</a>.</p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Need a compact CMS audit and roadmap? See Consultation on the services page</h3><div class="cta-intro"><p>Run a quick CMS audit: check canonical URLs, metadata, URL patterns and editorial schedules to see where content workflow limits search performance.</p></div><a href="https://orvus.net/services" target="_blank" rel="noopener" class="cta-button">Inquire about Consultation</a></div><h3>CMS as the primary place to manage content architecture and on-page SEO</h3><p>For most public websites, teams configure structural SEO controls inside the CMS because that is where content is authored, templated and published. Examples include deciding directory structures, templated title tags, and scheduling evergreen updates. W3Techs data confirms that CMS platforms remain central to public web delivery, which keeps these controls near the publishing layer <a href="https://w3techs.com/technologies/overview/content_management" target="_blank" rel="noopener">W3Techs CMS usage overview</a>.</p><p>Practical cms seo tasks that belong in the CMS are URL decisions, meta description management, canonical control, and editorial scheduling. Keeping these tasks within the CMS helps reduce coordination overhead between content teams and developers, and supports predictable search behaviour.</p>
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure><h2>What a CRM does: core functions and when teams prioritise CRM</h2><h3>CRM core capabilities</h3>
+    <div class="side-by-side special-image-left">
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1XCixT2P9ix0S1vU0aTuOMGdXNZZnEvSH=s1200" alt="Small team reviewing site structure and customer pipelines on screen in minimalist office with natural lighting focusing on cms seo and brand colors 0B1E33 and C8A45D" /></a>
+      <div class="side-text"><p>A customer relationship management system centralises customer records, interactions and sales or service workflows to support pipeline management and reporting. For a practical overview of these capabilities see the Salesforce CRM overview <a href="https://www.salesforce.com/crm/what-is-crm/" target="_blank" rel="noopener">Salesforce CRM overview</a>.</p></div>
+    </div><p>Typical CRM features include contact and account records, deal pipelines, activity logging, and integration points with marketing automation. Teams use CRMs to coordinate sales activity, track stages in a funnel and capture lifecycle events that feed reporting.</p><h3>When a CRM becomes the primary system</h3><p>Organisations prioritise a CRM when the main constraint is managing customer lifecycles, automating sales or delivering repeatable service workflows. When pipeline visibility and lifecycle automation are core to operations, putting the CRM at the centre of the stack reduces manual handoffs and supports clearer reporting.</p><p>Market trends show continued enterprise investment in CRM capability, with vendors focusing on cloud integration, analytics and connectors that look like customer data platform functionality <a href="https://www.statista.com/statistics/1208062/global-crm-market-size/" target="_blank" rel="noopener">Statista CRM market size</a>.</p><h2>Key differences between a CMS and a CRM</h2><h3>Functional separation: content vs relationship data</h3><p>The primary functional difference is that CMSs focus on content delivery and editorial workflows while CRMs focus on relationship data, transactions and operational workflows. This contrast clarifies where responsibility for a task should sit in most organisations <a href="https://blog.hubspot.com/marketing/crm-vs-cms" target="_blank" rel="noopener">HubSpot article on CMS and CRM differences</a>.</p><section class="faq-accordion"><input type="checkbox" id="faq-u1k9m2" class="faq-toggle" checked /><label for="faq-u1k9m2" class="faq-summary" role="button" tabindex="0">When should I prioritise a CMS, a CRM, or both for my business?</label><div class="faq-content"><p>Prioritise a CMS when content production and cms seo are the main constraints. Prioritise a CRM for customer lifecycle and sales automation. Choose integration when commerce, subscriptions or tight attribution are core needs.</p></div></section><h3>Overlap areas and common misunderstandings</h3><p>Areas of overlap that commonly cause confusion include forms, lead capture and simple user profiles. These elements can live in both systems, but they serve different purposes: the CMS typically captures and routes leads while the CRM stores long term relationship data and transaction history.</p><p>When teams expect a CMS to manage complex sales workflows, or expect a CRM to replace content architecture, they often face gaps in capability and measurement. Clear responsibility mapping avoids duplicated effort and reporting blind spots.</p><h2>When to integrate CMS and CRM: common patterns and tradeoffs</h2><h3>Integration use cases: personalization, attribution, lead enrichment</h3><p>Teams commonly <a href="https://www.contentstack.com/blog/all-about-headless/transform-your-digital-strategy-best-practices-for-integrating-headless-cms-with-crm" target="_blank" rel="noopener">integrate CMS and CRM</a> so site behaviour and content can update customer profiles, enable personalization, and improve attribution. Connecting these systems makes it possible to tie content interactions to later conversions, which supports better measurement when done carefully <a href="https://blog.hubspot.com/marketing/crm-vs-cms" target="_blank" rel="noopener">HubSpot article on CMS and CRM differences</a>.</p><p>Typical integration use cases include enriching lead records with page behaviour, personalising site content based on lifecycle stage, and sending high intent signals into sales workflows so follow up is timed and relevant.</p><h3>Technical patterns: APIs, webhooks and CDP style links</h3><p>Common technical approaches are <a href="https://www.techtarget.com/searchcontentmanagement/tip/5-steps-to-integrate-a-content-personalization-engine-into-a-CMS" target="_blank" rel="noopener">direct API calls</a> from the CMS to the CRM, webhooks for event driven updates, and middleware or customer data platform connectors that normalise schema differences. Each pattern trades implementation speed against long term flexibility.</p><p>Implementations also need to plan for data model mismatch, consent and privacy rules, and the added complexity of attribution when systems are stitched together. These tradeoffs are practical constraints that affect integration benefit and ongoing maintenance <a href="https://w3techs.com/technologies/overview/content_management" target="_blank" rel="noopener">W3Techs CMS usage overview</a>.</p><h2>A practical decision framework: choose CMS, CRM, or an integrated approach</h2><h3>Primary constraints and decision rules</h3><p>Use this simple rule: prioritise a CMS when the main constraint is content production and SEO; prioritise a CRM when the main constraint is customer lifecycle and sales automation; choose integration when commerce, subscriptions or tight attribution are core needs. This rule reflects how teams commonly decide between systems <a href="https://blog.hubspot.com/marketing/crm-vs-cms" target="_blank" rel="noopener">HubSpot article on CMS and CRM differences</a>.</p><p>Start by ranking your primary constraint. If content throughput, editorial coordination and search outcomes are limiting growth, invest in CMS capabilities and content architecture. If pipeline visibility, lifecycle automation and retention are limiting, invest in CRM capabilities and data quality.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://orvus.net/services" target="_blank" rel="noopener">Orvus Unique Services</a></div>
+      <a href="https://orvus.net/services" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1H_h1lsT61lq2b7T9TJp_cP-rw6fSFKSG" alt="Orvus Unique Services" /></a>
+    </div><h3>Quick diagnostic checklist for teams</h3><p>Run this <a href="https://orvus.net/services" target="_blank" rel="noopener">five point diagnostic</a> to pick a path: 1) Is content production the bottleneck? 2) Is pipeline automation missing? 3) Do you need per user personalised content? 4) Is attribution between content and revenue reliable? 5) Do you operate commerce or subscription flows? Answering these clarifies whether to prioritise CMS, CRM or integration.</p><p>Each affirmative answer points to a different focus. For example, if content is the blocker and attribution is weak, start with CMS and instrument links to the CRM incrementally. If lifecycle automation is the blocker, map CRM processes first and add CMS hooks as required.</p><h2>Implementation checklist: data models, consent and measuring content to revenue</h2><h3>Aligning identifiers and schemas</h3><p>Practical steps to align systems begin with identifiers. Make sure user IDs, email keys and session mapping are defined and shared across teams. A deliberate mapping of these keys reduces mismatch and improves the accuracy of joined reports.</p>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>When you join events from the CMS to CRM records, instrument server side or authenticated signals where possible, and document which fields in each system serve as keys. This reduces guesswork during integration and makes debugging simpler <a href="https://blog.hubspot.com/marketing/crm-vs-cms" target="_blank" rel="noopener">HubSpot article on CMS and CRM differences</a>.</p></div>
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1FLNgZF1ZTqU831JUrorLw7nLhMjesO2J=s1200" alt="Minimal vector infographic showing content delivery and customer data flows with icons and color coded pipelines cms seo" /></a>
+    </div><h3>Consent, privacy and realistic attribution</h3><p>Capture consent explicitly where you plan to move behavioural data from the site into customer records. Store consent flags with timestamps and scopes so downstream systems can respect preferences and retention rules.</p><p>Measurement of content to revenue paths should be pragmatic. Expect murky joins, and aim to build incrementally: validate signal quality, test simple attribution windows, and use controlled experiments where possible to reduce bias in your conclusions <a href="https://www.statista.com/statistics/1208062/global-crm-market-size/" target="_blank" rel="noopener">Statista CRM market size</a>.</p><h2>Common mistakes and pitfalls teams make</h2><h3>Assuming one system will do everything</h3><p>One common mistake is assuming the CMS will solve CRM tasks or the CRM will replace content strategy. Both systems have design intent. Expecting one to do the other leads to technical debt and gaps in reporting.</p><h3>Poor data alignment and measurement blind spots</h3><p>Other predictable errors are inconsistent naming conventions, missing identifier alignment, and no clear test system for creative or content experiments. These lead to unreliable reports and slow iteration.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick internal checklist to validate identifier alignment between CMS and CRM</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-qg13rv-0">
+                        <input id="tool-check-qg13rv-0" type="checkbox" />
+                        <span>User ID match</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-u8kwwr-1">
+                        <input id="tool-check-u8kwwr-1" type="checkbox" />
+                        <span>Email key consistency</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-ay1ufc-2">
+                        <input id="tool-check-ay1ufc-2" type="checkbox" />
+                        <span>Session to contact mapping</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Run after any integration change</p>
+            </div><p>Mitigations are practical: small automations that copy canonical keys, shared naming conventions documented in a short guide, and a small staging integration to validate assumptions before wide release.</p><h2>Example scenarios: ecommerce, subscriptions and service businesses</h2><h3>Ecommerce example: CMS for catalog and CRM for orders and retention</h3><p>For ecommerce the CMS often manages catalog presentation, landing pages and SEO, while the CRM or order system manages transactions, cohorts and retention messaging. Integration helps tie browsing and content signals to later purchases for better attribution and personalised offers.</p><p>In practice, teams might prioritise CMS changes to improve organic traffic to <a href="https://wordable.io/cms-integration/" target="_blank" rel="noopener">product pages</a>, then add CRM enrichment so sales and retention teams see which content attracted repeat buyers <a href="https://blog.hubspot.com/marketing/crm-vs-cms" target="_blank" rel="noopener">HubSpot article on CMS and CRM differences</a>.</p><h3>Service business example: lead capture in CMS feeding CRM pipelines</h3><p>For a service business the CMS is frequently the inbound engine, producing content that attracts leads. The CRM then captures those leads, runs qualification and moves opportunities through a pipeline. That separation keeps content and sales workflows focused and measurable.</p><p>When subscriptions or repeat billing are core, teams should consider integrated approaches so lifecycle triggers and content personalisation support retention rather than ad hoc point solutions <a href="https://www.statista.com/statistics/1208062/global-crm-market-size/" target="_blank" rel="noopener">Statista CRM market size</a>.</p>
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure><h2>Conclusion and next steps for operators</h2><h3>Quick recap</h3><p>The practical rule is straightforward: prioritise a CMS when content production and cms seo are the main constraints, prioritise a CRM when customer lifecycle and sales automation are dominant, and choose integration for commerce, subscriptions or tight attribution.</p><h3>Suggested first actions</h3><p>Three useful next steps are: run the diagnostic checklist, <a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">audit identifier alignment and consent handling</a>, and map a minimal integration test that proves a single signal end to end. Treat this as systems design work that compounds over time rather than a one off project.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-0xc0uk" class="faq-toggle" /><label for="faq-0xc0uk" class="faq-summary" role="button" tabindex="0">What is the main difference between a CMS and a CRM?</label><div class="faq-content"><p>A CMS manages content creation, templates and publication for websites, while a CRM centralises customer records, interactions and sales or service workflows.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-6x1vtn" class="faq-toggle" /><label for="faq-6x1vtn" class="faq-summary" role="button" tabindex="0">Should I integrate my CMS and CRM immediately?</label><div class="faq-content"><p>Not always. Integrate when you need personalization, tighter attribution, commerce or subscription flows, and after you have basic identifier alignment and consent in place.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-qn97oh" class="faq-toggle" /><label for="faq-qn97oh" class="faq-summary" role="button" tabindex="0">Which system should I prioritise for SEO?</label><div class="faq-content"><p>Prioritise the CMS for SEO work, because content architecture and on page controls are usually implemented at the publishing layer.</p></div></section>
+</section><section class="article-ending">If you need to move from diagnosis to a short roadmap, start small: run the diagnostic checklist, confirm identifier alignment and test one integration point. Systems design and measurement are ongoing work that compound when you reduce friction between teams.
+
+Orvus Limited can act as a systems builder and strategic reference to translate diagnostic findings into a prioritized plan without promising specific outcomes.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://wordpress.org/about/" target="_blank" rel="noopener">https://wordpress.org/about/</a></li><li><a href="https://w3techs.com/technologies/overview/content_management" target="_blank" rel="noopener">https://w3techs.com/technologies/overview/content_management</a></li><li><a href="https://www.salesforce.com/crm/what-is-crm/" target="_blank" rel="noopener">https://www.salesforce.com/crm/what-is-crm/</a></li><li><a href="https://www.statista.com/statistics/1208062/global-crm-market-size/" target="_blank" rel="noopener">https://www.statista.com/statistics/1208062/global-crm-market-size/</a></li><li><a href="https://blog.hubspot.com/marketing/crm-vs-cms" target="_blank" rel="noopener">https://blog.hubspot.com/marketing/crm-vs-cms</a></li><li><a href="https://orvus.net/services" target="_blank" rel="noopener">https://orvus.net/services</a></li><li><a href="https://orvus.net/about" target="_blank" rel="noopener">https://orvus.net/about</a></li><li><a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">https://orvus.net/category/useful-knowledge/</a></li><li><a href="https://www.contentstack.com/blog/all-about-headless/transform-your-digital-strategy-best-practices-for-integrating-headless-cms-with-crm" target="_blank" rel="noopener">https://www.contentstack.com/blog/all-about-headless/transform-your-digital-strategy-best-practices-for-integrating-headless-cms-with-crm</a></li><li><a href="https://www.techtarget.com/searchcontentmanagement/tip/5-steps-to-integrate-a-content-personalization-engine-into-a-CMS" target="_blank" rel="noopener">https://www.techtarget.com/searchcontentmanagement/tip/5-steps-to-integrate-a-content-personalization-engine-into-a-CMS</a></li><li><a href="https://wordable.io/cms-integration/" target="_blank" rel="noopener">https://wordable.io/cms-integration/</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
