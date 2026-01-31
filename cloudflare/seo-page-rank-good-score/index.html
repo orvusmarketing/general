@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What is a good PageRank score? Practical guidance for modern SEO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      --text-color: #f4e7c5;
+      --accent: #C8A45D;
+      --accent-hover: #f6de9f;
+      --line: rgba(200,164,93,0.26);
+      --surface: #050d18;
+      --surface-2: #0b1628;
+      --radius: 12px;
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/18Bu7pXrFk5z2R5PGZ0ovF54i9i9XPXUr" alt="What is a good PageRank score? banner" />
+        </div>
+        <h1 class="title">What is a good PageRank score? Practical guidance for modern SEO</h1>
+        <p class="subline">PageRank’s original model helps reason about link equity; this article explains what it measured, why public PageRank disappeared, and practical steps to improve link equity.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://orvus.net/2026/01/31/seo-page-rank-good-score/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">PageRank started as a mathematical model to estimate importance from the web&#39;s link graph. Over time the web and ranking systems have grown, and link signals now sit alongside many other inputs. This article explains what PageRank originally measured, why public PageRank is gone, and how to use modern proxies and technical fixes to improve link equity in a measured way.
+
+The guidance is aimed at operators and marketing teams who need clear decision criteria and a compact plan. It focuses on practical diagnostics, measurement choices and steps you can take without promising specific ranking outcomes.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">PageRank is a foundational link-analysis model, but Google no longer publishes public PageRank values.</span></div><div class="highlight-card"><span class="highlight-text">Vendor scores are useful for relative benchmarking and trend tracking, not as direct equivalents of Google&#39;s internal signals.</span></div><div class="highlight-card"><span class="highlight-text">Fix crawlability and internal linking first; reallocate existing authority before heavy link acquisition.</span></div>
+     </div>
+  <h2>What PageRank originally measured: a concise definition and context</h2><h3>The original algorithm in one paragraph</h3><p><a href="https://en.wikipedia.org/wiki/PageRank" target="_blank" rel="noopener">PageRank</a> was introduced as a link-analysis algorithm that estimates a page's relative importance from the web's link graph. The method models links as votes and propagates weight through the graph to produce a score per node; the foundational description remains the reference point for link-based analysis, even decades later <a href="http://infolab.stanford.edu/~backrub/google.html" target="_blank" rel="noopener">Stanford paper</a>.</p>
+    <div class="side-by-side special-image-left">
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1LKpbJ3DWtwdMILSdLvTIbirnydvoOfJm=s1200" alt="seo page rank technical audit on laptop screen showing crawl report and URL list with a person taking notes on a minimalist navy Orvus branded desk" /></a>
+      <div class="side-text"><p>The original formulation produces a skewed distribution of values, meaning most pages have very low scores while a few collect most of the weight. That skew makes raw numbers hard to read as standalone thresholds; the values behave like percentiles more than absolute grades.</p></div>
+    </div><p>In the early web the link graph offered a comparatively clear signal about authority and endorsement. The math behind PageRank captured that structure and helped surface pages that other sites referenced. Over time, the web grew, and the signal became one input among many.</p><p>Reading PageRank today requires two practical shifts: treat it as a conceptual model for link equity, and avoid expecting a single number to explain ranking outcomes. The algorithm remains useful for thinking about how links flow value across a site, but the original values are not directly comparable to modern vendor scores.</p><h2>Why Google no longer publishes a public PageRank and what that means</h2><h3>Toolbar PageRank deprecation and Google guidance</h3><p>Google stopped publishing public PageRank values, removing the toolbar score and emphasising that link signals are only one of many inputs to ranking; their documentation describes links as part of a larger system rather than a single determinative score <a href="https://developers.google.com/search/docs/fundamentals/how-search-works" target="_blank" rel="noopener">Google Search Central</a>.</p><p>Because Google no longer provides a public PageRank number, SEO teams must rely on proxies and a broader set of metrics when evaluating authority. That shift changes how you benchmark progress: look for trends and relative gains rather than aiming at a fixed public score.</p><div class="cta-section"><h3 class="cta-headline">Check if link-equity is a bottleneck</h3><div class="cta-intro"><p>Download a concise diagnostic checklist or contact a short diagnostic if you want a quick view of whether link-equity is a likely bottleneck for your site.</p></div><a href="https://orvus.net/services" target="_blank" rel="noopener" class="cta-button">Request a short diagnostic</a></div><p>Google's guidance means link work should be planned as part of a systems approach. Link equity can matter for discovery and authority, but content relevance, page experience and machine-learned signals are also central. Treat link work as one track in a coordinated SEO programme.</p><p>Practically this means teams should combine proxy link metrics with content quality checks and technical audits before making major investment decisions.</p><h2>How modern ranking systems use link signals alongside other features</h2><h3>Link equity as one input in a multi-feature ranking stack</h3><p>Modern search systems blend PageRank-like link signals with many other features, including content relevance, user intent and page experience; vendor analysis and <a href="https://www.nature.com/research-intelligence/nri-topic-summaries/pagerank-algorithms-and-web-ranking-techniques-micro-693415" target="_blank" rel="noopener">industry reviews</a> describe this multi-factor approach and how links fit into a broader stack <a href="https://ahrefs.com/blog/pagerank/" target="_blank" rel="noopener">Ahrefs Blog</a>.</p>
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure><p></p><p>Because of this blending, raising a single link metric rarely produces uniform ranking gains across all queries. Link equity can help for queries where relevance is already established, but improving links alone often gives better returns when paired with content and UX work.</p>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Machine-learned models and intent signals can amplify or attenuate the impact of link equity. If a page matches intent and has good experience signals, additional high-quality inbound links can make a measurable difference. If those other signals are weak, links alone tend to have limited effect.</p></div>
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1VZWvKHPcelYzeSbaq-DV2OCJhDp-y3CG=s1200" alt="Minimal 2D vector sitemap infographic showing internal linking flow and authority distribution with highlighted root node in Orvus Ltd colors seo page rank" /></a>
+    </div><p>In practice, teams should use a combined diagnostic: check relevance and UX first, then treat link work as a force multiplier where it aligns with content and funnel goals.</p><h2>Commercial PageRank proxies: what Moz, Ahrefs and others actually provide</h2><h3>Differences between proprietary scores and Google’s internal signals (seo page rank)</h3><p>SEO vendors publish proprietary link-equity metrics that approximate PageRank behaviour but use different scales and heuristics; these vendor scores are useful for relative benchmarking yet are not direct equivalents of Google’s internal signals <a href="https://moz.com/learn/seo/page-rank" target="_blank" rel="noopener">Moz learning center</a>.</p><p>Vendor metrics vary by what they measure and how they scale results. That means a high score at one provider does not map one-to-one to a similar number at another provider. Use each vendor as a consistent internal benchmark rather than an absolute target.</p><section class="faq-accordion"><input type="checkbox" id="faq-rdgnll" class="faq-toggle" checked /><label for="faq-rdgnll" class="faq-summary" role="button" tabindex="0">What does a good PageRank score mean today for SEO?</label><div class="faq-content"><p>A good PageRank score is a relative concept: because Google no longer publishes PageRank, use vendor proxies and percentiles to benchmark link equity and combine that with technical and content diagnostics to prioritise work.</p></div></section><h3>How to compare and use vendor metrics responsibly</h3><p>Compare vendor metrics by tracking trends and percentiles within the same tool. A rising domain authority proxy or link equity indicator in one platform typically signals progress even if the absolute number is not comparable to another provider.</p><p>When reporting, present vendor scores as relative positions or percentile bands. This reduces the risk of chasing arbitrary thresholds and aligns measurement with the conceptual idea that link distributions are skewed and relative.</p><h2>Practical ways to improve link equity in 2026</h2><h3>Earn relevant, contextual inbound links</h3><p>The most reliable way to increase link equity is to earn relevant, contextual inbound links from sites that are topically aligned with your pages. Contextual placements in editorial content tend to pass more meaningful signals than generic directory or profile links, and they help with referral traffic and relevance.</p><p>Target placements that match your content architecture and funnel stage. For product pages, aim for reviews and comparisons; for informational pages, prioritize references from high-relevance articles and resource pages. Measuring the impact requires combining link data with site-level attribution and conversion reporting <a href="https://ahrefs.com/blog/pagerank/" target="_blank" rel="noopener">Ahrefs Blog</a>.</p><h3>Measurement: site-level attribution and proxy metrics</h3><p>Because Google’s internal PageRank is not public, measure progress using a blend of vendor proxies and site-level attribution. Track trends in your chosen proxy metrics, then test whether gains correlate with improved organic traffic or conversions for target pages.</p><p>Use <a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">short diagnostic windows</a> to see early signals: pick priority queries or segments, run a focused outreach and content push, and check whether traffic and conversions move in the expected direction over a 30 to 90 day window.</p><h2>Internal linking and technical fixes to let link equity flow</h2><h3>Common crawl and indexing issues to check</h3><p>Crawlability and indexability matter because link signals only help if search engines can discover and attribute them. Check index coverage, canonical tags and robots directives to ensure links point to indexable pages and do not get lost behind blocking rules <a href="https://developers.google.com/search/docs/fundamentals/how-search-works" target="_blank" rel="noopener">Google Search Central</a>.</p><p>Fixing crawl or canonical issues often unlocks existing external link value without acquiring any new backlinks. Prioritise pages that should rank but do not appear in index reports.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://orvus.net/services" target="_blank" rel="noopener">Orvus Unique Services</a></div>
+      <a href="https://orvus.net/services" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1H_h1lsT61lq2b7T9TJp_cP-rw6fSFKSG" alt="Orvus Unique Services" /></a>
+    </div><h3>Internal linking patterns that preserve and pass authority</h3><p>Design internal linking so high-value pages receive focused internal referrals without diluting signals. Avoid overly generic site-wide links from footers or tag pages to priority pages; prefer in-body contextual links from related pages that use descriptive anchors.</p><p>Ensure you use logical canonicalisation and pagination handling so link weight flows to the preferred version. Simple internal linking changes can reallocate existing authority across your content architecture with limited engineering effort.</p><h3>Diagnostic steps: crawl reports, index coverage, and canonicalisation checks</h3><p>Run a crawl to map internal link paths and identify orphaned pages. Combine that with index coverage reports from Google Search Central and a canonical check to confirm the canonical targets align with your intended landing pages.</p><p>When you fix an indexing or canonical problem, re-run the crawl and monitor proxy metrics and organic traffic to validate that link-equity flow has improved.</p><h2>Decision criteria: when to prioritise link-equity work vs other SEO investments</h2><h3>Checklist: data signals that justify link-focus</h3><p>Prioritise link-equity work when diagnostics show strong relevance but low authority signals. Typical indicators include pages that match search intent and have decent UX, yet sit behind low vendor link scores or receive little referral authority; such patterns suggest link work may unlock ranking potential <a href="https://ahrefs.com/blog/pagerank/" target="_blank" rel="noopener">Ahrefs Blog</a>.</p><p>Other signals include a site with healthy technical foundations but a weak backlink profile relative to competitors on target queries. Use this checklist to decide whether to shift budget to outreach and link acquisition.</p><h3>How to balance content, UX and link investments</h3><p>Balance investments by addressing the weakest link in the funnel. If content relevance is poor, prioritise content and intent alignment first. If content and UX are strong but authority lags, focus on targeted link acquisition and internal linking. The right mix depends on funnel constraints and measurement quality.</p><p>Adopt short prioritisation windows of 30 to 90 days for experiments. That cadence helps teams validate whether link-focused actions move meaningful KPIs before scaling effort.</p><h2>Typical mistakes and pitfalls when interpreting PageRank-like scores</h2><h3>Misreading vendor scales as absolutes</h3><p>A common mistake is treating vendor scores as exact equivalents to Google’s internal PageRank or chasing single-number thresholds. Vendor metrics are proxies with proprietary scales; use them for trends and relative comparisons rather than absolute targets <a href="https://moz.com/learn/seo/page-rank" target="_blank" rel="noopener">Moz learning center</a>.</p><p>Because original PageRank values were skewed, absolute thresholds are misleading. Convert scores into percentile bands or internal categories to make them actionable rather than treating them as grades.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Run a focused crawl and index audit to spot lost link equity</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-nvo8d4-0">
+                        <input id="tool-check-nvo8d4-0" type="checkbox" />
+                        <span>Crawl results</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-jrkka2-1">
+                        <input id="tool-check-jrkka2-1" type="checkbox" />
+                        <span>Index coverage</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-tyy3bc-2">
+                        <input id="tool-check-tyy3bc-2" type="checkbox" />
+                        <span>Canonical issues</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Run monthly or after structural changes</p>
+            </div><h3>Ignoring crawl and internal linking issues</h3><p>Another pitfall is to spend only on new link acquisition while ignoring internal problems that prevent existing links from passing value. If links point to non-indexable or non-canonical pages, their value may be wasted.</p><p>Quick mitigation: prioritise fixes that restore flow first, then resume outreach. This order often yields clearer measurement and better marginal returns on link investment.</p>
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure><p></p><h2>Putting it together: measurement, realistic benchmarks and next steps</h2><h3>How to set relative benchmarks and monitor progress</h3><p>Set benchmarks using vendor proxies as relative percentiles rather than absolute scores. Track a small set of indicators, for example a domain authority proxy, the count of contextual inbound links to priority pages, and site-level organic conversions. Use trend lines and percentiles to judge progress <a href="https://moz.com/learn/seo/page-rank" target="_blank" rel="noopener">Moz learning center</a>.</p><p>Combine proxy trends with site-level attribution to determine whether link equity work correlates with traffic and conversion improvements. Correlation over a short diagnostic window helps justify scaling outreach and internal linking changes.</p><h3>Recommended short list of next actions</h3><p>Start with a compact plan: <a href="https://orvus.net/services" target="_blank" rel="noopener">run a crawl and index check</a>, map internal linking to priority pages, and pick a small set of topical sites for outreach. Use vendor proxies to track trend movements, but prioritise measuring organic outcomes for target queries.</p><p>For teams constrained in resources, focus first on fixes that reallocate existing authority (internal linking and index fixes) before investing heavily in new link acquisition. <a href="https://orvus.net/about" target="_blank" rel="noopener">Orvus Limited</a> can often help reframe these tasks into a compact diagnostics and execution plan when teams need an external systems perspective, conditioned on constraints and data quality.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-ug1lvq" class="faq-toggle" /><label for="faq-ug1lvq" class="faq-summary" role="button" tabindex="0">Is there a single public PageRank score I can check for my site?</label><div class="faq-content"><p>No. Google stopped publishing public PageRank values, so there is no official PageRank score available. Use vendor proxies and site-level metrics to track relative changes.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-rlnv8l" class="faq-toggle" /><label for="faq-rlnv8l" class="faq-summary" role="button" tabindex="0">Can improving link equity guarantee higher rankings?</label><div class="faq-content"><p>No. Improving link equity can help when content relevance and page experience are already strong, but it does not guarantee ranking increases because search systems use many signals.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-d0mrnw" class="faq-toggle" /><label for="faq-d0mrnw" class="faq-summary" role="button" tabindex="0">Which vendor metric should I trust for benchmarking link authority?</label><div class="faq-content"><p>Use a single vendor consistently and treat its score as a relative benchmark or percentile. Track trends rather than aiming for absolute numbers.</p></div></section>
+</section><section class="article-ending">Improving how link equity flows is often a systems task that combines outreach, content alignment and technical fixes. Treat vendor metrics as signals, not goals, and rely on site-level attribution to validate work. Use short diagnostic windows to test whether changes move meaningful KPIs before scaling effort.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://en.wikipedia.org/wiki/PageRank" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/PageRank</a></li><li><a href="http://infolab.stanford.edu/~backrub/google.html" target="_blank" rel="noopener">http://infolab.stanford.edu/~backrub/google.html</a></li><li><a href="https://developers.google.com/search/docs/fundamentals/how-search-works" target="_blank" rel="noopener">https://developers.google.com/search/docs/fundamentals/how-search-works</a></li><li><a href="https://ahrefs.com/blog/pagerank/" target="_blank" rel="noopener">https://ahrefs.com/blog/pagerank/</a></li><li><a href="https://www.nature.com/research-intelligence/nri-topic-summaries/pagerank-algorithms-and-web-ranking-techniques-micro-693415" target="_blank" rel="noopener">https://www.nature.com/research-intelligence/nri-topic-summaries/pagerank-algorithms-and-web-ranking-techniques-micro-693415</a></li><li><a href="https://moz.com/learn/seo/page-rank" target="_blank" rel="noopener">https://moz.com/learn/seo/page-rank</a></li><li><a href="https://orvus.net/services" target="_blank" rel="noopener">https://orvus.net/services</a></li><li><a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">https://orvus.net/category/useful-knowledge/</a></li><li><a href="https://orvus.net/about" target="_blank" rel="noopener">https://orvus.net/about</a></li><li><a href="https://marketbrew.ai/optimization-guide/evolution-of-the-pagerank-algorithm" target="_blank" rel="noopener">https://marketbrew.ai/optimization-guide/evolution-of-the-pagerank-algorithm</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
