@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Are new car sales declining?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Agent-mapped brand tokens derived from provided style */
+      --text-color: #010205; /* from --fbp-ink */
+      --accent: #3666ed; /* from --fbp-accent */
+      --accent-hover: #2f5be0; /* from --fbp-accent-600 */
+      --line: rgba(1,2,5,.18); /* from --fbp-line */
+      --surface: #ffffff; /* from --fbp-bgsoft */
+      --surface-2: #fafafa;
+      --radius: 0px; /* from --fbp-radius */
+
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+    .cta-button:focus{ outline: 3px solid color-mix(in srgb, var(--accent) 60%, #0000); outline-offset: 3px; }
+    .article-body .cta-button{ background: var(--accent); }
+    .article-body .cta-button:hover{ background: var(--accent-hover); }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1PN_8nNzJhGhXC6pEWbWqktVtEkuRQVaT=s1200" alt="Are new car sales declining?" />
+        </div>
+        <h1 class="title">Are new car sales declining?</h1>
+        <p class="subline">A concise look at retail sales trends, financing headwinds, and practical steps for comparison-first buyers.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://carfaxdeals.com/blog/new-car-sales-declining"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <article class="formatted-blog-post">
+  <div class="formatted-blog-post__inner">
+    
+  <div class="summary">This article explores whether new car sales are declining, why trends differ by market and segment, and what practical steps buyers should take now. It synthesizes recent industry signals and provides a simple decision framework for comparison-first shoppers.
+
+We focus on retail sales as the clearest measure of consumer activity, and we use industry summaries to explain how financing costs, incentives, and EV adoption are shaping outcomes. The goal is to help research-oriented buyers assess market context and shop with more confidence.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">U.S. retail new-vehicle volumes largely flattened or dipped modestly in 2024 and 2025, driven in part by financing costs.</span></div><div class="highlight-card"><span class="highlight-text">Regional and segment variation means local deals may appear even when national volumes look flat.</span></div><div class="highlight-card"><span class="highlight-text">Compare pricing insights and run vehicle history reports to evaluate incentives and confirm title status before visiting a dealer.</span></div>
+     </div>
+  <h2>What new car sales means: key metrics and context</h2><p>When readers ask about new car sales they usually mean retail new-vehicle sales, the measure that best reflects consumer purchases from dealers rather than factory shipments or registrations. Retail sales count transactions at the dealer level and differ from registrations, which track title or registration events, and from wholesale shipments, which reflect factory deliveries to dealers.</p><p>Retail sales are most useful for understanding consumer demand because they capture point-of-sale activity. Analysts also look at registrations and manufacturer shipment data to cross-check timing and channel flows. Supply-chain normalization since 2022 reduced inventory-driven swings, so recent new vehicle changes feel more tied to demand than to production shortages, a shift analysts have noted in industry reporting, especially from major U.S. market trackers like Cox Automotive <a href="https://www.coxautoinc.com/insights/us-new-vehicle-retail-sales-2024-2025/" target="_blank" rel="noopener">Cox Automotive analysis</a>.</p><p><a href="https://carfaxdeals.com/blog" target="_blank" rel="noopener">Industry reports</a> you will see in media include manufacturer sales releases, Cox Automotive, S&P Global Mobility, NADA, ACEA for European registrations, and U.S. Census retail series. Each data source measures a related but distinct concept, so compare definitions before treating figures as directly comparable.</p><h2>Recent headline trends: are new car sales declining?</h2><p>Major industry trackers reported that U.S. retail sales flattened or dipped modestly in 2024 and 2025, with analysts pointing to higher finance costs and softer consumer spending as proximate causes. This characterization helps explain why headlines sometimes say sales are flat while others report small declines, depending on the period and metric used, and is described in recent industry summaries <a href="https://www.coxautoinc.com/insights/us-new-vehicle-retail-sales-2024-2025/" target="_blank" rel="noopener">Cox Automotive analysis</a>. Coverage also appeared in the New York Times <a href="https://www.nytimes.com/2026/01/05/business/new-car-sales.html" target="_blank" rel="noopener">New York Times</a>.</p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Run a quick comparison before you visit a dealer</h3><div class="cta-intro"><p>Compare local listings and pricing context across dealers to spot where incentives may create opportunities.</p></div><a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener" class="cta-button">Run a vehicle history report</a></div><p>Flat national volumes can hide meaningful variation across regions and vehicle segments. For example, some light truck and SUV lines held steadier volumes while other passenger car segments softened, and that variation affects how rapidly consumers find deals in their local market. Edmunds framed the national picture as mixed in its pricing and sales review, noting finance costs as a key constraint <a href="https://www.edmunds.com/industry-insights/2024-new-car-sales-trends/" target="_blank" rel="noopener">Edmunds industry insight</a>.</p><p>Several open questions remain for 2026, including how sustained higher interest rates or a sharp economic slowdown would change demand, and whether faster EV price declines or broader incentives could offset weakness in internal combustion segments. These are active areas of debate among industry forecasters (see Cox Automotive's 2026 outlook <a href="https://www.coxautoinc.com/insights-hub/cox-automotive-2026-outlook/" target="_blank" rel="noopener">Cox Automotive</a>).</p><h2>Major drivers: financing costs, demand, and supply-chain effects</h2><h3>How higher interest rates affect buyer affordability and new car sales</h3><p>Higher interest rates raise monthly payments for financed purchases, which reduces the number of buyers who can comfortably afford the same vehicle or pushes them to choose lower-cost trims. Analysts point to finance costs as a leading near-term headwind for retail volumes, especially for buyers relying on dealer or captive financing, and discuss this dynamic in market summaries <a href="https://www.coxautoinc.com/insights/us-new-vehicle-retail-sales-2024-2025/" target="_blank" rel="noopener">Cox Automotive analysis</a>.</p><p>As an example, a modest rate increase can raise monthly payments enough to change purchase timing. Some buyers delay until rates fall or they secure a larger down payment. That behavior has contributed to softer retail volumes even after production constraints eased.</p>
+    <div class="side-by-side special-image-left">
+      <a href="https://carfaxdeals.com/how-to-use" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1kXUXRI0Jwony33yQyXkGUI1Go-Ce1o-N=s1200" alt="Close view of an SUV and a compact car side by side on white background showing segment differences and a small blue price analysis tag for new car sales" /></a>
+      <div class="side-text">Supply-chain improvements since 2022 reduced production bottlenecks, shifting the story from constrained supply to demand dynamics. With supply more normalized, incentives and dealer pricing tactics now play a larger role in moving inventory, and analysts from global trackers note that sales trends in 2024 were more demand-led than supply-led <a href="https://www.spglobal.com/mobility/en/insights/global-light-vehicle-sales-2024" target="_blank" rel="noopener">S&P Global Mobility report</a>.</div>
+    </div><p>Other demand factors to watch include consumer confidence, employment, and targeted incentives. These variables interact: weaker confidence can amplify the effect of higher rates, while stronger incentives in particular segments can temporarily offset affordability headwinds.</p><h2>Regional and segment patterns: EVs, trucks, and Europe versus North America</h2><p>Global light-vehicle sales showed uneven regional performance in 2024, with recovery in North America and parts of Asia offset by weaker demand in some European markets, so the aggregated global headline masks differing local outcomes <a href="https://www.spglobal.com/mobility/en/insights/global-light-vehicle-sales-2024" target="_blank" rel="noopener">S&P Global Mobility report</a> (see S&P Global Mobility blog <a href="https://www.spglobal.com/automotive-insights/en/blogs/us-auto-sales" target="_blank" rel="noopener">coverage</a>).</p><p>EV adoption is reshaping the new-vehicle mix and pricing dynamics, but uptake is uneven by region and by price segment, so EVs are an important structural factor without being the sole driver of aggregate sales trends. Regional incentives, charging infrastructure, and model availability all affect how much EVs contribute to total volumes <a href="https://www.spglobal.com/mobility/en/insights/global-light-vehicle-sales-2024" target="_blank" rel="noopener">S&P Global Mobility report</a>.</p>
+    <section class="product-block">
+      <div class="product-text">CarFax Deals acts as a verification layer, pairing pricing context with vehicle history reports so buyers can compare listings across regions with more confidence. <a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener">Run CarFax Report</a></div>
+      <div class="product-media"><a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1wa7oWaOtZkR3ozriGCaxTb4pzdGxaLaJ" alt="Run CarFax Report" /></a></div>
+      <div class="product-actions"><a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener" class="product-button">Run a vehicle history report</a></div>
+    </section><p>Segment differences matter: light trucks and SUVs supported volume in many North American markets even as some passenger car segments weakened. Europe showed more sensitivity to economic cycles and fleet renewals, which contributed to the regional divergence seen in registration data <a href="https://www.acea.auto/statistics/article/new-passenger-car-registrations-2024" target="_blank" rel="noopener">ACEA registrations</a>.</p><h2>Dealer-level signals and buyer-side opportunities in a soft market</h2><p>Dealer-level and retail sales series indicate greater reliance on incentives and localized pricing changes in 2024 and 2025, as dealers used price adjustments and remarketing strategies to move inventory even when national unit volumes were flat. Industry indicators document this dealer behavior and the retail response in several reports <a href="https://www.nada.org/nadadata/new-vehicle-sales-2024" target="_blank" rel="noopener">NADA data</a>.</p><p>Localized discounts and targeted incentives can create buying opportunities for consumers who compare listings across nearby dealers, but not every discount reflects a broad market shift. Some incentives are specific to a dealer's stock, model mix, or local demand conditions.</p><p>For buyers, price analysis labels and vehicle history context matter more when dealers compete on price. Use price context to check if a listed discount aligns with local market pricing, and verify history and title status to avoid problems that a lower sticker price cannot show. The U.S. Census retail series also highlights retail sales variability by geography and channel <a href="https://www.census.gov/retail/motor-vehicle-parts-2024.html" target="_blank" rel="noopener">U.S. Census retail data</a>.</p><h2>A practical decision framework for buyers: when to buy, wait, or negotiate</h2><p>Three criteria help determine whether to act now or wait: current financing affordability, visible inventory pressure or incentives at local dealers, and model lifecycle timing such as upcoming refreshes or new trims. Financing and incentive signals are two principal inputs to this decision framework <a href="https://www.coxautoinc.com/insights/us-new-vehicle-retail-sales-2024-2025/" target="_blank" rel="noopener">Cox Automotive analysis</a>.</p><section class="faq-accordion"><input type="checkbox" id="faq-gog63z" class="faq-toggle" checked /><label for="faq-gog63z" class="faq-summary" role="button" tabindex="0">Are new car sales declining?</label><div class="faq-content"><p>Overall volumes showed mixed signals in 2024 and 2025, with flattening or modest declines in some markets driven mainly by higher finance costs and variable regional outcomes.</p></div></section><p>Use pricing context and <a href="https://carfaxdeals.com/vinreport" target="_blank" rel="noopener">vehicle history reports</a> to compare similar listings rather than relying on a single dealer quote. A vehicle history report can confirm title status and ownership history, while price analysis labels help gauge whether an offer is consistent with local market context.</p><p>Checklist to score readiness to buy:</p><ul><li>Affordability: Monthly payment fits your budget with current rates</li><li>Inventory pressure: Several nearby dealers show incentives on the same model</li><li>Model timing: No imminent redesign or new model year that matters to you</li></ul><h2>Common mistakes, pitfalls, and scenarios to watch</h2><p>Buyers commonly over-interpret national headlines. Assuming a national decline means local bargains is risky because many discounts are localized and driven by dealer inventory or pricing strategy rather than a market-wide collapse. Dealer data and retail series show this localized behavior in 2024 and 2025 <a href="https://www.nada.org/nadadata/new-vehicle-sales-2024" target="_blank" rel="noopener">NADA data</a>.</p><p>Another frequent error is ignoring total cost to own. Low sticker price or a short-term incentive can be offset by higher running costs, insurance, or finance charges, so factor in ownership costs when comparing options. Vehicle history checks remain important for used purchases and trade-in assessments.</p><p>Three buyer scenarios and recommended actions:</p><ol><li>Patient buyer: Waiting for rate improvements or broader EV price declines, keep a watchlist and <a href="https://carfaxdeals.com/how-to-use" target="_blank" rel="noopener">compare pricing insights</a> across listings</li><li>Trade-up buyer: If incentives align and trade-in value is strong, negotiate using local price signals and a history report for the incoming car</li><li>Urgent buyer: Prioritize affordability checks and choose proven trims with clear maintenance records</li></ol><h2>Wrap-up: what readers should remember and next steps</h2><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick buyer readiness checklist to evaluate timing and offers</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-1lst2p-0">
+                        <input id="tool-check-1lst2p-0" type="checkbox" />
+                        <span>Affordability</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-ce83vx-1">
+                        <input id="tool-check-ce83vx-1" type="checkbox" />
+                        <span>Inventory signals</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-8bdywl-2">
+                        <input id="tool-check-8bdywl-2" type="checkbox" />
+                        <span>Model timing</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Score each item 0 to 2</p>
+            </div><p>In summary, recent evidence points to mixed signals: U.S. retail volumes flattened or dipped modestly in 2024 and 2025, with finance costs and weaker consumer spending as important factors, while regions and segments differed in performance <a href="https://www.coxautoinc.com/insights/us-new-vehicle-retail-sales-2024-2025/" target="_blank" rel="noopener">Cox Automotive analysis</a>.</p><p>For comparison-first buyers, the practical next step is to <a href="https://carfaxdeals.com/how-to-use" target="_blank" rel="noopener">compare pricing insights</a> and run vehicle history reports across listings before contacting a dealer. That approach helps surface localized discounts and verify title and ownership history, improving confidence in negotiation or timing decisions.</p>
+    <figure class="special-image-standalone">
+      <a href="https://carfaxdeals.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1zBYq-paoIVXixqtdXptp4QMLSBr8Yyzr=s200" alt="CarFax Deals" />
+      </a>
+    </figure>
+<p>Two things to watch for in 2026 are sustained moves in interest rates and faster EV price changes, both of which could materially influence near-term new-vehicle demand and incentives <a href="https://www.spglobal.com/mobility/en/insights/global-light-vehicle-sales-2024" target="_blank" rel="noopener">S&P Global Mobility report</a>.</p>
+    <div class="side-by-side image-2-right">
+      <div class="side-text">Two things to watch for in 2026 are sustained moves in interest rates and faster EV price changes, both of which could materially influence near-term new-vehicle demand and incentives <a href="https://www.spglobal.com/mobility/en/insights/global-light-vehicle-sales-2024" target="_blank" rel="noopener">S&P Global Mobility report</a>.</div>
+      <a href="https://carfaxdeals.com/how-to-use" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1xI2j2Mj4bt5tx8PjH5WXhvQlHuVtW3qO=s1200" alt="Minimal 2D vector of a laptop with VIN input boxes and visual vehicle history report on a clean white desk in CarFax Deals color palette new car sales" /></a>
+    </div>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-qo7t5w" class="faq-toggle" /><label for="faq-qo7t5w" class="faq-summary" role="button" tabindex="0">Are U.S. new car sales actually falling?</label><div class="faq-content"><p>Data from major U.S. trackers describe flattened or modestly dipped retail volumes in 2024 and 2025, often tied to higher financing costs and softer consumer spending.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-0dhhgx" class="faq-toggle" /><label for="faq-0dhhgx" class="faq-summary" role="button" tabindex="0">Will EV adoption cause a long-term decline in new vehicle volumes?</label><div class="faq-content"><p>EV adoption reshapes the product mix and pricing, but uptake varies by region and segment, so EVs change composition rather than uniformly lowering total volumes.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-f0c7zv" class="faq-toggle" /><label for="faq-f0c7zv" class="faq-summary" role="button" tabindex="0">How can I find the best local price when national headlines are mixed?</label><div class="faq-content"><p>Compare pricing context across nearby dealer listings, check vehicle history reports, and look for consistent incentives at multiple dealers before deciding.</p></div></section>
+</section><section class="article-ending">If you plan to shop in 2026, track interest rate moves and EV price developments, and compare pricing context across local listings. Use vehicle history reports to confirm title and ownership details before making decisions.
+
+Taking a comparison-first approach helps you spot localized opportunities while avoiding common pitfalls tied to headline interpretations.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.coxautoinc.com/insights/us-new-vehicle-retail-sales-2024-2025/" target="_blank" rel="noopener">https://www.coxautoinc.com/insights/us-new-vehicle-retail-sales-2024-2025/</a></li><li><a href="https://www.coxautoinc.com/insights-hub/cox-automotive-2026-outlook/" target="_blank" rel="noopener">https://www.coxautoinc.com/insights-hub/cox-automotive-2026-outlook/</a></li><li><a href="https://www.edmunds.com/industry-insights/2024-new-car-sales-trends/" target="_blank" rel="noopener">https://www.edmunds.com/industry-insights/2024-new-car-sales-trends/</a></li><li><a href="https://www.spglobal.com/mobility/en/insights/global-light-vehicle-sales-2024" target="_blank" rel="noopener">https://www.spglobal.com/mobility/en/insights/global-light-vehicle-sales-2024</a></li><li><a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener">https://carfaxdeals.com/run-report</a></li><li><a href="https://www.acea.auto/statistics/article/new-passenger-car-registrations-2024" target="_blank" rel="noopener">https://www.acea.auto/statistics/article/new-passenger-car-registrations-2024</a></li><li><a href="https://www.nada.org/nadadata/new-vehicle-sales-2024" target="_blank" rel="noopener">https://www.nada.org/nadadata/new-vehicle-sales-2024</a></li><li><a href="https://www.census.gov/retail/motor-vehicle-parts-2024.html" target="_blank" rel="noopener">https://www.census.gov/retail/motor-vehicle-parts-2024.html</a></li><li><a href="https://carfaxdeals.com/vinreport" target="_blank" rel="noopener">https://carfaxdeals.com/vinreport</a></li><li><a href="https://carfaxdeals.com/how-to-use" target="_blank" rel="noopener">https://carfaxdeals.com/how-to-use</a></li><li><a href="https://carfaxdeals.com/blog" target="_blank" rel="noopener">https://carfaxdeals.com/blog</a></li><li><a href="https://www.spglobal.com/automotive-insights/en/blogs/us-auto-sales" target="_blank" rel="noopener">https://www.spglobal.com/automotive-insights/en/blogs/us-auto-sales</a></li><li><a href="https://www.nytimes.com/2026/01/05/business/new-car-sales.html" target="_blank" rel="noopener">https://www.nytimes.com/2026/01/05/business/new-car-sales.html</a></li>
+    </ul>
+  </section>
+  </div>
+</article>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
