@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Are RIAs better than brokers? A clear comparison and how to start an RIA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Derived brand tokens from provided style */
+      --text-color: #ffffff; /* from --fp-ink */
+      --accent: #e6bb5b; /* from --fp-accent */
+      --accent-hover: color-mix(in srgb, var(--accent) 86%, #000 14%);
+      --line: rgba(255,255,255,.14); /* from --fp-line */
+      --surface: #0f0f0f; /* from --fp-bg */
+      --surface-2: #141414; /* from --fp-panel */
+      --radius: 0px; /* from --fp-radius */
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--accent);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--accent);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/how-to-start-an-ria-review.jpg" alt="Are RIAs better than brokers? Cover image" />
+        </div>
+        <h1 class="title">Are RIAs better than brokers? A clear comparison and how to start an RIA</h1>
+        <p class="subline">A practical comparison of fiduciary RIAs and brokers, plus the main steps to form and verify an RIA.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://financepolice.com/how-to-start-an-ria-register-form-adv/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">Many readers ask whether RIAs are better than brokers and how to start an RIA if they are an adviser. This article breaks down the regulatory difference, common fee models, and practical verification steps so you can compare options with primary documents.
+
+Use this as a clear starting point: the fiduciary versus suitability distinction matters for disclosure and conflicts, but the right choice depends on the services you need, how fees are charged, and whether you want ongoing planning or transactional execution.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">RIAs commonly align fees with ongoing advice, while brokers more often use commissions or product-based payments.</span></div><div class="highlight-card"><span class="highlight-text">Check Form ADV for RIAs and Reg BI disclosures for brokers before signing any agreement.</span></div><div class="highlight-card"><span class="highlight-text">Growth of the RIA channel increases choice but does not guarantee better investor outcomes.</span></div>
+     </div>
+  <h2>Quick answer: are RIAs better than brokers?</h2>
+<p>Short answer: RIAs often suit people who want ongoing, holistic planning and transparent fee arrangements, while brokers can be appropriate for transactional or product-focused services. This distinction rests largely on regulatory standards and common compensation models, so the right choice depends on your needs, costs, and how you prefer advice to be paid for. <a href="https://www.investor.gov/introduction-investing/brokers-dealers-and-advisers" target="_blank" rel="noopener">Investor.gov overview of advisers</a></p>
+<p>If you searched for <a href="https://financepolice.com/category/investing/" target="_blank" rel="noopener">how to start an RIA</a>, this article also walks through the main registration steps and verification documents you will need to review before hiring, partnering with, or forming a firm. It does not provide legal advice but points to the primary documents and questions to check with counsel or compliance professionals. <a href="https://www.finra.org/investors/choosing-investment-professional" target="_blank" rel="noopener">FINRA guide on choosing a professional</a></p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Print a verification checklist to compare advisers</h3><div class="cta-intro"><p>If you want a quick decision checklist, scroll to the decision checklist section below or use the printable checklist mentioned later to compare fee structures and disclosure documents.</p></div><a href="https://financepolice.com/advertise/" target="_blank" rel="noopener" class="cta-button">Get the checklist</a></div>
+<p>Briefly: the core regulatory difference is fiduciary duty for most RIAs versus a suitability or Regulation Best Interest standard for brokers, and that difference affects disclosure, conflicts, and common compensation patterns. For verification, check a firm’s Form ADV for RIA registration and broker disclosures for Reg BI statements before agreeing to services. <a href="https://www.investor.gov/introduction-investing/brokers-dealers-and-advisers" target="_blank" rel="noopener">Investor.gov overview of advisers</a></p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://financepolice.com/advertise/" target="_blank" rel="noopener">Finance Police Advertisement</a></div>
+      <a href="https://financepolice.com/advertise/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1ug1qbTayRj6EcDWjTNWpnRoUKcCRAWtj" alt="Finance Police Advertisement" /></a>
+    </div>
+<h2>how to start an RIA: quick overview</h2>
+<p>This section gives the high-level path for <a href="https://financepolice.com/category/investing/" target="_blank" rel="noopener">how to start an RIA</a> so you understand the main regulatory steps and choices. The central registration document for an RIA is Form ADV, which you prepare to register either with the SEC or with state regulators depending on your planned assets under management and business model. <a href="https://www.investor.gov/introduction-investing/brokers-dealers-and-advisers" target="_blank" rel="noopener">Investor.gov overview of advisers</a></p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://financepolice.com/category/crypto/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1rgN8bnND7KjrGGvOillFJ-bemIKmdUYL=s1200" alt="Close up flat lay of an advisor verification checklist with boxes for Form ADV fee illustration and written agreement on dark Finance Police background how to start an ria" /></a>
+      <div class="side-text"><p>Founders typically decide early whether to operate a fee-only or fee-based model, whether the firm will custody client assets, and whether to register with the SEC or the state. These choices affect compliance needs, recordkeeping, and cost. Seek a verification step with a qualified compliance or legal adviser before filing. <a href="https://www.cfp.net/what-is-a-fiduciary" target="_blank" rel="noopener">CFP Board overview of fiduciary considerations</a></p></div>
+    </div>
+<h2>Definition and regulatory context: fiduciary duty versus suitability</h2>
+<p>Fiduciary duty means an adviser is required to act in a client’s best interest when giving personalized advice, including disclosing material conflicts and putting client interests ahead of the firm’s when acting as an adviser. This is the typical regulatory expectation for Registered Investment Advisers. <a href="https://www.investor.gov/introduction-investing/brokers-dealers-and-advisers" target="_blank" rel="noopener">Investor.gov overview of advisers</a></p>
+<section class="faq-accordion"><input type="checkbox" id="faq-kz6bd1" class="faq-toggle" checked /><label for="faq-kz6bd1" class="faq-summary" role="button" tabindex="0">Are RIAs better than brokers?</label><div class="faq-content"><p>RIAs often suit clients seeking ongoing planning and fee-aligned advice, while brokers can be appropriate for transactional or product-focused needs; the right choice depends on disclosures, fees, and client needs.</p></div></section>
+<p>By contrast, brokers have historically operated under a suitability standard and, for retail recommendations, are also subject to Regulation Best Interest, which requires firms and representatives to act in the client’s best interest at the time of a recommendation and to provide certain disclosures about conflicts. Regulation Best Interest raised disclosure expectations but did not fully equate to a fiduciary obligation in all circumstances. <a href="https://www.finra.org/investors/choosing-investment-professional" target="_blank" rel="noopener">FINRA guide on choosing a professional</a></p>
+<h2>How RIAs and brokers typically get paid</h2>
+<p>RIAs most commonly use fee-based or fee-only models, including asset-based fees tied to assets under management, hourly fees, or fixed project fees; these models tend to align adviser compensation with ongoing advice rather than product sales. Ask firms to explain fee terms in clear language and show examples in writing. <a href="https://www.finra.org/investors/choosing-investment-professional" target="_blank" rel="noopener">FINRA overview of adviser compensation</a></p>
+<p>Brokers more often earn commissions or product-based payments when a client buys a security or insurance product, which creates different incentive profiles that consumers should explicitly ask about. When a broker recommends a product, ask for a written explanation of how the rep is paid for that recommendation. <a href="https://www.cfp.net/what-is-a-fiduciary" target="_blank" rel="noopener">CFP Board explanation of conflicts and compensation</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://financepolice.com/" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1MqGf4oUdM3_qqw1_FcWTOAhVpbssBwO9=s150" alt="Finance Police Logo" />
+      </a>
+    </figure>
+<h2>Market trends: growth of the RIA channel</h2>
+<p>Industry reporting through 2024 and early 2025 shows growth in the RIA channel: more assets under management and more firms operating as RIAs, with many advisors and teams transitioning away from broker-dealer models. This shift reflects demand for fee-aligned advice and different business economics. <a href="https://www.cerulli.com/insights/u-s-ria-marketplace-2024" target="_blank" rel="noopener">Cerulli report summary</a></p>
+<p>Growth in one channel does not by itself prove better investor outcomes. It does, however, increase choice and competition in the market, so consumers should still verify disclosures and service models rather than assuming superior outcomes from affiliation alone. <a href="https://www.investmentnews.com/rias-growth-2024-advisors-leaving-broker-dealers" target="_blank" rel="noopener">InvestmentNews coverage of advisor transitions</a></p>
+<h2>How to decide: a reader checklist</h2>
+<p>Decision factors: assess whether you want ongoing planning and advice, or mainly product execution and occasional trades; weigh fee sensitivity and how transparent you want fees to be; consider the complexity of your finances and whether you need coordination across taxes, estates, and investments. For many people, a fiduciary RIA fits ongoing planning needs; a broker may fit simpler transactional needs. <a href="https://www.investor.gov/introduction-investing/brokers-dealers-and-advisers" target="_blank" rel="noopener">Investor.gov guidance on choosing</a></p>
+<p>Verification checklist: request a copy of Form ADV for an RIA, read Part 2 for fees and conflicts, ask a broker for written Reg BI disclosures and details on commissions, and get any service agreement in writing. Ask for concrete fee illustrations and sample statements of services so you can compare apples to apples. <a href="https://www.cfp.net/what-is-a-fiduciary" target="_blank" rel="noopener">CFP Board guidance on fiduciary questions</a></p>
+<h2>Key steps to start an RIA firm: registration checklist</h2>
+<p>Decide registration route: if you expect to manage assets above the SEC threshold or plan a multi-state business, prepare to <a href="https://www.sec.gov/divisions/investment/iaregulation/regia.htm" target="_blank" rel="noopener">register with the SEC</a>; smaller advisers typically register with the <a href="https://financepolice.com/change-registered-agent-in-california/" target="_blank" rel="noopener">state regulator</a> where they operate. The Form ADV is the central filing for either path and discloses business practices and conflicts. <a href="https://www.investor.gov/introduction-investing/brokers-dealers-and-advisers" target="_blank" rel="noopener">Investor.gov overview of adviser registration</a></p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">A simple self-audit to plan RIA registration steps</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-cfpveh-0">
+                        <input id="tool-check-cfpveh-0" type="checkbox" />
+                        <span>Registration route</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-0txjud-1">
+                        <input id="tool-check-0txjud-1" type="checkbox" />
+                        <span>Form ADV completed</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-2fcej8-2">
+                        <input id="tool-check-2fcej8-2" type="checkbox" />
+                        <span>Compliance manual</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use this worksheet when you meet with counsel</p>
+            </div>
+<p>Prepare <a href="https://www.sec.gov/files/formadv-instructions.pdf" target="_blank" rel="noopener">Form ADV Part 1 and Part 2</a> carefully: Part 1 lists business structure and ownership while Part 2 is the narrative disclosure for clients about services, fees, conflicts, and disciplinary history. Early planning should include fee schedules, a written compliance manual, recordkeeping systems, and policies for custody if you will hold client assets. <a href="https://www.cfp.net/what-is-a-fiduciary" target="_blank" rel="noopener">CFP Board on disclosure and conflicts</a></p>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Operational considerations: choose an accounting and custodial setup, decide whether to custody assets or use client-directed custodians, set billing cycles, and plan staffing for compliance and client service. These choices change cost structures and ongoing obligations. Consider engaging compliance counsel or a consultant during initial implementation. <a href="https://www.cerulli.com/insights/u-s-ria-marketplace-2024" target="_blank" rel="noopener">Cerulli context on firm operations</a></p></div>
+      <a href="https://financepolice.com/category/crypto/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1swpKwvdRY__TA0795K86XniInre6KLbx=s1200" alt="Minimalist 2D vector of two diverging financial paths illustrating how to start an ria with planning calendar and checklist icons on advisory path and a broker path with a trade ticket icon" /></a>
+    </div>
+<h2>Common mistakes to avoid when forming or choosing an adviser</h2>
+<p>Overlooking compensation details is common. People sometimes assume labels alone solve conflicts; instead, read disclosures and ask for fee illustrations, examples of recommended products, and how the adviser handles conflicts in practice. <a href="https://www.investor.gov/introduction-investing/brokers-dealers-and-advisers" target="_blank" rel="noopener">Investor.gov advice on checking disclosures</a></p>
+<p>Another mistake is not verifying enforcement or disciplinary history. Disclosure forms and primary regulator pages show disciplinary history and whether complaints or actions exist; take that step before signing a long-term service agreement. Reviews have shown improved disclosure but also persistent enforcement and transparency gaps, so stay skeptical and verify documents. <a href="https://www.onefpa.org/journal/Pages/2024-fiduciary-standards-review.aspx" target="_blank" rel="noopener">Journal of Financial Planning review</a></p>
+<h2>Practical examples and scenarios</h2>
+<p>Scenario 1, simple trading needs: if you mainly want order execution, occasional trades, or access to specific securities and you have a small account, a broker-dealer account with commission-based pricing can be acceptable. In such cases, focus on execution quality, transaction costs, and clear commission disclosures. <a href="https://www.finra.org/investors/choosing-investment-professional" target="_blank" rel="noopener">FINRA on choosing service types</a></p>
+<p>Scenario 2, comprehensive planning: someone with multiple accounts, employer benefits, tax considerations, and estate goals often benefits from an RIA model that coordinates services and uses fee-based compensation tied to ongoing advice. Ask for a sample service agreement and a fee illustration to compare costs. <a href="https://www.investor.gov/introduction-investing/brokers-dealers-and-advisers" target="_blank" rel="noopener">Investor.gov guidance</a></p>
+<p>Scenario 3, adviser converting from broker-dealer to RIA: teams often move to the RIA channel to gain control over fee schedules, align compensation with advisory relationships, or to operate independently of a broker-dealer platform. Industry reporting documents these transitions and suggests practical reasons for the move. <a href="https://www.investmentnews.com/rias-growth-2024-advisors-leaving-broker-dealers" target="_blank" rel="noopener">InvestmentNews reporting</a></p>
+<h2>Costs, fees, and conflict patterns to watch</h2>
+<p>Sample fee language: look for terms such as AUM fee, advisory fee, wrap fee, hourly rate, or project fee in RIA disclosures; these show how the firm charges and whether fees recur or are transaction-based. When in doubt, ask for calculations that show annual cost examples at different portfolio sizes. <a href="https://www.finra.org/investors/choosing-investment-professional" target="_blank" rel="noopener">FINRA on common fee terms</a></p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://financepolice.com/category/crypto/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1rgN8bnND7KjrGGvOillFJ-bemIKmdUYL=s1200" alt="Close up flat lay of an advisor verification checklist with boxes for Form ADV fee illustration and written agreement on dark Finance Police background how to start an ria" /></a>
+      <div class="side-text"><p>Commission or product-based compensation can create incentives to favor certain products. Ask advisers to explain how they compare product costs and to provide written examples of how conflicts are handled. Request a written description of any third-party payments or revenue sharing arrangements. <a href="https://www.cfp.net/what-is-a-fiduciary" target="_blank" rel="noopener">CFP Board on conflicts and disclosure</a></p></div>
+    </div>
+<h2>What research and policy reviews say about outcomes</h2>
+<p>Academic and policy analyses through 2024 find improved disclosure and attention to conflicts since Regulation Best Interest, but evidence is mixed on whether fiduciary status alone produces consistently better investor returns. These reviews highlight gains in transparency while noting measurement and enforcement limitations. <a href="https://www.onefpa.org/journal/Pages/2024-fiduciary-standards-review.aspx" target="_blank" rel="noopener">Journal of Financial Planning review</a></p>
+<p>Limitations include how outcomes are measured, client heterogeneity, and enforcement variability across regulators. That is why verification of practice, written disclosures, and fee illustrations remains crucial rather than relying solely on labels. <a href="https://www.investor.gov/introduction-investing/brokers-dealers-and-advisers" target="_blank" rel="noopener">Investor.gov overview</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://financepolice.com/" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1MqGf4oUdM3_qqw1_FcWTOAhVpbssBwO9=s150" alt="Finance Police Logo" />
+      </a>
+    </figure>
+<h2>Hybrid models and the effect of Regulation Best Interest</h2>
+<p>Hybrid firms can act as RIAs in some relationships and as broker-dealers in others, which makes written disclosures and role clarity essential. When a firm operates in both roles, ask how they document which standard applies to each interaction. <a href="https://www.finra.org/investors/choosing-investment-professional" target="_blank" rel="noopener">FINRA on hybrid arrangements</a></p>
+<p>Regulation Best Interest raised broker disclosure and suitability expectations for retail recommendations but did not fully remove the practical difference between suitability and fiduciary duty. Ask representatives whether they provide a written fiduciary commitment for the services you need. <a href="https://www.onefpa.org/journal/Pages/2024-fiduciary-standards-review.aspx" target="_blank" rel="noopener">Journal of Financial Planning review</a></p>
+<h2>How to verify an adviser or firm before you sign</h2>
+<p>Find Form ADV on the SEC search tool or the adviser’s website and read Part 2 for a plain-language summary of services, fees, conflicts, and disciplinary history; Form ADV is the primary verification document for RIAs. <a href="https://www.investor.gov/introduction-investing/brokers-dealers-and-advisers" target="_blank" rel="noopener">Investor.gov on Form ADV</a> <a href="https://www.investopedia.com/terms/f/form_adv.asp" target="_blank" rel="noopener">Investopedia guide to Form ADV</a></p>
+<p>For brokers, request broker-dealer disclosures and Reg BI statements, and ask for written answers about commission schedules, third-party payments, and whether recommendations are constrained by product availability. Also request references or sample client engagement documents. <a href="https://www.finra.org/investors/choosing-investment-professional" target="_blank" rel="noopener">FINRA guidance on verifying brokers</a></p>
+<h2>Conclusion: practical next steps and resources</h2>
+<p>Three practical first actions: assess whether you need ongoing planning or mainly transaction execution, request and compare disclosure documents such as Form ADV and Reg BI statements, and ask for written fee illustrations and sample service agreements. Use those materials to compare total cost and service level. <a href="https://www.investor.gov/introduction-investing/brokers-dealers-and-advisers" target="_blank" rel="noopener">Investor.gov guidance</a></p>
+<p><a href="https://financepolice.com/" target="_blank" rel="noopener">FinancePolice</a> provides clear explanations to help you understand the difference between adviser types and the verification steps you should take, but do not rely on labels alone. For registration or compliance steps when starting an RIA, consult primary sources and qualified counsel. <a href="https://www.cfp.net/what-is-a-fiduciary" target="_blank" rel="noopener">CFP Board context</a></p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-8stzo4" class="faq-toggle" /><label for="faq-8stzo4" class="faq-summary" role="button" tabindex="0">What is the main difference between an RIA and a broker?</label><div class="faq-content"><p>RIAs typically owe a fiduciary duty to act in a client’s best interest for advisory services, while brokers generally operate under a suitability standard and Regulation Best Interest for retail recommendations.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-1sv2jj" class="faq-toggle" /><label for="faq-1sv2jj" class="faq-summary" role="button" tabindex="0">Where do I find a firm&#39;s Form ADV?</label><div class="faq-content"><p>Form ADV is publicly available through the SEC adviser search tool and often on the adviser’s website; Part 2 gives a plain-language summary of fees, services, and conflicts.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-rpqj0h" class="faq-toggle" /><label for="faq-rpqj0h" class="faq-summary" role="button" tabindex="0">Does choosing an RIA guarantee better returns?</label><div class="faq-content"><p>No. Research shows improved disclosure under fiduciary standards but mixed evidence on consistent return differences, so verify fees and practices rather than rely on labels alone.</p></div></section>
+</section><section class="article-ending">If you plan to interview advisers or start an RIA, collect Form ADV or broker disclosures and ask for written fee illustrations. Consult primary regulator pages and seek compliance counsel for registration steps so you understand obligations before you file.
+
+FinancePolice offers plain-language explainers to help with these decisions, but rely on primary sources and professional advice for registration or legal questions.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.investor.gov/introduction-investing/brokers-dealers-and-advisers" target="_blank" rel="noopener">https://www.investor.gov/introduction-investing/brokers-dealers-and-advisers</a></li><li><a href="https://www.finra.org/investors/choosing-investment-professional" target="_blank" rel="noopener">https://www.finra.org/investors/choosing-investment-professional</a></li><li><a href="https://financepolice.com/advertise/" target="_blank" rel="noopener">https://financepolice.com/advertise/</a></li><li><a href="https://www.cfp.net/what-is-a-fiduciary" target="_blank" rel="noopener">https://www.cfp.net/what-is-a-fiduciary</a></li><li><a href="https://www.cerulli.com/insights/u-s-ria-marketplace-2024" target="_blank" rel="noopener">https://www.cerulli.com/insights/u-s-ria-marketplace-2024</a></li><li><a href="https://www.investmentnews.com/rias-growth-2024-advisors-leaving-broker-dealers" target="_blank" rel="noopener">https://www.investmentnews.com/rias-growth-2024-advisors-leaving-broker-dealers</a></li><li><a href="https://www.onefpa.org/journal/Pages/2024-fiduciary-standards-review.aspx" target="_blank" rel="noopener">https://www.onefpa.org/journal/Pages/2024-fiduciary-standards-review.aspx</a></li><li><a href="https://financepolice.com/category/investing/" target="_blank" rel="noopener">https://financepolice.com/category/investing/</a></li><li><a href="https://financepolice.com/change-registered-agent-in-california/" target="_blank" rel="noopener">https://financepolice.com/change-registered-agent-in-california/</a></li><li><a href="https://financepolice.com/" target="_blank" rel="noopener">https://financepolice.com/</a></li><li><a href="https://www.sec.gov/divisions/investment/iaregulation/regia.htm" target="_blank" rel="noopener">https://www.sec.gov/divisions/investment/iaregulation/regia.htm</a></li><li><a href="https://www.sec.gov/files/formadv-instructions.pdf" target="_blank" rel="noopener">https://www.sec.gov/files/formadv-instructions.pdf</a></li><li><a href="https://www.investopedia.com/terms/f/form_adv.asp" target="_blank" rel="noopener">https://www.investopedia.com/terms/f/form_adv.asp</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
