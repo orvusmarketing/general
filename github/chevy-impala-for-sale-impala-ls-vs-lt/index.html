@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What's better, Impala LS or LT? Practical guide for buyers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Mapped brand tokens */
+      --text-color: #010205; /* from --fbp-ink */
+      --accent: #3666ed; /* from --fbp-accent */
+      --accent-hover: #2f5be0; /* from --fbp-accent-600 */
+      --line: rgba(1,2,5,.18); /* from --fbp-line */
+      --surface: #ffffff; /* from --fbp-bgsoft */
+      --surface-2: #fafafa;
+      --radius: 0px; /* from --fbp-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease, background .12s ease;
+    }
+    .cta-button:hover{
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: none;
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1N6-MR0PJikexFNDm9WzX7lYiQWGw8EqI=s1200" alt="What's better, Impala LS or LT?" />
+        </div>
+        <h1 class="title">What's better, Impala LS or LT? Practical guide for buyers</h1>
+        <p class="subline">A practical checklist for comparing Impala LS and LT trims before contacting a seller.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://carfaxdeals.com/blog/chevy-impala-for-sale-impala-ls-vs-lt"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+<article class="formatted-blog-post">
+  <div class="formatted-blog-post__inner">
+    
+  <div class="summary">If you are browsing a chevy impala for sale, trim labels like LS and LT matter, but they do not tell the full story. This article focuses on the practical differences buyers should confirm before contacting a seller.
+
+We compare engines, trim equipment, fuel economy and the verification steps that change which trim is the smarter buy for different priorities. The goal is a simple checklist you can follow using VIN level information.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">LS is the base trim and typically favors economy and core features, while LT often adds infotainment and convenience upgrades.</span></div><div class="highlight-card"><span class="highlight-text">The 2.5L four cylinder is standard; the 3.6L V6 is an optional upgrade that reduces combined mpg but improves performance.</span></div><div class="highlight-card"><span class="highlight-text">VIN level checks for title status, accident history and factory options are crucial before choosing between LS and LT.</span></div>
+     </div>
+  <h2>Why compare Impala LS and LT before you start shopping</h2><h3>Who this comparison is for</h3><p>If you are researching a chevy impala for sale, the trim label alone rarely tells the whole story. Trim controls standard features and the typical options a car will have, and those options change fuel costs, everyday comfort and resale value. Many buyers start with a badge or an asking price, but a focused comparison helps align a listing with your priorities.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Filter search results for likely lower risk listings</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-15shoc-0">
+                        <input id="tool-check-15shoc-0" type="checkbox" />
+                        <span>Single owner</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-ymkmdr-1">
+                        <input id="tool-check-ymkmdr-1" type="checkbox" />
+                        <span>No accident reported</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-r0b4i0-2">
+                        <input id="tool-check-r0b4i0-2" type="checkbox" />
+                        <span>V6 engine option</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Start with filters, then use the VIN to confirm build details</p>
+            </div><p>This guide is for research minded buyers who want practical steps to compare LS and LT examples and to confirm whether a particular listing actually matches the advertised trim and equipment. It assumes you will check VIN details and vehicle history before you contact the dealer.</p><p>Short version: LS is the base trim and tends to offer the core comfort and safety features at a lower price, while LT commonly adds upgraded infotainment, convenience upgrades and optional V6 power that can justify a modest premium. Factory specifications show the 2.5L four cylinder is standard while a 3.6L V6 is frequently available on LT and higher trims, so engine and options are the main trade offs buyers face. For details that change the practical choice you will need VIN level checks for the exact build and history.</p><h2>Quick overview: what the LS and LT trims include</h2><h3>Factory trim hierarchy and expected features</h3><p>The LS is the base Impala trim and typically includes essential comfort and safety equipment such as cloth seats, basic infotainment and standard driver aids, while the LT usually layers in upgraded audio, additional convenience features and nicer interior trim. For a clear baseline of what was factory standard on a given model year, consult the manufacturer specifications tied to that year and build.</p><p>Because some desirable items can be either factory options or dealer installed, you should not assume a given feature listed by a seller is standard for the trim without checking the build sheet for the VIN; factory option lists explain what came standard and what was optional on a specific model year and trim <a href="https://www.chevrolet.com/2019/impala/specs" target="_blank" rel="noopener">Chevrolet specifications</a></p><p>Option packages and dealer accessories can shift an LS into what feels like LT territory, or add desirable items to an LT while leaving the engine unchanged. When you compare listings, check whether the advertised upgrades are factory options tied to a VIN or aftermarket additions that affect condition and value.</p><h2>Engines and powertrains: the 2.5L standard and the optional 3.6L V6</h2><h3>Which trims normally have which engines</h3><p>The 2.5L inline four cylinder is the standard powerplant across LS and LT, and the 3.6L V6 was commonly offered as an upgrade on LT and higher trims. This factory arrangement means an LT badge does not automatically imply a V6; you must confirm engine code or VIN build data to know which powertrain the car has <a href="https://www.chevrolet.com/2019/impala/specs" target="_blank" rel="noopener">Chevrolet specifications</a></p><section class="faq-accordion"><input type="checkbox" id="faq-dg9e51" class="faq-toggle" checked /><label for="faq-dg9e51" class="faq-summary" role="button" tabindex="0">Which trim is better for my needs, the Impala LS or LT?</label><div class="faq-content"><p>LS typically fits buyers prioritizing economy and lower purchase price, while LT suits those who value added comfort and the optional V6; VIN level history and condition often override trim-based expectations.</p></div></section><p>If you plan to use the car for highway merging, longer trips with passengers, or occasional towing, the V6 provides noticeably stronger acceleration and higher towing capacity than the 2.5L. If your priority is lower ongoing fuel cost and you mainly do city or light highway driving, the four cylinder is typically more economical in daily use.</p><p>The V6 delivers better passing acceleration and a smoother feel when loaded, but it also tends to reduce combined fuel economy by several miles per gallon compared with the 2.5L. That change in fuel consumption and potential for higher maintenance costs is worth quantifying against your driving habits before you commit to a listing.</p>
+    <div class="side-by-side special-image-left">
+      <a href="https://carfaxdeals.com/how-to-use" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1GZcw03BBsLHiTPTouhWsJvf59B0sI4Mk=s1200" alt="CarFax Deals - Image 1" /></a>
+      <div class="side-text"><p>For model years using the 2.5L FWD powertrain, EPA combined fuel economy figures fall in the mid 20 mpg range, while the 3.6L V6 generally lowers combined mpg by several miles per gallon. Use the exact model year and engine when reading EPA data for the VIN you plan to inspect, since quoted numbers vary by year and drivetrain <a href="https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=41238" target="_blank" rel="noopener">EPA fuel economy page</a></p></div>
+    </div><p>Reliability summaries show moderate average annual repair costs for the Impala, and those costs tend to rise with higher mileage and when service history is incomplete. If a listing lacks documented service records, expect more uncertainty in projected ownership costs and factor that into your offer strategy <a href="https://repairpal.com/chevrolet/impala" target="_blank" rel="noopener">RepairPal reliability overview</a></p><p>LT examples commonly add upgraded infotainment screens, better audio systems and more convenience controls compared with the LS. These creature comforts can make daily driving more pleasant and are often the reason buyers accept a price premium for the LT in the used market <a href="https://www.edmunds.com/chevrolet/impala/2019/" target="_blank" rel="noopener">Edmunds trim overview</a> and <a href="https://www.cargurus.com/Cars/articles/chevrolet-impala-buying-guide" target="_blank" rel="noopener">Chevrolet Impala buying guide</a></p>
+    <section class="product-block">
+      <div class="product-text">CarFax Deals can surface price analysis labels and vehicle history context for a listing, Run CarFax Report: <a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener">Run CarFax Report</a></div>
+      <div class="product-media"><a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1wa7oWaOtZkR3ozriGCaxTb4pzdGxaLaJ" alt="Run CarFax Report" /></a></div>
+      <div class="product-actions"><a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener" class="product-button">Run Vehicle History Report</a></div>
+    </section><p>Because some desirable items appear in optional packages rather than as trim standard, confirm trim badging and then verify the VIN build sheet to know which features were factory installed. A visible LT badge does not guarantee every LT upgrade was included at the factory.</p><p>Common LT upgrades include <a href="https://www.mcgrathchevroletofdubuque.com/chevy-impala-overview.htm" target="_blank" rel="noopener">remote start</a>, upgraded seating materials, driver convenience packages and larger wheels or lighting packages. These features are useful to list explicitly when comparing asking prices across similar model years and mileages, because they explain modest price differences between otherwise similar cars.</p><h2>Safety ratings and how to check them for the model year and VIN</h2><h3>Why safety comparison needs model-year detail</h3><p>Crash test results and safety equipment vary by model year and sometimes by trim, so comparing an LS and LT requires checking the exact model year or VIN to know what was tested and what safety options are present. Both NHTSA and IIHS report scores and test details by year, which makes a year or VIN lookup necessary for accurate comparisons <a href="https://www.nhtsa.gov/vehicle/2019/CHEVROLET/IMPALA/4%20DR%20SEDAN" target="_blank" rel="noopener">NHTSA ratings</a></p><h3>Where to find NHTSA and IIHS scores for a VIN or year</h3><p>Look up NHTSA crash test summaries for the model year and consult IIHS pages for side and overlap evaluations. Also check recall listings tied to the VIN to confirm whether required repairs were completed before you buy, since recalls and completed repairs affect safety performance in practice.</p><h2>Vehicle history and maintenance: the listing checks that change the choice</h2><h3>Key items in a vehicle history report</h3><p>Before you contact a seller, a vehicle history report should be used to check accident history, title status, ownership history and mileage records. These items can change which trim is the better buy: an LT with accident history or a salvage title can be worth less than a clean LS with low mileage.</p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Run Vehicle History Report with the Run Vehicle History Report flow</h3><div class="cta-intro"><p>If you want to reduce uncertainty for a specific listing, consider running a vehicle history report. CarFax Deals is one option that can help surface title status, ownership history and reported accidents for the VIN you plan to inspect.</p></div><a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener" class="cta-button">Run Vehicle History Report</a></div><p>Missing service history and higher mileage both increase projected ownership costs and risk. Repair and maintenance expectations rise with mileage, so a well documented LS with low miles can be a better long term value than an LT with poor records <a href="https://repairpal.com/chevrolet/impala" target="_blank" rel="noopener">RepairPal reliability overview</a></p><p>Service history confirms routine maintenance that preserves long term reliability, and documented oil changes, transmission service and brake work reduce the risk of unexpected repairs. Use the vehicle history report and any provided service records to adjust your price expectations for a listing before you make an offer.</p>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Valuation guides show overlapping price ranges for LS and LT examples, with the LT often commanding a modest premium depending on year, mileage and whether it has the optional V6. That premium tends to reflect the added comfort features and the occasional V6 option buyers prefer for performance reasons <a href="https://www.edmunds.com/chevrolet/impala/2019/" target="_blank" rel="noopener">Edmunds valuation context</a> and <a href="https://www.autoweb.com/chevrolet-impala-used-car-buyers-guide" target="_blank" rel="noopener">Autoweb used car buyers guide</a></p></div>
+      <a href="https://carfaxdeals.com/how-to-use" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1fKspQOQZ_FePw9hxt8EkTdkQ6KzyU514=s1200" alt="Minimalist 2D vector of a VIN plate on a car door jamb beside a smartphone showing a vehicle history report with blue highlights chevy impala for sale" /></a>
+    </div><p>When a listing includes the 3.6L V6 or premium option packages, adjust your comparison range upward to reflect the likely buyer demand for those features. Conversely, high mileage, missing service history or title issues should reduce your offer relative to guide values; always compare local listings against valuation ranges for similar model years and mileages.</p><p>Method: pick three local listings in the same model year range, note trim and engine, open valuation guide estimates for each, then adjust for mileage and service history differences. That quick triangulation helps you see whether the LT premium quoted by a seller is reasonable for your market.</p><h2>Decision framework: which trim fits which buyer</h2><h3>Priority matrix: budget, features, performance, running cost</h3><p>Map your priorities to trim choices. If your top need is commute economy and lower running cost, a low mileage LS with the 2.5L often fits best. If feature comfort and stronger acceleration matter more than marginal fuel savings, an LT with upgraded packages or the V6 can be the right trade.</p><h3>How to weigh a V6 against added comfort options</h3><p>Compare the marginal cost of the V6 and the convenience packages to the value those features add for your use case. For example, a V6 may cost more to fuel and maintain but delivers better highway merging and responsiveness. If you often carry passengers or tow small loads, the V6 is more useful; if most driving is short trips and city commuting, the four cylinder usually lowers ownership costs.</p><p>Remember to factor in VIN level findings and model year safety ratings when you finalize a choice, since a well maintained LS can beat an LT with poor history or unresolved recalls <a href="https://www.nhtsa.gov/vehicle/2019/CHEVROLET/IMPALA/4%20DR%20SEDAN" target="_blank" rel="noopener">NHTSA ratings</a></p><h2>Common mistakes buyers make when choosing between LS and LT</h2><h3>Overvaluing badge or trim label</h3><p>A common error is assuming the LT badge makes a car inherently better. Condition, history, mileage and the actual factory build matter more than a trim label when it comes to reliability and value. An LT with poor maintenance or accident history can be a worse buy than an LS with documented service records.</p><h3>Ignoring VIN and service records</h3><p>Trusting seller claims without a VIN check or service records increases risk. Always confirm engine, options and title status through the VIN and a vehicle history report, and treat 'no accident reported' language as a statement to verify rather than proof of condition.</p><h2>How to inspect a listing and decode seller claims</h2><h3>Checklist for the listing page</h3><p>Checklist for a listing page: <a href="https://carfaxdeals.com/vin-decoder" target="_blank" rel="noopener">confirm the VIN</a>, <a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener">run a vehicle history report</a>, verify title status, confirm engine and exact trim, and request service records. If a seller uses shorthand like 'LT package' ask for the build sheet or window sticker to confirm which options were included at the factory <a href="https://www.chevrolet.com/2019/impala/specs" target="_blank" rel="noopener">Chevrolet specifications</a></p><h3>Questions to ask the dealer before test drive</h3><p>Copy these short questions when you contact a seller: What is the VIN? Has the car had any title issues? Are full service records available? Is the original window sticker or build sheet available? Has any accident or frame repair been reported? These direct queries narrow uncertainty before you schedule a visit.</p>
+    <figure class="special-image-standalone">
+      <a href="https://carfaxdeals.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1zBYq-paoIVXixqtdXptp4QMLSBr8Yyzr=s200" alt="CarFax Deals" />
+      </a>
+    </figure>
+<p>When a seller says 'no accident reported,' ask how that was determined and then confirm with the VIN report. A claim of no reported accidents reduces one risk, but the vehicle history report is the verification step that matters.</p><h2>Practical scenarios: sample buyer profiles and recommended trim choices</h2><h3>Commuter who values economy</h3><p>Profile: daily city and highway commute under 20 miles each way. Recommendation: a low mileage LS with the 2.5L usually minimizes fuel and maintenance cost. Confirm service history and valuation guides for local pricing before making an offer.</p><h3>Family buyer prioritizing comfort and space</h3><p>Profile: family runs, frequent passengers and long trips. Recommendation: an LT with comfort packages is often preferable for extra infotainment and convenience options, provided the vehicle has a clean history and reasonable mileage.</p><h3>Buyer who needs power or towing</h3><p>Profile: needs stronger acceleration or light towing occasionally. Recommendation: prioritize LT listings that explicitly include the 3.6L V6 and confirm the engine via VIN. Check EPA or VIN records for exact fuel economy figures that match that engine choice <a href="https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=41238" target="_blank" rel="noopener">EPA fuel economy page</a></p><h2>Checklist: steps to pick and verify a used Impala listing before you buy</h2><h3>Pre-contact checks</h3><p>1) Copy the VIN from the listing and run a vehicle history report. 2) Compare the VIN build to advertised trim and features. 3) Check title status and any reported damage or salvage records. 4) Pull valuation guide ranges for that model year and mileage to set your offer range <a href="https://www.edmunds.com/chevrolet/impala/2019/" target="_blank" rel="noopener">Edmunds valuation context</a></p><h3>At-inspection checklist</h3><p>On site, confirm the engine bay badge or service history that proves the engine, test all infotainment and convenience features, look for signs of structural repair, and ask the dealer for a maintenance log. If the service history is incomplete, increase your negotiation buffer to account for possible repairs.</p>
+    <figure class="special-image-standalone">
+      <a href="https://carfaxdeals.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1zBYq-paoIVXixqtdXptp4QMLSBr8Yyzr=s200" alt="CarFax Deals" />
+      </a>
+    </figure>
+<h2>Conclusion: next steps and where to check details</h2><h3>Summary of trade-offs</h3><p>In short, the LS favors economy and base value while the LT commonly offers comfort upgrades and the option of a V6 for stronger performance. Which is better depends on your priorities, the vehicle history and the specific model year and build for the VIN you are considering.</p><h3>Final recommended verification steps</h3><p>Before you make an offer, confirm the VIN build sheet, run a vehicle history report and compare local listings against valuation guides. Those verification steps reduce uncertainty and help you choose an LS or LT that matches your needs and budget.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-76ixmo" class="faq-toggle" /><label for="faq-76ixmo" class="faq-summary" role="button" tabindex="0">How much does an Impala LT usually cost compared with an LS?</label><div class="faq-content"><p>LT examples often trade at a modest premium over LS models, but the exact difference depends on model year, mileage, optional V6 engines and condition. Use local valuation guides and compare similar listings to estimate the spread.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-wlelwq" class="faq-toggle" /><label for="faq-wlelwq" class="faq-summary" role="button" tabindex="0">Does an LT always include the V6 engine?</label><div class="faq-content"><p>No. The V6 was commonly offered as an option on LT and higher trims, but the 2.5L four cylinder is standard on both LS and LT for many years. Confirm the engine via VIN or the seller&#39;s documentation.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-9rwuwx" class="faq-toggle" /><label for="faq-9rwuwx" class="faq-summary" role="button" tabindex="0">What should I run on a listing before contacting the dealer?</label><div class="faq-content"><p>Run a vehicle history report using the VIN, check title status, verify ownership and mileage records, and request service history and the build sheet to confirm factory options before arranging a test drive.</p></div></section>
+</section><section class="article-ending">Take a measured approach: match the trim and engine to your driving needs, then use VIN checks and valuation guides to confirm a fair asking price. Those steps reduce risk and make the comparison between LS and LT a factual decision.
+
+If you need one next action, start by copying the VIN from listings you like and running a vehicle history report so you can confirm title status, ownership history and factory options before you visit the dealer.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.chevrolet.com/2019/impala/specs" target="_blank" rel="noopener">https://www.chevrolet.com/2019/impala/specs</a></li><li><a href="https://www.fueleconomy.gov/feg/Find.do?action=sbs&id=41238" target="_blank" rel="noopener">https://www.fueleconomy.gov/feg/Find.do?action=sbs&amp;id=41238</a></li><li><a href="https://repairpal.com/chevrolet/impala" target="_blank" rel="noopener">https://repairpal.com/chevrolet/impala</a></li><li><a href="https://www.edmunds.com/chevrolet/impala/2019/" target="_blank" rel="noopener">https://www.edmunds.com/chevrolet/impala/2019/</a></li><li><a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener">https://carfaxdeals.com/run-report</a></li><li><a href="https://www.nhtsa.gov/vehicle/2019/CHEVROLET/IMPALA/4%20DR%20SEDAN" target="_blank" rel="noopener">https://www.nhtsa.gov/vehicle/2019/CHEVROLET/IMPALA/4%20DR%20SEDAN</a></li><li><a href="https://carfaxdeals.com/vin-decoder" target="_blank" rel="noopener">https://carfaxdeals.com/vin-decoder</a></li><li><a href="https://carfaxdeals.com/vinreport" target="_blank" rel="noopener">https://carfaxdeals.com/vinreport</a></li><li><a href="https://www.cargurus.com/Cars/articles/chevrolet-impala-buying-guide" target="_blank" rel="noopener">https://www.cargurus.com/Cars/articles/chevrolet-impala-buying-guide</a></li><li><a href="https://www.mcgrathchevroletofdubuque.com/chevy-impala-overview.htm" target="_blank" rel="noopener">https://www.mcgrathchevroletofdubuque.com/chevy-impala-overview.htm</a></li><li><a href="https://www.autoweb.com/chevrolet-impala-used-car-buyers-guide" target="_blank" rel="noopener">https://www.autoweb.com/chevrolet-impala-used-car-buyers-guide</a></li>
+    </ul>
+  </section>
+  </div>
+</article>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
