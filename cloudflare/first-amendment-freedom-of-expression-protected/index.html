@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Does the First Amendment protect expressions?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #8f1f2a; /* derived darker accent */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.9); margin-bottom: 1.6rem; }
+    .article-body .article-highlights{ display:block; margin: 1.6rem 0; }
+    .article-body .highlight-card{ background: transparent; border-left: 4px solid var(--accent); padding: 0.9rem 1rem; margin-bottom: 0.6rem; }
+    .article-body .side-by-side{ display:flex; gap: 16px; align-items:flex-start; margin: 1.6rem 0; }
+    .article-body .side-by-side img{ max-width: 320px; height:auto; }
+    .cta-button{ background: var(--accent); }
+    .cta-button:hover{ background: var(--accent-hover); filter: brightness(1.02); }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/first-amendment-freedom-of-expression-courthouse.jpg" alt="First Amendment freedom of expression courthouse image" />
+        </div>
+        <h1 class="title">Does the First Amendment protect expressions?</h1>
+        <p class="subline">A concise, sourced guide to what the Constitution protects and the main judicial exceptions.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/first-amendment-freedom-of-expression-protected/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">The First Amendment plays a central role in U.S. public life by protecting various forms of expression. This guide explains in plain language what kinds of expression the Constitution typically protects and the main exceptions courts have recognized.
+
+It is written for voters, local residents, journalists, and civic readers who need a neutral, sourced overview. The material summarizes key Supreme Court precedents and offers a practical checklist for assessing borderline situations; for specific disputes, legal counsel should be consulted.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">The First Amendment covers spoken, written, symbolic, and some nonverbal conduct, but protection is fact dependent.</span></div><div class="highlight-card"><span class="highlight-text">Incitement, obscenity, defamation of public figures, and true threats are main exceptions courts recognize.</span></div><div class="highlight-card"><span class="highlight-text">In digital contexts, courts apply established tests while grappling with issues like AI authorship and platform moderation.</span></div>
+     </div>
+  <h2>Quick answer: does the First Amendment protect expressions?</h2><h3>Short bottom-line summary: first amendment freedom of expression</h3><p>The short answer is yes, the First Amendment generally protects a wide range of expression, but that protection is not absolute. U.S. law treats expression broadly to include spoken and written words, symbolic acts, and some nonverbal conduct, and courts apply specific exceptions rather than a single rule when speech falls outside protection, according to legal reference material <a href="https://www.law.cornell.edu/wex/first_amendment" target="_blank" rel="noopener">Legal Information Institute</a>.</p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/14HGq5LgVYR1QuIq-LJF-DPRemG821v3u=s1200" alt="Close up photograph of a printed First Amendment page with a pen and notepad on a deep navy background minimalist Michael Carbonara style first amendment freedom of expression" /></a>
+      <div class="side-text"><p>Practical outcomes turn on facts such as who is speaking, who is targeted, what the content says, whether there is an intent to produce harm, and whether any established exception applies.</p></div>
+    </div>
+<p><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">This guide</a> is written for voters, local residents, journalists, and civic readers who want a clear, neutral explanation of how the First Amendment treats expression and how courts use established tests in real disputes.</p>
+<h2>What counts as expression under the First Amendment</h2>
+<p>The law recognizes many forms of expression: spoken words, written text, symbolic actions like flags or gestures, and some nonverbal conduct that communicates a message. Courts and commentators treat this scope as broad and fact dependent, meaning the same action can be expressive in one context and not in another <a href="https://www.law.cornell.edu/wex/first_amendment" target="_blank" rel="noopener">Legal Information Institute</a>.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Follow primary sources and campaign materials</h3><div class="cta-intro"><p>Consult the primary sources cited here if you need the exact tests courts use, or seek legal advice for specific disputes.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign updates</a></div>
+<p>Examples include a political speech, an editorial, a protest sign, or a symbolic act of protest; non-examples might include routine conduct that lacks a communicative intent or isolated acts that are primarily criminal in nature rather than expressive.</p>
+<h2>The core Supreme Court framework you need to know</h2>
+<p>The modern doctrine rests on a set of landmark Supreme Court decisions that provide the tests courts use to decide when expression is protected and when it is not. These cases form the baseline for later rulings and guide lower courts in applying doctrine to new facts <a href="https://www.oyez.org/cases/1968/492" target="_blank" rel="noopener">Brandenburg v. Ohio</a> and see related <a href="https://bclawreview.bc.edu/articles/3136/files/662f9d422847c.pdf" target="_blank" rel="noopener">scholarly analysis</a>.</p>
+<p>Key decisions include the incitement decision in Brandenburg v. Ohio, the obscenity framework in Miller v. California, and the actual malice rule for public-figure defamation from New York Times Co. v. Sullivan. Each case targets a different category of speech and sets a specific legal standard courts must follow when a dispute reaches them.</p>
+<h2>Incitement and the Brandenburg test</h2>
+<p>Under Brandenburg, speech that is intended to and likely to produce imminent lawless action is not protected. The test focuses on intent and imminence rather than on unpopular or offensive content alone, and it remains the controlling incitement standard at the Supreme Court level <a href="https://www.oyez.org/cases/1968/492" target="_blank" rel="noopener">Brandenburg v. Ohio</a>. See the <a href="https://supreme.justia.com/cases/federal/us/395/444/" target="_blank" rel="noopener">full opinion</a>.</p>
+<p>Because intent and imminence are fact questions, courts look for evidence about the speaker, the words used, the setting, and how likely immediate lawless action was given the context. A generalized call to violent ideas without a clear, immediate nexus to unlawful acts typically remains protected under the Brandenburg framework.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<p>Illustrative practice points: a direct, time-specific instruction to a crowd to commit violence right away is more likely to fail Brandenburg than abstract advocacy for illegal ideas at some undefined future date.</p>
+<h2>Obscenity and the Miller test</h2>
+<p>Miller v. California established that obscene material is not protected and provided a three-part test. Material is obscene if, applying contemporary community standards, it depicts sexual conduct in an offensive way, and it lacks serious literary, artistic, political, or scientific value <a href="https://www.oyez.org/cases/1972/70" target="_blank" rel="noopener">Miller v. California</a>.</p>
+<p>Obscenity is therefore treated as a categorical exception, and the community-standards component means outcomes can vary by jurisdiction. Courts will consider whether the content has any serious value before labeling it obscene and removing First Amendment protection.</p>
+<h2>Defamation and the New York Times v. Sullivan rule</h2>
+<p>When speech concerns reputation, defamation doctrine limits recovery in certain cases. For public figures, New York Times Co. v. Sullivan requires proof of actual malice, which means showing the speaker knew the statement was false or acted with reckless disregard for its truth <a href="https://www.oyez.org/cases/1963/39" target="_blank" rel="noopener">New York Times Co. v. Sullivan</a>.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>The Sullivan rule raises the bar for public-figure plaintiffs compared with private individuals. Whether someone is a public figure depends on their role, public visibility, or how they have engaged in public controversy, and campaign materials or public filings can be relevant when classifying a speaker.</p>
+<h2>True threats and targeted violent communications</h2>
+<p>True threats are not protected by the First Amendment. The Court’s decision in Virginia v. Black identified that statements intended to intimidate or threaten a specific person or group can be regulated and prosecuted, subject to constitutional safeguards <a href="https://www.oyez.org/cases/2002/02-1492" target="_blank" rel="noopener">Virginia v. Black</a>.</p>
+<p>Court analysis of threats looks at context, the specificity of the statement, whether the speaker intended to intimidate, and how a reasonable person would interpret the communication. The doctrine has also been applied to online statements, where context and audience size can change how a court views the risk of harm.</p>
+<h2>A practical checklist: how to assess if a statement is protected</h2>
+<p>To evaluate whether a particular statement is likely protected, follow a fact-focused checklist that maps to the controlling tests and exceptions on <a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">constitutional rights</a> <a href="https://www.law.cornell.edu/wex/first_amendment" target="_blank" rel="noopener">Legal Information Institute</a>.</p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick evaluation of a statement's protection under First Amendment tests</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-gh5099-0">
+                        <input id="tool-check-gh5099-0" type="checkbox" />
+                        <span>Speaker status</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-q4u7j6-1">
+                        <input id="tool-check-q4u7j6-1" type="checkbox" />
+                        <span>Target</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-chvuiw-2">
+                        <input id="tool-check-chvuiw-2" type="checkbox" />
+                        <span>Content</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-5dxe0w-3">
+                        <input id="tool-check-5dxe0w-3" type="checkbox" />
+                        <span>Intent</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-u5mzfu-4">
+                        <input id="tool-check-u5mzfu-4" type="checkbox" />
+                        <span>Imminence</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-e5yuy8-5">
+                        <input id="tool-check-e5yuy8-5" type="checkbox" />
+                        <span>Exception</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use this checklist to gather facts before seeking advice</p>
+            </div>
+<p>Checklist steps that follow this tool can help organize evidence and prepare a clear record. The checklist below is intended for informational use and to help document facts, not as a substitute for legal advice.</p>
+<ul><li>Identify speaker status, including whether the speaker is a public figure or a private individual.</li><li>Note the target and the size of the audience, and whether the communication was directed at a specific person or group.</li><li>Describe the content precisely, including any time-specific calls to action, threats, or references to illegal conduct.</li><li>Collect evidence of intent and timing, such as timestamps, messages leading up to the statement, and witness accounts.</li><li>Assess imminence: was immediate unlawful action likely given the context and platform?</li><li>Determine whether the content fits any categorical exception, such as obscenity or defamation with actual malice.</li></ul>
+<p>When documenting, preserve screenshots, timestamps, and any metadata available from platforms. Civil liberties resources also recommend recording contemporaneous context and third-party amplification as part of a careful factual record <a href="https://www.aclu.org/know-your-rights/free-speech" target="_blank" rel="noopener">ACLU guidance</a>.</p>
+<h2>How courts are applying these tests to social media and AI-generated content</h2>
+<p>Courts continue to adapt traditional tests to digital contexts, including social media and AI-generated messages. Key issues include how intent is shown when content moves quickly online and whether AI tools change who can be treated as the speaker in a legal sense <a href="https://www.law.cornell.edu/wex/first_amendment" target="_blank" rel="noopener">Legal Information Institute</a>. See recent scholarship on incitement and social media <a href="https://scholarship.law.wm.edu/cgi/viewcontent.cgi?article=3967&context=wmlr" target="_blank" rel="noopener">here</a>.</p>
+<p>Platform moderation remains a private-actor control and is separate from constitutional protection, which limits only government action. Open questions include how cross-jurisdiction enforcement and automated content moderation intersect with the need to show mens rea and imminence in threat or incitement claims.</p>
+<h2>Common mistakes people make when assuming protection</h2>
+<p>A common error is treating the First Amendment as an absolute shield. Protection does not extend to incitement to imminent lawless action, true threats, or obscene material, and courts repeatedly emphasize that content and context matter <a href="https://www.oyez.org/cases/1968/492" target="_blank" rel="noopener">Brandenburg v. Ohio</a>.</p>
+<p>Another mistake is ignoring speaker status in defamation situations: public figures face a higher burden under Sullivan when alleging reputational harm. People also conflate platform policy with constitutional limits, but private platforms may enforce rules even when content remains constitutionally protected against government suppression.</p>
+<h2>How speaker status and audience shape legal outcomes</h2>
+<p>Whether a speaker is a public figure affects defamation claims, because actual malice applies to public figures under Sullivan, raising the plaintiff’s burden of proof <a href="https://www.oyez.org/cases/1963/39" target="_blank" rel="noopener">New York Times Co. v. Sullivan</a>.</p>
+<p>Audience characteristics also matter: statements directed at a small, identifiable group or a vulnerable person can increase the chance courts will treat the speech as a threat or as likely to produce imminent harm. Documenting distribution and audience helps assess legal risk.</p>
+<h2>Practical scenarios: applying the tests to everyday examples</h2>
+<p>Scenario one, political advocacy online: a heated post criticizing officials is likely protected speech if it expresses opinion or general advocacy, while a post that includes a clear, time-specific call for violence could fail the Brandenburg test depending on intent and likelihood <a href="https://www.oyez.org/cases/1968/492" target="_blank" rel="noopener">Brandenburg v. Ohio</a>.</p>
+<p>Scenario two, a targeted threatening message: a message that tells a named person they will be harmed at a specific time is more likely to be treated as a true threat under Virginia v. Black than a vague insult, especially if evidence shows intent to intimidate <a href="https://www.oyez.org/cases/2002/02-1492" target="_blank" rel="noopener">Virginia v. Black</a>.</p>
+<h2>What to do if you or someone you follow faces a legal risk over speech</h2>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Document the statement, including exact wording, date, platform, and any responses or amplification, and preserve screenshots and metadata where possible. Clear documentation makes it easier to apply the checklist factors and to show context if a dispute arises <a href="https://www.aclu.org/know-your-rights/free-speech" target="_blank" rel="noopener">ACLU guidance</a>.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1fDe5iUbjIlm8OtyW22W4mONAa7D-lwzz=s1200" alt="Sleek minimalist 2D vector infographic showing three icon tiles for Brandenburg Miller and Sullivan cases illustrating first amendment freedom of expression" /></a>
+    </div>
+<p>For borderline cases, <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">consult an attorney</a> because outcomes depend on detailed facts and applicable law. Remember that platform moderation and legal claims are separate processes and may proceed on different timelines.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<h2>Conclusion and further reading</h2>
+<p>Expression receives broad protection under the First Amendment, but specific exceptions exist and courts decide many cases by applying targeted tests to the facts. The leading precedents discussed here remain core guidance for evaluating whether a statement is protected <a href="https://www.law.cornell.edu/wex/first_amendment" target="_blank" rel="noopener">Legal Information Institute</a>.</p>
+<p>For full texts and detailed analysis, consult the primary cases and civil liberties resources cited above. If you face a real legal risk, seek counsel rather than relying solely on general summaries.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-win8wd" class="faq-toggle" /><label for="faq-win8wd" class="faq-summary" role="button" tabindex="0">Does the First Amendment protect symbolic acts like flag burning?</label><div class="faq-content"><p>Many symbolic acts are protected as expression, but protection can depend on context and intent; courts consider whether the act communicates a message and whether a recognized exception applies.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-rb6f5d" class="faq-toggle" /><label for="faq-rb6f5d" class="faq-summary" role="button" tabindex="0">Can online posts be prosecuted as incitement?</label><div class="faq-content"><p>Yes, but only when they meet the Brandenburg standard of intent and likelihood of imminent lawless action; online context can affect that analysis and courts examine timing and evidence of intent.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-szgr8v" class="faq-toggle" /><label for="faq-szgr8v" class="faq-summary" role="button" tabindex="0">If I receive a threatening message, is it protected speech?</label><div class="faq-content"><p>Targeted threats are not protected as true threats; whether a message qualifies depends on specificity, context, and whether the speaker intended to intimidate or cause fear.</p></div></section>
+</section><section class="article-ending">Summary: expression is broadly protected but not absolute. When issues are close, courts apply established tests that focus on facts like intent, imminence, and speaker status.
+
+If you need more detail on a particular case or a legal question, consult the primary sources cited here or seek qualified legal advice.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.law.cornell.edu/wex/first_amendment" target="_blank" rel="noopener">https://www.law.cornell.edu/wex/first_amendment</a></li><li><a href="https://www.oyez.org/cases/1968/492" target="_blank" rel="noopener">https://www.oyez.org/cases/1968/492</a></li><li><a href="https://www.oyez.org/cases/1972/70" target="_blank" rel="noopener">https://www.oyez.org/cases/1972/70</a></li><li><a href="https://www.oyez.org/cases/1963/39" target="_blank" rel="noopener">https://www.oyez.org/cases/1963/39</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.oyez.org/cases/2002/02-1492" target="_blank" rel="noopener">https://www.oyez.org/cases/2002/02-1492</a></li><li><a href="https://www.aclu.org/know-your-rights/free-speech" target="_blank" rel="noopener">https://www.aclu.org/know-your-rights/free-speech</a></li><li><a href="https://supreme.justia.com/cases/federal/us/395/444/" target="_blank" rel="noopener">https://supreme.justia.com/cases/federal/us/395/444/</a></li><li><a href="https://scholarship.law.wm.edu/cgi/viewcontent.cgi?article=3967&context=wmlr" target="_blank" rel="noopener">https://scholarship.law.wm.edu/cgi/viewcontent.cgi?article=3967&amp;context=wmlr</a></li><li><a href="https://bclawreview.bc.edu/articles/3136/files/662f9d422847c.pdf" target="_blank" rel="noopener">https://bclawreview.bc.edu/articles/3136/files/662f9d422847c.pdf</a></li><li><a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">https://michaelcarbonara.com/constitutional-rights/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
