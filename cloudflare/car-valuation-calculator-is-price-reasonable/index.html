@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>How can I tell if a car's asking price is reasonable?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Derived brand tokens */
+      --text-color: #010205; /* from --fbp-ink */
+      --accent: #3666ed;    /* from --fbp-accent */
+      --accent-hover: #2f5be0; /* from --fbp-accent-600 */
+      --line: rgba(1,2,5,.18); /* from --fbp-line */
+      --surface: #ffffff;   /* from --fbp-bgsoft */
+      --surface-2: #fafafa;
+      --radius: 0px;        /* from --fbp-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    /* Scoped presentation for highlights and faq inside article-body */
+    .article-body .summary{ font-style:italic; color:color-mix(in srgb, var(--text-color) 75%, #fff 25%); margin-bottom:2rem; }
+
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:1.1rem; margin:2.1rem 0; padding:.4rem 0; }
+    .article-body .article-highlights .highlight-card{
+      background:linear-gradient(135deg,#fff 0%,#fff 55%,#fff 100%);
+      box-shadow:0 4px 16px rgba(1,2,5,.10), 0 2px 8px rgba(1,2,5,.06);
+      padding:1.15rem 1.35rem; display:flex; align-items:center;
+      border-left:4px solid var(--accent); border-right:2px solid var(--accent);
+      font-weight:600; font-size:1.04em; line-height:1.5; border-radius:var(--radius);
+    }
+    .article-body .highlight-text{ color:var(--text-color); font-size:1.02em; font-weight:600; }
+
+    .article-body .faq-accordion{ border:1px solid var(--line); border-radius:var(--radius); background:transparent; box-shadow:none; margin:0 0 1.2rem 0; overflow:hidden; width:100%; box-sizing:border-box; }
+    .article-body .faq-summary{ all:unset; display:block; font-weight:700; font-size:1.06rem; line-height:1.55; padding:1rem 1.25rem 1rem 2.5rem; color:var(--text-color); cursor:pointer; position:relative; }
+    .article-body .faq-summary::before{ content:""; position:absolute; left:.85rem; top:50%; transform:translateY(-50%); width:0; height:0; border-style:solid; border-width:6px 0 6px 8px; border-color:transparent transparent transparent var(--accent); opacity:.95; transition:transform .2s ease; }
+    .article-body .faq-toggle:checked ~ .faq-summary::before{ transform:translateY(-50%) rotate(90deg); }
+    .article-body .faq-content{ display:none; padding:.25rem 1.25rem 1rem 2.5rem; color:var(--text-color); border-top:1px solid var(--line); }
+    .article-body .faq-toggle:checked ~ .faq-content{ display:block; }
+
+    .article-body figure.special-image-standalone{ margin:2rem auto; text-align:center; max-width:130px; width:100%; border:0 !important; box-shadow:none !important; background:transparent !important; }
+    .article-body figure.special-image-standalone img{ width:100%; height:auto; border-radius:0 !important; object-fit:contain; }
+
+    .article-body .side-by-side{ display:flex; align-items:flex-start; gap:clamp(16px, 3vw, 28px); margin:0 0 2rem; width:100%; box-sizing:border-box; }
+    .article-body .side-by-side.image-2-right{ flex-direction:row-reverse; }
+    .article-body .side-by-side.special-image-left{ flex-direction:row; }
+    .article-body .side-by-side img{ flex:0 0 auto; max-width:min(100%, 400px); width:100%; border-radius:var(--radius); box-shadow:0 3px 14px rgba(1,2,5,.14); }
+    .article-body .side-by-side .side-text{ flex:1 1 auto; min-width:0; padding:0 .75rem; color:var(--text-color); text-align:left; }
+
+    @media (max-width: 768px){
+      .page-shell{ border-radius: 0; border-left: 0; border-right: 0; }
+      .content-wrapper{ padding-left: 0; padding-right: 0; }
+      .top, .cta-wrap, .main{ padding-left: clamp(14px, 4.6vw, 20px); padding-right: clamp(14px, 4.6vw, 20px); }
+      .article-body{ max-width: 100%; }
+      .article-body img{ max-width: 100% !important; }
+      .article-body .side-by-side{ flex-direction:column !important; gap:1rem; }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1idlpOGo6zcg9h5MVqBw73ZhZ_jKfO8b9=s1200" alt="Car valuation and asking price guide" />
+        </div>
+        <h1 class="title">How can I tell if a car's asking price is reasonable?</h1>
+        <p class="subline">A repeatable workflow to convert valuations, local comparables and history into a defendable target price range.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://carfaxdeals.com/blog/car-valuation-calculator-is-price-reasonable"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+<article class="formatted-blog-post">
+  <div class="formatted-blog-post__inner">
+
+  <div class="summary">When you see a used car listing, the asking price is a starting point, not the full answer. A structured approach helps you decide whether that number fits your budget and risk tolerance.
+
+This article shows a repeatable workflow that begins with a car valuation calculator baseline, then refines that value using local comparable listings, vehicle history reports, and itemized transaction costs. Follow the checklist and examples to create a defendable target price range before contacting a dealer.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Start with a valuation baseline, then adjust for local comparables and vehicle history to reach a defendable target price range.</span></div><div class="highlight-card"><span class="highlight-text">Convert vehicle history findings and inspection estimates into explicit dollar adjustments rather than vague discounts.</span></div><div class="highlight-card"><span class="highlight-text">Include taxes, registration, dealer fees, and repair estimates so your total cost matches reality.</span></div>
+     </div>
+  <h2>What a reasonable asking price means and why it matters</h2>
+  <p>An asking price is the number a seller lists, while market value is an estimate of what similar cars sell for in your area. A target price range is a defensible band a buyer creates by starting with a valuation baseline and then adjusting for local market context and vehicle history. For guidance on checking vehicle histories and title status before accepting a price, consult official consumer advice from government resources like the FTC <a href="https://consumer.ftc.gov/articles/buying-used-car" target="_blank" rel="noopener">FTC guidance on buying used cars</a>.</p>
+  <p>Price alone rarely tells the full story. Condition, ownership records, open recalls, and expected immediate repairs change what is fair to pay. Using pricing insights alongside a vehicle history report helps surface risks that would otherwise be hidden in a single listing.</p>
+
+  <h2>A repeatable step-by-step workflow to judge a used car price</h2>
+  <p>Start by getting a valuation baseline from a <a href="https://www.edmunds.com/tmv.html" target="_blank" rel="noopener">recognized source</a>, then cross-check that baseline with at least one other tool or local retail index. A reliable workflow begins with a valuation baseline and then checks local comparables to reflect regional conditions, which improves confidence before making any decision <a href="https://www.kbb.com/car-values/" target="_blank" rel="noopener">Kelley Blue Book car values</a>.</p>
+  <p>Next, gather at least three local comparable listings that match model year, trim, and a close mileage band. Comparing multiple local dealership listings helps you see retail markup and how dealers are pricing similar cars in your area, which can differ from national indices.</p>
+
+  <section class="faq-accordion"><input type="checkbox" id="faq-ezmede" class="faq-toggle" checked /><label for="faq-ezmede" class="faq-summary" role="button" tabindex="0">How can I tell if a car's asking price is reasonable?</label><div class="faq-content"><p>Use a car valuation calculator to establish a baseline, compare local comparable listings, adjust for mileage, condition, and vehicle history, and add transaction costs to form a defendable target price range.</p></div></section>
+
+  <p>After you have comparables, quantify adjustments for mileage, condition, prior damage, and any expected repairs. Create explicit line items so your target price range is transparent and defensible when you discuss it with the seller or dealer.</p>
+
+  <p>Finally, add transaction costs such as taxes, registration, dealer fees, and any warranty or immediate repair costs to form a total cost-to-own estimate. Including these items prevents underestimating what you will actually pay after the sale <a href="https://www.consumerreports.org/cars/how-to-determine-fair-price-for-used-car/" target="_blank" rel="noopener">Consumer Reports guidance on fair price</a>.</p>
+
+  <h2>How to use a car valuation calculator and cross-check its result</h2>
+  <p>When you run a car valuation calculator, enter the exact model year, trim, and the odometer reading. Small input errors can shift a baseline value enough to mislead a buyer, so double-check powertrain and trim options before you accept the result <a href="https://www.kbb.com/car-values/" target="_blank" rel="noopener">Kelley Blue Book car values</a>.</p>
+  <p>Different valuation tools use different data and methodologies, so their estimates will vary. <a href="https://www.carfax.com/used-car-index" target="_blank" rel="noopener">Market direction signals</a> from <a href="https://www.coxautoinc.com/insights-hub/manheim-used-vehicle-value-index-december-2025-trends/" target="_blank" rel="noopener">wholesale indices</a> can explain why baselines change month to month, but they should not replace local comparables when assessing a specific retail listing <a href="https://www.manheim.com/insights/manheim-market-report" target="_blank" rel="noopener">Manheim market reports</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://carfaxdeals.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1zBYq-paoIVXixqtdXptp4QMLSBr8Yyzr=s200" alt="CarFax Deals" />
+      </a>
+    </figure>
+
+  <p>To reconcile two baselines, compare what each tool assumed about mileage, options, and condition. If one baseline reflects retail asking prices and another tracks wholesale movement, weight the retail-oriented baseline more heavily for a buyer-facing target value.</p>
+  <p>One practical method is a weighted average. For example, give 60 percent weight to a retail-focused baseline and 40 percent to a wholesale-adjusted number when the local market is stable. If local dealer listings show a strong divergence, shift weight toward the local listings instead.</p>
+
+  <div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+    <p class="tool-purpose">Guide for entering core inputs in a valuation tool and cross-checking baselines</p>
+    <ul class="tool-checklist-list">
+      <li class="tool-checklist-item">
+        <label for="tool-check-ite99d-0">
+          <input id="tool-check-ite99d-0" type="checkbox" />
+          <span>Model year</span>
+        </label>
+      </li>
+      <li class="tool-checklist-item">
+        <label for="tool-check-pgbhqm-1">
+          <input id="tool-check-pgbhqm-1" type="checkbox" />
+          <span>Trim</span>
+        </label>
+      </li>
+      <li class="tool-checklist-item">
+        <label for="tool-check-32n2k0-2">
+          <input id="tool-check-32n2k0-2" type="checkbox" />
+          <span>Mileage</span>
+        </label>
+      </li>
+      <li class="tool-checklist-item">
+        <label for="tool-check-c9pvv7-3">
+          <input id="tool-check-c9pvv7-3" type="checkbox" />
+          <span>Powertrain</span>
+        </label>
+      </li>
+      <li class="tool-checklist-item">
+        <label for="tool-check-scos2s-4">
+          <input id="tool-check-scos2s-4" type="checkbox" />
+          <span>Condition notes</span>
+        </label>
+      </li>
+    </ul>
+    <p class="tool-notes">Use identical inputs across tools</p>
+  </div>
+
+  <h2>How to compare local comparable listings effectively</h2>
+  <p>Pick comparables that match model year and trim first. Then sort listings into mileage brackets such as under 30k, 30k to 70k, and over 70k to avoid comparing cars with materially different usage. Matching these factors reduces noise and produces a cleaner reference set for market value check for cars <a href="https://www.manheim.com/insights/manheim-market-report" target="_blank" rel="noopener">Manheim market reports</a>.</p>
+  <p>Look for listing bias. Dealer markup, incentives, or advertising language can push an asking price away from true retail expectation. Price analysis labels and dealer transparency signals help you judge whether a listing is priced aggressively or conservatively relative to other nearby offerings.</p>
+  <p>When a market index diverges from local listings, prioritize local data for a specific purchase. Indices flag broad direction, but regional supply shocks or dealer behavior often make local comparables the best signal for an individual transaction <a href="https://www.jdpower.com/business/press-releases/used-vehicle-market-trends-2024-2025" target="_blank" rel="noopener">J.D. Power market trends</a>.</p>
+  <p>Record the mean and median of your comparable prices and note the range. If the asking price sits above the upper bound of comparable listings without clear justification, treat it with caution and use that gap as a negotiation reference point.</p>
+
+  <h2>Adjusting the baseline for mileage, condition, repairs and vehicle history</h2>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Positive adjustments are often justified for single-owner cars with documented maintenance and a clean title, while multiple owners or missing service records usually lower value. <a href="https://carfaxdeals.com/vinreport" target="_blank" rel="noopener">Vehicle history reports</a> and recall checks materially affect fair price because title issues, prior damage, or open recalls change expected repair costs and resale risk <a href="https://consumer.ftc.gov/articles/buying-used-car" target="_blank" rel="noopener">FTC guidance on vehicle histories</a>.</p></div>
+      <a href="https://carfaxdeals.com/how-to-use" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1QFsDF8rf8LemI-OXEM2rynDk3gQ2naqG=s1200" alt="Minimalist 2D vector laptop showing side by side comparables with horizontal price range bars and a printed vehicle history report car valuation calculator" /></a>
+    </div>
+
+  <p>Quantify mileage impact using local comparables as a guide. For example, if the comparable average for the trim is 50,000 miles and the subject car has 80,000 miles, apply a per-mile or bracket adjustment that reflects typical local depreciation; this helps translate the baseline into a realistic target.</p>
+  <p>Estimate repair costs from inspection quotes or public cost estimators. When an inspection finds immediate mechanical work, add the lower of the repair estimate or a conservative contingency to your adjustment line so the target price reflects likely outlay after purchase <a href="https://www.nhtsa.gov/road-safety/used-cars" target="_blank" rel="noopener">NHTSA guidance on inspections</a>.</p>
+
+    <section class="product-block">
+      
+      <div class="product-media"><a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1wa7oWaOtZkR3ozriGCaxTb4pzdGxaLaJ" alt="Run CarFax Report" /></a></div>
+      <div class="product-actions"><a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener" class="product-button">Run CarFax Report</a></div>
+    </section>
+
+  <p>Prior accidents, salvage titles, or open recalls can materially reduce a car's fair price because they increase future repair and resale risk. Where these issues appear in the vehicle history report, convert the risk into a dollar adjustment based on likely repair costs and reduced resale value, rather than a vague discount.</p>
+
+  <h2>Including transaction costs and creating a defendable target price range</h2>
+  <p>Transaction costs widen the total cost-to-own compared with the headline asking price. Common items include sales tax, registration fees, dealer documentation fees, and the cost of any extended warranty you decide to buy; these line items can add materially to your final outlay and should be listed explicitly <a href="https://www.consumerreports.org/cars/how-to-determine-fair-price-for-used-car/" target="_blank" rel="noopener">Consumer Reports on calculating total cost</a>.</p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://carfaxdeals.com/how-to-use" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1_YReV2GcX8vwNnHwjzgBYVgC_VXv4Tn8=s1200" alt="Screenshot style car valuation calculator input screen showing model year trim and mileage fields highlighted with clean white background and blue CarFax Deals accents" /></a>
+      <div class="side-text"><p>Build a target price range with a clear structure: baseline valuation, plus or minus itemized adjustments (mileage, condition, repairs, history), and a summed list of transaction costs. Presenting this line-item worksheet to a dealer clarifies how you reached your range and turns vague disagreement into discussable entries.</p></div>
+    </div>
+
+  <p>When the seller's asking price falls well above the top of your range with no justifying information, that is a valid reason to walk away. If a dealer will not provide documentation or an inspection allowance that bridges the gap, prioritize other options that fit your adjusted range and risk tolerance <a href="https://www.jdpower.com/business/press-releases/used-vehicle-market-trends-2024-2025" target="_blank" rel="noopener">J.D. Power on market signals</a>.</p>
+
+  <h2>Common mistakes, red flags and negotiation pitfalls</h2>
+  <p>A frequent error is relying on a single valuation without checking local comparables or a vehicle history report. That approach can miss title problems, undisclosed damage, or other issues that change expected costs, so cross-checking with history data and local listings reduces that risk <a href="https://consumer.ftc.gov/articles/buying-used-car" target="_blank" rel="noopener">FTC guidance on checking vehicle history</a>.</p>
+  <p>Misreading cosmetic wear as mechanical risk and vice versa can also cause wrong adjustments. Ask for photos of suspect areas and, where possible, an independent inspection to separate superficial fixes from items that will need immediate mechanical work.</p>
+  <p>Failing to verify title status or open recalls is a high-risk oversight. If the vehicle history report shows salvage branding or open recalls, treat the asking price as negotiable downward and consider an independent inspection before finalizing any purchase <a href="https://www.nhtsa.gov/road-safety/used-cars" target="_blank" rel="noopener">NHTSA inspection recommendations</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://carfaxdeals.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1zBYq-paoIVXixqtdXptp4QMLSBr8Yyzr=s200" alt="CarFax Deals" />
+      </a>
+    </figure>
+
+  <h2>Practical examples, sample calculations and next steps</h2>
+  <p>Example 1, low-mileage single-owner: start with a car valuation calculator baseline for the exact trim and mileage, cross-check with a second source, then apply a positive adjustment for single ownership and documented service. Add estimated taxes and registration to create the total cost. When you document these items, you can present the range to a dealer as evidence-based reasoning <a href="https://www.kbb.com/car-values/" target="_blank" rel="noopener">Kelley Blue Book car values</a>.</p>
+  <p>Example 2, higher-mileage multiple-owner: use the same baseline process, then subtract for higher mileage and multiple owners and add inspection-estimated repairs. If the adjusted top of your range is lower than the asking price by a significant margin, that disparity is a negotiation point or a reason to walk away.</p>
+
+  <div class="cta-section">
+    <h3 class="cta-headline">Order a vehicle history report and run your worksheet</h3>
+    <div class="cta-intro"><p>Use the worksheet below to calculate a defendable target range and order a vehicle history report before you contact a dealer.</p></div>
+    <a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener" class="cta-button">Run CarFax Report</a>
+  </div>
+
+  <p><a href="https://carfaxdeals.com/how-to-use" target="_blank" rel="noopener">Worksheet</a>: list baseline, then add or subtract line items for mileage, condition, prior damage, and repair estimates; finally append transaction costs to show total cost-to-own. Use this worksheet when you compare listings and when you discuss price with a seller.</p>
+  <p>Next steps: <a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener">run a vehicle history report</a>, schedule an independent inspection if the history or comparables raise questions, and then contact the dealer with your documented target range and specific line-item concerns <a href="https://www.jdpower.com/business/press-releases/used-vehicle-market-trends-2024-2025" target="_blank" rel="noopener">J.D. Power on buying steps</a>.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-58pwk7" class="faq-toggle" /><label for="faq-58pwk7" class="faq-summary" role="button" tabindex="0">How accurate are car valuation calculators?</label><div class="faq-content"><p>Valuation tools give a useful baseline but differ by methodology; cross-check at least one other source and compare with local listings for a more accurate estimate.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-22qeov" class="faq-toggle" /><label for="faq-22qeov" class="faq-summary" role="button" tabindex="0">Do I need a vehicle history report to judge price?</label><div class="faq-content"><p>A vehicle history report is strongly recommended because title issues, prior damage, or open recalls can materially affect fair price and repair expectations.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-y1lc1x" class="faq-toggle" /><label for="faq-y1lc1x" class="faq-summary" role="button" tabindex="0">When should I get an independent inspection?</label><div class="faq-content"><p>Order an inspection for higher-risk purchases, when history shows damage, or when comparables and the asking price do not align.</p></div></section>
+</section>
+
+<section class="article-ending">A reasonable asking price is what you can justify with documented baselines, clear adjustments, and the full cost-to-own laid out. Use valuation tools, local comparables, and vehicle history reports to reduce uncertainty before you buy.
+
+If the asking price disagrees with your adjusted range and the dealer cannot explain the difference with verifiable information, consider other listings or ask for inspection allowances to bridge the gap.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://consumer.ftc.gov/articles/buying-used-car" target="_blank" rel="noopener">https://consumer.ftc.gov/articles/buying-used-car</a></li>
+      <li><a href="https://www.kbb.com/car-values/" target="_blank" rel="noopener">https://www.kbb.com/car-values/</a></li>
+      <li><a href="https://www.consumerreports.org/cars/how-to-determine-fair-price-for-used-car/" target="_blank" rel="noopener">https://www.consumerreports.org/cars/how-to-determine-fair-price-for-used-car/</a></li>
+      <li><a href="https://www.manheim.com/insights/manheim-market-report" target="_blank" rel="noopener">https://www.manheim.com/insights/manheim-market-report</a></li>
+      <li><a href="https://www.jdpower.com/business/press-releases/used-vehicle-market-trends-2024-2025" target="_blank" rel="noopener">https://www.jdpower.com/business/press-releases/used-vehicle-market-trends-2024-2025</a></li>
+      <li><a href="https://www.nhtsa.gov/road-safety/used-cars" target="_blank" rel="noopener">https://www.nhtsa.gov/road-safety/used-cars</a></li>
+      <li><a href="https://www.edmunds.com/tmv.html" target="_blank" rel="noopener">https://www.edmunds.com/tmv.html</a></li>
+      <li><a href="https://www.coxautoinc.com/insights-hub/manheim-used-vehicle-value-index-december-2025-trends/" target="_blank" rel="noopener">https://www.coxautoinc.com/insights-hub/manheim-used-vehicle-value-index-december-2025-trends/</a></li>
+      <li><a href="https://www.carfax.com/used-car-index" target="_blank" rel="noopener">https://www.carfax.com/used-car-index</a></li>
+      <li><a href="https://carfaxdeals.com/vinreport" target="_blank" rel="noopener">https://carfaxdeals.com/vinreport</a></li>
+      <li><a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener">https://carfaxdeals.com/run-report</a></li>
+      <li><a href="https://carfaxdeals.com/how-to-use" target="_blank" rel="noopener">https://carfaxdeals.com/how-to-use</a></li>
+    </ul>
+  </section>
+  </div>
+</article>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
