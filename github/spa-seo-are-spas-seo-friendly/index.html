@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Are SPAs SEO friendly? A systems-first guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand tokens derived from provided style */
+      --text-color: rgba(244,231,197,0.86); /* --orvus-ink-soft */
+      --accent: #C8A45D; /* --orvus-gold */
+      --accent-hover: #f6de9f; /* --orvus-gold-strong */
+      --line: rgba(200,164,93,0.26); /* --orvus-border-soft */
+      --surface: #050d18; /* --orvus-bg-soft */
+      --surface-2: #0c182b;
+      --radius: 12px;
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: transparent;
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: #f4e7c5;
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: rgba(244,231,197,0.72);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: transparent;
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: rgba(244,231,197,0.02);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: #f4e7c5;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #050d18;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: transparent;
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+      border-radius: 12px;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: rgba(244,231,197,0.04);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: rgba(244,231,197,0.02);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: #f4e7c5;
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: #f4e7c5;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1WUnb5GJduuyxLx_cS9O6XZuKH5fNnDDJ" alt="Are SPAs SEO friendly? — Banner" />
+        </div>
+        <h1 class="title">Are SPAs SEO friendly? A systems-first guide</h1>
+        <p class="subline">A systems-focused guide comparing SSR, prerendering and client rendering to make SPAs reliably indexable.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://orvus.net/2026/02/01/spa-seo-are-spas-seo-friendly/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">Single-page applications are common because they deliver fast, app-like experiences. But for search, their client-first nature raises familiar questions: will crawlers see the same metadata and content that users do? This guide breaks down the practical risks and the engineering options teams use to make SPAs reliably indexable.
+
+The approach here is systems-focused. It contrasts server-side rendering, prerendering, and client-side rendering, and it provides a compact diagnostic workflow you can run in a day to prioritise fixes based on your constraints and traffic patterns.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">SPAs can be SEO friendly, but route-specific server HTML remains the most reliable approach for consistent indexing.</span></div><div class="highlight-card"><span class="highlight-text">Prerendering suits mostly static routes, while SSR helps when metadata must vary per request.</span></div><div class="highlight-card"><span class="highlight-text">A short diagnostic using URL Inspection and Lighthouse often reveals the highest-impact fixes.</span></div>
+     </div>
+  <h2>Are SPAs SEO friendly? Quick answer and what this guide covers</h2>
+<p>Short answer, in practical terms: SPAs can be made SEO friendly, but the most reliable path is to deliver route-specific server HTML using server-side rendering or prerendering where feasible, because search engines still rely on server-delivered metadata for consistent indexing and meta extraction. <a href="https://developers.google.com/search/docs/crawling-indexing/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central JavaScript SEO basics</a></p>
+<h3>Short executive answer, spa seo</h3>
+<p>SPAs often work for users, but for search they expose a few predictable risks: missing route-specific title and description tags, canonical links managed only in client code, and crawl inefficiencies caused by heavy client rendering. This article will walk through those failure modes and how to verify fixes. <a href="https://web.dev/prerendering/" target="_blank" rel="noopener">Prerendering guidance on web.dev</a></p>
+<section class="faq-accordion"><input type="checkbox" id="faq-06zokz" class="faq-toggle" checked /><label for="faq-06zokz" class="faq-summary" role="button" tabindex="0">Are SPAs SEO friendly?</label><div class="faq-content"><p>SPAs can be SEO friendly when route-specific metadata is available in server-delivered HTML; SSR or prerendering are the most reliable long-term approaches, with dynamic rendering used only as a temporary fallback.</p></div></section>
+<p>What this article will and will not do: it focuses on practical, system-level decisions you can make today, including when prerendering is sufficient and when a full SSR pipeline is worth the cost. It does not prescribe one-size-fits-all timelines or promise outcomes, but it does offer diagnostic steps and implementation patterns you can test against your site. <a href="https://www.smashingmagazine.com/2025/03/ssr-prerendering-csr-seo-performance/" target="_blank" rel="noopener">Smashing Magazine guide on SSR, prerendering and CSR</a></p>
+<h2>What is a single-page application and how search engines see it</h2>
+<h3>SPA mechanics in brief</h3>
+<p>A single-page application loads a single HTML shell and uses client-side routing to change views without full page reloads. This improves perceived performance and enables app-like interactions, but it changes how metadata and route content appear to crawlers that expect route-level HTML. <a href="https://developer.mozilla.org/en-US/docs/Glossary/Single-page_application" target="_blank" rel="noopener">MDN Web Docs SPA glossary</a>. See also an SPA SEO overview on <a href="https://macrometa.com/seo-dynamic-content/single-page-application-seo" target="_blank" rel="noopener">Macrometa</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure>
+<h3>Why route-level HTML matters for search</h3>
+<p>Search engines now execute client-side JavaScript in many cases, yet they still extract important signals from the initial server response when available. If route-specific title, meta description, canonical and structured data are not present in the server response, engines can miss or delay indexing those signals, which creates uncertainty for SEO. <a href="https://developers.google.com/search/docs/crawling-indexing/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central JavaScript SEO basics</a></p>
+<h2>How major search engines render client-side JavaScript</h2>
+<h3>Google rendering pipeline and guidance</h3>
+<p>Google executes JavaScript during rendering, but its guidance consistently treats server-side rendering and prerendering as the preferred long-term approaches, recommending dynamic rendering only as a troubleshooting fallback for sites that cannot provide server HTML per route. This makes SSR or prerendering the more reliable path for route-level meta extraction. <a href="https://developers.google.com/search/docs/crawling-indexing/dynamic-rendering" target="_blank" rel="noopener">Google Search Central dynamic rendering guidance</a></p>
+<h3>Bing rendering behaviour and differences</h3>
+<p>Bing’s documentation shows the engine executes JavaScript and offers guidance on how its crawler handles rendered content, but the practical takeaway is similar: ensure important route metadata is available in server-delivered HTML when possible to avoid mismatches between server output and rendered DOM. <a href="https://learn.microsoft.com/en-us/bing/search-apis/bingbot/javascript" target="_blank" rel="noopener">Bing rendering guidance</a></p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Compact SPA SEO diagnostic</h3><div class="cta-intro"><p>If you need a short diagnostic checklist to compare server HTML, rendered DOM and indexing status for a few representative routes, use the steps later in this article as a one-day workflow.</p></div><a href="https://orvus.net/services" target="_blank" rel="noopener" class="cta-button">Inquire about a diagnostic</a></div>
+<h2>Core ways to make SPAs indexable: SSR, prerendering and hybrid models</h2>
+<h3>Server-side rendering and hydration</h3>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1C-iOAKNCc4EsixFEK0LUc986B5cgTBxW=s1200" alt="Two developers review a site audit on a laptop with browser devtools visible in a minimalist navy workspace focused on spa seo improvements" /></a>
+      <div class="side-text"><p>Server-side rendering delivers full HTML for each route from the server, then hydrates interactive client code in the browser. SSR ensures route-specific title, meta description and structured data are present in the server response so crawlers can extract the correct signals without needing a full client render. <a href="https://developers.google.com/search/docs/crawling-indexing/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central JavaScript SEO basics</a></p></div>
+    </div>
+<h3>Prerendering and static generation</h3>
+<p>Prerendering or static generation builds route HTML ahead of time and serves that HTML to crawlers and users; it often reduces runtime complexity compared with SSR for pages that change rarely. Prerendering works well for mostly static routes but increases build workload and can be harder to apply to highly dynamic or personalized pages. <a href="https://web.dev/prerendering/" target="_blank" rel="noopener">web.dev prerendering guide</a> See a practical implementation guide on <a href="https://dev.to/buzzgk/optimizing-seo-for-single-page-applications-spas-53i7" target="_blank" rel="noopener">dev.to</a>. A reference prerender setup is available at <a href="https://www.websanova.com/articles/spa-prerender-for-seo-reference-guide" target="_blank" rel="noopener">Websanova</a>.</p>
+<h3>Hybrid and incremental approaches</h3>
+<p>Teams frequently adopt hybrid models: prerender high-value static routes, use SSR for dynamic SEO-critical pages, and keep client-side rendering for purely interactive areas. Dynamic rendering remains an option for short-term troubleshooting, but engine guidance treats it as a fallback rather than a primary long-term strategy. <a href="https://developers.google.com/search/docs/crawling-indexing/dynamic-rendering" target="_blank" rel="noopener">Google Search Central dynamic rendering guidance</a></p>
+<h2>Choosing between SSR, prerendering and CSR: practical decision criteria</h2>
+<p>Decision criteria cluster around the content change cadence, personalization needs, build and hosting constraints, and developer familiarity. Start by listing <a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">page types</a> and how often they change, then match each to the lowest-complexity approach that still delivers route-level HTML when that is required. <a href="https://www.smashingmagazine.com/2025/03/ssr-prerendering-csr-seo-performance/" target="_blank" rel="noopener">Smashing Magazine trade-offs</a></p>
+<h3>Content change cadence and page types</h3>
+<p>If a route changes rarely and is SEO-critical, prerendering often suffices. For highly personalized pages or pages that must render different metadata per request, SSR is more appropriate despite higher runtime cost. <a href="https://web.dev/prerendering/" target="_blank" rel="noopener">web.dev prerendering guidance</a></p>
+<h3>Team constraints and hosting cost</h3>
+<p>Estimate hosting compute and build-time costs for SSR versus prerendering; prerendering shifts cost to build time while SSR moves it to request time. Weigh these costs against developer familiarity with frameworks and the operational burden of running server processes. <a href="https://www.smashingmagazine.com/2025/03/ssr-prerendering-csr-seo-performance/" target="_blank" rel="noopener">Smashing Magazine on operational trade-offs</a></p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://orvus.net/services" target="_blank" rel="noopener">Orvus Unique Services</a></div>
+      <a href="https://orvus.net/services" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1H_h1lsT61lq2b7T9TJp_cP-rw6fSFKSG" alt="Orvus Unique Services" /></a>
+    </div>
+<h3>Measurement and risk tolerance</h3>
+<p>Choose the option that provides acceptable indexing reliability for your highest-value routes while keeping rollout and verification complexity manageable. Use incremental rollouts and canary releases to reduce risk during migration. <a href="https://developers.google.com/search/docs/crawling-indexing/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central JavaScript SEO basics</a></p>
+<h2>Implementing SSR or prerendering in modern frameworks: patterns and tradeoffs</h2>
+<h3>Framework integrations and server infrastructure</h3>
+<p>Most modern frameworks offer SSR or static generation primitives and plugins for hydration, but integration patterns vary. Decide whether to use edge rendering, traditional server workers or a hybrid CDN-edge plus origin setup based on performance and operational cost. <a href="https://www.smashingmagazine.com/2025/03/ssr-prerendering-csr-seo-performance/" target="_blank" rel="noopener">Smashing Magazine implementation patterns</a></p>
+<h3>Caching and CDN patterns</h3>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Cache server-rendered HTML where possible and serve prerendered pages from a CDN to reduce origin compute. Use cache invalidation and incremental regeneration to balance freshness and cost. These patterns reduce runtime hosting cost for SSR and make prerendering more scalable. <a href="https://www.smashingmagazine.com/2025/03/ssr-prerendering-csr-seo-performance/" target="_blank" rel="noopener">Smashing Magazine on caching and incremental regeneration</a></p></div>
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1Vsv7VN3z_U6Ot5q5H273YsY5N86X6doG=s1200" alt="Minimal vector infographic spa seo checklist with icons for URL inspection Lighthouse and engine render test on dark Orvus brand background" /></a>
+    </div>
+<h3>Build pipelines and incremental regeneration</h3>
+<p>Build-time prerendering can be combined with incremental regeneration to update only changed pages and keep build windows manageable. Monitor build durations and use selective prerendering for high-value routes to limit pipeline impact. <a href="https://web.dev/prerendering/" target="_blank" rel="noopener">web.dev prerendering considerations</a></p>
+<h2>Route metadata, canonical links and structured data for SPAs</h2>
+<h3>Server-side meta per route</h3>
+<p>Each crawlable route should deliver route-specific title, meta description and canonical in the server HTML so crawlers extract consistent metadata across routes. Relying on client-only injection risks missing or delayed signals. <a href="https://developers.google.com/search/docs/crawling-indexing/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central JavaScript SEO basics</a></p>
+<h3>Canonical URLs and client routing</h3>
+<p>Avoid changing canonical links solely in client code. Canonical signals are critical to avoid duplicate indexing and route fragmentation, and they are best emitted from the server response for each route. <a href="https://web.dev/prerendering/" target="_blank" rel="noopener">web.dev prerendering guidance</a></p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">quick server-side meta verification checklist</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-92wqm6-0">
+                        <input id="tool-check-92wqm6-0" type="checkbox" />
+                        <span>Title present</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-3no1ff-1">
+                        <input id="tool-check-3no1ff-1" type="checkbox" />
+                        <span>Meta description present</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-siw1y4-2">
+                        <input id="tool-check-siw1y4-2" type="checkbox" />
+                        <span>Canonical present</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">run for representative routes</p>
+            </div>
+<h3>Structured data in server-delivered HTML</h3>
+<p>Include key structured data in server HTML when it matters for rich results or indexing. Structured data added only after client render can be missed by initial extraction or cause discrepancies between server and rendered DOM. <a href="https://developers.google.com/search/docs/crawling-indexing/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central JavaScript SEO basics</a></p>
+<h2>Performance, crawl budget and when heavy JavaScript hurts crawlability</h2>
+<h3>How heavy JS affects render timing</h3>
+<p>Large JavaScript bundles and expensive client-side rendering increase time to a meaningful paint and can delay crawler rendering, which in turn slows indexing and may cause engines to deprioritize resource-heavy routes. Prioritise reducing initial JS payload and use code-splitting for route-critical code. <a href="https://web.dev/prerendering/" target="_blank" rel="noopener">web.dev performance guidance</a></p>
+<h3>Crawl budget implications and route explosion</h3>
+<p>Sites with many client-side routes can look like route explosion to crawlers if canonical signals are inconsistent or if sitemaps do not accurately reflect server-accessible route lists. This makes prioritisation and sitemap hygiene important for large SPAs. <a href="https://developers.google.com/search/docs/crawling-indexing/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central JavaScript SEO basics</a></p>
+<h3>Mitigations</h3>
+<p>High-impact mitigations include prerendering priority pages, generating server-side sitemaps that list canonical routes, and splitting code so initial loads are lightweight. These steps reduce render time and improve crawl efficiency without needing full SSR everywhere. <a href="https://www.smashingmagazine.com/2025/03/ssr-prerendering-csr-seo-performance/" target="_blank" rel="noopener">Smashing Magazine mitigations</a></p>
+<h2>Common SPA SEO failures and how to fix them</h2>
+<h3>Missing or delayed meta tags</h3>
+<p>Failure mode: titles and descriptions injected only after client render. Fix: ensure server response contains route-specific meta or use prerendering for those routes so the HTML returned to crawlers has the expected metadata. <a href="https://web.dev/prerendering/" target="_blank" rel="noopener">web.dev fixes</a></p>
+<h3>Broken canonicals and duplicate routes</h3>
+<p>Failure mode: client-side routing produces multiple accessible URLs with inconsistent canonical tags. Fix: emit canonical tags from server HTML per route and maintain a single canonical URL per content item to avoid signal fragmentation. <a href="https://developers.google.com/search/docs/crawling-indexing/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central canonical guidance</a></p>
+<h3>Rendering differences between server HTML and client DOM</h3>
+<p>Failure mode: structured data or important content appears only after hydration. Fix: move critical structured data to server templates or prerender pipelines so it is present in the initial HTML the crawler receives. After changes, verify with URL Inspection and Lighthouse. <a href="https://developers.google.com/search/docs/crawling-indexing/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central verification</a></p>
+<h2>Verification and testing workflow: Search Console, Lighthouse and engine tools</h2>
+<h3>URL Inspection and indexed HTML checks</h3>
+<p>Use Search Console URL Inspection to compare the server response and the rendered HTML that the engine saw. Inspect representative routes after changes to confirm server-delivered metadata is indexed as expected. <a href="https://developers.google.com/search/docs/crawling-indexing/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central URL Inspection guidance</a></p>
+<h3>Lighthouse and web.dev audits</h3>
+<p>Run Lighthouse audits to find render-performance and accessibility issues that also affect crawlability. Use web.dev checks to surface prerender or hydration concerns and to prioritise work. <a href="https://www.smashingmagazine.com/2025/03/ssr-prerendering-csr-seo-performance/" target="_blank" rel="noopener">Smashing Magazine on audit workflows</a></p>
+<h3>Engine-specific render testers</h3>
+<p>Validate with engine renderers such as the Bing rendering tester to confirm how other engines see your pages. Automate frequent checks for representative routes so regressions are caught early. <a href="https://learn.microsoft.com/en-us/bing/search-apis/bingbot/javascript" target="_blank" rel="noopener">Bing rendering guidance</a></p>
+<h2>Practical scenarios: ecommerce, SaaS, documentation and low-change pages</h2>
+<h3>When prerendering often suffices</h3>
+<p>Ecommerce product pages and marketing pages that change rarely are often good prerender candidates because they benefit from server HTML and do not require per-request personalization. Prioritise high-traffic product pages to get the most indexing benefit with the least runtime cost. <a href="https://web.dev/prerendering/" target="_blank" rel="noopener">web.dev prerendering guidance</a></p>
+<h3>When SSR is usually required</h3>
+<p>Highly personalised dashboards or pages that must render different metadata per authenticated session typically justify SSR for SEO-critical routes. SSR provides per-request HTML that can reflect personalization or up-to-date dynamic content. <a href="https://www.smashingmagazine.com/2025/03/ssr-prerendering-csr-seo-performance/" target="_blank" rel="noopener">Smashing Magazine on SSR use cases</a></p>
+<h3>Example trade-off table for teams</h3>
+<p>Map your pages by change cadence and SEO importance: low-change plus high SEO value = prerender, high-change plus public SEO value = SSR, purely interactive internal pages = CSR. Use this matrix to scope work and estimate build or hosting cost. <a href="https://web.dev/prerendering/" target="_blank" rel="noopener">web.dev mapping guidance</a></p>
+<h2>Migration checklist: moving from CSR to SSR or prerendering safely</h2>
+<h3>Planning and staging</h3>
+<p><a href="https://orvus.net" target="_blank" rel="noopener">Create a route inventory</a> and prioritise small sets of SEO-critical routes for an incremental rollout. Start with prerender or SSR for the top priority pages and verify indexing before broadening the rollout. <a href="https://developers.google.com/search/docs/crawling-indexing/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central migration guidance</a></p>
+<h3>Deploy patterns and rollback safety</h3>
+<p>Use feature flags or canary releases to expose new server-rendered routes to a subset of traffic. Keep a clear rollback plan in case server responses are missing expected metadata. These safety patterns reduce risk during migration. <a href="https://www.smashingmagazine.com/2025/03/ssr-prerendering-csr-seo-performance/" target="_blank" rel="noopener">Smashing Magazine deployment patterns</a></p>
+<h3>Verification and measurement after launch</h3>
+<p>After each rollout step, compare server HTML to rendered DOM, check URL Inspection for indexing, and monitor coverage and traffic dashboards for regressions. Keep a short watch period after changes to validate assumptions. <a href="https://developers.google.com/search/docs/crawling-indexing/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central verification tips</a></p>
+<h2>Measuring success: metrics, reporting and attribution for SPAs</h2>
+<h3>Indexing signals and search console metrics</h3>
+<p>Watch indexed page counts, coverage errors, and structured data errors in Search Console after changes. These metrics show whether server-side metadata changes are being picked up by engines. <a href="https://developers.google.com/search/docs/crawling-indexing/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central metrics</a></p>
+<h3>Performance and render timing metrics</h3>
+<p>Track Time to First Meaningful Paint and Total Blocking Time from Lighthouse audits because these metrics influence how quickly engines can render pages and extract metadata. Improving render timing often helps crawl efficiency. <a href="https://www.smashingmagazine.com/2025/03/ssr-prerendering-csr-seo-performance/" target="_blank" rel="noopener">Smashing Magazine on performance metrics</a></p>
+<h3>Attribution and tying search to revenue</h3>
+<p>Tie indexing and performance verification to business KPIs using existing analytics and attribution systems. Measurement design is context dependent and requires diagnostic work to attribute changes properly. <a href="https://developers.google.com/search/docs/crawling-indexing/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central measurement notes</a></p>
+<h2>Next steps and recommended diagnostic process</h2>
+<h3>Quick diagnostics you can run in a day</h3>
+<p>Run three checks: URL Inspection for a set of representative routes, Lighthouse audits for performance and render issues, and an engine render tester to compare server HTML with the rendered DOM. These steps reveal the most common SPA problems quickly. <a href="https://developers.google.com/search/docs/crawling-indexing/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central diagnostic steps</a></p>
+<h3>When to prioritise SSR or prerendering</h3>
+<p>Prioritise prerendering for high-value, low-change routes first. Move to SSR for SEO-critical routes that require per-request dynamic metadata or personalization. Make decisions based on diagnostic findings, not assumptions. <a href="https://web.dev/prerendering/" target="_blank" rel="noopener">web.dev prioritisation guidance</a></p>
+<h3>How to scope a compact diagnostic engagement</h3>
+<p>A compact diagnostic should map route types, run the day-one checks, estimate build and hosting impact for the chosen approach, and propose a staged rollout plan. <a href="https://orvus.net/about" target="_blank" rel="noopener">Orvus Limited</a> can run such a diagnostic and map trade-offs, conditional on your constraints and data. <a href="https://developers.google.com/search/docs/crawling-indexing/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central verification</a></p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-inb3qd" class="faq-toggle" /><label for="faq-inb3qd" class="faq-summary" role="button" tabindex="0">Can a single-page application rank in search results?</label><div class="faq-content"><p>Yes, SPAs can rank, but reliable indexing commonly requires route-specific server HTML delivered via SSR or prerendering for critical routes.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-ko075g" class="faq-toggle" /><label for="faq-ko075g" class="faq-summary" role="button" tabindex="0">Is dynamic rendering a good long-term solution?</label><div class="faq-content"><p>Dynamic rendering can be a short-term troubleshooting measure, but official guidance treats SSR or prerendering as preferred long-term approaches.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-cexmk2" class="faq-toggle" /><label for="faq-cexmk2" class="faq-summary" role="button" tabindex="0">What is the quickest check to see if my SPA has an SEO problem?</label><div class="faq-content"><p>Use Search Console URL Inspection on representative routes and compare the server response to the rendered HTML; follow up with a Lighthouse audit for render and performance issues.</p></div></section>
+</section><section class="article-ending">Decisions about SSR versus prerendering depend on page types, change cadence, hosting and developer constraints. Use the diagnostic steps in this guide to gather evidence before committing to a broad migration.
+
+If you want help scoping a compact diagnostic and mapping trade-offs, a short engagement can surface the least-complex path to reliable indexing without making large upfront assumptions.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://developers.google.com/search/docs/crawling-indexing/javascript-seo-basics" target="_blank" rel="noopener">https://developers.google.com/search/docs/crawling-indexing/javascript-seo-basics</a></li><li><a href="https://web.dev/prerendering/" target="_blank" rel="noopener">https://web.dev/prerendering/</a></li><li><a href="https://www.smashingmagazine.com/2025/03/ssr-prerendering-csr-seo-performance/" target="_blank" rel="noopener">https://www.smashingmagazine.com/2025/03/ssr-prerendering-csr-seo-performance/</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Glossary/Single-page_application" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Glossary/Single-page_application</a></li><li><a href="https://macrometa.com/seo-dynamic-content/single-page-application-seo" target="_blank" rel="noopener">https://macrometa.com/seo-dynamic-content/single-page-application-seo</a></li><li><a href="https://developers.google.com/search/docs/crawling-indexing/dynamic-rendering" target="_blank" rel="noopener">https://developers.google.com/search/docs/crawling-indexing/dynamic-rendering</a></li><li><a href="https://learn.microsoft.com/en-us/bing/search-apis/bingbot/javascript" target="_blank" rel="noopener">https://learn.microsoft.com/en-us/bing/search-apis/bingbot/javascript</a></li><li><a href="https://orvus.net/services" target="_blank" rel="noopener">https://orvus.net/services</a></li><li><a href="https://dev.to/buzzgk/optimizing-seo-for-single-page-applications-spas-53i7" target="_blank" rel="noopener">https://dev.to/buzzgk/optimizing-seo-for-single-page-applications-spas-53i7</a></li><li><a href="https://www.websanova.com/articles/spa-prerender-for-seo-reference-guide" target="_blank" rel="noopener">https://www.websanova.com/articles/spa-prerender-for-seo-reference-guide</a></li><li><a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">https://orvus.net/category/useful-knowledge/</a></li><li><a href="https://orvus.net" target="_blank" rel="noopener">https://orvus.net</a></li><li><a href="https://orvus.net/about" target="_blank" rel="noopener">https://orvus.net/about</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
