@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Is JavaScript still relevant in 2025? A practical guide for teams</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand tokens derived from provided ORVUS style */
+      --text-color: rgba(244,231,197,0.86); /* --orvus-ink-soft */
+      --accent: #C8A45D; /* --orvus-gold */
+      --accent-hover: #f6de9f; /* --orvus-gold-strong */
+      --line: rgba(200,164,93,0.26); /* --orvus-border-soft */
+      --surface: #050d18; /* --orvus-bg-soft */
+      --surface-2: #0b1628;
+      --radius: 12px;
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #050d18;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.95);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area */
+    .article-body .summary{ font-style: italic; color: rgba(244,231,197,0.72); margin-bottom: 2rem; }
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:1rem; margin:2.2rem 0; }
+    .article-body .highlight-card{ background: linear-gradient(135deg, #050d18 0%, #0b1628 60%, #101f36 100%); border-radius: 16px; border: 1px solid var(--line); padding: 1.15rem 1.35rem; font-weight:600; color: #f4e7c5; }
+    .article-body .side-by-side{ display:flex; gap:clamp(16px,3vw,28px); align-items:flex-start; margin:2rem 0; width:100%; }
+    .article-body .side-by-side img{ max-width: min(100%,420px); border-radius:14px; }
+    .article-body .special-image-standalone{ text-align:center; max-width:140px; margin:1.6rem auto; }
+    .article-body .tool-block{ max-width:680px; margin:2.3rem auto; padding:1.3rem; border-radius:18px; }
+    .article-body .tool-checklist-item label{ display:flex; align-items:center; gap:0.65rem; padding:0.75rem 0.85rem; background: rgba(244,231,197,0.04); border:1px solid rgba(200,164,93,0.22); border-radius:14px; }
+    .article-body .cta-section{ margin:2rem 0; padding:1rem; border-radius:14px; border:1px solid var(--line); }
+    .article-body .cta-section .cta-button{ display:inline-block; background: var(--accent); color:#050d18; padding:0.65em 1.25em; font-weight:800; border-radius:999px; text-decoration:none; }
+    .article-body .cta-section .cta-button:hover{ background: var(--accent-hover); }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/javascript-seo-rendering.jpg" alt="Is JavaScript still relevant in 2025? Banner" />
+        </div>
+        <h1 class="title">Is JavaScript still relevant in 2025? A practical guide for teams</h1>
+        <p class="subline">Practical guidance on rendering patterns, indexing behaviour, and performance for teams.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://orvus.net/2026/02/01/javascript-seo-relevant-2025/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+          <div class="summary">JavaScript continues to power the majority of modern user interfaces. For teams responsible for ecommerce or service sites, the practical question is not whether to use JavaScript, but how to use it so pages remain discoverable and fast. This article explains the landscape in 2025, focusing on rendering patterns, indexing behaviour, performance mitigations, and decision frameworks that operators can put into practice.
+
+You will find a compact checklist and measurement steps to validate your choices using Search Console, Lighthouse, and field data. The guidance is pragmatic and conditional: the right path depends on your funnel, device mix, and engineering constraints.</div>
+
+          <div class="article-highlights">
+               <div class="highlight-card"><span class="highlight-text">JavaScript remains dominant for front end development in 2025, but rendering choices shape SEO outcomes.</span></div><div class="highlight-card"><span class="highlight-text">Search engines execute JavaScript, yet resource limited rendering can cause indexing delays compared with server rendered HTML.</span></div><div class="highlight-card"><span class="highlight-text">Use SSR or reliable pre rendering for pages that depend on organic discovery, and validate changes with Search Console and field metrics.</span></div>
+             </div>
+
+          <h2>What javascript seo means today: definition and context</h2>
+          <p>javascript seo describes how JavaScript affects content visibility, metadata exposure, and indexing for search engines. For teams that build interactive sites, this term covers the full stack from initial HTML served by the server to client side rendering and dynamic updates that happen after load. The phrase is practical: it points to the intersection of front end architecture and search outcomes, not a separate discipline.</p>
+          <p>JavaScript remains the dominant client side language in modern stacks, present in the vast majority of projects and developer surveys, which matters for how teams choose rendering strategies and build workflows <a href="https://almanac.httparchive.org/en/2024/javascript/" target="_blank" rel="noopener">Web Almanac 2024</a>.</p>
+
+          <figure class="special-image-standalone">
+            <a href="https://orvus.net" target="_blank" rel="noopener">
+              <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+            </a>
+          </figure>
+
+          <p>At its core, javascript seo is about trade offs. Heavy client side rendering can deliver rich interactivity. That interactivity often requires larger bundles and more client CPU time. The consequence is a tension between interactive experiences and the need to present reliable initial HTML for search engines and fast page loads for users. (<a href="https://www.clickrank.ai/javascript-rendering-affect-seo/" target="_blank" rel="noopener">discussion</a>)</p>
+          <p>When a page must be discoverable by organic search, teams often prioritise serving critical content in server rendered HTML so the content is visible immediately to both users and indexing systems. That approach reduces the risk that content remains hidden until client execution completes.</p>
+
+          <h2>How major search engines handle JavaScript and indexing</h2>
+
+          <div class="side-by-side special-image-left">
+            <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1EyhdBwi3XWc1SjuGoXy_3e_SIbqPBbfz=s1200" alt="Two developers reviewing performance dashboards and Lighthouse reports on dual monitors in a minimalist Orvus Ltd styled office with javascript seo focus" /></a>
+            <div class="side-text"><p>Major engines execute client JavaScript as part of their rendering pipelines, but those pipelines are resource limited. Rendering often happens in a deferred or queued stage that can add latency to when dynamic content is indexed. For pages that rely on client side rendering for core content, this can mean slower discovery or inconsistent indexing behavior compared with pages that serve the same content in initial HTML <a href="https://developers.google.com/search/docs/advanced/javascript/javascript-seo-basics" target="_blank" rel="noopener">JavaScript SEO basics</a>. (see Vercel explainer: <a href="https://vercel.com/blog/how-google-handles-javascript-throughout-the-indexing-process" target="_blank" rel="noopener">how Google handles JavaScript</a>)</p></div>
+          </div>
+          <p>Practical symptoms you might see include quick updates in the browser that do not appear in search results, content that is present visually but missing in cached or rendered snapshots, or metadata changes that are visible to users but not reflected in search snippets. These symptoms often point to rendering budget limits rather than pure relevance problems.</p>
+          <p>To confirm how a page renders to search engines, use server side rendering snapshots, Search Console’s URL Inspection rendered view, and the rendering tools in Bing Webmaster. These tools show whether critical content and metadata are present in the engine’s rendered DOM and help isolate whether indexation delays are likely.</p>
+          <p>When investigating, focus first on pages that drive organic discovery. If those pages rely on client execution to expose titles, descriptions, or main content, treat them as high priority for server rendering or reliable pre rendering.</p>
+          <div class="cta-section"><h3 class="cta-headline">Plan a short consultation on rendering and search visibility</h3><div class="cta-intro"><p>Download a short diagnostic checklist to prioritise pages for rendering checks and Search Console validation.</p></div><a href="https://orvus.net/services" target="_blank" rel="noopener" class="cta-button">Inquire</a></div>
+
+          <h2>Modern rendering options: SSR, SSG, edge rendering and hybrid hydration</h2>
+          <p>Server side rendering, or SSR, and static site generation, or SSG, are two patterns teams use to deliver initial HTML that contains critical content and metadata. SSR builds the HTML on request, which can help with personalised or frequently changing content. SSG pre builds pages at deploy time and often suits catalog and content pages where the surface is relatively stable.</p>
+          <p>Edge rendering moves the HTML generation closer to the user by running rendering logic on edge nodes. This reduces round trip latency and can lower client CPU work by delivering a smaller, already rendered payload.</p>
+          <section class="faq-accordion"><input type="checkbox" id="faq-6emcsm" class="faq-toggle" checked /><label for="faq-6emcsm" class="faq-summary" role="button" tabindex="0">Is JavaScript still relevant for SEO and performance in 2025?</label><div class="faq-content"><p>Yes, JavaScript remains central to modern front ends, but teams should use hybrid rendering patterns and measurement to balance interactivity with reliable indexing and performance.</p></div></section>
+          <p>Hybrid models attempt to balance interactivity and initial load cost. Partial hydration, islands architecture, and deferred hydration let teams ship minimal, server rendered HTML for critical content and enable selective client side activation only where interaction is required. These approaches can reduce initial CPU and network demands while preserving dynamic capabilities for parts of the page.</p>
+          <p>Choosing between SSR, SSG, edge rendering, and hybrid hydration is rarely binary. Consider how frequently content changes, whether pages are personal or public, and the technical skills available. For many teams a mixed approach that uses SSG for catalog pages, SSR for personalised flows, and partial hydration for interactive widgets is a pragmatic compromise.</p>
+
+          <h2>Performance trade offs: client bundle size, Core Web Vitals, and mitigations</h2>
+          <p>Heavy client side bundles correlate with poorer Core Web Vitals unless teams use targeted mitigations. Large JavaScript payloads increase parsing and main thread work, which can delay first input responsiveness and inflate time to interactive metrics. The practical impact is detectable in both lab audits and field metrics.</p>
+
+          <div class="side-by-side image-2-right">
+            <div class="side-text"><p>Common mitigations include code splitting to reduce initial bundle weight, deferred hydration to postpone non essential interactive code, SSR or SSG to move critical content into initial HTML, and resource hints to prioritise important assets. Managing third party scripts and measuring their runtime cost is also essential to control unexpected CPU use and layout shifts <a href="https://developer.chrome.com/docs/lighthouse/overview/" target="_blank" rel="noopener">Lighthouse overview and performance audits</a>.</p></div>
+            <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1gRcw7eEQWzGBRBykNs3gnvCBTW1PuAFs=s1200" alt="Minimal vector infographic comparing server rendered HTML and client rendered DOM for javascript seo side by side panels with server icons document browser and DOM tree no text" /></a>
+          </div>
+          <p>Start by running Lighthouse audits in lab and comparing those results with field metrics from real user monitoring. Lab tools help identify heavy bundles and blocking scripts. Field data validates whether mitigations translate into measurable user experience improvements across real networks and devices.</p>
+          <p>When you implement mitigations, measure before and after on the same pages and on representative devices. Small changes in bundling or hydration strategy can shift Core Web Vitals, but the net effect depends on the page template, audience device profile, and third party scripts in use.</p>
+
+          <h2>WebAssembly: when it complements JavaScript and when it does not</h2>
+          <p>WebAssembly has matured as a component for compute intensive and edge workloads, and it typically complements JavaScript rather than replacing it for UI logic. Use cases where WebAssembly adds value include heavy image or media processing, cryptographic tasks, and performance sensitive libraries that benefit from lower level execution <a href="https://developer.mozilla.org/en-US/docs/WebAssembly" target="_blank" rel="noopener">WebAssembly - MDN Web Docs</a>.</p>
+          <p>For most user interface code, JavaScript remains the natural choice because of ecosystem integration, developer ergonomics, and the ability to iterate quickly. WebAssembly can be integrated for discrete workloads while JavaScript continues to drive DOM updates and event handling.</p>
+          <p>
+              <div class="side-by-side product-image-right">
+                <div class="side-text"><a href="https://orvus.net/services" target="_blank" rel="noopener">Orvus Unique Services</a></div>
+                <a href="https://orvus.net/services" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1H_h1lsT61lq2b7T9TJp_cP-rw6fSFKSG" alt="Orvus Unique Services" /></a>
+              </div></p>
+          <p>Teams should weigh the operational cost of adding WebAssembly against the performance gains. Introducing WebAssembly can add build complexity, debugging friction, and deployment considerations. If the workload is compute heavy and measurable gains are plausible, prototype and measure before expanding usage.</p>
+
+          <h2>SEO checklist and measurement: what to validate and how</h2>
+          <p>Keep a short, evidence based checklist for JavaScript driven pages. At minimum, ensure critical content appears in server rendered or pre rendered HTML, expose clear metadata including canonical links, and confirm search engines can fetch and render the page. These steps reduce surprises when search engines process your pages <a href="https://developers.google.com/search/docs/crawling-indexing/rendering" target="_blank" rel="noopener">Rendering - Crawling, indexing, and rendering</a>.</p>
+          <p>Tools to use include Search Console for live URL inspection and rendered snapshots, Bing Webmaster for alternate engine validation, Lighthouse for lab audits, and field metrics from real user monitoring to track Core Web Vitals over time. Use both lab and field data to separate blocking issues from device and network variability.</p>
+          <p>Prioritise pages that are most important for organic discovery. Typical candidates are home pages, category and product pages for ecommerce, and high intent landing pages. For those pages consider SSR or reliable pre rendering so critical content and metadata are available on first load.</p>
+          <p>When validating, follow a simple measurement pattern: document baseline metrics, implement a single mitigation, and then compare lab and field metrics. If metrics improve in lab but not in field, check audience device mix and third party script behaviour before assuming the mitigation failed.</p>
+          <p>Orvus often recommends starting with a <a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">compact diagnostic</a> that maps pages to rendering risk and funnel impact. That diagnostic helps teams decide which pages to move to SSR or which widgets to hydrate selectively.</p>
+
+          <h2>Decision framework for teams: SSR, hybrid, or client heavy app</h2>
+          <p>Decide by asking practical questions about SEO criticality, interactivity requirements, <a href="https://orvus.net/about" target="_blank" rel="noopener">team skills</a>, and measurement maturity. If a page must be discovered organically and shows content that search engines need to see immediately, favour SSR or pre rendering. If a page is highly interactive and discovery is lower priority, a client heavy approach may be acceptable.</p>
+          <p>A lightweight prioritisation matrix starts with two axes: organic discovery importance and interactivity need. Pages high on organic importance and low on interactivity are strong SSR or SSG candidates. Pages low on organic importance and high on interactivity can be client heavy with selective hydration for embedded critical items.</p>
+          <div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+                        <p class="tool-purpose">Prioritise pages for SSR and render validation</p>
+                        <ul class="tool-checklist-list">
+                    <li class="tool-checklist-item">
+                                <label for="tool-check-x14sgz-0">
+                                  <input id="tool-check-x14sgz-0" type="checkbox" />
+                                  <span>Critical landing pages</span>
+                                </label>
+                              </li><li class="tool-checklist-item">
+                                <label for="tool-check-eqex33-1">
+                                  <input id="tool-check-eqex33-1" type="checkbox" />
+                                  <span>Product pages</span>
+                                </label>
+                              </li><li class="tool-checklist-item">
+                                <label for="tool-check-7t2adp-2">
+                                  <input id="tool-check-7t2adp-2" type="checkbox" />
+                                  <span>Checkout flow</span>
+                                </label>
+                              </li>
+            </ul>
+                        <p class="tool-notes">Use this as a compact starting checklist</p>
+                      </div>
+          <p>Validate choices with staged rollouts or A/B tests where possible. Run Lighthouse and monitor field metrics for the variant group and the control group. If SSR or partial hydration improves discovery and user experience for priority pages under realistic conditions, broaden the approach incrementally.</p>
+          <p>Keep decisions conditional and data driven. Preferences for full SSR versus hybrid models depend on performance budgets, engineering constraints, and how quickly teams can measure outcomes.</p>
+
+          <h2>Common mistakes, audits and troubleshooting steps</h2>
+          <p>A few recurring errors reduce indexability and harm user experience. Common problems include leaving critical content out of the initial HTML, failing to expose canonical and meta tags early, and letting unmanaged third party scripts add unpredictable runtime cost.</p>
+          <p>Triage by checking server rendered HTML, using Search Console’s rendered view to confirm what engines see, and comparing Lighthouse lab audits with field metrics. If server HTML contains the content but engines do not index it, the issue may be rendering budget or crawl timing rather than content quality.</p>
+          <p>Quick fixes include pre rendering high value pages, deferring non essential scripts, and applying code splitting to reduce initial bundle size. More extensive remediation may require engineering work to change rendering strategy or to introduce partial hydration patterns.</p>
+
+          <h2>Practical examples and recommended next steps</h2>
+          <p>Scenario one, ecommerce: an online catalog depends on organic traffic to product pages. For these pages, prefer SSG or SSR so product titles, descriptions, and canonical links appear in initial HTML. Use code splitting and deferred hydration for interactive widgets like image zoomers to limit initial CPU work.</p>
+          <p>Scenario two, SaaS app: the marketing site and landing pages should use SSR or pre rendering for discovery, while the in app dashboard can be client heavy. Separate the public discovery surface from the application shell and treat them as different rendering domains.</p>
+          <p>Minimum viable tests: prerender a representative product page or landing page, run Lighthouse audits and compare field Core Web Vitals before and after, and check Search Console rendered snapshots for the prerendered page. If possible, run an A/B test or staged rollout to validate impact on discovery and user engagement.</p>
+          <p>Plan follow ups around measurement cadence. Measure weekly for field metrics and after each deploy for lab audits. Prioritise pages where rendering changes have the largest funnel impact and iterate from there.</p>
+
+          <figure class="special-image-standalone">
+            <a href="https://orvus.net" target="_blank" rel="noopener">
+              <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+            </a>
+          </figure>
+          <p>In many cases, applying selective server rendering and careful hydration reduces indexing risk and improves perceived performance without sacrificing interactivity. The best approach depends on constraints and realistic performance budgets for your user base.</p>
+
+          <h2>Summary</h2>
+          <p>JavaScript remains relevant in 2025 as the dominant front end language, but its role is more nuanced. Teams balance interactivity and reliable indexing by using SSR, SSG, edge rendering, and hybrid hydration patterns. Measuring the effects with Search Console, Lighthouse, and field metrics is essential before committing to large changes <a href="https://2024.stateofjs.com/en-US/" target="_blank" rel="noopener">State of JavaScript 2024</a>.</p>
+          <p>Use a <a href="https://orvus.net" target="_blank" rel="noopener">prioritized checklist</a>, start with the pages that matter most for organic discovery, and validate changes with staged experiments. That disciplined approach helps reconcile the needs of interactivity, performance, and search visibility.</p>
+
+          <section class="faq-section" aria-label="Frequently Asked Questions">
+            <section class="faq-accordion"><input type="checkbox" id="faq-9x9yww" class="faq-toggle" /><label for="faq-9x9yww" class="faq-summary" role="button" tabindex="0">Does Google index pages that rely on client side JavaScript?</label><div class="faq-content"><p>Yes, major search engines execute and index client side JavaScript, but rendering is resource limited and may delay indexing compared with server rendered HTML.</p></div></section>
+            <section class="faq-accordion"><input type="checkbox" id="faq-u96tg2" class="faq-toggle" /><label for="faq-u96tg2" class="faq-summary" role="button" tabindex="0">When should I use SSR instead of client side rendering?</label><div class="faq-content"><p>Prefer SSR when a page must be reliably indexed or when critical metadata and content must be visible to search engines on first load. Use client side rendering for highly interactive app areas where organic discovery is not the priority.</p></div></section>
+            <section class="faq-accordion"><input type="checkbox" id="faq-t20k2c" class="faq-toggle" /><label for="faq-t20k2c" class="faq-summary" role="button" tabindex="0">Is WebAssembly a replacement for JavaScript in UI code?</label><div class="faq-content"><p>No, WebAssembly complements JavaScript for compute intensive tasks but typically is not used to replace UI logic due to ecosystem and build complexity.</p></div></section>
+          </section>
+
+          <section class="article-ending">Start with a small diagnostic that maps your highest value pages to rendering risk. Prioritise server rendering or pre rendering for pages that matter to organic discovery, and run staged tests to confirm improvements. If you want a short consultation to plan a compact diagnostic and roadmap, the services page linked below describes how to start an inquiry with Orvus.</section>
+
+          <section class="ba-refs">
+            <h3 class="ba-refs__title">References</h3>
+            <ul class="ba-refs__list">
+              <li><a href="https://almanac.httparchive.org/en/2024/javascript/" target="_blank" rel="noopener">https://almanac.httparchive.org/en/2024/javascript/</a></li><li><a href="https://developers.google.com/search/docs/advanced/javascript/javascript-seo-basics" target="_blank" rel="noopener">https://developers.google.com/search/docs/advanced/javascript/javascript-seo-basics</a></li><li><a href="https://vercel.com/blog/how-google-handles-javascript-throughout-the-indexing-process" target="_blank" rel="noopener">https://vercel.com/blog/how-google-handles-javascript-throughout-the-indexing-process</a></li><li><a href="https://www.clickrank.ai/javascript-rendering-affect-seo/" target="_blank" rel="noopener">https://www.clickrank.ai/javascript-rendering-affect-seo/</a></li><li><a href="https://developer.chrome.com/docs/lighthouse/overview/" target="_blank" rel="noopener">https://developer.chrome.com/docs/lighthouse/overview/</a></li><li><a href="https://developer.mozilla.org/en-US/docs/WebAssembly" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/WebAssembly</a></li><li><a href="https://orvus.net/services" target="_blank" rel="noopener">https://orvus.net/services</a></li><li><a href="https://developers.google.com/search/docs/crawling-indexing/rendering" target="_blank" rel="noopener">https://developers.google.com/search/docs/crawling-indexing/rendering</a></li><li><a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">https://orvus.net/category/useful-knowledge/</a></li><li><a href="https://orvus.net/about" target="_blank" rel="noopener">https://orvus.net/about</a></li><li><a href="https://orvus.net" target="_blank" rel="noopener">https://orvus.net</a></li><li><a href="https://2024.stateofjs.com/en-US/" target="_blank" rel="noopener">https://2024.stateofjs.com/en-US/</a></li>
+            </ul>
+          </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
