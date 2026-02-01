@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Can you look up car value by VIN for free?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand tokens derived from provided style */
+      --text-color: #010205;
+      --accent: #3666ed;
+      --accent-hover: #2f5be0;
+      --line: rgba(1,2,5,.18);
+      --surface: #ffffff;
+      --surface-2: #fafafa;
+      --radius: 0px;
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/vin-lookup-kbb-dashboard.jpg" alt="VIN lookup KBB dashboard" />
+        </div>
+        <h1 class="title">Can you look up car value by VIN for free?</h1>
+        <p class="subline">A VIN lookup is a starting point — learn what free checks reveal and when to verify further.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://carfaxdeals.com/blog/vin-lookup-kbb-check-car-value-by-vin-free"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+<div class="summary">A vehicle identification number is a starting point for learning about a car, not the whole story. This article helps clarify what a vin lookup kbb search can reveal for free, and what it cannot.
+
+You will get step-by-step checks to run now, guidance on when to pay for reports or inspections, and practical examples for translating a valuation range into a negotiation plan.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Government VIN decoders and NICB VINCheck let you confirm recalls and theft or total-loss records for free.</span></div><div class="highlight-card"><span class="highlight-text">KBB offers VIN-linked estimates that require mileage and condition inputs and return ranges, not guaranteed sale prices.</span></div><div class="highlight-card"><span class="highlight-text">Use NMVTIS guidance for authoritative title status and consider paid reports or inspections when flags appear.</span></div>
+     </div>
+  <h2>vin lookup kbb: what a free VIN-based value check can and cannot show</h2><p>A vin lookup kbb search can often give you a quick starting estimate and VIN-specific facts such as recall and manufacturer data, but it usually cannot produce a precise sale price by itself. The government VIN decoder shows what the vehicle was built as and helps spot recalls, which helps explain why a VIN is useful for an initial check <a href="https://www.nhtsa.gov/vehicle-identification-number" target="_blank" rel="noopener">NHTSA VIN decoder</a></p><section class="faq-accordion"><input type="checkbox" id="faq-sx9lum" class="faq-toggle" checked /><label for="faq-sx9lum" class="faq-summary" role="button" tabindex="0">Is a free VIN lookup enough to set a buying price?</label><div class="faq-content"><p>A free VIN lookup gives important facts like recalls and theft or total-loss reports, and KBB can return a VIN-linked value range, but a VIN alone usually cannot confirm trim, options, or condition that materially affect price; combine free checks with local comparables and inspections when needed.</p></div></section><p>Kelley Blue Book offers VIN-based value tools that return free estimates, but those tools rely on extra inputs like exact mileage, condition, and options to tighten a range, so take the result as a starting band rather than a guaranteed price <a href="https://www.kbb.com/what-is-my-car-worth/" target="_blank" rel="noopener">Kelley Blue Book value guide</a></p><h3>Quick answer</h3><p>Short answer, yes and no. You can run free VIN checks that confirm recalls and some title or theft flags, and you can get a KBB estimate tied to a VIN, but the estimate is a range that needs local context and condition details before you trust it for negotiation.</p><h3>Why VIN matters and what it usually reveals</h3><p>A VIN reliably identifies model year, engine type, and factory options that were installed at build time, and it points to manufacturer recalls. That identification is why VIN-based checks are the first step for many buyers when assessing value <a href="https://www.nhtsa.gov/vehicle-identification-number" target="_blank" rel="noopener">NHTSA VIN decoder</a></p><h2>Where to get free VIN information: NHTSA, NICB, and NMVTIS explained</h2><h3>What each government source provides</h3><p>NHTSA’s VIN decoder returns manufacturer data and links to safety recalls, which is useful for spotting recalls before you estimate value <a href="https://www.nhtsa.gov/vehicle-identification-number" target="_blank" rel="noopener">NHTSA VIN decoder</a></p><p>NICB’s VINCheck is a free lookup for theft and total-loss records reported to insurers; it helps rule out known stolen or salvage-flagged vehicles before you make a buying decision <a href="https://www.nicb.org/vincheck" target="_blank" rel="noopener">NICB VINCheck</a></p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Run the NHTSA VIN decoder and NICB VINCheck now and note any flags</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-w04u7m-0">
+                        <input id="tool-check-w04u7m-0" type="checkbox" />
+                        <span>NHTSA VIN decoder</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-7ag33x-1">
+                        <input id="tool-check-7ag33x-1" type="checkbox" />
+                        <span>NICB VINCheck</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-zhdd7c-2">
+                        <input id="tool-check-zhdd7c-2" type="checkbox" />
+                        <span>NMVTIS approved provider</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use results to confirm recalls and theft or total-loss flags</p>
+            </div><p>NMVTIS centralizes title and salvage information and is the authoritative source for title status, but consumer access typically comes through approved providers, many of which charge fees for a formatted report <a href="https://vehiclehistory.bja.ojp.gov/nmvtis_vehiclehistory" target="_blank" rel="noopener">NMVTIS consumer access information</a></p><h3>How to use each free lookup in practice</h3><p>Run NICB VINCheck first to confirm no reported theft or total-loss history, then use NHTSA’s VIN decoder to check recalls and to confirm the build data you will use when entering options at valuation sites <a href="https://www.nicb.org/vincheck" target="_blank" rel="noopener">NICB VINCheck</a></p><p>If title history matters, check NMVTIS guidance and consider an approved NMVTIS provider to see branded title or salvage records; if a report shows a branded title you should treat valuation ranges with extra caution <a href="https://vehiclehistory.gov/" target="_blank" rel="noopener">NMVTIS consumer access information</a></p><h2>How Kelley Blue Book uses VINs to produce free estimates</h2><h3>What information KBB can parse from a VIN</h3><p>KBB can use a VIN to prefill model year, make, and some factory options, and then it asks you for mileage and condition to produce a value range; that VIN-linked tool is free to use but the estimate depends on your inputs <a href="https://www.kbb.com/what-is-my-car-worth/" target="_blank" rel="noopener">Kelley Blue Book value guide</a></p>
+    <section class="product-block">
+      <div class="product-text"><a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener">Run CarFax Report</a></div>
+      <div class="product-media"><a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1wa7oWaOtZkR3ozriGCaxTb4pzdGxaLaJ" alt="Run CarFax Report" /></a></div>
+      <div class="product-actions"><a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener" class="product-button">Run the VIN checks</a></div>
+    </section><p>Even with a VIN, KBB cannot always detect nonfactory options, recent repairs, or interior condition from a VIN alone, so its range will widen if you cannot supply accurate mileage, trim, and known options <a href="https://www.edmunds.com/car-buying/why-vin-doesnt-set-car-value.html" target="_blank" rel="noopener">Why a VIN Alone Doesn’t Set a Car’s Value</a></p><p>CarFax Deals can act as a verification layer by surfacing <a href="https://carfaxdeals.com/vinreport" target="_blank" rel="noopener">vehicle history reports</a> and price analysis labels alongside listings, which helps compare pricing context across dealers before you call, but platform signals do not replace a physical inspection or a title check</p><h2>Step-by-step: how to check car value by VIN for free</h2><h3>A concise checklist you can follow now</h3><p>Step 1, run a NICB VINCheck to confirm no theft or reported total-loss history for the VIN you are evaluating <a href="https://www.nicb.org/vincheck" target="_blank" rel="noopener">NICB VINCheck</a></p><div class="cta-section"><h3 class="cta-headline">Continue your VIN checks</h3><div class="cta-intro"><p>Continue the checklist by running the NHTSA VIN decoder and noting any recalls or build data.</p></div><a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener" class="cta-button">Run the VIN checks</a></div><p>Step 2, run the NHTSA VIN decoder and record recall notices and the factory build details you will use when getting valuation estimates <a href="https://www.nhtsa.gov/vin-decoder" target="_blank" rel="noopener">NHTSA VIN decoder</a> (or use our <a href="https://carfaxdeals.com/vin-decoder" target="_blank" rel="noopener">VIN decoder</a>).</p><p>Step 3, enter the VIN into KBB’s VIN-based tool and supply exact mileage, the condition grade, and any known options to get a tighter KBB range <a href="https://www.kbb.com/what-is-my-car-worth/" target="_blank" rel="noopener">Kelley Blue Book value guide</a></p>
+    <div class="side-by-side special-image-left">
+      <a href="https://carfaxdeals.com/how-to-use" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1Iq9J382pVyUGy6OEVx0G5nwyU8pSRUlK=s1200" alt="Person holding smartphone running vin lookup kbb on a government vehicle check page in a clean white office with blue 3666ed accents and minimalist composition" /></a>
+      <div class="side-text"><p>Step 4, if title clarity matters, search for NMVTIS-approved providers to confirm branded title, salvage, or theft status; consider paying for an NMVTIS report if an online VIN check shows potential issues <a href="https://vehiclehistory.gov/" target="_blank" rel="noopener">NMVTIS consumer access information</a></p></div>
+    </div><p>Step 5, compare the KBB range to local comparable listings and any price analysis labels you find; use those comparables to translate a valuation range into an expected sale band for your market <a href="https://www.consumer.ftc.gov/articles/buying-used-car" target="_blank" rel="noopener">FTC guidance on buying a used car</a> (see our <a href="https://carfaxdeals.com/how-to-use" target="_blank" rel="noopener">how-to guide</a> for comparing listings).</p><h3>How to combine VIN checks with local market comparables</h3><p>Take the VIN-linked KBB range and overlay two or three nearby listings for the same model year, similar mileage, and similar condition; prioritize listings with clean title and consistent service history when refining your expected sale band <a href="https://www.kbb.com/what-is-my-car-worth/" target="_blank" rel="noopener">Kelley Blue Book value guide</a></p><p>If the KBB range and local comparables align, you have more confidence to set a negotiation target; if they diverge, pause to verify title records, service history, and trim/options before proceeding <a href="https://vehiclehistory.gov/" target="_blank" rel="noopener">NMVTIS consumer access information</a></p><h2>When to rely on a free VIN estimate and when to seek more certainty</h2><h3>Decision criteria and red flags</h3><p>Rely more on free VIN estimates when the vehicle shows a clean title, a single-owner history, consistent mileage, and well documented service records; these signals tend to reduce the likelihood that hidden condition issues will move price materially <a href="https://vehiclehistory.gov/" target="_blank" rel="noopener">NMVTIS consumer access information</a></p><p>Red flags that call for paid verification include any branded title entries, salvage or rebuilt records, inconsistent mileage history, or missing trim and option information, since a VIN alone may not capture those details <a href="https://www.edmunds.com/car-buying/why-vin-doesnt-set-car-value.html" target="_blank" rel="noopener">Why a VIN Alone Doesn’t Set a Car’s Value</a></p><p>When major discrepancies appear between KBB’s VIN-based range and local listings, or when NICB or NMVTIS show flags, pay for a detailed history report or arrange a mechanic inspection before an offer <a href="https://www.consumer.ftc.gov/articles/buying-used-car" target="_blank" rel="noopener">FTC guidance on buying a used car</a></p><h3>When a paid report or inspection is worth it</h3><p>Consider a paid NMVTIS or branded history report when title or salvage status is uncertain, and hire a mechanic inspection when service records are incomplete or when you suspect recent repairs that could affect safety or value <a href="https://vehiclehistory.gov/" target="_blank" rel="noopener">NMVTIS consumer access information</a></p><h2>Common mistakes buyers make when using free VIN value checks</h2><h3>What to avoid</h3><p>A common mistake is treating a VIN-based KBB range as a guaranteed sale price; KBB returns ranges because condition, options, and local demand change outcomes, so expect a band rather than a single number <a href="https://www.kbb.com/what-is-my-car-worth/" target="_blank" rel="noopener">Kelley Blue Book value guide</a></p><p>Another error is skipping title checks; assuming no accident or salvage because a quick search showed no results risks missing records that appear only in NMVTIS or in paid reports <a href="https://vehiclehistory.gov/" target="_blank" rel="noopener">NMVTIS consumer access information</a></p><p>A reliable habit is to cross-check multiple valuation sources and local listings, and to use price analysis labels and service history to narrow your expectations rather than relying on a single free result <a href="https://www.consumer.ftc.gov/articles/buying-used-car" target="_blank" rel="noopener">FTC guidance on buying a used car</a></p><h2>Practical examples: reading reports and comparing to local listings</h2><h3>Example 1: a late-model sedan with full service records</h3><p>If the VIN returns no NICB or NMVTIS flags, KBB’s VIN-based range lines up with several nearby listings that have similar mileage and full service history, you can treat the KBB band as a practical negotiation band after an inspection and with confirmation of title status <a href="https://www.kbb.com/what-is-my-car-worth/" target="_blank" rel="noopener">Kelley Blue Book value guide</a></p><p>In that case, use the lower end of the KBB range as a walk-away threshold and the middle of the band as an initial offer, adjusting for any issues uncovered during inspection.</p><h3>Example 2: a truck with unclear title history</h3><p>If NICB or an NMVTIS check show possible salvage or total-loss history, pause and get a paid NMVTIS or branded report and a mechanic inspection before assuming the KBB estimate applies; a title brand can change the market and affect resale significantly <a href="https://vehiclehistory.gov/" target="_blank" rel="noopener">NMVTIS consumer access information</a></p><p>When a paid report confirms a branded title, you may use the KBB range only as a reference and expect market discounts; that outcome often changes whether buying is reasonable.</p><h3>How to translate a KBB range into a negotiation target</h3><p>Start with the KBB mid-range as your reference, adjust down for cosmetic or service issues identified in inspection, and adjust up if local comparable listings consistently exceed KBB’s top of range for similar condition; document your adjustments so you can explain your offer to a seller <a href="https://www.kbb.com/what-is-my-car-worth/" target="_blank" rel="noopener">Kelley Blue Book value guide</a></p><h2>Next steps: when to pay for a report, get an inspection, and how CarFax Deals fits in</h2><h3>Paid reports, inspections, and your checklist before visiting a dealer</h3><p>Pay for an NMVTIS report when title status is unclear or when a VIN check shows potential salvage, and hire a mechanic inspection when service history is incomplete or when you suspect recent repairs that affect value or safety <a href="https://vehiclehistory.gov/" target="_blank" rel="noopener">NMVTIS consumer access information</a></p>
+    <figure class="special-image-standalone">
+      <a href="https://carfaxdeals.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1zBYq-paoIVXixqtdXptp4QMLSBr8Yyzr=s200" alt="CarFax Deals" />
+      </a>
+    </figure>
+<p>CarFax Deals can help by surfacing vehicle history reports, price analysis labels, and dealer transparency signals so you can compare listings faster and identify which cars merit a deeper check; use those signals as part of your verification, not as a substitute for inspection</p><p>If uncertainty remains after free checks and platform signals, pay for a detailed history report and get a pre-purchase inspection before finalizing any purchase decision <a href="https://www.consumer.ftc.gov/articles/buying-used-car" target="_blank" rel="noopener">FTC guidance on buying a used car</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://carfaxdeals.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1zBYq-paoIVXixqtdXptp4QMLSBr8Yyzr=s200" alt="CarFax Deals" />
+      </a>
+    </figure>
+
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"></div>
+      <a href="https://carfaxdeals.com/how-to-use" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1hiVzogv-i1om7848V4iGATmSGb025jXm=s1200" alt="vin lookup kbb two device comparison vector showing tablet with simplified valuation card and second device with two local car listing cards on white background" /></a>
+    </div>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-vq2q60" class="faq-toggle" /><label for="faq-vq2q60" class="faq-summary" role="button" tabindex="0">Can I get an exact sale price just from a VIN?</label><div class="faq-content"><p>No, a VIN alone usually cannot produce an exact sale price because it does not show trim-level options, recent repairs, interior condition, or actual odometer history; use VIN checks plus condition and comparables.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-ry3106" class="faq-toggle" /><label for="faq-ry3106" class="faq-summary" role="button" tabindex="0">Which free VIN checks should I run first?</label><div class="faq-content"><p>Start with NICB VINCheck for theft or total-loss records and NHTSA’s VIN decoder for recalls and manufacturer build data, then compare results to a KBB VIN-based estimate.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-74nwzn" class="faq-toggle" /><label for="faq-74nwzn" class="faq-summary" role="button" tabindex="0">When should I pay for an NMVTIS report or a mechanic inspection?</label><div class="faq-content"><p>Pay for an NMVTIS report when title or salvage status is uncertain, and get a mechanic inspection when service history is incomplete or when you find discrepancies in mileage or damage reports.</p></div></section>
+</section><section class="article-ending">Free VIN checks are a useful first filter, but they are not a substitute for clear title records, an accurate mileage history, and a physical inspection. Use the steps in this guide to reduce uncertainty before you contact a seller.
+
+When the stakes are high or data conflicts appear, pay for a detailed history report and a mechanic inspection to get the certainty you need.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.nhtsa.gov/vehicle-identification-number" target="_blank" rel="noopener">https://www.nhtsa.gov/vehicle-identification-number</a></li><li><a href="https://www.kbb.com/what-is-my-car-worth/" target="_blank" rel="noopener">https://www.kbb.com/what-is-my-car-worth/</a></li><li><a href="https://www.nicb.org/vincheck" target="_blank" rel="noopener">https://www.nicb.org/vincheck</a></li><li><a href="https://vehiclehistory.bja.ojp.gov/nmvtis_vehiclehistory" target="_blank" rel="noopener">https://vehiclehistory.bja.ojp.gov/nmvtis_vehiclehistory</a></li><li><a href="https://carfaxdeals.com/run-report" target="_blank" rel="noopener">https://carfaxdeals.com/run-report</a></li><li><a href="https://www.edmunds.com/car-buying/why-vin-doesnt-set-car-value.html" target="_blank" rel="noopener">https://www.edmunds.com/car-buying/why-vin-doesnt-set-car-value.html</a></li><li><a href="https://carfaxdeals.com/vinreport" target="_blank" rel="noopener">https://carfaxdeals.com/vinreport</a></li><li><a href="https://www.consumer.ftc.gov/articles/buying-used-car" target="_blank" rel="noopener">https://www.consumer.ftc.gov/articles/buying-used-car</a></li><li><a href="https://www.nhtsa.gov/vin-decoder" target="_blank" rel="noopener">https://www.nhtsa.gov/vin-decoder</a></li><li><a href="https://carfaxdeals.com/vin-decoder" target="_blank" rel="noopener">https://carfaxdeals.com/vin-decoder</a></li><li><a href="https://carfaxdeals.com/how-to-use" target="_blank" rel="noopener">https://carfaxdeals.com/how-to-use</a></li><li><a href="https://vehiclehistory.gov/" target="_blank" rel="noopener">https://vehiclehistory.gov/</a></li>
+    </ul>
+  </section>
+
+          </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
