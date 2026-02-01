@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What's the difference between crawling and indexing? A pragmatic operator guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand tokens derived from provided style */
+      --text-color: rgba(244,231,197,0.86);
+      --accent: #C8A45D;
+      --accent-hover: #f6de9f;
+      --line: rgba(200,164,93,0.26);
+      --surface: #050d18;
+      --surface-2: #0b1628;
+      --radius: 12px;
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/19NNyHzZeITOXb1gwRltQY7dqBj99-aLU" alt="Crawling vs indexing infographic for operators" />
+        </div>
+        <h1 class="title">What's the difference between crawling and indexing? A pragmatic operator guide</h1>
+        <p class="subline">A diagnostic-first guide to separating discovery checks from indexing fixes.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://orvus.net/2026/02/01/crawling-seo-difference-crawling-indexing/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+          <div class="summary">For operators and founders, the practical difference between crawling and indexing matters because each stage needs different checks and fixes. This guide explains what each stage does and why separating diagnosis from action reduces wasted work.
+
+Start with a diagnostic-first mindset: confirm whether a page was discovered and fetched before changing meta tags, canonicals or content. The sequence saves time and helps tie later changes to measured outcomes.</div>
+
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Crawling is discovery and retrieval; indexing is parsing and storing content for search.</span></div><div class="highlight-card"><span class="highlight-text">Use URL Inspection and Index Coverage alongside server logs to tell discovery from index selection.</span></div><div class="highlight-card"><span class="highlight-text">Fix crawl access first, then address meta directives and canonical signals if a page is not indexed.</span></div>
+     </div>
+
+  <h2>Crawling vs indexing: what crawling seo actually means</h2>
+  <p>Crawling seo refers to the discovery and retrieval stage search engines use to find and request URLs on your site. Crawlers find pages via links, sitemaps, and submitted URLs, and treat discovery as a separate step from later indexing and storage <a href="https://developers.google.com/search/docs/basics/crawling-indexing" target="_blank" rel="noopener">Crawling and indexing - Google Search Central</a>.</p>
+  <p>Indexing is the follow-up stage where fetched pages are parsed, analysed and stored so they can be returned for queries. A page can be crawled and never indexed if meta noindex, canonical rules or index selection prevent storage <a href="https://learn.microsoft.com/en-us/bing/webmaster/help/crawling-and-indexing-what-to-know" target="_blank" rel="noopener">Crawling and indexing overview - Bing Webmaster Tools</a>.</p>
+
+  <div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+    <p class="tool-purpose">quick URL check using server logs and URL Inspection</p>
+    <ul class="tool-checklist-list">
+      <li class="tool-checklist-item">
+        <label for="tool-check-recvyc-0">
+          <input id="tool-check-recvyc-0" type="checkbox" />
+          <span>URL</span>
+        </label>
+      </li>
+      <li class="tool-checklist-item">
+        <label for="tool-check-0jdtyt-1">
+          <input id="tool-check-0jdtyt-1" type="checkbox" />
+          <span>Last crawled</span>
+        </label>
+      </li>
+      <li class="tool-checklist-item">
+        <label for="tool-check-87zz2e-2">
+          <input id="tool-check-87zz2e-2" type="checkbox" />
+          <span>Response code</span>
+        </label>
+      </li>
+      <li class="tool-checklist-item">
+        <label for="tool-check-1wksa5-3">
+          <input id="tool-check-1wksa5-3" type="checkbox" />
+          <span>Index status</span>
+        </label>
+      </li>
+    </ul>
+    <p class="tool-notes">Run after a sitemap check</p>
+  </div>
+
+  <p>Operationally the distinction matters because fixes differ. If a URL is not discovered you look at links, sitemaps and crawl access. If it is discovered but not indexed you check meta directives, canonicals and content quality <a href="https://developers.google.com/search/docs/basics/crawling-indexing" target="_blank" rel="noopener">Crawling and indexing - Google Search Central</a>.</p>
+
+  <h2>How search engines discover URLs</h2>
+  <p>Search engines discover URLs in a few predictable ways. The most common channels are internal links, external incoming links, XML sitemaps and explicit URL submissions; these channels guide crawlers to pages to fetch <a href="https://developers.google.com/search/docs/advanced/crawling/how-googlebot-works" target="_blank" rel="noopener">How Googlebot crawls the web</a>.</p>
+  <p>For large sites sitemaps are a practical complement to linking, not a replacement. A properly segmented, up-to-date sitemap helps crawlers prioritise canonical pages but does not guarantee crawling or indexing on its own <a href="https://developers.google.com/search/docs/basics/crawling-indexing" target="_blank" rel="noopener">Crawling and indexing - Google Search Central</a>.</p>
+  <p>Discovery failures typically show as pages absent from crawl stats or never appearing in server logs as crawler requests. Start by checking sitemap reports and internal linking around the missing URLs to see if they are reachable from the site navigation or other indexable pages <a href="https://developers.google.com/search/docs/advanced/crawling/how-googlebot-works" target="_blank" rel="noopener">How Googlebot crawls the web</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure>
+
+  <h2>Crawl behaviour and the rules that control it</h2>
+  <p>Robots exclusion directives govern whether crawlers may request URLs. The REP standard specifies how robots.txt should be interpreted and remains the foundational protocol for crawler access control <a href="https://datatracker.ietf.org/doc/html/rfc9309" target="_blank" rel="noopener">RFC 9309 - The 'Robots Exclusion Protocol' (REP)</a>.</p>
+  <p>Meta robots tags and X-Robots-Tag HTTP headers influence indexing and can also affect crawling in some implementations. A noindex directive prevents indexing, while a robots.txt disallow prevents fetching; they serve different purposes and must be used carefully <a href="https://developers.google.com/search/docs/basics/crawling-indexing" target="_blank" rel="noopener">Crawling and indexing - Google Search Central</a>.</p>
+
+  <div class="cta-section">
+    <h3 class="cta-headline">Consultation to tailor the crawl and index diagnostics</h3>
+    <div class="cta-intro"><p>Run the checklist below to confirm crawl access and then use URL Inspection to re-request indexing where appropriate. Use the printable diagnostics checklist if you need a repeatable team workflow.</p></div>
+    <a href="https://orvus.net/services" target="_blank" rel="noopener" class="cta-button">Inquire about Consultation</a>
+  </div>
+
+  <p>Crawler policies differ by engine and may handle edge cases differently. That means a directive or header that works as expected on one engine can be treated differently by another, so cross-check behaviour in the relevant webmaster consoles <a href="https://learn.microsoft.com/en-us/bing/webmaster/help/crawling-and-indexing-what-to-know" target="_blank" rel="noopener">Crawling and indexing overview - Bing Webmaster Tools</a>.</p>
+
+  <h2>What happens during indexing</h2>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1Z_ZlHzX2gyUUvy5asVxn0MiB5zsHy0yg=s1200" alt="Side by side server log and URL inspection screenshot highlighting crawler requests and index status for crawling seo monitoring" /></a>
+      <div class="side-text"><p>Indexing is the process of parsing fetched pages, extracting signals such as structured data and textual content, and storing a representation that the search engine will use when answering queries <a href="https://developers.google.com/search/docs/basics/crawling-indexing" target="_blank" rel="noopener">Crawling and indexing - Google Search Central</a>.</p></div>
+    </div>
+
+  <p>Canonicalization and index selection determine which URL variants are stored. Even when a page is crawled, a canonical pointing to another URL or a noindex directive can prevent it from being indexed and served in results <a href="https://learn.microsoft.com/en-us/bing/webmaster/help/crawling-and-indexing-what-to-know" target="_blank" rel="noopener">Crawling and indexing overview - Bing Webmaster Tools</a>.</p>
+  <p>Signals such as structured data and perceived content quality influence whether an indexed page is later used for relevant queries. Operators should treat these signals as part of indexability work, distinct from earlier crawlability checks <a href="https://developers.google.com/search/docs/basics/crawling-indexing" target="_blank" rel="noopener">Crawling and indexing - Google Search Central</a>.</p>
+
+  <h2>How to check whether a page was crawled or indexed</h2>
+  <p>Start in the webmaster console. Use URL Inspection and the Index Coverage report to see if a specific URL was requested and whether it was indexed. These tools explicitly distinguish states like discovered, crawled and indexed <a href="https://developers.google.com/search/docs/basics/crawling-indexing" target="_blank" rel="noopener">Crawling and indexing - Google Search Central</a>.</p>
+  <p>Server logs and crawl stats provide the ground truth for crawler requests. A missing crawler entry in logs usually means the URL was never fetched; a 200-series response followed by a non-indexed state points to indexation issues rather than discovery problems <a href="https://www.searchenginejournal.com/how-to-use-google-search-console-index-coverage/" target="_blank" rel="noopener">How to check indexing and coverage with Search Console (practical guide)</a>.</p>
+
+<section class="faq-accordion"><input type="checkbox" id="faq-acuswu" class="faq-toggle" checked /><label for="faq-acuswu" class="faq-summary" role="button" tabindex="0">What&#39;s the practical difference between crawling and indexing?</label><div class="faq-content"><p>Crawling is how search engines discover and fetch URLs; indexing is how they parse and store page content and signals so pages can be returned in search results. Treat them as separate steps and diagnose discovery before changing indexing signals.</p></div></section>
+
+  <p>When Search Console shows "Discovered - currently not indexed" it usually means the URL was found but not fetched for deeper analysis. When it shows "Crawled - currently not indexed" the engine did fetch the page and decided not to index it, often due to indexing signals or perceived low value <a href="https://developers.google.com/search/docs/basics/crawling-indexing" target="_blank" rel="noopener">Crawling and indexing - Google Search Central</a>.</p>
+
+  <p>Use an ordered checklist: confirm discovery channels, verify crawler requests in logs, inspect response codes and rendering, then check URL Inspection for index reasoning. That sequence helps avoid speculative fixes <a href="https://www.searchenginejournal.com/how-to-use-google-search-console-index-coverage/" target="_blank" rel="noopener">How to check indexing and coverage with Search Console (practical guide)</a>.</p>
+
+  <h2>Common crawlability problems and quick checks</h2>
+  <p>Server errors and slow responses are frequent reasons crawlers fail to fetch pages. Check response times, error rates and timeouts in server logs or monitoring tools because throttled or erroring hosts reduce crawl frequency <a href="https://moz.com/learn/seo/crawling-and-indexing" target="_blank" rel="noopener">Crawlability vs Indexability: What's the Difference?</a>.</p>
+  <p>Blocked resources in robots.txt or disallowed file types can prevent correct rendering and discovery. Make sure essential JS and CSS needed for rendering are not blocked and that robots.txt is intentional and precise <a href="https://datatracker.ietf.org/doc/html/rfc9309" target="_blank" rel="noopener">RFC 9309 - The 'Robots Exclusion Protocol' (REP)</a>.</p>
+  <p>Weak internal linking or orphaned pages often lead to discovery failures. Run an internal link audit and prioritise indexable pages in navigation and sitemaps to improve discoverability <a href="https://developers.google.com/search/docs/advanced/crawling/how-googlebot-works" target="_blank" rel="noopener">How Googlebot crawls the web</a>.</p>
+
+  <h2>Typical indexability issues and how they differ from crawl problems</h2>
+  <p>Meta noindex tags and conflicting canonical signals commonly explain pages marked as "crawled but not indexed". Verify HTML meta robots and any X-Robots-Tag headers before changing content or structure <a href="https://learn.microsoft.com/en-us/bing/webmaster/help/crawling-and-indexing-what-to-know" target="_blank" rel="noopener">Crawling and indexing overview - Bing Webmaster Tools</a>.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://orvus.net/services" target="_blank" rel="noopener">Orvus Unique Services</a></div>
+      <a href="https://orvus.net/services" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1H_h1lsT61lq2b7T9TJp_cP-rw6fSFKSG" alt="Orvus Unique Services" /></a>
+    </div>
+
+  <p>Low content value or thin duplicate content can make crawled pages unlikely candidates for indexing. Focus on improving unique, query-relevant content or consolidating duplicates with correct canonical signals <a href="https://moz.com/learn/seo/crawling-and-indexing" target="_blank" rel="noopener">Crawlability vs Indexability: What's the Difference?</a>.</p>
+  <p>After making fixes, re-request indexing using URL Inspection and monitor Index Coverage for changes. Re-requests help the engine prioritise re-evaluation, though results depend on crawl budgets and site constraints <a href="https://developers.google.com/search/docs/basics/crawling-indexing" target="_blank" rel="noopener">Crawling and indexing - Google Search Central</a>.</p>
+
+  <h2>A diagnostic-first checklist: confirm crawl access, discoverability, then indexability</h2>
+  <p>Step 1, confirm crawler access. Check robots.txt, ensure no unintentional disallows, and verify that essential assets are reachable. The REP standard explains the expected robots behaviour and where to place constraints <a href="https://datatracker.ietf.org/doc/html/rfc9309" target="_blank" rel="noopener">RFC 9309 - The 'Robots Exclusion Protocol' (REP)</a>.</p>
+  <p>Step 2, confirm discovery. Review sitemaps for accuracy, test internal linking to avoid orphan pages, and prioritise relevant canonical URLs in navigation and indexable lists <a href="https://developers.google.com/search/docs/advanced/crawling/how-googlebot-works" target="_blank" rel="noopener">How Googlebot crawls the web</a>.</p>
+  <p>Step 3, confirm indexability. Inspect meta robots, X-Robots-Tag headers and canonical elements. If content quality or duplication is the issue, iterate on content or canonicalization before re-requesting indexing <a href="https://learn.microsoft.com/en-us/bing/webmaster/help/crawling-and-indexing-what-to-know" target="_blank" rel="noopener">Crawling and indexing overview - Bing Webmaster Tools</a>.</p>
+  <p>Use URL Inspection to re-request indexing after fixes and watch the Index Coverage report for status changes. Record dates and actions so you can attribute later traffic shifts more responsibly <a href="https://www.searchenginejournal.com/how-to-use-google-search-console-index-coverage/" target="_blank" rel="noopener">How to check indexing and coverage with Search Console (practical guide)</a>. <a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">See our blog for guides</a>.</p>
+
+  <h2>Handling client-side rendering and other modern crawler challenges</h2>
+  <p>Client-side rendering can introduce variability because some rendering steps happen after initial fetch. Crawlers have improved rendering but differences remain; test rendered output in URL Inspection and compare it to server-side rendered HTML <a href="https://developers.google.com/search/docs/advanced/crawling/how-googlebot-works" target="_blank" rel="noopener">How Googlebot crawls the web</a>. <a href="https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics" target="_blank" rel="noopener">See Google's JavaScript SEO guide</a>.</p>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>For critical pages consider server-side rendering or prerendering so the crawler receives complete HTML quickly. This reduces ambiguity in whether a page was crawled and fully rendered for indexing decisions <a href="https://moz.com/learn/seo/crawling-and-indexing" target="_blank" rel="noopener">Crawlability vs Indexability: What's the Difference?</a>. <a href="https://vercel.com/blog/how-google-handles-javascript-throughout-the-indexing-process" target="_blank" rel="noopener">See Vercel's article</a>.</p></div>
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1O8_G9l-_j1TwdwexFcvYr0Se8H1LyY9Q=s1200" alt="Minimal 2D vector checklist infographic with icons for robots txt sitemap internal links and canonical tag on dark blue background for crawling seo" /></a>
+    </div>
+
+  <p>Diagnose client-side issues with logs and rendered screenshots from URL Inspection rather than guessing. Rendering problems are often site-specific and need targeted fixes <a href="https://developers.google.com/search/docs/basics/crawling-indexing" target="_blank" rel="noopener">Crawling and indexing - Google Search Central</a>. <a href="https://ipullrank.com/javascript-seo-how-google-crawls-and-indexes-javascript-websites" target="_blank" rel="noopener">See a practical guide</a>.</p>
+
+  <h2>When and how to use sitemaps and URL submission for large sites</h2>
+  <p>Sitemaps speed discovery for large collections of pages but do not guarantee crawling or indexing. Keep sitemaps focused on canonical, indexable pages and refresh them when the canonical set changes <a href="https://developers.google.com/search/docs/basics/crawling-indexing" target="_blank" rel="noopener">Crawling and indexing - Google Search Central</a>.</p>
+  <p>Avoid submitting every low-value URL. For very large sites use segmented sitemaps and batch updates to help webmaster tools surface discovery problems without overwhelming reporting. Monitor sitemap reports to catch systemic omissions <a href="https://developers.google.com/search/docs/advanced/crawling/how-googlebot-works" target="_blank" rel="noopener">How Googlebot crawls the web</a>.</p>
+
+  <h2>Measuring impact and tying indexing to revenue signals</h2>
+  <p>Use Index Coverage and search performance reports alongside analytics to measure changes after indexation fixes. Watch organic impressions and clicks for pages that were previously excluded to detect meaningful changes over time <a href="https://developers.google.com/search/docs/basics/crawling-indexing" target="_blank" rel="noopener">Crawling and indexing - Google Search Central</a>.</p>
+  <p>Avoid assuming immediate business impact. Indexing changes often compound over weeks and their effect depends on funnel fit, content relevance and measurement quality. Document tests and dates to support later attribution <a href="https://www.searchenginejournal.com/how-to-use-google-search-console-index-coverage/" target="_blank" rel="noopener">How to check indexing and coverage with Search Console (practical guide)</a>.</p>
+
+  <h2>Mistakes to avoid and common false assumptions</h2>
+  <p>Do not assume that a crawled page is indexed. Always confirm with URL Inspection or an index coverage report before acting on the assumption that a page is in the index <a href="https://developers.google.com/search/docs/basics/crawling-indexing" target="_blank" rel="noopener">Crawling and indexing - Google Search Central</a>.</p>
+  <p>Avoid over-relying on a single signal such as a sitemap entry. Cross-check server logs, Search Console reports and site architecture before making structural changes to canonicals or meta directives <a href="https://moz.com/learn/seo/crawling-and-indexing" target="_blank" rel="noopener">Crawlability vs Indexability: What's the Difference?</a>.</p>
+
+  <h2>Practical examples and short diagnostic scenarios</h2>
+  <p>Scenario: ecommerce product pages discovered but not indexed. Check for duplicate product descriptions, incorrect canonicals to category pages, and meta noindex tags. Confirm crawler requests in logs and then correct canonicals or consolidate content before re-requesting indexing <a href="https://www.searchenginejournal.com/how-to-use-google-search-console-index-coverage/" target="_blank" rel="noopener">How to check indexing and coverage with Search Console (practical guide)</a>.</p>
+  <p>Scenario: service landing pages not discovered. Audit internal linking and sitemap entries, check robots.txt for accidental disallow rules, and prioritise key service pages in the navigation and XML sitemaps so they are reachable for crawlers <a href="https://developers.google.com/search/docs/advanced/crawling/how-googlebot-works" target="_blank" rel="noopener">How Googlebot crawls the web</a>.</p>
+  <p>After fixes, verify changes by checking server logs for fresh crawler activity, using URL Inspection to request reindexing, and monitoring Index Coverage for status updates. Keep records of the steps you took and the dates you requested reindexing <a href="https://developers.google.com/search/docs/basics/crawling-indexing" target="_blank" rel="noopener">Crawling and indexing - Google Search Central</a>.</p>
+
+  <h2>Conclusion: a systems approach to crawlability and indexability</h2>
+  <p>Distinguish discovery from index selection and follow a diagnostic-first workflow: confirm crawl access, validate discovery, then confirm indexability before making content or canonical changes. That approach minimises accidental removals and helps teams focus on high-impact fixes <a href="https://developers.google.com/search/docs/basics/crawling-indexing" target="_blank" rel="noopener">Crawling and indexing - Google Search Central</a>. <a href="https://orvus.net" target="_blank" rel="noopener">Orvus Ltd.</a></p>
+  <p>Measure changes with console tools and analytics and treat improvements as compounding effects rather than instant wins. When problems persist, escalate to site-specific diagnostics that blend server logs, rendered views and targeted content audits <a href="https://moz.com/learn/seo/crawling-and-indexing" target="_blank" rel="noopener">Crawlability vs Indexability: What's the Difference?</a>. <a href="https://orvus.net/about" target="_blank" rel="noopener">See our about page</a>.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-n0w7ss" class="faq-toggle" /><label for="faq-n0w7ss" class="faq-summary" role="button" tabindex="0">How can I tell if a page was crawled but not indexed?</label><div class="faq-content"><p>Use URL Inspection and Index Coverage in your webmaster console, and cross-check server logs for crawler requests and response codes to distinguish discovery from indexing issues.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-5ybbmb" class="faq-toggle" /><label for="faq-5ybbmb" class="faq-summary" role="button" tabindex="0">Will submitting a sitemap guarantee my pages will be indexed?</label><div class="faq-content"><p>No. Sitemaps help discovery but do not guarantee crawling or indexing; prioritise canonical, indexable pages and good internal linking instead.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-1xwlop" class="faq-toggle" /><label for="faq-1xwlop" class="faq-summary" role="button" tabindex="0">Does client-side rendering prevent indexing?</label><div class="faq-content"><p>Client-side rendering can add variability; test rendered views in URL Inspection and consider server-side rendering or prerendering for critical pages if rendering is inconsistent.</p></div></section>
+</section>
+
+<section class="article-ending">Adopt a systems approach that sequences checks by discovery, crawl access and indexability. Use server logs and webmaster consoles together and document changes so you can attribute later traffic shifts.
+
+If issues persist after the checklist, plan a targeted diagnostic that includes rendered views, log analysis and a prioritized content or canonical remediation plan tailored to your site constraints.</section>
+
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://developers.google.com/search/docs/basics/crawling-indexing" target="_blank" rel="noopener">https://developers.google.com/search/docs/basics/crawling-indexing</a></li><li><a href="https://learn.microsoft.com/en-us/bing/webmaster/help/crawling-and-indexing-what-to-know" target="_blank" rel="noopener">https://learn.microsoft.com/en-us/bing/webmaster/help/crawling-and-indexing-what-to-know</a></li><li><a href="https://developers.google.com/search/docs/advanced/crawling/how-googlebot-works" target="_blank" rel="noopener">https://developers.google.com/search/docs/advanced/crawling/how-googlebot-works</a></li><li><a href="https://datatracker.ietf.org/doc/html/rfc9309" target="_blank" rel="noopener">https://datatracker.ietf.org/doc/html/rfc9309</a></li><li><a href="https://www.searchenginejournal.com/how-to-use-google-search-console-index-coverage/" target="_blank" rel="noopener">https://www.searchenginejournal.com/how-to-use-google-search-console-index-coverage/</a></li><li><a href="https://moz.com/learn/seo/crawling-and-indexing" target="_blank" rel="noopener">https://moz.com/learn/seo/crawling-and-indexing</a></li><li><a href="https://orvus.net/services" target="_blank" rel="noopener">https://orvus.net/services</a></li><li><a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">https://orvus.net/category/useful-knowledge/</a></li><li><a href="https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics" target="_blank" rel="noopener">https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics</a></li><li><a href="https://vercel.com/blog/how-google-handles-javascript-throughout-the-indexing-process" target="_blank" rel="noopener">https://vercel.com/blog/how-google-handles-javascript-throughout-the-indexing-process</a></li><li><a href="https://ipullrank.com/javascript-seo-how-google-crawls-and-indexes-javascript-websites" target="_blank" rel="noopener">https://ipullrank.com/javascript-seo-how-google-crawls-and-indexes-javascript-websites</a></li><li><a href="https://orvus.net/about" target="_blank" rel="noopener">https://orvus.net/about</a></li><li><a href="https://orvus.net" target="_blank" rel="noopener">https://orvus.net</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
