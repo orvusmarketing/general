@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Do we have freedom of expression?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      --text-color: #ffffff;
+      --accent: #ae2736;
+      --accent-hover: #8f1f2c;
+      --line: rgba(255,255,255,.16);
+      --surface: #0b2664;
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px;
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.88); margin-bottom: 2rem; }
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:1rem; margin:2.2rem 0; }
+    .article-body .highlight-card{ background: linear-gradient(135deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.03) 100%); border:1px solid rgba(255,255,255,.14); border-left:4px solid var(--accent); padding:1.15rem 1.35rem; font-weight:750; color: var(--text-color); }
+    .article-body .side-by-side{ display:flex; gap:clamp(16px,3vw,28px); align-items:flex-start; margin:2rem 0; width:100%; }
+    .article-body .side-by-side img{ max-width: min(100%, 420px); box-shadow: 0 14px 34px rgba(0,0,0,.42); border:1px solid rgba(255,255,255,.10); }
+    .article-body .side-by-side .side-text{ padding:0 0.75rem; }
+    .article-body .side-by-side.product-image-right{ flex-direction:column; align-items:center; text-align:center; }
+    .article-body .tool-block{ max-width:720px; margin:2.3rem auto; padding:1.3rem; background: linear-gradient(135deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.03) 100%); border:1px solid rgba(255,255,255,.14); }
+
+    .cta-button{ background: var(--accent); }
+    .cta-button:hover{ background: var(--accent-hover); filter: none; }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/freedom-and-expression-skyline.jpg" alt="Freedom and expression skyline banner" />
+        </div>
+        <h1 class="title">Do we have freedom of expression?</h1>
+        <p class="subline">An explainer on legal protections, limits, and practical steps around freedom of expression.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/freedom-and-expression-explainer-2/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">This article explains freedom and expression in clear, source grounded terms. It compares international guidance, U.S. constitutional standards, and regional approaches to show when speech may be limited.
+
+The goal is to help voters, students, and civic readers understand what rights exist, where limits can apply, and what practical steps to take if they believe a restriction is improper.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">International law protects opinion and expression but permits lawful, necessary, and proportionate restrictions for public order and related aims.</span></div><div class="highlight-card"><span class="highlight-text">U.S. First Amendment doctrine offers broad protection but allows limits for speech likely to incite imminent lawless action under Brandenburg.</span></div><div class="highlight-card"><span class="highlight-text">Practical obstacles, including threats to press freedom and private platform moderation, can limit expression even where legal protections exist.</span></div>
+     </div>
+  <h2>Short answer: Do we have freedom and expression?</h2>
+<p>Short answer, freedom and expression is widely protected in law but it is not absolute. The international baseline recognizes a general right to hold and share opinions, yet allows lawful, necessary, and proportionate restrictions for aims like public order or national security. For readers in the United States, the First Amendment provides broad protection, but courts have long held that speech intended and likely to produce imminent lawless action may be restricted under the Brandenburg test. For an international statement of the baseline, see the OHCHR guidance on freedom of opinion and expression <a href="https://www.ohchr.org/en/freedom-opinion-expression" target="_blank" rel="noopener">OHCHR guidance</a>.</p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1Y6xZF1KKOKBTKeqffU9qVeMtqu3h4aI3=s1200" alt="Editorial photo of a small group holding plain signs in a public square conveying freedom and expression minimalist navy backdrop white accents" /></a>
+      <div class="side-text"><p>That means the legal answer depends on context. Who took the action matters, what the words were meant to do matters, and whether other rights or public safety concerns are implicated matters. These questions are settled differently in different legal systems, so a concise conclusion for one country may not fit another.</p></div>
+    </div>
+<p>Practically, many people experience limits that are not strictly legal, such as threats to press safety or private moderation by platforms. Those practical limits can shrink the space for open discussion even when a law on the books protects expression.</p>
+<h2>What freedom and expression means: international law and UN guidance</h2>
+<p>International law recognizes freedom of opinion and expression as a protected right, including in treaties and UN guidance that set a common baseline for many states. These instruments describe both the right and the narrow, regulated grounds on which states may lawfully restrict it. (<a href="https://michaelcarbonara.com/educational-freedom" target="_blank" rel="noopener">our educational freedom page</a>)</p>
+<p>The Office of the United Nations High Commissioner for Human Rights explains that restrictions must be provided by law, pursue a legitimate aim such as public order or national security, and be necessary and proportionate to that legitimate aim. This three part framing guides how states should assess limits and is central to international human rights practice <a href="https://www.ohchr.org/en/freedom-opinion-expression" target="_blank" rel="noopener">OHCHR guidance</a>.</p>
+<p>In practice, the lawful, necessary, and proportionate standard requires decision makers to consider whether a restriction genuinely advances a specified public interest and whether a less restrictive measure could address the concern. For example, a narrowly tailored temporary ban on a violent incitement in a moment of acute unrest is more likely to meet the test than a broad criminal prohibition on unpopular opinions.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>International guidance influences national courts and policy makers, but it does not automatically override domestic constitutions. Some countries align closely with OHCHR standards, while others apply national tests that produce different limits. The international framework therefore functions as a common reference point rather than a single enforceable rule across all systems. See EU Council conclusions <a href="https://data.consilium.europa.eu/doc/document/ST-5835-2026-INIT/en/pdf" target="_blank" rel="noopener">on priorities in UN human rights work</a>.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay informed with campaign updates and civic resources</h3><div class="cta-intro"><p>For readers who want primary UN framing and practical guidance, consult the OHCHR materials and the linked primary texts to understand how lawful, necessary, and proportionate restrictions are defined and applied.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign</a></div>
+<h2>How the First Amendment and U.S. law treat freedom and expression</h2>
+<p>In the United States the First Amendment protects expression from government censorship or punishment. The protection is broad and covers most political speech and public debate, but it is not unlimited. A helpful overview of how U.S. law frames the right is provided by legal resources that summarize First Amendment doctrine <a href="https://www.law.cornell.edu/wex/first_amendment" target="_blank" rel="noopener">First Amendment summary</a>.</p>
+<p>One key limit under U.S. law comes from the Supreme Court decision Brandenburg v. Ohio, which set a test for when advocacy can be restricted. Under that approach, speech can be restricted if it is directed to inciting imminent lawless action and is likely to produce such action. The Brandenburg test thus requires both intent and a real risk of immediate harm <a href="https://www.oyez.org/cases/1968/492" target="_blank" rel="noopener">Brandenburg decision</a>.</p>
+<p>It is important to note that First Amendment rules constrain government actors. Private platforms, employers, and other nonstate actors are generally governed by their own policies and contractual terms rather than the First Amendment. That distinction matters when people seek remedies for content removal or moderation.</p>
+<h2>A different balance: European and regional approaches to speech limits</h2>
+<p>Across many European states and in the case law of the European Court of Human Rights, freedom of expression is balanced against competing rights and public safety considerations through a proportionality analysis. The Council of Europe provides an accessible factsheet explaining this regional approach <a href="https://www.echr.coe.int/Documents/FS_Freedom_of_expression_ENG.pdf" target="_blank" rel="noopener">ECHR factsheet</a>.</p>
+<p>The ECHR approach often results in a wider allowance for restrictions in areas such as hate speech or public-order concerns than U.S. doctrine would permit. This does not mean that expression is unprotected in Europe, but that courts more readily apply limits where they find a pressing social or safety interest that outweighs an individual instance of speech.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-d05t8v" class="faq-toggle" checked /><label for="faq-d05t8v" class="faq-summary" role="button" tabindex="0">Do we have freedom of expression in practice and law?</label><div class="faq-content"><p>The right exists in international instruments and in many national systems, but it is not absolute. Restrictions may be lawful when they meet legal tests such as being lawful, necessary, and proportionate, or when they meet specific judicial tests like Brandenburg in the United States. Practical limits from threats to press safety and private moderation also affect how freely people can speak.</p></div></section>
+<p>Because courts weigh context, outcomes can diverge between systems. A statement that a U.S. court would protect may be restricted under an ECHR style proportionality review, especially if it targets a protected group or poses a concrete public-order risk.</p>
+<h2>Limits in practice: press freedom, public opinion, and real-world constraints</h2>
+<p>Legal texts provide rules, but monitoring by independent organizations shows that journalists and media workers face threats that limit expression in practice. Reporters Without Borders documents declines in press freedom in many countries, illustrating that legal protections do not always translate into safe conditions for reporting <a href="https://rsf.org/en/ranking/2024" target="_blank" rel="noopener">World Press Freedom Index 2024</a>. The UN has also warned of rising internet shutdowns that further restrict information flows <a href="https://news.un.org/en/story/2026/01/1166813" target="_blank" rel="noopener">UN news</a>.</p>
+<p>Public opinion also shapes how societies regulate speech. Surveys in 2024 show that significant shares of populations support legal limits on certain categories, such as hate speech, reflecting tensions between abstract free expression norms and popular preferences about public safety and dignity <a href="https://www.pewresearch.org/topic/freedom-of-expression/" target="_blank" rel="noopener">Pew Research Center findings</a>.</p>
+<p>These practical pressures can lead to self censorship, editorial caution, or stronger platform moderation. The result is that, even where statutes protect expression, the day to day space for speech can be narrowed by safety concerns, political pressure, or commercial rules.</p>
+<h2>Practical steps: how to document and assert your rights if expression is restricted</h2>
+<p>If you believe your expression rights have been restricted, start by identifying whether the actor was a state actor or a private party. Remedies and rules differ depending on that distinction, and the distinction affects whether First Amendment or international human rights frameworks apply <a href="https://www.law.cornell.edu/wex/first_amendment" target="_blank" rel="noopener">First Amendment summary</a>. See our constitutional rights hub <a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">here</a>.</p>
+<p>Next, document the incident carefully. Save copies of the material in question, record dates and times, and preserve contextual information such as screenshots, witness names, or related communications. Documentation helps whether you pursue an administrative complaint, a platform appeal, or legal counsel.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>For official state level complaints about freedom of expression, the OHCHR materials outline complaint routes and principles about lawful, necessary, and proportionate restrictions that can guide a submission or an administrative appeal <a href="https://www.ohchr.org/en/freedom-opinion-expression" target="_blank" rel="noopener">OHCHR guidance</a>. See also the OHCHR topic page <a href="https://www.ohchr.org/en/topic/freedom-expression-and-opinion" target="_blank" rel="noopener">Freedom of expression and opinion</a>.</p>
+<p>When cross border or platform issues are involved, seek legal advice. Platform rules and cross jurisdictional enforcement raise complex procedural questions, and a lawyer can help map remedies that fit the situation. Legal counsel can also advise on timing for official filings and whether urgent relief is practical in a given case.</p>
+<h2>Private platforms, cross-border moderation, and remaining open questions</h2>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Private platforms operate under their own terms of service, so removing or moderating content is usually a contract and policy matter rather than a constitutional one. Platform rules may allow removals for content that national law would not restrict, and platform enforcement can vary across regions.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1GEeH_zlq38HGnYdEfqVuHW-ZBinRgOC5=s1200" alt="Minimal flat 2D vector infographic three column layout with globe building and shield icons representing international law US law and platform rules freedom and expression" /></a>
+    </div>
+<p>Cross border content moderation complicates enforcement because different jurisdictions have different thresholds for lawful limits. A platform operating in multiple countries may face legal demands that pull its policies in conflicting directions. These unresolved questions mean there is no single global standard for how platforms should act when laws diverge.</p>
+<p>For users, that means reading platform policies, using built in complaint routes, and preserving evidence of moderation decisions are practical first steps. Where platforms provide escalation mechanisms, follow them and consider seeking legal advice if those routes are exhausted or ineffective. Also check our <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news</a> page for updates and resources.</p>
+<h2>Common mistakes people make when asserting free-expression rights</h2>
+<p>A frequent error is assuming that all speech limits are unlawful without checking who took the action and what legal tests apply. State restrictions and private moderation are governed by different rules, and clarity about the actor helps determine the right remedy.</p>
+<p>Another mistake is failing to document incidents promptly. Lost screenshots, overwritten messages, or delayed witness statements weaken factual claims and complicate administrative or legal remedies.</p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">A short documentation checklist for expression incidents</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-orf4hv-0">
+                        <input id="tool-check-orf4hv-0" type="checkbox" />
+                        <span>Incident date</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-i9lu59-1">
+                        <input id="tool-check-i9lu59-1" type="checkbox" />
+                        <span>Actor</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-bb3oqz-2">
+                        <input id="tool-check-bb3oqz-2" type="checkbox" />
+                        <span>Content saved</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-h6bgjp-3">
+                        <input id="tool-check-h6bgjp-3" type="checkbox" />
+                        <span>Witnesses</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-j0kv7d-4">
+                        <input id="tool-check-j0kv7d-4" type="checkbox" />
+                        <span>Platform action</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-92p8hv-5">
+                        <input id="tool-check-92p8hv-5" type="checkbox" />
+                        <span>Next steps</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Keep records in multiple formats</p>
+            </div>
+<p>People also sometimes conflate public opinion with legal standards. Popular support for limits does not by itself make a restriction lawful. For legal assessment, consult primary sources and qualified counsel rather than relying on social sentiment.</p>
+<h2>Practical examples and short scenarios: applying tests in real situations</h2>
+<p>Example 1, Brandenburg scenario. Imagine a speaker urges a crowd to attack a specific group at a protest and provides specific instructions for immediate action. Under Brandenburg, courts would examine whether the speech was intended to incite imminent lawless action and whether it was likely to succeed. If both elements are present, the speech can be restricted. For background on the Supreme Court standard, see the Brandenburg decision summary <a href="https://www.oyez.org/cases/1968/492" target="_blank" rel="noopener">Brandenburg decision</a>.</p>
+<p>Example 2, ECHR proportionality scenario. Suppose a public statement targets a protected group with hateful language that authorities assess as likely to stir communal violence. A regional court applying a proportionality balance might permit a restriction if it finds that the measure is necessary to protect public order and is proportionate to the threat. The ECHR factsheet explains the balancing approach used in such cases <a href="https://www.echr.coe.int/Documents/FS_Freedom_of_expression_ENG.pdf" target="_blank" rel="noopener">ECHR factsheet</a>.</p>
+<p>Linking to press safety, journalists reporting on sensitive topics can face threats that are not solved by legal decisions alone. Monitoring by press organizations documents practical risks to safety and to information flows that affect how freely information circulates in reality <a href="https://rsf.org/en/ranking/2024" target="_blank" rel="noopener">World Press Freedom Index 2024</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Conclusion and where to find primary sources and help</h2>
+
+<p>Freedom and expression is a broadly protected principle, but protection is conditional and often balanced against other public interests. International guidance requires restrictions to be lawful, necessary, and proportionate, while U.S. law uses specific tests like Brandenburg for imminent lawless action <a href="https://www.ohchr.org/en/freedom-opinion-expression" target="_blank" rel="noopener">OHCHR guidance</a>.</p>
+<p>For primary materials, consult the OHCHR site for international guidance, Cornell Law School materials for First Amendment summaries, ECHR factsheets for regional practice, the Reporters Without Borders index for press freedom monitoring, and public opinion research from Pew for context on popular attitudes. These sources can help readers decide on complaint routes or whether to seek legal advice <a href="https://www.law.cornell.edu/wex/first_amendment" target="_blank" rel="noopener">First Amendment summary</a>.</p>
+<p>Document incidents, identify the actor, and follow available complaint mechanisms. If the case involves cross border or platform moderation questions, consider getting legal counsel to map options. The legal frameworks and practical safeguards vary by place and by the forum where the restriction occurred.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-zy4wgb" class="faq-toggle" /><label for="faq-zy4wgb" class="faq-summary" role="button" tabindex="0">How does international law treat restrictions on expression?</label><div class="faq-content"><p>International guidance recognizes freedom of opinion and expression but allows restrictions that are lawful, necessary, and proportionate for aims like public order or national security.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-1cbvs0" class="faq-toggle" /><label for="faq-1cbvs0" class="faq-summary" role="button" tabindex="0">When can speech be restricted in U.S. law?</label><div class="faq-content"><p>Under U.S. Supreme Court precedent, speech intended to incite imminent lawless action and likely to produce such action can be restricted, as stated in Brandenburg v. Ohio.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-ell4dn" class="faq-toggle" /><label for="faq-ell4dn" class="faq-summary" role="button" tabindex="0">What should I do if a platform removes my content?</label><div class="faq-content"><p>Preserve records, review the platform&#39;s complaint process, follow any appeals route, and consider legal advice if the matter raises complex jurisdictional or legal issues.</p></div></section>
+</section><section class="article-ending">If you face a specific restriction, document it carefully and consult primary texts or legal counsel to explore remedies. Use official complaint routes and monitoring bodies to guide next steps without assuming outcomes.
+
+This explainer is informational and not legal advice.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.ohchr.org/en/freedom-opinion-expression" target="_blank" rel="noopener">https://www.ohchr.org/en/freedom-opinion-expression</a></li><li><a href="https://www.ohchr.org/en/topic/freedom-expression-and-opinion" target="_blank" rel="noopener">https://www.ohchr.org/en/topic/freedom-expression-and-opinion</a></li><li><a href="https://www.law.cornell.edu/wex/first_amendment" target="_blank" rel="noopener">https://www.law.cornell.edu/wex/first_amendment</a></li><li><a href="https://www.oyez.org/cases/1968/492" target="_blank" rel="noopener">https://www.oyez.org/cases/1968/492</a></li><li><a href="https://www.echr.coe.int/Documents/FS_Freedom_of_expression_ENG.pdf" target="_blank" rel="noopener">https://www.echr.coe.int/Documents/FS_Freedom_of_expression_ENG.pdf</a></li><li><a href="https://rsf.org/en/ranking/2024" target="_blank" rel="noopener">https://rsf.org/en/ranking/2024</a></li><li><a href="https://www.pewresearch.org/topic/freedom-of-expression/" target="_blank" rel="noopener">https://www.pewresearch.org/topic/freedom-of-expression/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://data.consilium.europa.eu/doc/document/ST-5835-2026-INIT/en/pdf" target="_blank" rel="noopener">https://data.consilium.europa.eu/doc/document/ST-5835-2026-INIT/en/pdf</a></li><li><a href="https://news.un.org/en/story/2026/01/1166813" target="_blank" rel="noopener">https://news.un.org/en/story/2026/01/1166813</a></li><li><a href="https://michaelcarbonara.com/educational-freedom" target="_blank" rel="noopener">https://michaelcarbonara.com/educational-freedom</a></li><li><a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">https://michaelcarbonara.com/constitutional-rights/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
