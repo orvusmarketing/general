@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Is Amazon SPA or MPA? A practical spa seo detection guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand tokens derived from provided style */
+      --text-color: #f4e7c5; /* from --orvus-ink */
+      --accent: #C8A45D; /* from --orvus-gold */
+      --accent-hover: #f6de9f; /* from --orvus-gold-strong */
+      --line: rgba(200,164,93,0.26); /* from --orvus-border-soft */
+      --surface: #050d18; /* from --orvus-bg-soft */
+      --surface-2: #0b1628;
+      --radius: 12px;
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1zpwNcV-1m5UyhP3IA3gjoYZPio3cSkZt" alt="Is Amazon SPA or MPA?" />
+        </div>
+        <h1 class="title">Is Amazon SPA or MPA? A practical spa seo detection guide</h1>
+        <p class="subline">Practical tests using view-source, curl, and Chrome DevTools to classify SPA versus MPA for SEO.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://orvus.net/2026/02/01/spa-seo-is-amazon-spa-or-mpa/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">Operators and technical marketers need clear, reproducible methods to decide whether a site behaves like a single-page application or a multi-page application. This article focuses on practical tests you can run with minimal tooling and explains why those signals matter for spa seo.
+
+You will get step-by-step checks using view-source, curl, and Chrome DevTools network traces, plus how to validate what Google actually indexed using Google Search Console and the Mobile-Friendly Test.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Use curl and view-source to confirm whether the server returns full HTML for key URLs before assuming a site is SPA.</span></div><div class="highlight-card"><span class="highlight-text">A network trace that shows document navigations versus XHR/fetch is a reproducible signal for classifying rendering behaviour.</span></div><div class="highlight-card"><span class="highlight-text">Public scans show amazon.com commonly returns full HTML for product pages, consistent with an MPA or hybrid approach.</span></div>
+     </div>
+  <h2>What SPA and MPA mean for spa seo</h2><h3>Core definitions</h3><p>A single-page application updates the current document using client-side routing and incremental DOM updates rather than loading a full new HTML document for each URL, while a multi-page application serves distinct full HTML documents per URL, which changes how navigation works and how crawlers see content, according to the MDN definition <a href="https://developer.mozilla.org/en-US/docs/Glossary/Single-page_application" target="_blank" rel="noopener">MDN Web Docs on single-page applications</a>.</p><p>The navigation semantics matter because client-side routing can replace full-document navigations with history.pushState calls and XHR or fetch requests, and that shift can change what a search engine sees during crawling and rendering. When a crawler expects a document response but the site relies on JavaScript to populate the page, the indexed snapshot can lag or miss important content, so this distinction is directly relevant to spa seo.</p><section class="faq-accordion"><input type="checkbox" id="faq-063qx5" class="faq-toggle" checked /><label for="faq-063qx5" class="faq-summary" role="button" tabindex="0">Is Amazon a single-page application or a multi-page application for SEO purposes?</label><div class="faq-content"><p>Public scans and page-level inspections indicate Amazon serves full HTML for product and category pages, which aligns with an MPA or a server-rendered hybrid rather than a pure SPA, but endpoint-level tests are required to confirm behavior for specific flows.</p></div></section><h3>Why the distinction matters for search engines</h3><p>Search engines parse an initial HTML document and then may execute JavaScript to render the final view. If the initial document lacks main content because rendering depends on client scripts, indexing can be delayed or flaky. Google has advised that client-side rendering can introduce indexing delays and that server-side rendering or hybrid approaches are recommended when SEO is a priority <a href="https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central JavaScript SEO basics</a>.</p><p>For operators and founders focused on <a href="https://orvus.net/services" target="_blank" rel="noopener">search architecture</a>, the practical takeaway is simple: know whether your pages deliver server-rendered HTML per URL or whether they depend on client-side routing to show the main content. That knowledge directs which tests you run and which fixes you prioritise for spa seo.</p><h2>How browsers and search engines render JavaScript</h2><h3>Two-stage rendering model</h3><p>Modern rendering for web pages usually happens in two stages. First the crawler or browser requests the document and parses the server HTML. Then JavaScript runs to hydrate or update the DOM. That hydration step can convert a shell into the final page, but it can also delay visible content long enough that automated renderers or crawlers record a different snapshot, which affects indexing and visibility.</p><p>Because the second stage depends on CPU time and network resources, large client-side workloads can exhaust rendering budgets and cause partial or failed renders in automated environments. Google and web platform guidance frame these resource limits as a real constraint for client-side rendering, and they recommend server side rendering or hybrid approaches to reduce the risk of missed content <a href="https://web.dev/rendering-on-the-web/" target="_blank" rel="noopener">web.dev on rendering approaches</a>. See the Chrome developers discussion for alternative architectures <a href="https://developer.chrome.com/blog/beyond-spa" target="_blank" rel="noopener">Beyond SPAs - alternative architectures for your PWA</a>.</p>
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure>
+<h3>Differences between browser and Google's renderer</h3>
+<p>Browsers render for a human with full CPU allocation and interactive timing, while Google's renderer runs in a controlled environment with limited time and resources. These differences mean a page that looks fine in a desktop browser may not fully render in an indexing renderer if critical content waits behind heavy client-side operations. For javascript seo testing, confirm both live browser behaviour and what Google records using its tools.</p>
+    <div class="side-by-side special-image-left">
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/170bTNSy6NrS-26IseRSqdcrIrtkzl1zC=s1200" alt="Chrome DevTools network panel screenshot highlighting document and XHR entries in Orvus Ltd brand colors navy and gold spa seo" /></a>
+      <div class="side-text"><p>When planning technical SEO work, treat discrepancies between browser render and Google render as signals to run deeper tests. If the server-provided HTML already contains main content, the indexing risk is lower. If not, consider server side rendering or validated dynamic rendering to close gaps.</p></div>
+    </div>
+<h2>Detecting SPA vs MPA for spa seo: reproducible tests</h2>
+<h3>Network trace patterns</h3>
+<p>Start with a browser network trace and watch the navigation type for page transitions. Full document navigations show a document request and response, while SPA-like navigations often show XHR or fetch traffic and no full document reload. Categorising these entries helps you label a site as document-driven or XHR-driven for spa seo diagnosis <a href="https://moz.com/learn/seo/spa" target="_blank" rel="noopener">Moz guide to detecting SPAs</a> and see a comparison of SPA and MPA architectures <a href="https://www.dotcms.com/blog/what-is-a-single-page-application" target="_blank" rel="noopener">dotCMS comparison</a>.</p><p>When you run a trace, look for clear differences: a navigation that triggers a document request will typically return a full HTML payload, whereas a pushState-driven update will fetch JSON or partial HTML and then update the existing DOM. Treat these patterns as reproducible signals rather than one-off curiosities.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Run the quick spa seo checklist on a key page</h3><div class="cta-intro"><p>Run the quick checklist below for a high-value page: view-source, a short curl, and a one-minute network trace to see whether the page returns server HTML or relies on XHR updates.</p></div><a href="https://orvus.net/services" target="_blank" rel="noopener" class="cta-button">Start a short diagnostic</a></div>
+<h3>Server HTML checks (view-source / curl)</h3>
+<p>Use view-source in the browser or curl from the command line to retrieve the raw server response for a URL. If the response contains the main content and semantic markup before JavaScript runs, the page is likely server-rendered or served as a traditional MPA document, which reduces immediate indexing risk <a href="https://moz.com/learn/seo/spa" target="_blank" rel="noopener">Moz single-page applications and SEO</a>.</p><p>Example curl intent: fetch the same URL you use in the browser, then inspect whether product titles, meta tags, and primary content appear in the raw HTML. If they do, you have a strong signal that the server returns full HTML per URL; if not, you likely need deeper rendering checks.</p>
+<h3>Runtime routing indicators</h3>
+<p>At runtime, the presence of history.pushState usage and a lack of full-document navigations are classic signs of client-side routing. You can test for pushState behavior by interacting with the page and observing the console or instrumenting navigation events; repeated pushState calls combined with fetch traffic usually indicate SPA-like routing rather than per-URL document loads <a href="https://developer.mozilla.org/en-US/docs/Glossary/Single-page_application" target="_blank" rel="noopener">MDN Web Docs on single-page applications</a>.</p><p>Combine these runtime indicators with the server HTML checks and network trace to avoid false positives. A site that uses pushState for minor UI flows but still returns full HTML for main URLs can behave like a server-rendered hybrid, and that usually carries lower spa seo risk than a pure CSR site.</p>
+<h2>Practical checklist for SEO verification</h2>
+<h3>Quick manual checks</h3>
+<p>Run these short checks in order of speed and confidence: view-source or curl for the URL, a one-minute network trace to classify navigations, then disable JavaScript to see whether main content still appears. These manual steps are low-effort and can quickly show whether server HTML exists for key pages <a href="https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central JavaScript SEO basics</a>.</p><p>If the server HTML contains the primary content, document the evidence and move on to measurement checks. If the server HTML is empty or minimal, escalate to the validation checklist below and prepare a reproducible test plan for engineers.</p>
+<h3>Tools to validate indexed render</h3>
+<p>Use Google Search Console URL Inspection to view Google's rendered HTML snapshot for a specific URL and compare it with your server response. The URL Inspection snapshot is an authoritative view of what Google indexed for that URL and is essential for javascript seo testing <a href="https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central JavaScript SEO basics</a>.</p><p>Also use the Mobile-Friendly Test to see how Googlebot-Mobile renders the page. Treat these tools together as the final checkpoint: local curl and network traces tell you how the server responds, and Google tools tell you what was actually indexed.</p>
+<h2>What public scans and inspections show for amazon.com</h2>
+<h3>Summary of technology profile</h3>
+<p>Public technology scans such as BuiltWith report that amazon.com includes server-side technologies and serves full HTML responses for product and category pages, which aligns with behaviour expected from MPAs or server-rendered hybrids rather than a pure CSR SPA <a href="https://builtwith.com/amazon.com" target="_blank" rel="noopener">BuiltWith profile for amazon.com</a>.</p><p>Those scans are a high-level signal. They indicate that amazon.com returns complete HTML for many key pages, which typically lowers the immediate indexing risk tied to client-side rendering. However, scans cannot fully describe endpoint-level hydration depth or interactive flows.</p>
+<h3>Page-level inspection notes</h3>
+<p>Page-level inspections done publicly show product and category pages returning full document responses, with client-side JavaScript layered on for interactivity. That pattern is consistent with an MPA or hybrid model where server-rendered HTML forms the baseline and scripts enhance the experience <a href="https://moz.com/learn/seo/spa" target="_blank" rel="noopener">Moz on SPA detection</a>.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://orvus.net/services" target="_blank" rel="noopener">Orvus Unique Services</a></div>
+      <a href="https://orvus.net/services" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1H_h1lsT61lq2b7T9TJp_cP-rw6fSFKSG" alt="Orvus Unique Services" /></a>
+    </div>
+<p><a href="https://orvus.net/about" target="_blank" rel="noopener">Orvus Limited</a> can act as a systems builder to help structure reproducible tests and validation tickets, focusing on search architecture and measurement rather than generic audits. Keep the mention light and contextual when you involve external partners.</p><p>Open questions remain about how much progressive hydration or client-side routing Amazon applies in specific interactive flows or on subdomains. Those are endpoint-specific issues that require curl and network traces to resolve at the URL level <a href="https://builtwith.com/amazon.com" target="_blank" rel="noopener">BuiltWith profile for amazon.com</a>.</p>
+<h2>When SPA-like patterns create SEO risk and when they don't</h2>
+<h3>High-risk CSR patterns</h3>
+<p>Patterns that raise indexing risk include pages where the initial server HTML lacks main content, heavy reliance on pushState without server-side document responses, or large hydration steps that push visible content behind long-running scripts. These situations can produce flaky or delayed indexing and therefore demand remedial action such as server side rendering or pre-rendering <a href="https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central guidance</a>.</p><p>If you spot those patterns on revenue-critical pages, prioritise them for controlled validation and remediation. Use the checklist in the rendering fixes section to prove that any change actually improves Google's recorded render before rolling out broadly.</p>
+<h3>Low-risk server-rendered hybrids</h3>
+<p>Hybrid approaches that return full HTML for core content but use client-side scripts only to enhance interactivity tend to carry lower indexing risk. In many cases, progressive hydration and modest client-side enhancements do not block indexing and can be left as-is after confirming Google recorded the content in its indexed snapshot <a href="https://web.dev/rendering-on-the-web/" target="_blank" rel="noopener">web.dev on rendering approaches</a>.</p><p>The practical rule of thumb: if the server response contains the main content and Google’s URL Inspection shows that content in the rendered snapshot, the urgency to implement SSR decreases. Use measured tests to confirm that judgement rather than assuming no action is required.</p>
+<h2>Rendering fixes and validation workflows</h2>
+<h3>SSR, pre-rendering, and validated dynamic rendering</h3>
+<p>When CSR blocks indexing, common remediation options include server side rendering, pre-rendering snapshots for key URLs, or validated dynamic rendering where server snapshots are served to bots while humans receive hydrated pages. These choices trade engineering complexity against indexability and should be chosen based on evidence from reproducible tests <a href="https://web.dev/rendering-on-the-web/" target="_blank" rel="noopener">web.dev rendering approaches</a>.</p><p>Avoid implementing broad SSR before you have endpoint-level evidence that JavaScript is the blocker. Instead, prefer targeted fixes for high-value pages and validate each change using the same checks you use for detection: curl, network traces, and Google Search Console URL Inspection <a href="https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central JavaScript SEO basics</a>.</p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Validate whether server-rendered HTML is available and Google can index it</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-g5s9el-0">
+                        <input id="tool-check-g5s9el-0" type="checkbox" />
+                        <span>URL</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-v18vp9-1">
+                        <input id="tool-check-v18vp9-1" type="checkbox" />
+                        <span>curl output</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-ov0ywr-2">
+                        <input id="tool-check-ov0ywr-2" type="checkbox" />
+                        <span>network trace type</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-77gyjt-3">
+                        <input id="tool-check-77gyjt-3" type="checkbox" />
+                        <span>GSC snapshot</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-t898km-4">
+                        <input id="tool-check-t898km-4" type="checkbox" />
+                        <span>JS disabled screenshot</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Run on a small set of high-value pages first</p>
+            </div>
+<h3>When to run a controlled validation</h3>
+<p>Run a controlled validation when your detection tests show missing server HTML, when Google’s URL Inspection snapshot lacks expected content, or when business metrics depend on pages that appear to be CSR-blocked. A controlled validation should compare pre-change and post-change renders for the same URLs to confirm the fix improved Google's recorded snapshot <a href="https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central guidance</a>.</p><p>Document the curl outputs, network traces, and GSC snapshots alongside the code change and use a short list of validation URLs to avoid noisy rollouts. Small, measurable tickets reduce risk and let you iterate based on evidence rather than assumptions.</p>
+<h2>Decision criteria: choose SSR, hybrid, or CSR</h2>
+<h3>Trade-offs and constraints</h3>
+<p>Key decision inputs include the indexability evidence from your tests, the traffic and revenue importance of the pages, engineering constraints such as deploy complexity and runtime cost, and the quality of measurement and reporting you already have in place. These inputs determine whether SSR is worth the added complexity or whether a hybrid approach is sufficient <a href="https://web.dev/rendering-on-the-web/" target="_blank" rel="noopener">web.dev on rendering approaches</a>.</p><p>SSR improves indexability by delivering full HTML but increases server complexity and testing needs. Hybrid options can balance cost and SEO needs by serving server HTML for crawlable URLs while keeping client-side rendering for UX flows that do not affect indexable content.</p>
+<h3>Prioritisation for technical teams</h3>
+<p>Prioritise fixes for crawlable, high-value pages first. Use the detection checklist to prove indexability gaps, then open small validation tickets that change one variable at a time. This approach keeps engineering effort focused on pages that matter for revenue and measurement and prevents wholesale changes based on inconclusive tests <a href="https://web.dev/rendering-on-the-web/" target="_blank" rel="noopener">web.dev rendering advice</a>.</p><p>For teams with limited bandwidth, focus on top landing pages, product pages, and category pages where search traffic and conversions concentrate. Prove improvement in GSC before broadening the remediation scope.</p>
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure>
+<p> </p>
+<h2>Common testing mistakes and troubleshooting tips</h2>
+<h3>False negatives from single checks</h3>
+<p>Relying on one test alone often causes misclassification. For example, a curl response might show server HTML for a user agent but a production edge experiment or A/B test could change responses for other users. Combine view-source, curl, network traces, and Google tools to reduce false negatives and document each step <a href="https://moz.com/learn/seo/spa" target="_blank" rel="noopener">Moz SPA detection advice</a>.</p><p>Also watch for caching layers and geofencing that return different HTML depending on location or cookies. Run tests from multiple locations or use consistent headers to avoid being misled by transient server behavior.</p>
+<h3>How to avoid flaky test setups</h3>
+<p>Use consistent command examples and instrumented traces. Record the network trace, note the navigation type entries, and save the raw curl output. When you disable JavaScript locally, remember that Google may still execute JavaScript in its renderer, so always confirm findings with the URL Inspection snapshot rather than treating the local JS-disabled test as definitive <a href="https://web.dev/rendering-on-the-web/" target="_blank" rel="noopener">web.dev rendering guidance</a>.</p><p>If tests disagree, escalate to a controlled experiment with a small set of pages and document the evidence for engineers to reproduce. That discipline avoids unnecessary engineering work driven by flaky or single-source signals.</p>
+<h2>Examples and inspection walkthroughs</h2>
+<h3>Sample curl and view-source checks</h3>
+<p>A simple curl example retrieves the raw server HTML: curl -L -s "https://example.com/product/sku" and then inspect the output for product title and main content. If those elements appear in the curl output, the server returned full HTML for that URL and the page is less likely to be CSR-blocked for indexing <a href="https://moz.com/learn/seo/spa" target="_blank" rel="noopener">Moz SPA testing walkthrough</a> and this SPA vs MPA guide <a href="https://wezom.com/blog/spa-vs-mpa-whats-best-for-your-project" target="_blank" rel="noopener">SPA vs MPA: Key Differences</a>.</p><p>Use view-source in the browser to confirm the same content is present before JavaScript mutates the DOM. If view-source and curl match the final rendered page, you have strong evidence of server rendering at that endpoint.</p>
+<h3>Reading a Chrome network trace and identifying document vs XHR</h3>
+<p>Open DevTools, preserve log, then navigate the site while recording. Look in the Type or Initiator columns for 'document' entries during navigations and 'fetch' or 'xhr' entries for client-driven updates. A navigation that loads a new document entry in the trace signals a full HTML load, whereas repeated fetch or xhr activity with no document load suggests SPA-like updates <a href="https://moz.com/learn/seo/spa" target="_blank" rel="noopener">Moz on SPA detection</a>.</p><p>Annotate traces with timestamps and screenshots so you can present clear evidence. These annotated traces are helpful in tickets to engineers, since they show exactly which requests produced the visible content and whether the server provided it directly.</p>
+<h2>Verifying Google's indexed render and measurement</h2>
+<h3>Use Google Search Console URL Inspection</h3>
+<p>URL Inspection shows Google's rendered HTML snapshot and whether the page was indexed. Compare the GSC snapshot with your server curl output to see if Google recorded the server-provided content or a client-rendered result. This comparison is the most direct way to confirm what Google indexed and whether JavaScript blocked content <a href="https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central JavaScript SEO basics</a>.</p><p>If the GSC snapshot lacks expected content but your server HTML includes it, that gap indicates rendering or timing issues. Use the validation workflow to iterate on changes and re-run URL Inspection until the snapshot reflects the server content.</p>
+<h3>Confirm with Mobile-Friendly Test and cached snapshots</h3>
+<p>The Mobile-Friendly Test provides an additional render check with Googlebot-Mobile and a visual screenshot of the rendered page. Use it alongside URL Inspection to cross-validate results and document any discrepancies conservatively <a href="https://web.dev/rendering-on-the-web/" target="_blank" rel="noopener">web.dev rendering approaches</a>.</p><p>Repeat these checks after any remediation to ensure the indexed record changes as expected, and keep a short list of validation URLs to avoid noisy measurement across many pages.</p>
+<h2>Documenting findings and communicating fixes to engineers</h2>
+<h3>What evidence to include</h3>
+<p>When you file a ticket, include the raw curl/view-source output, annotated network trace screenshots showing document versus XHR traffic, and the GSC rendered snapshot. Those three artifacts together let engineers reproduce the issue and understand whether the error is server-side or client-side <a href="https://web.dev/rendering-on-the-web/" target="_blank" rel="noopener">web.dev guidance</a>.</p><p>Label each artifact with the test commands, timestamps, and any headers or cookies used so the behaviour can be reproduced. Clear evidence reduces back-and-forth and helps prioritise remediation for the most important pages.</p>
+<h3>How to prioritise tickets</h3>
+<p>Map each finding to impact and effort. High-impact pages that lack server HTML or show missing GSC snapshots deserve high priority. For lower-impact pages, consider a hybrid or deferred remediation approach. Always scope tickets narrowly and require a validation plan that uses the same detection checklist to confirm success <a href="https://web.dev/rendering-on-the-web/" target="_blank" rel="noopener">web.dev on prioritisation</a>.</p><p><a href="https://orvus.net/services" target="_blank" rel="noopener">Orvus Unique Services</a> can act as a systems builder to help structure reproducible tests and validation tickets, focusing on search architecture and measurement rather than generic audits. Keep the mention light and contextual when you involve external partners.</p>
+<h2>Summary and next steps for operators and founders</h2>
+<h3>Quick decision map</h3>
+<p>Run the detection checklist first: curl/view-source, network trace to see document versus XHR, and Google tools to confirm indexed render. If server HTML is present, the indexing risk is low; if it is not, prioritise high-value pages for remediation and controlled validation <a href="https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics" target="_blank" rel="noopener">Google Search Central guidance</a>.</p>
+<h3>Recommended next actions</h3>
+<p>Prioritise testing of top landing, product, and <a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">category pages</a>. Document curl outputs, annotated traces, and GSC snapshots in tickets. Start with targeted validation tickets that prove a change improves Google’s recorded render before expanding the remediation scope. Repeat tests after changes and treat the results as your primary signal for further work.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-vh3m3j" class="faq-toggle" /><label for="faq-vh3m3j" class="faq-summary" role="button" tabindex="0">How can I quickly tell if a page is SPA or MPA?</label><div class="faq-content"><p>Run a curl or view-source for the URL, record a browser network trace to see document versus XHR loads, and check Google Search Console URL Inspection for the rendered snapshot.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-rxbxqo" class="faq-toggle" /><label for="faq-rxbxqo" class="faq-summary" role="button" tabindex="0">Does seeing pushState always mean I have to implement SSR?</label><div class="faq-content"><p>Not always. pushState can be used for UI flows while core content is server-rendered. Verify server HTML and GSC snapshots first before choosing SSR.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-4jj631" class="faq-toggle" /><label for="faq-4jj631" class="faq-summary" role="button" tabindex="0">What is the minimum set of pages to test first?</label><div class="faq-content"><p>Start with top landing pages, high-traffic product pages, and category pages where search traffic and conversions concentrate.</p></div></section>
+</section>
+
+<section class="article-ending">Detecting SPA versus MPA behaviour is a test-first exercise: collect server HTML, network traces, and Google render snapshots before making architectural changes. Prioritise high-value pages for validation and use small, measurable tickets to confirm any remediation.
+
+If you need structured help, consider a compact diagnostic that maps the detection checklist to a short remediation plan tied to measurement and validation.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://developer.mozilla.org/en-US/docs/Glossary/Single-page_application" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Glossary/Single-page_application</a></li><li><a href="https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics" target="_blank" rel="noopener">https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics</a></li><li><a href="https://web.dev/rendering-on-the-web/" target="_blank" rel="noopener">https://web.dev/rendering-on-the-web/</a></li><li><a href="https://moz.com/learn/seo/spa" target="_blank" rel="noopener">https://moz.com/learn/seo/spa</a></li><li><a href="https://builtwith.com/amazon.com" target="_blank" rel="noopener">https://builtwith.com/amazon.com</a></li><li><a href="https://orvus.net/services" target="_blank" rel="noopener">https://orvus.net/services</a></li><li><a href="https://developer.chrome.com/blog/beyond-spa" target="_blank" rel="noopener">https://developer.chrome.com/blog/beyond-spa</a></li><li><a href="https://www.dotcms.com/blog/what-is-a-single-page-application" target="_blank" rel="noopener">https://www.dotcms.com/blog/what-is-a-single-page-application</a></li><li><a href="https://orvus.net/about" target="_blank" rel="noopener">https://orvus.net/about</a></li><li><a href="https://wezom.com/blog/spa-vs-mpa-whats-best-for-your-project" target="_blank" rel="noopener">https://wezom.com/blog/spa-vs-mpa-whats-best-for-your-project</a></li><li><a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">https://orvus.net/category/useful-knowledge/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
