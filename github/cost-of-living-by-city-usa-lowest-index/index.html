@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What city has the lowest cost of living index? A practical guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #8f1f2a; /* derived darker */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* from --mc-panel-2 */
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent scoped additions (only allowed selectors used) */
+    .article-body .cta-section{ background: transparent; border: 0; box-shadow: none; padding: 0; }
+    .article-body .cta-button{ background: var(--accent); }
+    .article-body .cta-button:hover{ background: var(--accent-hover); }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1fjl0V1mf1hoOGeOM7gba_0vgwE5XR540" alt="Cost of living by city USA - banner image" />
+        </div>
+        <h1 class="title">What city has the lowest cost of living index? A practical guide</h1>
+        <p class="subline">Practical steps to compare local price levels, housing and wages before moving.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/cost-of-living-by-city-usa-lowest-index/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">This guide explains what city-level cost-of-living indexes measure and why different lists can disagree. It is aimed at readers who want practical steps to compare price levels against local wages and housing before moving.
+
+The article uses objective measures such as the BEA Regional Price Parities alongside consumer lists and rent reports so readers can see why places like Decatur, Illinois appear on low-cost shortlists in 2024.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Combine official price-level measures with current rent and wage checks to understand real affordability.</span></div><div class="highlight-card"><span class="highlight-text">Housing and rent are the dominant drivers of city-level cost differences.</span></div><div class="highlight-card"><span class="highlight-text">Decatur, Illinois appears near the bottom of several 2024 consumer lists because of low housing costs.</span></div>
+     </div>
+  <h2>What cost-of-living indexes measure and why they differ</h2>
+  <p>A cost-of-living index compares local prices to a national benchmark to show whether a place is relatively more or less expensive. These indexes do not measure wages; they measure price levels across a defined basket of goods and services, often at a metro area level. The BEA Regional Price Parities provide an official example of a metro-level price comparison useful for that purpose, and they are commonly recommended for objective comparisons <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities</a>.</p>
+  <p>Indexes report scores where the national average is the baseline. A score above the baseline means prices are higher than average; a score below means prices are lower. Which specific items are in the basket and how they are weighted determine much of the difference between one index and another. Methodology choices change placement more than small price movements.</p>
+  <div class="cta-section">
+    <h3 class="cta-headline">Stay informed with Michael Carbonara</h3>
+    <div class="cta-intro"><p>Before you decide based on one list, compare at least one objective price-level measure with a recent local rent check to see which measure matches your spending profile.</p></div>
+    <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign</a>
+  </div>
+  <p>Consumer-facing rankings often build composite scores from categories such as housing, groceries, utilities, transportation, healthcare, and local taxes. Those public lists can be useful for headlines, but they mix different data types and time periods. For a clearer sense of relative prices, use the official metro-level RPPs alongside consumer lists to see the same question from two angles.</p>
+  <h3>Definitions: index, basket, geographic unit</h3>
+  <p>An index is a relative number based on a reference. The basket is the set of goods and services priced. The geographic unit is the level at which prices are aggregated, for example a metropolitan area or a single city. Those choices matter because a metro area can include suburban and rural places with prices that differ from the core city.</p>
+  <h3>Official vs. consumer-facing measures</h3>
+  <p>Official measures like the BEA RPPs are designed for economic analysis and compare price levels across regions using a consistent framework. Consumer-facing rankings may use the same categories but assign different weights or combine city and county data in ways that suit their audience. That is why you will see different cities ranked lowest depending on the list you read.</p>
+  <h2>How economists and websites build these rankings</h2>
+  <p>Most rankings draw on a mix of sources. Common inputs include housing costs or typical rents, groceries and food, utilities, transportation, healthcare, and local taxes. Consumer rankings usually state which inputs they use and how they weigh them. That transparency helps readers understand why scores move, but it also means lists are not directly interchangeable.</p>
+  <p>Housing or rent is often the largest single driver of rank differences because it is usually the most expensive regular item in household budgets. Recent rent reports show substantially lower typical rents in the cities that appear cheapest on consumer lists, which explains why those places rank low on many lists <a href="https://www.apartmentlist.com/research/national-rent-data" target="_blank" rel="noopener">National Rent Report</a>. See related coverage on <a href="https://www.move.org/lowest-cost-of-living/" target="_blank" rel="noopener">Move.org</a> for additional consumer-oriented lists.</p>
+  <p>Data sources differ in time coverage and geographic granularity. The BEA RPPs are metro-area level and updated on a schedule that suits national accounting, whereas consumer sites may use more recent rental listings or survey data for a single town. These timing and unit differences will change rankings, especially when housing markets move quickly.</p>
+  <h3>Data sources and typical indicators</h3>
+  <p>Consumer lists typically combine public data, listings, and sometimes user-contributed information. Examples of such consumer rankings are WalletHub and U.S. News, which publish accessible lists and document their methodology so readers can judge how results were calculated <a href="https://wallethub.com/edu/cheapest-places-to-live/20488" target="_blank" rel="noopener">Cheapest Places to Live in America (2024)</a>. For wider perspective, see analysis from <a href="https://www.forbes.com/sites/laurabegleybloom/2025/03/24/the-best-and-most-affordable-places-to-live-in-america-2025-report/" target="_blank" rel="noopener">Forbes</a>.</p>
+  <h3>How housing is treated and why it matters</h3>
+  <p>Some indexes use median rent, others use a weighted housing cost that includes mortgage payments and property taxes. Where rent is low, a city will tend to appear near the bottom of consumer cost lists. Because of this, renters and homeowners can get different impressions from the same list, so match the housing measure to your situation.</p>
+  <h2>A practical framework to compare cities for movers</h2>
+  <p>Start by picking the index that matches your situation. For an objective, economy-wide view use the BEA RPPs; for renter-specific comparisons use recent local rent surveys or listing sites. Combining an objective price-level measure with current rental and job data gives a clearer picture than any single list <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities</a>.</p>
+  <p>Step 1: check the RPP or an equivalent price-level indicator for the metro you are considering. That tells you whether the metro area generally runs above or below the national price level. Step 2: scan current one-bedroom and two-bedroom rent listings in neighborhoods you would consider. Step 3: compare typical local wages for jobs you might take.</p>
+  <section class="faq-accordion"><input type="checkbox" id="faq-eu9rsy" class="faq-toggle" checked /><label for="faq-eu9rsy" class="faq-summary" role="button" tabindex="0">Which U.S. city has the lowest cost-of-living index?</label><div class="faq-content"><p>Several 2024 consumer-facing rankings identify Decatur, Illinois as the city that most often ranks lowest, but rankings differ by methodology, and readers should combine objective price-level measures with local rent and wage checks before drawing conclusions.</p></div></section>
+  <p>When you combine these steps you can see whether lower prices meaningfully improve household finances after accounting for likely earnings. Local job markets and wage levels are the key counterbalance to low nominal prices, so check recent job postings and median wage data alongside price measures <a href="https://www.apartmentlist.com/research/national-rent-data" target="_blank" rel="noopener">National Rent Report</a>. Also see recent updates on the <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news</a> page.</p>
+  <h3>Step 1: pick the right index for your situation</h3>
+  <p>If you are a remote worker with stable pay, prioritizing a low housing cost makes sense. If you are moving to seek employment, weight local wage and job data more heavily. The BEA RPPs are a practical starting point for price-level context, but they do not replace checking current listings for specific housing types.</p>
+  <h3>Step 2: combine index scores with local wages and listings</h3>
+  <p>Put numbers side by side: an RPP score, median rent for relevant units, and median wages for your occupation or industry. This quick matrix shows whether a lower price level will translate into more disposable income for your household. Use local labor-market sources for wage checks rather than relying only on national averages.</p>
+  <h2>Decision criteria: what to check beyond low prices</h2>
+  <p>Low prices are only one factor. Look at local earnings, job availability, transportation options, healthcare access, school quality if you have children, and local tax rules. These non-price factors can materially affect living standards and cost-of-living calculations.</p>
+  <p>Local wage levels and job availability can offset or negate the advantage of lower prices. A place with very low housing costs but few jobs in a given field may not improve your income situation. Compare local occupational wages and recent job postings to estimate earning potential in your line of work.</p>
+  <p>Access to services and transportation matter for daily costs. If a low-cost city requires long drives to reach work or essential services, commuting time raises actual living costs and can reduce net benefit. Account for commuting costs and time when you balance price savings against lifestyle impacts.</p>
+  <h3>Earnings and job availability</h3>
+  <p>Tally typical salaries for roles similar to yours in the target metro and compare them with national medians. That will show whether local pay scales will support the lifestyle you expect. If local pay is substantially lower, calculate how much lower prices must be to compensate.</p>
+  <h3>Access to services and transportation</h3>
+  <p>Look for measures of commute times and public transit availability, plus proximity to hospitals and grocery stores. These factors affect recurring costs and resilience in bad weather or personal emergencies. For many movers, having reliable local services outweighs small variations in price indexes.</p>
+  <h2>Typical mistakes and how to avoid them</h2>
+  <p>A common error is relying on a single consumer list to decide where to move. Different rankings use different baskets and weights and may report at different geographic levels. Cross-checking the BEA RPPs with consumer lists and live rental listings reduces the chance of being misled by one methodology alone <a href="https://realestate.usnews.com/places/rankings/cheapest-places-to-live" target="_blank" rel="noopener">Cheapest Places to Live in the U.S.</a>. Visual summaries from <a href="https://www.visualcapitalist.com/americas-most-and-least-affordable-cities-in-2025/" target="_blank" rel="noopener">Visual Capitalist</a> can also help spot geographic patterns.</p>
+  <p>Another mistake is ignoring housing type. A list based on median rent will not reflect the price you pay if you plan to buy a home or share housing. Match the housing measure to your expected living arrangement to avoid surprises.</p>
+  <p>Hidden costs are often understated. Insurance, property taxes, utilities, and one-time moving expenses can add materially to the cost of relocation. Factor these into your calculations and treat advertised indexes as starting points rather than final answers.</p>
+  <h3>Relying on a single ranking</h3>
+  <p>To reduce risk, consult at least two consumer-facing rankings and one official price-level measure. That mix highlights whether a city is consistently low-cost across different methods or only low under a specific weighting scheme.</p>
+  <h3>Ignoring housing type and hidden costs</h3>
+  <p>Match listings to the housing type you will use and add an estimate for one-time moving and setup costs. For homeowners, add property tax and insurance checks; for renters, include renter insurance and utility patterns in your neighborhood estimate.</p>
+  <h2>Examples: cities that commonly rank among the cheapest</h2>
+  <p>Several widely used 2024 consumer-facing rankings identify Decatur, Illinois as the city with the lowest cost-of-living index in their published lists. Those consumer lists emphasize categories such as housing and everyday expenses and therefore place Decatur near the bottom of their rankings <a href="https://realestate.usnews.com/places/rankings/cheapest-places-to-live" target="_blank" rel="noopener">Cheapest Places to Live in the U.S.</a>.</p>
+  <p>Other smaller Midwestern and Appalachian communities also recur in top-10 shortlists from consumer rankings. Examples that appear across some lists include Enid, Oklahoma, and Weirton, West Virginia, though exact placement differs by methodology <a href="https://wallethub.com/edu/cheapest-places-to-live/20488" target="_blank" rel="noopener">Cheapest Places to Live in America (2024)</a>.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+  <p>These cities' low rankings are largely driven by substantially lower typical rents and housing costs compared with national averages, according to 2024 rent reports and consumer list analyses <a href="https://www.apartmentlist.com/research/national-rent-data" target="_blank" rel="noopener">National Rent Report</a>.</p>
+  <h3>Why Decatur, IL appears at the bottom of many lists</h3>
+  <p>Decatur's appearance near the bottom is explained mainly by lower housing costs and modest local price levels. Consumer lists that weight housing heavily will therefore list Decatur among the cheapest places to live. Keep in mind that consumer lists and official measures can differ because of geographic unit and weighting choices.</p>
+  <h3>A short top-10 shortlist and what it reflects</h3>
+  <p>Compact shortlists drawn from prominent consumer rankings commonly include several small Midwestern or Appalachian cities where rents and home prices are low. These shortlists are practical starting points for further checks, not destinations to pick without additional local wage and job-market verification.</p>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Compact shortlists drawn from prominent consumer rankings commonly include several small Midwestern or Appalachian cities where rents and home prices are low. These shortlists are practical starting points for further checks, not destinations to pick without additional local wage and job-market verification.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1bY1yZSLgJ0yY96OK3RdjQYKc83aZkBnt=s1200" alt="Minimal vector infographic map of United States highlighting low cost regions with icons for housing wages and commute in Michael Carbonara color palette cost of living by city usa" /></a>
+    </div>
+  <h2>A short how-to toolkit for readers: sample checks and quick calculators</h2>
+  <p>Three quick checks you can run in an afternoon will give a much clearer picture: compare the BEA RPP for the metro; scan current one-bedroom and two-bedroom rents in neighborhoods you would accept; and compare median wages or current job listings for your occupation. Together these checks show whether low nominal prices convert into better household budgets <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities</a>. Also see the site homepage at <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">Michael Carbonara</a>.</p>
+  <p>Where to verify rent and job pay quickly: use primary rental listings and local job boards or government labor statistics to get recent numbers. Rent listing snapshots show current market conditions in ways that lagging indexes may not capture, and labor-market snapshots show whether earnings can offset lower prices <a href="https://www.apartmentlist.com/research/national-rent-data" target="_blank" rel="noopener">National Rent Report</a>.</p>
+  <div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick checklist to compare a candidate city</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-vich8p-0">
+                        <input id="tool-check-vich8p-0" type="checkbox" />
+                        <span>BEA RPP score</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-xn19f9-1">
+                        <input id="tool-check-xn19f9-1" type="checkbox" />
+                        <span>1BR rent</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-qriej3-2">
+                        <input id="tool-check-qriej3-2" type="checkbox" />
+                        <span>Median wage for role</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use recent local listings</p>
+            </div>
+  <p>Three practical quick calculations: first, compute a price-adjusted wage by dividing your current or expected local wage by the local price-level measure to see relative purchasing power. Second, calculate expected housing share of income using typical rents. Third, add an estimated commute cost to see net monthly gain. These quick calculations help separate headline low-cost claims from real household impact.</p>
+  <h3>Three quick checks to run in one afternoon</h3>
+  <p>1) Pull the BEA RPP for the metro. 2) Snapshot current rents for unit types you will use. 3) Search recent job postings and median wages for relevant occupations. If all three point in the same direction, you have a strong signal.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+  <h3>Where to verify rent and job pay quickly</h3>
+  <p>Government labor statistics and local job boards are useful for wage checks. Primary rental listings give current rent levels. Combining these sources reduces the chance of surprises from lagged indexes or narrow baskets. See the author about page at <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">About</a>.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-w5by57" class="faq-toggle" /><label for="faq-w5by57" class="faq-summary" role="button" tabindex="0">What does a cost-of-living index measure?</label><div class="faq-content"><p>A cost-of-living index compares local prices for a defined basket of goods and services to a national benchmark to show whether a place is relatively more or less expensive.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-8qyycb" class="faq-toggle" /><label for="faq-8qyycb" class="faq-summary" role="button" tabindex="0">Is Decatur, Illinois the city with the lowest cost of living?</label><div class="faq-content"><p>Several 2024 consumer-facing rankings list Decatur, Illinois among the lowest-cost cities, but results can vary by methodology and by whether the focus is on renters or broader household consumption.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-rolpdw" class="faq-toggle" /><label for="faq-rolpdw" class="faq-summary" role="button" tabindex="0">What is the most important check before moving to a low-cost city?</label><div class="faq-content"><p>Compare an objective price-level measure with current local rent listings and local wage or job data to see whether lower prices will translate into better household finances.</p></div></section>
+</section>
+
+<section class="article-ending">Use price-level measures together with current local rent listings and job-wage checks before making a relocation decision. That combined approach reduces the chance of being misled by a single ranking methodology.
+
+For voters and local readers seeking background on local issues, this method helps separate headline rankings from everyday costs and earning potential.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area</a></li><li><a href="https://www.apartmentlist.com/research/national-rent-data" target="_blank" rel="noopener">https://www.apartmentlist.com/research/national-rent-data</a></li><li><a href="https://wallethub.com/edu/cheapest-places-to-live/20488" target="_blank" rel="noopener">https://wallethub.com/edu/cheapest-places-to-live/20488</a></li><li><a href="https://realestate.usnews.com/places/rankings/cheapest-places-to-live" target="_blank" rel="noopener">https://realestate.usnews.com/places/rankings/cheapest-places-to-live</a></li><li><a href="https://www.move.org/lowest-cost-of-living/" target="_blank" rel="noopener">https://www.move.org/lowest-cost-of-living/</a></li><li><a href="https://www.forbes.com/sites/laurabegleybloom/2025/03/24/the-best-and-most-affordable-places-to-live-in-america-2025-report/" target="_blank" rel="noopener">https://www.forbes.com/sites/laurabegleybloom/2025/03/24/the-best-and-most-affordable-places-to-live-in-america-2025-report/</a></li><li><a href="https://www.visualcapitalist.com/americas-most-and-least-affordable-cities-in-2025/" target="_blank" rel="noopener">https://www.visualcapitalist.com/americas-most-and-least-affordable-cities-in-2025/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">https://michaelcarbonara.com/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
