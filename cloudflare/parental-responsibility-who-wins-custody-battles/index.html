@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Who wins the most custody battles?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Derived brand tokens (from provided style) */
+      --text-color: #ffffff; /* --mc-ink */
+      --accent: #ae2736;     /* --mc-accent */
+      --accent-hover: #8a1f2d; /* darker accent (optional) */
+      --line: rgba(255,255,255,.16); /* --mc-line */
+      --surface: #0b2664;    /* --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* panel */
+      --radius: 0px;        /* --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease, background .12s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: none;
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.80); margin-bottom: 2rem; }
+    .article-body .article-ending{ margin-top: 2.6rem; padding-top: 1.2rem; border-top: 1px solid var(--line); font-style: italic; }
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:1rem; margin:2.2rem 0; }
+    .article-body .highlight-card{ background: linear-gradient(135deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.03) 100%); border:1px solid rgba(255,255,255,.14); border-left:4px solid var(--accent); padding:1.15rem 1.35rem; font-weight:750; color: var(--text-color); box-shadow: 0 14px 34px rgba(0,0,0,.40); }
+    .article-body .side-by-side{ display:flex; gap:clamp(16px,3vw,28px); align-items:flex-start; margin:2rem 0; width:100%; }
+    .article-body .side-by-side img{ max-width: min(100%, 320px); height:auto; display:block; }
+    .article-body .side-by-side.product-image-right{ flex-direction:column; align-items:center; text-align:center; }
+    .article-body .faq-accordion{ border:1px solid rgba(255,255,255,.14); border-left:4px solid var(--accent); border-radius: var(--radius); margin-bottom:1.2rem; overflow:hidden; background: linear-gradient(135deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.03) 100%); }
+    .article-body .faq-summary{ padding:1.25rem 1.2rem 1.25rem 2.9rem; font-weight:950; cursor:pointer; position:relative; color:var(--text-color); display:flex; align-items:center; min-height:64px; }
+    .article-body .faq-summary::before{ content: ''; position:absolute; left:1.05rem; top:50%; transform:translateY(-50%); border-style:solid; border-width:6px 0 6px 9px; border-color: transparent transparent transparent var(--accent); }
+    .article-body .faq-toggle{ position:absolute; opacity:0; pointer-events:none; }
+    .article-body .faq-toggle:checked ~ .faq-summary::before{ transform: translateY(-50%) rotate(90deg); border-color: transparent transparent transparent var(--text-color); }
+    .article-body .faq-content{ display:none; padding:1.05rem 1.2rem 1.15rem 1.2rem; border-top:1px solid rgba(255,255,255,.12); color: rgba(255,255,255,.92); }
+    .article-body .faq-toggle:checked ~ .faq-content{ display:block; }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1-v1moxYi192lJCXwmOZHT_uCopMdEv7S" alt="Who wins the most custody battles? banner image" />
+        </div>
+        <h1 class="title">Who wins the most custody battles?</h1>
+        <p class="subline">Explains who typically gains custody in U.S. family courts and why.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/parental-responsibility-who-wins-custody-battles/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+  <div class="summary">This article explains who typically gains custody in U.S. family courts and why. It uses the term parental responsibility to cover both decision-making authority and physical custodianship. The content is neutral and source-attributed, directing readers toward state statutes and local court records for case-specific information. Michael Carbonara is presented only as a candidate reference profile elsewhere on the campaign site and is not a source for legal rules.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">U.S. courts use the best interests of the child as the guiding test for custody decisions.</span></div><div class="highlight-card"><span class="highlight-text">National data show mothers more often serve as primary physical custodians, but local law and facts determine outcomes.</span></div><div class="highlight-card"><span class="highlight-text">Documented safety risks frequently lead courts to limit or supervise parenting time to protect the child.</span></div>
+     </div>
+  <h2>What parental responsibility and custody mean in U.S. family courts</h2><h3>Quick definition</h3><p>Parental responsibility refers to the legal duties and rights parents have for a child, including who makes major decisions and who provides day-to-day care. Courts describe parental responsibility in different terms, but the practical split is usually between decision-making authority and physical care. For clarity across this article, parental responsibility will be used as a neutral label for both decision-making and custody roles.</p><p>The overarching legal test in U.S. family courts is the best interests of the child, which guides how parental responsibility is allocated in individual cases. For a concise explanation of that standard and its application, see Cornell Law School's Legal Information Institute.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">quick pointer to primary legal sources for custody definitions</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-c2ftth-0">
+                        <input id="tool-check-c2ftth-0" type="checkbox" />
+                        <span>State statutory text</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-8a1bon-1">
+                        <input id="tool-check-8a1bon-1" type="checkbox" />
+                        <span>Court rules</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-mv0adh-2">
+                        <input id="tool-check-mv0adh-2" type="checkbox" />
+                        <span>Published opinions</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Check the state court website for updated statutes</p>
+            </div><h3>Physical custody versus legal custody</h3>
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1lcB6xWbA2_HBjSIQvTxZJ0tKE3GV3Iiz=s1200" alt="Michael Carbonara - Image 1" /></a>
+      <div class="side-text"><p>Legal custody usually means decision-making authority on major matters like education, health care, and religion. Physical custody, sometimes called primary physical custody or physical custodianship, refers to the parent's role in day-to-day caregiving and where the child lives. Terminology varies by state, but these two concepts are widely used to describe different aspects of parental responsibility.</p></div>
+    </div><p>Professional guides for family law practitioners, such as those from the American Bar Association, explain how states and courts use these distinctions when drafting custody orders and parenting plans.</p><h2>How the 'best interests of the child' standard works in practice</h2><h3>What the standard covers</h3><p>The best interests test is not a single formula. Statutes and court rules typically list several factors judges should consider, such as the child's established living arrangements, parental roles, parental fitness, and the child's needs. For a practical overview of how courts describe and apply these factors, see the Legal Information Institute's discussion of the best interests standard.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure><h3>Statutes versus judicial discretion</h3><p>Many states provide a factor list in statute, but judges retain discretion to weigh those factors in light of the facts before them. That means the same statutory list can produce different outcomes in different jurisdictions or in different judges' hands. The American Bar Association's custody materials summarize how statutory factor lists and judge discretion interact in practice.</p><p>Courts generally use the standard to shape orders about parenting time and decision-making rather than following a rigid allocation rule, so outcomes often reflect both statutory guidance and case-specific discretion.</p><h2>Key factors courts commonly weigh in parental responsibility cases</h2><h3>Caregiving history and everyday routines</h3><p>Courts commonly consider who performed the child's daily caregiving tasks before separation, because continuity of care can be important to the child's welfare. This caregiving history often influences which parent receives primary physical custody.</p><section class="faq-accordion"><input type="checkbox" id="faq-8gazjf" class="faq-toggle" checked /><label for="faq-8gazjf" class="faq-summary" role="button" tabindex="0">Who wins the most custody battles?</label><div class="faq-content"><p>There is no single winner across all cases; courts apply the best interests standard and consider caregiving history, parental fitness, and safety risks, with local statutes and facts shaping outcomes.</p></div></section><p>How caregiving history is documented matters: judges look for corroborating records such as school contacts, medical appointment notes, or consistent testimony describing daily routines.</p><h3>Parental fitness, safety, and substance or mental-health concerns</h3><p>Parental fitness includes factors like substance use, untreated mental-health conditions, and the capacity to provide a stable environment. When credible safety concerns arise, family-court practice and child-welfare guidance advise steps to protect the child, which can include limiting or supervising parenting time.</p><p>Courts and child-welfare agencies use established guidance to balance parental participation with safety obligations, and model guidelines advise evaluators and judges on assessing these risks.</p><h3>The child's stated preference when age-appropriate</h3><p>When a child is of sufficient age and maturity, many courts will consider the child's expressed preference, but states differ on the age at which that preference is controlling and on how much weight to give it. The Legal Information Institute explains that child preference can be a factor but not an automatic decision maker.</p><p>Some courts elicit a child's view through in-camera interviews or written statements, while others rely on evaluator reports; practices vary and the child's preference is only one of several factors considered.</p><h2>Who wins the most custody battles in practice: patterns and national data</h2><h3>National survey evidence</h3><p>National survey data from the <a href="https://www2.census.gov/library/publications/2025/demo/p60-285.pdf" target="_blank" rel="noopener">U.S. Census Bureau</a> show that mothers more frequently serve as primary physical custodians, a pattern still referenced in recent practice guidance and summaries of custody basics. For national-level figures and context, see the Census Bureau's custodial parents report.</p><h3>How caregiving patterns map to outcomes</h3>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Because courts often give weight to who historically provided day-to-day care, caregiving patterns map into practical advantages for the parent who served as the primary caregiver. Practitioners and judges commonly reference primary caregiver status when making physical custody determinations.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1V2PVqOociZv-suU42UWAtOvf-C37vG5y=s1200" alt="Michael Carbonara - Image 2" /></a>
+    </div><p>Readers should note that national surveys provide a broad picture but do not predict individual cases, so local statutes and court practice matter for specific outcomes.</p><h2>How a child's preference is treated in custody decisions</h2><h3>When courts ask for a child's view</h3><p>Child preference can influence custody outcomes where the child is judged mature enough to express a reasoned view. The threshold and the way courts collect that view are state-specific, and model guidelines provide methods for eliciting a child's opinion without subjecting the child to undue pressure.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><h3>Variation by state and by child age</h3><p>States set different age guidelines and methods for weighing preference. Some statutes list age ranges or require a judge to consider maturity; other jurisdictions leave discretion to the evaluator or the court. The result is significant variation in how much influence a child's stated preference has in any given case.</p><p>Even where a court hears a child's preference, it is only one factor among many in the best interests calculus and does not automatically determine parental responsibility.</p><h2>Safety, abuse allegations, and supervised parenting time</h2><h3>How courts respond to documented risks</h3><p>Documented abuse or credible safety risks strongly affect custody outcomes and frequently lead courts to limit or supervise parenting time to protect the child. Child-welfare guidance emphasizes prioritizing the child's safety when credible allegations are substantiated.</p><h3>Use of supervised visitation and protective orders</h3><p>When safety concerns are substantiated, courts may order supervised visitation, restricted parenting plans, or protective remedies. Family-court models and child-welfare resources recommend structured risk-assessment approaches to determine appropriate protective measures.</p><p>These protective steps are designed to balance the child's safety with opportunities for parental involvement where appropriate, and jurisdictions have differing procedures for implementing supervision and monitoring.</p><h2>State-by-state variation and research gaps that matter for readers</h2><p>State statutes, factor lists, and evidentiary procedures differ, and those differences affect how judges weigh caregiving history, parental fitness, and child preference in parental responsibility decisions. For an overview of how local rules shape outcomes, see the National Center for State Courts' discussion of family justice data and gaps.</p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay connected with Michael Carbonara</h3><div class="cta-intro"><p>Consult your state court statistics page and recent local opinions to understand how your jurisdiction treats the factors that matter most in parental responsibility cases.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign</a></div><p>Researchers note that nationwide outcome studies after 2020 are limited, so state and county court data are usually the best sources for current patterns and trends. See our <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news page</a> for local reports and updates.</p><h2>How to read local court statistics, filings, and primary sources</h2><h3>Where to find state and county court data</h3><p>Start with the state court system's statistics page, which often includes family court reports, and check county or circuit court websites for local administrative orders and opinion summaries (see analysis of <a href="https://www.pew.org/en/research-and-analysis/data-visualizations/2025/03/how-many-cases-and-what-kind-do-state-and-local-courts-handle" target="_blank" rel="noopener">how many cases state and local courts handle</a>). The National Center for State Courts highlights where data gaps exist and which primary sources are most reliable for custody research.</p><h3>What to look for in filings and opinions</h3><p>Key documents include custody orders, parenting plans, and evaluator reports. Look for language describing the factors the judge relied on, any findings about caregiving patterns or safety concerns, and the specific parenting time schedule adopted. Case-level details often reveal how statutory factors were applied in practice.</p><p>Because public statistics can lag, checking the most recent published opinions and local administrative reports gives a clearer sense of current practice than relying on older national summaries.</p><h2>Common mistakes parents and reporters make in custody cases</h2><h3>Overreliance on national averages</h3><p>Assuming national averages determine local outcomes is a common error: national data show broad patterns but cannot substitute for state statutes or recent local rulings when predicting a specific case.</p><h3>Using unsourced online claims as evidence</h3><p>Presenting unverified allegations or social-media claims as evidence can mislead courts and readers. Reporters and parents should check primary filings and official court documents before treating a claim as factual.</p><p>Failing to document caregiving routines or neglecting to obtain professional evaluations can weaken the factual record a court uses to allocate parental responsibility.</p><h2>Practical scenarios: joint custody, sole physical custody, and supervised visitation</h2><h3>Example scenario: primary caregiver retains physical custody</h3><p>Hypothetical: when one parent has been the primary day-to-day caregiver for several years and both parents are fit, a court applying a best interests analysis may award primary physical custody to the established caregiver while granting the other parent meaningful parenting time. The best interests framework supports continuity and stability for the child.</p><h3>Example scenario: safety concerns lead to supervised visitation</h3><p>Hypothetical: where there is documented abuse or a credible safety risk, a court may limit unsupervised contact and order supervised visitation or other protective measures. Model guidelines recommend using structured risk assessments and evaluator input to set appropriate supervision terms.</p><p>These scenarios are explanatory and not predictions for any individual case; actual outcomes depend on the facts, the jurisdiction, and the judge's evaluation of evidence.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure><h2>Preparing evidence: evaluations, risk assessments, and documentation courts expect</h2><h3>Typical contents of parenting evaluations</h3><p>Parenting evaluations commonly assess caregiving history, parental capacity, the child's needs, and any allegations of risk. Model standards set out what evaluators typically review and report to the court.</p><h3>How structured risk-assessment tools are used</h3><p>Family-court guidance recommends structured tools to evaluate safety risks and to help judges decide whether supervised arrangements or restrictions are necessary. Evaluators use these tools alongside interviews, collateral records, and observational information.</p><p>Keeping careful documentation of caregiving routines, appointments, and communications can provide corroborating evidence that courts find useful when allocating parental responsibility.</p><h2>When to seek protective orders, evaluations, or professional help</h2><h3>Indicators that courts will treat safety as primary</h3><p>When allegations are substantiated or there is credible evidence of harm, courts typically prioritize protection of the child and may order supervised visitation, restricted contact, or emergency protective orders. Child-welfare guidance emphasizes prompt protective responses where safety risks are credible.</p><h3>How to request evaluations or supervision in family court</h3><p>Parties can ask the court for parenting evaluations or supervision orders through filings that set out the relevant facts and supporting documents. Child-welfare agencies may also become involved when safety concerns meet statutory thresholds for protective intervention.</p><p>This information is general in nature; exact procedures vary by state and county, and readers should consult local court rules or counsel for case-specific steps.</p><h2>What reporters, students, and researchers should verify before reporting custody trends</h2><h3>Key documents and statistics to check</h3><p>Verify claims against state court statistics, published opinions, and primary filings rather than relying solely on national summaries. The National Center for State Courts highlights the importance of primary sources when assessing family justice trends.</p><h3>How to avoid misleading generalizations</h3><p>Note statute variations and recent state law changes that affect how factors are weighted. Attribute statements to named sources and avoid presenting limited data as definitive; primary filings and recent local rulings provide the best evidence for local trends.</p><h2>Takeaways and next steps for parents and readers</h2><p>Key takeaways: courts use the best interests standard, caregiving history matters, safety concerns strongly influence outcomes, and national data show mothers more often serve as primary physical custodians but cannot predict individual cases. For a summary explanation of the best interests approach, see Cornell Law School's Legal Information Institute. See the <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">about page</a> for related information about the author.</p><p>For case-specific information, consult state statutes, local court statistics, and primary filings. The National Center for State Courts recommends checking those primary sources to understand how custody factors are applied in a given jurisdiction. See our <a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">issues page</a> for related content.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-n4cxq9" class="faq-toggle" /><label for="faq-n4cxq9" class="faq-summary" role="button" tabindex="0">What does parental responsibility mean?</label><div class="faq-content"><p>Parental responsibility refers to legal duties and rights over a child, including decision-making authority and who provides daily care; courts allocate these responsibilities using the best interests standard.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-zope64" class="faq-toggle" /><label for="faq-zope64" class="faq-summary" role="button" tabindex="0">Do children decide custody?</label><div class="faq-content"><p>A child's preference may be considered if the child is deemed sufficiently mature, but it is only one factor and its weight varies by state and court.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-0qkgph" class="faq-toggle" /><label for="faq-0qkgph" class="faq-summary" role="button" tabindex="0">Where can I find local custody statistics?</label><div class="faq-content"><p>Check your state court's statistics page, local family court administrative reports, and published opinions for the most relevant and current information.</p></div></section>
+</section><section class="article-ending">If you need specific guidance for a particular case, consult your state court rules, recent local opinions, and primary filings. Family law matters are fact-driven and jurisdiction-specific, so primary sources and qualified counsel are the best way to understand likely outcomes.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.clio.com/blog/family-law-statistics/" target="_blank" rel="noopener">https://www.clio.com/blog/family-law-statistics/</a></li><li><a href="https://www2.census.gov/library/publications/2025/demo/p60-285.pdf" target="_blank" rel="noopener">https://www2.census.gov/library/publications/2025/demo/p60-285.pdf</a></li><li><a href="https://www.pew.org/en/research-and-analysis/data-visualizations/2025/03/how-many-cases-and-what-kind-do-state-and-local-courts-handle" target="_blank" rel="noopener">https://www.pew.org/en/research-and-analysis/data-visualizations/2025/03/how-many-cases-and-what-kind-do-state-and-local-courts-handle</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li><li><a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">https://michaelcarbonara.com/issues/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
