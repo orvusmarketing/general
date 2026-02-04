@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What state has the best low-income housing? A practical guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      --text-color: #ffffff;
+      --accent: #ae2736;
+      --accent-hover: color-mix(in srgb, #ae2736 86%, #000 14%);
+      --line: rgba(255,255,255,.16);
+      --surface: #0b2664;
+      --surface-2: rgba(255,255,255,.06);
+      --radius: 0px;
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area */
+    .article-body .faq-accordion{ border-left: 4px solid var(--accent); }
+    .article-body .highlight-card{ border-left-color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/cheapest-state-to-live-in-usa-streets.jpg" alt="What state has the best low-income housing? banner image" />
+        </div>
+        <h1 class="title">What state has the best low-income housing? A practical guide</h1>
+        <p class="subline">Practical steps for renters to compare states and evaluate access to low-income housing.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/cheapest-state-to-live-in-usa-low-income-housing/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">Many searches for the cheapest state to live in usa focus on headline rent or cost-of-living comparisons. For people with low incomes those measures leave out crucial details such as the wage-to-rent relationship and the practical availability of subsidies.
+
+This article explains which data sources matter, how to compare states using a simple framework, and what concrete steps renters should take in 2026 to assess where low-income housing is most accessible.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">"Cheapest" listings often show low rents but not whether low-income households can actually access subsidized units.</span></div><div class="highlight-card"><span class="highlight-text">HUD income limits and local public housing authority practices are essential to check before moving for affordability reasons.</span></div><div class="highlight-card"><span class="highlight-text">Combine rent data, cost-burden statistics, and direct PHA inquiries to make a practical comparison between states.</span></div>
+     </div>
+  <h2>What "cheapest state to live in USA" really means for low-income households</h2>
+<p>When people ask which is the "cheapest state to live in usa" they are usually referring to low nominal rents or lower overall cost of living, but for low-income households those measures only tell part of the story. A state with low median rents can still leave many renters unable to afford housing if local wages are low or subsidized units are scarce, so it is important to look beyond headline rent figures and consider access and eligibility.</p>
+<p>The National Low Income Housing Coalition shows a persistent mismatch between wages and rents in most parts of the country, which helps explain why low sticker rents do not automatically mean accessible housing for people with limited income <a href="https://nlihc.org/oor/2024" target="_blank" rel="noopener">NLIHC Out of Reach 2024</a></p>
+<section class="faq-accordion"><input type="checkbox" id="faq-7eijv0" class="faq-toggle" checked /><label for="faq-7eijv0" class="faq-summary" role="button" tabindex="0">What state has the best low-income housing?</label><div class="faq-content"><p>No single state is universally the best for low-income housing; accessibility depends on local wages, cost-burden shares, and subsidy program availability, so prospective movers should compare HUD income limits, cost-burden statistics, and PHA waitlists for the specific metros they are considering.</p></div></section>
+<p>One helpful metric is housing cost-burden, defined as paying more than 30 percent of income for housing. Examining cost-burden alongside local wages and the supply of subsidized units gives a more complete picture than a single "cheapest" ranking.</p>
+<p>Program rules matter too. HUD income limits and eligibility are set by metropolitan area and change year to year, so two places with similar market rents can offer very different practical access to subsidized housing for a low-income household <a href="https://www.huduser.gov/portal/datasets/il/il2025/2025summary.odn" target="_blank" rel="noopener">HUD income limits and FY 2025 documentation</a></p>
+<h2>A practical framework to compare low-income housing across states</h2>
+<p>Use a short checklist of measurable criteria when you compare places. Core items include median rent, the share of households that are housing cost-burdened, the number of subsidized units and vouchers, voucher acceptance and portability, and state or local assistance programs. Those criteria can be assembled from national data and local contacts to create a consistent comparison.</p>
+<p>Start by deciding which outcomes matter most to you. If minimizing monthly rent is the priority, weight market rent and recent rent trends more heavily. If reliable access to help is key, give larger weight to voucher availability, public housing units, and PHA waitlist practices. This intentional weighting prevents misleading choices based only on low sticker rents.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Get updates and local resources from the campaign</h3><div class="cta-intro"><p>Use the checklist above to compare two states you are considering and note how rent, subsidy availability, and waitlists differ before you decide.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign</a></div>
+<p>Operationally, <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">collect data</a> from the same set of sources for each state so comparisons are apples-to-apples. Median rent and rent trends come from private data providers, cost-burden shares from the Census, and subsidy program counts and rules from HUD and state directories. Combining these figures with direct inquiries to local public housing authorities completes the picture.</p>
+<p>This approach reduces the chance a move driven by a single "cheapest" list leads to unexpected barriers such as long waitlists or voucher nonacceptance.</p>
+<h2>Key public data sources and how to use them</h2>
+<p>NLIHC's Out of Reach report and rent-to-wage measures are useful to see wage gaps that affect low-income renters, and the analysis helps explain why low rents alone are insufficient to guarantee access to units for people who earn below market wages <a href="https://nlihc.org/oor/2024" target="_blank" rel="noopener">NLIHC Out of Reach 2024</a></p>
+<p>HUD publishes area income limits and program guidance; see <a href="https://www.huduser.gov/portal/datasets/il.html" target="_blank" rel="noopener">HUD income limits dataset</a> those HUD income limits must be checked at the metro or county level because eligibility and subsidy formulas vary across areas and over time <a href="https://www.huduser.gov/portal/datasets/il/il2025/2025summary.odn" target="_blank" rel="noopener">HUD income limits and FY 2025 documentation</a></p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Run local HUD income-limit checks and basic subsidy availability comparisons</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-7xndqr-0">
+                        <input id="tool-check-7xndqr-0" type="checkbox" />
+                        <span>HUD income limits lookup</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-dwiiuv-1">
+                        <input id="tool-check-dwiiuv-1" type="checkbox" />
+                        <span>NLIHC state profile</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-5itbpl-2">
+                        <input id="tool-check-5itbpl-2" type="checkbox" />
+                        <span>Local PHA contact</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use matching metro area codes when searching</p>
+            </div>
+<p>The Census American Community Survey is the standard source for housing cost-burden statistics by state and metro area, and it helps quantify how many households pay more than 30 percent of their income for housing <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">American Community Survey housing data</a></p>
+<p>For recent rent movements use observed rent indexes such as Zillow's report to see short-term trends, while relying on Census and HUD for population and program eligibility context <a href="https://www.zillow.com/research/observed-rent-index-2024" target="_blank" rel="noopener">Zillow Observed Rent Index 2024</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>Begin by comparing median rent and the share of renters who are cost-burdened. A state with lower median rent but a high share of cost-burdened households may indicate weak local wages or scarce subsidized options, so weigh both dimensions before moving.</p>
+<p>Check HUD income limits and local program pages to determine whether you would likely qualify for common subsidy types in the metros you are considering. Local differences in income limits can change eligibility even between nearby counties <a href="https://www.huduser.gov/portal/datasets/il/il2025/2025summary.odn" target="_blank" rel="noopener">HUD income limits and FY 2025 documentation</a></p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1kifn9TBUa49eCtwBL5JSUPvedMWMMCnh=s1200" alt="Photograph of a modest apartment complex and nearby neighborhood street in the cheapest state to live in usa minimalist daytime navy and white palette" /></a>
+      <div class="side-text"><p>Many media lists and state ranking pages look primarily at median rents or broad cost-of-living measures and do not account for subsidy access or waitlist conditions. That focus can mislead renters who need subsidized units or vouchers to make housing affordable <a href="https://www.usnews.com/news/best-states/rankings/economy" target="_blank" rel="noopener">State rankings that emphasize affordability and economy</a></p></div>
+    </div>
+<p>Failing to consider wage levels is another common error. National analyses show a widespread mismatch between wages and rents, meaning low rents do not always keep housing affordable for low-wage households <a href="https://nlihc.org/oor/2024" target="_blank" rel="noopener">NLIHC Out of Reach 2024</a></p>
+<p>Avoid relying on single-source or outdated lists. Use primary program pages and contact local housing authorities for current details such as waitlist openings, voucher portability rules, and state-funded assistance levels.</p>
+<h2>Practical scenarios: how to evaluate three hypothetical state cases</h2>
+<p>Scenario A: low rents but few subsidies. Step 1, compare median rent and rent trends. Step 2, review cost-burden shares to see whether low rents translate into reduced housing stress. Step 3, check HUD income limits and the local PHA for subsidized unit counts and waitlist status. If cost-burden shares remain high and PHAs report long waitlists, the low market rents may not translate into practical access to affordable housing.</p>
+<p>Scenario B: moderate rents with strong voucher programs. Step 1, measure voucher supply and average voucher payment levels against local rents. Step 2, ask PHAs about voucher acceptance and portability. Step 3, confirm eligibility using HUD income limits. Strong voucher availability can shift a moderate-rent area into a workable option for qualified households.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>Scenario C: low cost-burden share overall but high local costs in some metros. Step 1, look at substate data where possible. Step 2, focus on specific metros and neighborhoods rather than statewide averages. Step 3, contact local PHA and review employer and transportation factors. State-level metrics can hide expensive local markets that matter for daily life.</p>
+<p>For all scenarios, treat these walks as illustrative. They are meant to show how a few targeted checks using rent, cost-burden, HUD income limits, and PHA information can produce different recommendations depending on your priorities <a href="https://www.jchs.harvard.edu/state-nations-housing-2024" target="_blank" rel="noopener">Harvard Joint Center for Housing Studies State of the Nation's Housing 2024</a></p>
+<h2>How to find and apply for low-income housing in your chosen state</h2>
+<p>Begin with <a href="https://www.hudexchange.info/programs/home/home-income-limits/" target="_blank" rel="noopener">HUD's local resource pages</a> and the HUD income-limit lookup to see which programs you may qualify for in the metro areas you are considering. These tools let you test eligibility against area median income and program thresholds <a href="https://www.huduser.gov/portal/datasets/il/il2025/2025summary.odn" target="_blank" rel="noopener">HUD income limits and FY 2025 documentation</a></p>
+<p>Next <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">contact</a> the public housing authority for the jurisdictions where you want to live. See <a href="http://www.hud.gov/helping-americans/public-housing" target="_blank" rel="noopener">HUD's Public Housing Program</a>. Ask about current waitlist status, application windows, required documents, and whether vouchers are accepted by landlords in target neighborhoods. Local PHAs are the primary administrators for many low-income housing programs.</p>
+<p>Prepare standard documents before applying: proof of income, identity and household composition, social security numbers where required, and any documentation of disability or veteran status if you are applying under a priority category. Procedures vary, so confirm exact document lists with the PHA.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>Finally, use NLIHC and state program directories to identify additional state-funded or nonprofit programs that can complement federal assistance.</p>
+<h2>Summary and next steps for readers</h2>
+<p>No single state is universally the "cheapest state to live in usa" for low-income households. Access to affordable housing depends on a mix of rent levels, wage conditions, the supply of subsidized units, and administrative realities like waitlists and voucher acceptance <a href="https://www.jchs.harvard.edu/state-nations-housing-2024" target="_blank" rel="noopener">Harvard Joint Center for Housing Studies State of the Nation's Housing 2024</a></p>
+<p>Immediate next actions: run HUD income-limit checks for the metros you are considering, contact local PHAs about waitlists and voucher policies, and review NLIHC state profiles and Census cost-burden data to compare how many households pay over 30 percent of income for housing <a href="https://nlihc.org/oor/2024" target="_blank" rel="noopener">NLIHC Out of Reach 2024</a></p>
+<p>If you want neutral guidance about local program contacts or to stay informed about state and local housing updates, consider <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener">signing up for campaign communications</a> or community resources that circulate timely housing notices.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-4sxq0w" class="faq-toggle" /><label for="faq-4sxq0w" class="faq-summary" role="button" tabindex="0">Does a state with low median rent mean easy access to low-income housing?</label><div class="faq-content"><p>Not necessarily. Low median rent can coexist with low wages and limited subsidized units, so check cost-burden rates and local subsidy availability to assess practical access.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-9b7pnp" class="faq-toggle" /><label for="faq-9b7pnp" class="faq-summary" role="button" tabindex="0">Where do I check if I qualify for housing assistance in a specific metro area?</label><div class="faq-content"><p>Use HUD income-limit lookup for the metro, then contact the local public housing authority for waitlist and program details.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-mdgnd7" class="faq-toggle" /><label for="faq-mdgnd7" class="faq-summary" role="button" tabindex="0">Are media 'cheapest state' lists reliable for low-income renters?</label><div class="faq-content"><p>They are a helpful starting point for market rents but often omit subsidy availability and waitlist realities, so verify with primary program sources.</p></div></section>
+</section><section class="article-ending">Deciding where to live when income is limited requires more than scanning a single list. Use HUD, NLIHC, and Census resources, contact local PHAs, and apply a consistent checklist to compare places.
+
+That process will help you identify practical options and the next administrative steps to apply for assistance in the metros you consider.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://nlihc.org/oor/2024" target="_blank" rel="noopener">https://nlihc.org/oor/2024</a></li><li><a href="https://www.huduser.gov/portal/datasets/il/il2025/2025summary.odn" target="_blank" rel="noopener">https://www.huduser.gov/portal/datasets/il/il2025/2025summary.odn</a></li><li><a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">https://www.census.gov/programs-surveys/acs</a></li><li><a href="https://www.zillow.com/research/observed-rent-index-2024" target="_blank" rel="noopener">https://www.zillow.com/research/observed-rent-index-2024</a></li><li><a href="https://www.jchs.harvard.edu/state-nations-housing-2024" target="_blank" rel="noopener">https://www.jchs.harvard.edu/state-nations-housing-2024</a></li><li><a href="https://www.usnews.com/news/best-states/rankings/economy" target="_blank" rel="noopener">https://www.usnews.com/news/best-states/rankings/economy</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.huduser.gov/portal/datasets/il.html" target="_blank" rel="noopener">https://www.huduser.gov/portal/datasets/il.html</a></li><li><a href="http://www.hud.gov/helping-americans/public-housing" target="_blank" rel="noopener">http://www.hud.gov/helping-americans/public-housing</a></li><li><a href="https://www.hudexchange.info/programs/home/home-income-limits/" target="_blank" rel="noopener">https://www.hudexchange.info/programs/home/home-income-limits/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener">https://michaelcarbonara.com/join/</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
