@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What US state has the lowest prices?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736;     /* from --mc-accent */
+      --accent-hover: #96222e; /* derived darker mix */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664;    /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* from --mc-panel-2 */
+      --radius: 0px;         /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Scoped small adjustments for article internals */
+    .article-highlights{ display:flex; flex-direction:column; gap:1rem; margin:1.2rem 0 1.8rem 0; }
+    .highlight-card{ background: linear-gradient(135deg, rgba(255,255,255,.03) 0%, rgba(255,255,255,.06) 100%); border-left:4px solid var(--accent); padding:0.9rem 1rem; border:1px solid rgba(255,255,255,.10); color:var(--text-color); font-weight:700; }
+    .summary{ font-style:italic; color: rgba(255,255,255,.90); margin-bottom:1.6rem; }
+    .cta-section .cta-button{ background: var(--accent); }
+    .tool-block{ border-left:4px solid var(--accent); }
+    .faq-accordion{ border-left:4px solid var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/12CxRuKazTpunVe09B1NypfilyB1rU-qP" alt="Map illustrating state price comparisons" />
+        </div>
+        <h1 class="title">What US state has the lowest prices?</h1>
+        <p class="subline">This article explains how official price indexes and complementary datasets show which states tend to have lower measured price levels and how to compare them for your household.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/cheapest-state-in-united-states/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">Understanding which state has the lowest prices requires clarity about what you mean by cheapest. This article uses official measures and complementary datasets to explain how price-level comparisons work and why different households may reach different conclusions.
+
+We rely on BEA Regional Price Parities as the central comparable index and show how housing, groceries, utilities and taxes can change which state looks cheapest for a given budget. The aim is to give readers a practical method and sources to run their own comparisons.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">BEA Regional Price Parities are the standard for comparing broad state price levels.</span></div><div class="highlight-card"><span class="highlight-text">Housing and rents are the biggest drivers of cross-state cost differences.</span></div><div class="highlight-card"><span class="highlight-text">Mississippi, Arkansas and Oklahoma commonly appear among lower-cost states in composite views.</span></div>
+     </div>
+  <h2>What does 'cheapest state in united states' mean?</h2>
+<p>The phrase cheapest state in united states is shorthand for asking which state has the lowest overall price level or the lowest costs for a specific household budget. For cross-state comparisons, economists most commonly rely on BEA Regional Price Parities as the baseline measure of broad price differences between states because they capture the relative price level of consumption across regions, not just inflation trends <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities</a>.</p>
+<p>That broad index is useful, but 'cheapest' can mean different things depending on whether you care most about rent, groceries, utilities, taxes, or another spending category. Housing and rents are often the largest single drivers of those differences, and timely rent series such as the Zillow Observed Rent Index show lower typical rents in many Southern and Midwestern states compared with coastal metros <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow research page</a>.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Join the campaign to receive updates and volunteer opportunities</h3><div class="cta-intro"><p>For readers who want to check primary sources, review the BEA RPP tables and category datasets before drawing firm conclusions.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Visit the Join the Campaign page</a></div>
+<p>Because the term is inherently relative, an answer that lists a single "cheapest" state must be read as conditional on the chosen measure and the household profile used. In many broad comparisons the BEA RPPs place several Southern states below the national average, but which state is cheapest for you depends on how you weight housing, groceries, utilities and taxes in your personal budget <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities</a>.</p>
+<p>Using the phrase cheapest state to live in without specifying categories or weights risks overstating what the data actually show. Good comparisons name the datasets and clarify whether the ranking is for overall price levels or for a specific spending pattern.</p>
+<h2>How economists measure price differences across states</h2>
+<p>BEA Regional Price Parities are index measures that show how price levels in states and metro areas compare with the national average. They are designed for cross-state price-level comparison and are preferred when the goal is to compare overall costs across large areas <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities</a>. You can also view related time series on the FRED site for further reference <a href="https://fred.stlouisfed.org/series/DCMPRPPALL" target="_blank" rel="noopener">FRED RPP series</a>.</p>
+<p>RPPs cover a broad basket of goods and services and are presented as relative indexes rather than dollar budgets. That means they are most useful for comparisons of price levels, not for replacing a household budget exercise that uses local quantities and wages <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities</a>.</p>
+<p>Complementary federal series can help when you need category detail or recent local trends. The Bureau of Labor Statistics regional CPI pages provide additional context on local price movements for many consumer categories and can be used alongside RPPs for trend analysis <a href="https://www.bls.gov/regions/" target="_blank" rel="noopener">BLS regional CPI resources</a>.</p>
+<p>Keep in mind that index measures are updated on particular schedules and can lag short-term price shocks. Analysts therefore combine RPPs with more frequent series for categories like rent to capture near-term shifts. See research on changing disparities in prices across states for context <a href="https://www.frbsf.org/research-and-insights/publications/economic-letter/2025/04/changing-disparity-in-prices-across-states/" target="_blank" rel="noopener">Changing disparity in prices across states</a>.</p>
+<p>When analysts use BEA RPPs to rank states by overall price level, several Southern states commonly appear at the low end of the distribution. The RPP tables consistently show a cluster of states with price levels below the national average, which is why many summaries call those states among the least expensive overall <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities</a>.</p>
+<p>Composite views that layer RPPs with housing and tax-burden data often highlight specific states that regularly rank low on multiple measures. For example, composite lists combining RPPs, rent indexes and tax rankings frequently include Mississippi, Arkansas and Oklahoma among the states with the lowest measured costs <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities</a>.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-a0po28" class="faq-toggle" checked /><label for="faq-a0po28" class="faq-summary" role="button" tabindex="0">Which US state has the lowest prices and how should I decide?</label><div class="faq-content"><p>There is no single universal cheapest state. BEA Regional Price Parities give the best comparable measure of overall price levels, but housing, groceries, utilities and taxes can change which state is cheapest for a particular household. Use a weighted composite method with primary datasets to identify the lowest-cost state for your circumstances.</p></div></section>
+<p>These rankings are descriptive of measured price levels; they do not imply a single state is universally cheapest for every household. Differences in household spending patterns and local prices within states mean rankings can shift when you change category weights or focus on a specific budget type.</p>
+<p>For readers asking which US state has the lowest prices, the short, accurate answer is that several states often occupy the bottom of RPP-based lists rather than a single state that always ranks first. See the Michael Carbonara homepage for related commentary <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">Michael Carbonara homepage</a>.</p>
+<h2>Why housing and rent usually determine which state is cheapest</h2>
+<p>Housing and rents are typically the largest single factor in cross-state cost differences. Rent and owner-equivalent housing components dominate household budgets, so variation in housing prices often drives most of the gap in measured state price levels <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow research page</a>.</p>
+<p>Timely rent measures such as the Zillow Observed Rent Index provide a near-real-time view of typical rents and often align with the low-cost patterns shown in the RPPs. Where average rents are much lower, monthly budgets fall substantially, all else equal <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow research page</a>.</p>
+<p>Local variation within states matters. Large states can include both low-rent rural counties and higher-rent metro areas, so statewide averages may mask important substate differences that change whether a given state is cheapest for someone in a particular locality.</p>
+<p>When estimating potential savings from moving, treat rent differences as a starting point and check local listings or metro-level rent series rather than relying solely on a state average.</p>
+<h2>How groceries, utilities and taxes change which state is the cheapest</h2>
+<p>Grocery costs vary regionally but are commonly compared using national baselines such as USDA Food Plans. Those plans provide standard benchmarks for grocery spending that can be adapted to local price levels to see how food costs affect household budgets <a href="https://www.ers.usda.gov/data-products/food-plans/" target="_blank" rel="noopener">USDA Food Plans</a>.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/11slLaoCSarqCbZ4HQFbGfD5zlZsgyWKU=s1200" alt="Minimalist 2D vector infographic of a modest suburban street with varied single family homes icons in deep navy and white with red accents representing cheapest state in united states" /></a>
+      <div class="side-text"><p>Utility and energy prices also shift monthly budgets. Retail residential electricity prices differ materially by state, and lower utility rates in some lower-cost states reduce recurring bills for households that consume a lot of energy <a href="https://www.eia.gov/electricity/state/" target="_blank" rel="noopener">EIA state electricity profiles</a>.</p></div>
+    </div>
+<p>State and local tax burdens affect after-tax affordability and can reinforce low-cost profiles in some states. Rankings of combined state-local tax burdens show meaningful variation that alters take-home income and should be part of any affordability calculation <a href="https://taxfoundation.org/state-local-tax-burden-rankings-2024/" target="_blank" rel="noopener">Tax Foundation state tax-burden rankings</a>.</p>
+<p>Because categories interact, a state with very low rents but higher-than-average taxes or energy costs might not be the cheapest once you account for after-tax spending and household consumption patterns.</p>
+<h2>Comparing example household budgets in lower-cost states</h2>
+<p>Single renter. For a person renting a one-bedroom unit, housing and local rent levels usually dominate the budget. In that case, states with lower typical rents shown in rent indexes often appear cheapest for single renters, though groceries and utilities still matter for monthly cash flow <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow research page</a>.</p>
+<p>Two-earner family. A household with two incomes and higher transport or childcare needs may place more weight on taxes, transport costs and healthcare access. Composite measures using RPPs together with tax and category data can shift the cheapest-state result for this profile <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities</a>.</p>
+<p>Retiree on fixed income. Retirees often emphasize healthcare, property taxes and utility costs. Lower energy prices and lower property-tax burdens in some states can make them relatively more affordable for this profile when compared with RPP ranks alone <a href="https://www.eia.gov/electricity/state/" target="_blank" rel="noopener">EIA state electricity profiles</a>.</p>
+<p>These scenarios are illustrative. To decide which state is cheapest for a particular household, use the step-by-step method below with the categories that matter most to you and verify numbers using the primary datasets referenced in this article.</p>
+<h2>A step-by-step method to find the cheapest state in united states for your household</h2>
+<p>Step 1: Pick your priority categories and simple weights. Common categories include housing, groceries, utilities, taxes, transport and healthcare. Assign a weight to each that reflects your typical spending.</p>
+<p>Step 2: Pull the public data. Use BEA RPPs for an overall price-level anchor and supplement with Zillow for rent, USDA Food Plans for groceries, EIA state electricity data for utilities and Tax Foundation data for tax burdens <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities</a>. See the news index for related updates on datasets <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news index</a>.</p>
+<div class="tool-block tool-calculator tool-centered" data-tool-type="calculator"
+              data-formula="Housing*0.4+Groceries*0.2+Utilities*0.15+Taxes*0.15+Transport*0.1" data-output="Composite score" data-unit="relative index">
+              <p class="tool-purpose">Calculate a simple weighted composite cost score for a state</p>
+              <div class="tool-calc-grid"><div class="tool-calc-field">
+                <label class="tool-calc-label">Housing</label>
+                <input class="tool-calc-input" type="number" value="" data-field="Housing" />
+              </div><div class="tool-calc-field">
+                <label class="tool-calc-label">Groceries</label>
+                <input class="tool-calc-input" type="number" value="" data-field="Groceries" />
+              </div><div class="tool-calc-field">
+                <label class="tool-calc-label">Utilities</label>
+                <input class="tool-calc-input" type="number" value="" data-field="Utilities" />
+              </div><div class="tool-calc-field">
+                <label class="tool-calc-label">Taxes</label>
+                <input class="tool-calc-input" type="number" value="" data-field="Taxes" />
+              </div><div class="tool-calc-field">
+                <label class="tool-calc-label">Transport</label>
+                <input class="tool-calc-input" type="number" value="" data-field="Transport" />
+              </div></div>
+              <div class="tool-calc-output">
+                <span class="tool-calc-output-label">Composite score:</span>
+                <span class="tool-calc-output-value">-</span>
+                <span class="tool-calc-output-unit">relative index</span>
+              </div>
+              <p class="tool-notes">Use local averages for field values</p>
+            </div>
+<p>Step 3: Calculate a composite score. Convert each category to a common scale or index, apply your weights, and compute a weighted average. Lower composite scores indicate lower relative cost under your chosen priorities. Be careful about data vintage and whether values are statewide or metro-level <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow research page</a>.</p>
+<p>Caveats: check dataset dates and use consistent geographic units. If you use metro-level rent data, use metro-level price comparisons rather than statewide RPPs, or adjust weights to reflect the geography you care about <a href="https://www.bls.gov/regions/" target="_blank" rel="noopener">BLS regional CPI resources</a>.</p>
+<h2>When 'cheapest' does not mean best for you: hidden costs and trade-offs</h2>
+<p>Lower measured prices do not automatically translate to better outcomes. County-level services, healthcare access and public transit availability can change effective affordability even when state-level price indexes are low. These service differences are often not fully captured by state-level RPPs.</p>
+<p>Employment opportunities and wage levels also matter. A move to a lower-price state may not save money if local wages are substantially lower or if suitable jobs are scarce. Consider likely wage changes alongside price differences before making relocation decisions.</p>
+<p>Other trade-offs include differences in school quality, broadband access and emergency services. These factors can increase both direct and indirect costs and should be part of any decision about moving for price reasons.</p>
+<h2>Common mistakes when comparing state prices</h2>
+<p>Relying on a single category. A common error is declaring one state cheapest because it has low rents while ignoring taxes or utility prices. Always compare multiple categories when possible and explain which measures you used <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow research page</a>.</p>
+<p>Mixing vintages or geographic units. Another mistake is comparing a recent metro rent series with an older statewide index. Check the dataset date and whether values are metro, county or state level before combining them <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities</a>.</p>
+<p>Forcing a single winner. Because households differ, resist presenting a single state as universally cheapest without clarifying the priority weights and categories used to reach that conclusion.</p>
+<h2>How to use public data sources and where to look for updates</h2>
+<p>BEA RPPs are available for download from the BEA site and should be your starting point for overall state price-level comparisons. The BEA pages include methodology notes and release dates that explain how the index is constructed <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities</a>.</p>
+<p>Zillow’s research pages provide the ZORI rent series and documentation useful for timely rent comparisons. The USDA posts Food Plans and supporting notes for grocery baseline comparisons, and the EIA provides state electricity profiles and retail price data for utilities <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow research page</a>.</p>
+<p>The Tax Foundation publishes state and local tax-burden rankings and methodology details that explain how tax loads vary by income and state. When using these sources, save the exact dataset release date to maintain reproducibility in any reporting or decision-making <a href="https://taxfoundation.org/state-local-tax-burden-rankings-2024/" target="_blank" rel="noopener">Tax Foundation state tax-burden rankings</a>.</p>
+<p>Why state tax differences matter when calling a state the cheapest</p>
+<p>Taxes change after-tax affordability by altering take-home income and by affecting costs such as property tax on owned housing. State-local tax-burden rankings show differences across states that can change whether a location is effectively cheaper for a given household <a href="https://taxfoundation.org/state-local-tax-burden-rankings-2024/" target="_blank" rel="noopener">Tax Foundation state tax-burden rankings</a>.</p>
+<p>Lower-income states often have lower combined state-local tax loads, which can reinforce their low-cost profiles in composite comparisons. However, tax impacts vary with income level, deductions and local fees, so individual results depend on household specifics <a href="https://taxfoundation.org/state-local-tax-burden-rankings-2024/" target="_blank" rel="noopener">Tax Foundation state tax-burden rankings</a>.</p>
+<h2>Short profiles: Mississippi, Arkansas and Oklahoma in the data</h2>
+<p>Mississippi. In BEA RPP-based lists, Mississippi commonly appears among states with below-average price levels, and typical rent series show lower median rents than national coastal metros, which together contribute to its low-cost profile <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities</a>.</p>
+<p>Arkansas. Arkansas also often ranks in the lower tier of RPP comparisons, and lower rents plus moderate tax burdens are factors that composite analyses use to explain its frequent placement among lower-cost states <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow research page</a>.</p>
+<p>Oklahoma. Oklahoma typically shows below-average price levels in RPP tables and can benefit from lower retail electricity prices and other utility advantages that reduce monthly expenses for many households <a href="https://www.eia.gov/electricity/state/" target="_blank" rel="noopener">EIA state electricity profiles</a>.</p>
+<p>These short profiles illustrate why those states commonly appear on low-cost lists, but none is guaranteed to be the cheapest choice for every household profile or locality.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+
+
+<h2>Quick checklist to evaluate if moving will actually save you money</h2>
+<p>Five data checks before you move: compare BEA RPPs for overall price levels, check metro or local rent indexes, review state and local tax burdens, examine utility prices, and estimate likely changes in wages for your occupation <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities</a>.</p>
+<p>Estimate one-time and recurring costs: include moving expenses, any deposit or buy-in costs, and recurring monthly bills. Remember to check local service availability and likely commuting or childcare costs.</p>
+<p>Use up-to-date primary sources and document the dataset dates and geography you used. If possible, run the simple composite score method on local metro data rather than statewide averages for greater accuracy <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow research page</a>.</p>
+<h2>Conclusion: which state is the cheapest state in united states and how to decide for yourself</h2>
+<p>There is no single universal answer to which state is the cheapest state in united states. For overall price levels the BEA RPPs are the best single comparable measure, but the cheapest state for you depends on how you weight housing, groceries, utilities and taxes in your personal budget <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities</a>.</p>
+<p>Composite views that combine RPPs with rent, grocery and tax data commonly place Mississippi, Arkansas and Oklahoma among the lower-cost states, but rankings change with household priorities and local variation <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow research page</a>. See purchasing power maps for additional local context <a href="https://taxfoundation.org/data/all/state/purchasing-power-real-value-100/" target="_blank" rel="noopener">Purchasing power map</a>.</p>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Next steps: decide your priority categories and weights, download the primary datasets referenced here, and calculate a simple weighted composite for the states you are considering. That method will show which state is cheapest for your circumstances rather than relying on a single published ranking.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1izlS-8GXcOc0j5VyNyWPvvt8-IJZceLO=s1200" alt="Minimal 2D vector infographic showing four icons for housing groceries utilities and taxes on a deep navy background with white icons and red accents cheapest state in united states" /></a>
+    </div>
+<p>Learn more about the author and site on the about page <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">about page</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+
+
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-wc24ay" class="faq-toggle" /><label for="faq-wc24ay" class="faq-summary" role="button" tabindex="0">What data best identifies the cheapest state in the United States?</label><div class="faq-content"><p>For broad price-level comparisons, BEA Regional Price Parities are the primary comparable measure; combine them with rent, grocery, utility and tax datasets for category detail.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-qrvbql" class="faq-toggle" /><label for="faq-qrvbql" class="faq-summary" role="button" tabindex="0">Do low state prices mean I will pay less after moving?</label><div class="faq-content"><p>Not always; wages, local services, taxes and healthcare access affect net affordability and should be considered alongside price measures.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-jt056p" class="faq-toggle" /><label for="faq-jt056p" class="faq-summary" role="button" tabindex="0">Which states commonly rank as lowest-cost?</label><div class="faq-content"><p>Composite analyses using RPPs, rent indexes and tax data commonly include Mississippi, Arkansas and Oklahoma among lower-cost states, though results vary by household priorities.</p></div></section>
+</section><section class="article-ending">Deciding whether to relocate for lower prices is a personal calculation that combines price data with local services, job prospects and household needs. Use the step-by-step method and primary sources described above to determine which state is likely to be cheapest for you.
+
+If you value details tied to a specific locality or profile, download the BEA RPPs and supplement them with metro-level rent, USDA Food Plans and state tax data before making decisions.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area</a></li><li><a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">https://www.zillow.com/research/data/</a></li><li><a href="https://www.bls.gov/regions/" target="_blank" rel="noopener">https://www.bls.gov/regions/</a></li><li><a href="https://www.ers.usda.gov/data-products/food-plans/" target="_blank" rel="noopener">https://www.ers.usda.gov/data-products/food-plans/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.eia.gov/electricity/state/" target="_blank" rel="noopener">https://www.eia.gov/electricity/state/</a></li><li><a href="https://taxfoundation.org/state-local-tax-burden-rankings-2024/" target="_blank" rel="noopener">https://taxfoundation.org/state-local-tax-burden-rankings-2024/</a></li><li><a href="https://fred.stlouisfed.org/series/DCMPRPPALL" target="_blank" rel="noopener">https://fred.stlouisfed.org/series/DCMPRPPALL</a></li><li><a href="https://www.frbsf.org/research-and-insights/publications/economic-letter/2025/04/changing-disparity-in-prices-across-states/" target="_blank" rel="noopener">https://www.frbsf.org/research-and-insights/publications/economic-letter/2025/04/changing-disparity-in-prices-across-states/</a></li><li><a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">https://michaelcarbonara.com/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://taxfoundation.org/data/all/state/purchasing-power-real-value-100/" target="_blank" rel="noopener">https://taxfoundation.org/data/all/state/purchasing-power-real-value-100/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
