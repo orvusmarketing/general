@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What city has the best income to cost of living ratio? A method-first guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens (from provided style) */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736;     /* from --mc-accent */
+      --accent-hover: #8c1f2d; /* derived darker accent */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664;    /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px;        /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease, background .12s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      display:block;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1A8xAb8mxCk5kwu106wa7z_8pFm3DFd9f" alt="Map illustrating cost of living by city in the United States" />
+        </div>
+        <h1 class="title">What city has the best income to cost of living ratio? A method-first guide</h1>
+        <p class="subline">A method-first guide for comparing incomes and local prices across U.S. cities.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/cost-of-living-by-city-united-states/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">Comparing incomes and local prices across U.S. cities is a common task for movers, job seekers, and researchers. This guide focuses on a method-first approach that prioritizes federal benchmarks and reproducibility.
+
+It explains which datasets to use, how to match years, how to adjust incomes for local purchasing power with BEA Regional Price Parities, and how to run housing and occupational sensitivity checks. The goal is to give readers a clear, actionable framework rather than a single unqualified city label.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Use BEA Regional Price Parities with ACS median household income for consistent cross-city purchasing-power comparisons.</span></div><div class="highlight-card"><span class="highlight-text">Run housing sensitivity checks with HUD or Zillow data because housing often drives rank changes.</span></div><div class="highlight-card"><span class="highlight-text">Publish data sources, exact formulas, and year choices so others can reproduce your ranking.</span></div>
+     </div>
+  <h2>Quick answer and what this guide covers for cost of living by city united states</h2>
+<p>Short summary answer: there is no single definitive city that universally has the best income to cost of living ratio, because rankings change with methodological choices. For cross-city comparisons the best practice is to adjust median household income by a federal price index and to run housing sensitivity checks when housing costs dominate a metro market. The federal standard for price-level adjustment is BEA Regional Price Parities, which this guide uses as the baseline for comparability <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities data</a>.</p>
+<p>How to read this article: first you will get the concise finding above, then a short <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">methods section</a> describing the data and year-matching rules, a step-by-step calculation you can replicate in a spreadsheet, and practical scenarios showing how results shift when you swap in housing indices or occupational wages. The guide also lists common mistakes and recommended sensitivity checks so readers can judge how robust any ranking is.</p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Primary data components to build an income to cost comparison</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-tmdwq6-0">
+                        <input id="tool-check-tmdwq6-0" type="checkbox" />
+                        <span>BEA RPP</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-ta0nnu-1">
+                        <input id="tool-check-ta0nnu-1" type="checkbox" />
+                        <span>ACS median household income</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-q7f664-2">
+                        <input id="tool-check-q7f664-2" type="checkbox" />
+                        <span>HUD or Zillow housing check</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use federal RPPs as the starting control</p>
+            </div>
+<h3>Short summary answer</h3>
+<p>This short opening repeats the main point plainly: method matters more than a single city name. If you read only one sentence, note that using BEA RPPs with ACS median household income and running housing sensitivity checks produces the most reproducible cross-city comparisons <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">American Community Survey documentation</a>.</p>
+<h3>How to read this article</h3>
+<p>The article is organized to let you skip to the part you need. If you want to reproduce results, go to the Key data sources and the Step-by-step calculation framework sections. If you want to understand limitations, read the Method choices, Housing, and Common mistakes sections. Where a factual claim relies on a federal dataset this guide links to the primary source or dataset for that point.</p>
+<h2>Why the question 'What city has the best income to cost of living ratio' matters</h2>
+<h3>Who uses these comparisons and why</h3>
+<p>Movers, job seekers, researchers, and local policymakers routinely use income-to-cost ratios to compare where a given income buys more or less. Individuals use these comparisons to weigh relocation trade-offs and to set salary expectations, while analysts and officials use them to study affordability patterns across metros and states. The core logic is to translate nominal incomes into local purchasing power using a price-level control and then interpret the adjusted figure against personal needs.</p>
+<h3>Common uses and limitations</h3>
+<p>These comparisons are practical but limited. Timing mismatches between income and price measures and differences in expense composition across places can change outcomes. For example, a city with high tourism income or a large number of nonresident earners can push up median household income without improving affordability for typical residents. That is why transparency about choices is essential when publishing rankings; the guide emphasizes matching ACS income years to the RPP year to reduce temporal mismatch <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities data</a>.</p>
+<h2>Key data sources to build an income-to-cost-of-living ratio</h2>
+<h3>Federal benchmarks: BEA RPPs and Census ACS</h3>
+<p>The central datasets for cross-city comparisons are BEA Regional Price Parities for price levels and the U.S. Census American Community Survey for median household income. BEA RPPs measure relative price levels across metros and states and are the preferred federal control when you need comparable purchasing-power adjustments, while ACS supplies the income numerator you adjust for local prices <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities data</a> and the dataset entry <a href="https://catalog.data.gov/dataset/regional-price-parities-by-state-and-metro-area" target="_blank" rel="noopener">on data.gov</a>.</p>
+<h3>Supplementary datasets: HUD, Zillow, MIT, BLS</h3>
+<p>Housing metrics and occupational wages are important supplements. HUD Fair Market Rents and Zillow home-value and rent indexes let you test how much housing explains ranking changes. The MIT Living Wage Calculator gives county-level basic cost benchmarks for practical relocation checks. BLS Occupational Employment and Wage Statistics provide the occupational wage context that helps translate household medians into salary benchmarks for negotiation <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">American Community Survey documentation</a>.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Try the reproducible ranking spreadsheet and test different assumptions</h3><div class="cta-intro"><p>Download the accompanying spreadsheet or open the reproducible table in the Methods section to test alternative index choices and to run your own sensitivity checks.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Download the methods spreadsheet</a></div>
+<h2>Choosing the metric and the right year when comparing cities</h2>
+<h3>Household versus individual income</h3>
+<p>The main choice is whether to use median household income, per-capita income, or individual earnings. Median household income captures resources available to typical households and is the standard for many affordability studies, but it weights households with more earners differently than single-worker households. Choose the measure that matches your decision: household-focused comparisons for family relocations and individual earnings for single workers or occupation-level negotiation.</p>
+<h3>Matching ACS year to the RPP year</h3>
+<p>Avoid mixing years. Use ACS income for the same year or nearest available period that aligns with the BEA RPP release to reduce temporal mismatch. The ACS 1-year tables are preferred for large places where available, and the 5-year tables are the fallback for smaller places; document which you use so others can reproduce the result <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">American Community Survey documentation</a>.</p>
+<p>Checklist to document your choices when you publish or share a list: state whether you used household or individual income, specify the exact ACS table and year, name the BEA RPP release used, and list any housing indices substituted for sensitivity tests.</p>
+<h2>How to apply BEA RPPs in a city comparison for cost of living by city united states</h2>
+<h3>What RPPs measure and what they do not</h3>
+<p>BEA RPPs measure broad price level differences across areas and are intended to adjust nominal incomes into purchasing-power equivalents. They are not indexes of short-term inflation or hyperlocal housing micromarkets. For cross-city affordability comparisons RPPs provide a consistent, federal benchmark for price adjustments <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities data</a>. RPP series are also available on FRED <a href="https://fred.stlouisfed.org/series/DCMPRPPALL" target="_blank" rel="noopener">(FRED series)</a>.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-p62wm2" class="faq-toggle" checked /><label for="faq-p62wm2" class="faq-summary" role="button" tabindex="0">What city has the best income to cost of living ratio?</label><div class="faq-content"><p>There is no single definitive city. The ranking depends on methodological choices; the most reproducible approach uses BEA RPPs with ACS median household income and housing sensitivity checks.</p></div></section>
+<h3>Practical steps to adjust income by RPP</h3>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1-fTUdem10Rs8fDkbVUkK7U-F0QVPTdjd=s1200" alt="Minimal 2D vector infographic of layered city skylines and suburban neighborhoods comparing costs illustrating cost of living by city united states in Michael Carbonara color palette" /></a>
+      <div class="side-text"><p>Practical steps: obtain the local RPP for the metro or state, obtain the matching ACS median household income, and compute adjusted income by dividing the local median by the local RPP normalized to the U.S. average. This converts a nominal median into a purchasing-power figure comparable across places.</p></div>
+    </div>
+<p>Caveats: RPPs smooth across broad consumption baskets and may understate local housing variation. Always run housing sensitivity checks in places where housing is the dominant household expense and report those results alongside the RPP-adjusted ranking <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">American Community Survey documentation</a>.</p>
+<h2>Using ACS median household income and BLS wage data to interpret results</h2>
+<h3>Selecting ACS 1-year vs 5-year tables</h3>
+<p>When available, use ACS 1-year estimates for large metro areas because they reflect more current annual conditions. For smaller places the ACS 5-year estimates are the reliable option because they pool multiple years to achieve statistical precision. State which one you use and why to help readers judge the estimate's reliability <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">American Community Survey documentation</a>.</p>
+<h3>Translating household medians into wage expectations with BLS OES</h3>
+<p>Compare the RPP-adjusted median household figure with local occupation-level wages from BLS OES to create practical salary benchmarks. Occupational wage tables help single workers and sector-specific employees translate household-level findings into job-market expectations and negotiation ranges <a href="https://www.bls.gov/oes/" target="_blank" rel="noopener">BLS Occupational Employment and Wage Statistics</a>.</p>
+<p>When you report results for job-seekers, highlight that household medians and occupational wages answer different questions and that aligning the metric to the use case improves practical utility.</p>
+<h2>Accounting for housing: HUD rents, Zillow indexes, and sensitivity checks</h2>
+<h3>Why housing matters more than other costs</h3>
+<p>Housing often accounts for the largest share of household spending and can dominate affordability rankings. To understand whether a high nominal median income truly buys more, compare housing-specific indices alongside RPP-adjusted incomes. HUD Fair Market Rents and Zillow home-value or rent indexes are the standard complementary checks to quantify housing burden <a href="https://www.huduser.gov/portal/datasets/fmr.html" target="_blank" rel="noopener">HUD Fair Market Rents data</a>.</p>
+<h3>Ways to test ranking sensitivity to housing</h3>
+<p>Two practical sensitivity tests: first, replace the housing component implicit in the RPP with a direct HUD or Zillow housing measure and recompute adjusted income; second, run a housing-adjusted ranking that deducts a standard housing share estimated from local rents or typical mortgage costs. These checks show whether a place moves up or down because of housing alone <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow Research data</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h3>Practical steps and contact</h3>
+<p>This section outlines practical implementation choices and contact options for readers with questions.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<h2>Step-by-step calculation framework and a worked example</h2>
+<h3>Formula and spreadsheet-friendly steps</h3>
+<p>Formula: adjusted_income = median_household_income / (local_RPP / US_average_RPP). In practice normalize the RPP so that the U.S. average equals 1.0, then divide local nominal median by the local RPP to get a purchasing-power adjusted median. That adjusted figure is the comparator you use to rank places.</p>
+<h3>A short worked example (synthetic numbers only)</h3>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Spreadsheet steps: (see reproducible table <a href="https://michaelcarbonara.com/survey/" target="_blank" rel="noopener">reproducible table</a>) 1) pull the metro-level RPP and set US_average_RPP = 1.0, 2) pull the matching ACS median household income for the same year, 3) compute adjusted_income in a cell with the formula above, 4) run a parallel column replacing the RPP housing component with HUD rents or Zillow rent indexes, and 5) flag places where ACS margin of error or small sample size may affect reliability. The worked numeric example below is synthetic and for illustration only: if a metro has a median household income of 60,000 and a normalized local RPP of 1.2, the adjusted_income equals 60,000 / 1.2 = 50,000 in U.S.-normalized purchasing-power terms.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1WdUX_WfB819kE-A5gzJfZY0b1TLKkpnH=s1200" alt="Minimal 2D vector infographic showing a house dollar sign scale and magnifying glass icons on a deep navy background illustrating cost of living by city united states with white icons and subtle red accents" /></a>
+    </div>
+<h2>How to rank cities and decision criteria to choose a 'best' city</h2>
+<h3>Ranking rules and tie-breakers</h3>
+<p>Recommended ranking order: primary measure is the RPP-adjusted median household income. Secondary checks include a housing-adjusted rank and occupational wage comparisons. Tie-breakers can use metro-level aggregates when city limits create noisy values for small adjacent places. Always disclose the geographic definition used for each row in your ranking.</p>
+<h3>Contextual decision criteria for different users</h3>
+<p>Different users will pick different 'best' cities depending on personal priorities. Single workers may prioritize occupational wage comparisons, families may weight housing-adjusted ranks, and retirees may emphasize taxes and health-care access. Present multiple ranked lists or filters so readers can apply their own weights rather than presenting one definitive ordering.</p>
+<h2>Common mistakes and sensitivity checks to avoid misleading rankings</h2>
+<h3>Top methodological pitfalls</h3>
+<p>Frequent errors include mixing data years, ignoring housing as a separate check, and failing to align city-limit data with metro RPPs. Another common mistake is reporting rankings without the underlying formulas and data sources, which prevents replication. To avoid these pitfalls, always publish the data sources, year, and exact formulas used so readers can reproduce the results <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">American Community Survey documentation</a>.</p>
+<h3>How to test and report sensitivity</h3>
+<p>Suggested sensitivity checks: run the ranking with alternate price indices, run the housing-only adjustment, and test excluding outlier areas with large nonresident income shares such as finance or tourism centers. Report how many places move more than a chosen threshold to convey robustness rather than presenting a single top list <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities data</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Practical examples and scenarios: how the ranking changes with different choices</h2>
+<h3>Scenario A: household income with RPP adjustment</h3>
+<p>Illustrative scenario A uses median household income adjusted by BEA RPPs to create a single purchasing-power comparator. This scenario is the baseline and is best for broad cross-city comparisons that seek federal consistency <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities data</a>.</p>
+<h3>Scenario B: household income with HUD housing adjustment</h3>
+<p>Scenario B replaces the housing component of the RPP with HUD FMR or Zillow rent measures to highlight housing-driven shifts. Expect some metros to fall in rank when housing is isolated as the main burden; this scenario is useful when housing costs define affordability decisions <a href="https://www.huduser.gov/portal/datasets/fmr.html" target="_blank" rel="noopener">HUD Fair Market Rents data</a>.</p>
+<h3>Scenario C: occupational wage focus using BLS</h3>
+<p>Scenario C uses occupational wage data from BLS OES to translate household-level results into job-market expectations for sector-specific workers. This is practical for salary negotiation and for single-earner households evaluating offers in different metros <a href="https://www.bls.gov/oes/" target="_blank" rel="noopener">BLS Occupational Employment and Wage Statistics</a>.</p>
+<h2>How to use the results: relocation, salary negotiation, and policy context</h2>
+<h3>Practical next steps for movers and job seekers</h3>
+<p>Combine adjusted-income rankings with active housing searches, commute-time estimates, and personal priorities before relocating. Use the RPP-adjusted figure to narrow candidate places and then validate with local rent or home-price searches to capture micromarket variation. For salary negotiation, use BLS OES local wages as a benchmark and adjust offers for local purchasing power rather than relying only on nominal salary tables <a href="https://www.bls.gov/oes/" target="_blank" rel="noopener">BLS Occupational Employment and Wage Statistics</a>.</p>
+<h3>How local officials and researchers might use the ratio</h3>
+<p>Researchers and local policymakers can use the ratio to identify affordability trends across metros, but they should be careful with geographic definitions when comparing small places. The metric can inform targeted housing policy or regional wage studies, provided the published work discloses the data sources, year, and formula used for any ranking <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities data</a>.</p>
+<h2>Conclusion and next steps for readers who want to reproduce or update rankings</h2>
+<h3>Summary of best practices</h3>
+<p>Use BEA RPPs with ACS median household income as the baseline, document whether you used ACS 1-year or 5-year estimates, run housing sensitivity checks with HUD or Zillow data, and use BLS OES for occupation-specific adjustments. Publish the exact formulas and source tables so others can reproduce and update your work <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">American Community Survey documentation</a>.</p>
+<h3>Where to get the raw data and how to keep it current</h3>
+<p>Download BEA RPP releases and the matching ACS tables for the chosen year directly from the federal sites cited. For housing checks use HUD FMR releases and Zillow research series as complementary inputs. Update the ranking each time a new BEA RPP or ACS release is published to keep temporal alignment and reduce mismatch issues <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities data</a>, or visit the <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">Michael Carbonara homepage</a>.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-fqnbkd" class="faq-toggle" /><label for="faq-fqnbkd" class="faq-summary" role="button" tabindex="0">What is the single best metric to compare affordability across cities?</label><div class="faq-content"><p>There is no single best metric for all uses. For reproducible cross-city comparisons, a common baseline is RPP-adjusted median household income, supplemented by housing-specific checks and occupational wage tables depending on your needs.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-wqxhin" class="faq-toggle" /><label for="faq-wqxhin" class="faq-summary" role="button" tabindex="0">Should I use ACS 1-year or 5-year estimates for a city comparison?</label><div class="faq-content"><p>Use ACS 1-year estimates for large places when they are available and the 5-year estimates for smaller places that lack 1-year coverage. Always report which one you used and why.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-lhj94e" class="faq-toggle" /><label for="faq-lhj94e" class="faq-summary" role="button" tabindex="0">Can I rely on a single published ranking to choose where to move?</label><div class="faq-content"><p>No. Treat any single ranking as conditional on the methods used. Run or consult sensitivity checks for housing and occupational wages and consider commute, schools, and personal priorities before deciding.</p></div></section>
+</section><section class="article-ending">If you want to reproduce or update a ranking, start with the BEA RPP release and the matching ACS table for the same year, and then run the housing and occupational checks described here. Present any published rankings with the data and formula so readers can verify and update the work.
+
+Responsible comparisons emphasize method over a headline city name and make clear the conditional nature of any top-list claims.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://catalog.data.gov/dataset/regional-price-parities-by-state-and-metro-area" target="_blank" rel="noopener">https://catalog.data.gov/dataset/regional-price-parities-by-state-and-metro-area</a></li><li><a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">https://www.census.gov/programs-surveys/acs</a></li><li><a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">https://www.census.gov/programs-surveys/acs</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://michaelcarbonara.com/survey/" target="_blank" rel="noopener">https://michaelcarbonara.com/survey/</a></li><li><a href="https://fred.stlouisfed.org/series/DCMPRPPALL" target="_blank" rel="noopener">https://fred.stlouisfed.org/series/DCMPRPPALL</a></li><li><a href="https://www.huduser.gov/portal/datasets/fmr.html" target="_blank" rel="noopener">https://www.huduser.gov/portal/datasets/fmr.html</a></li><li><a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">https://www.zillow.com/research/data/</a></li><li><a href="https://www.bls.gov/oes/" target="_blank" rel="noopener">https://www.bls.gov/oes/</a></li><li><a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">https://michaelcarbonara.com/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
