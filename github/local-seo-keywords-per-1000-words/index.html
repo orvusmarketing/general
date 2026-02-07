@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>How many keywords per 1000 words? Practical guidance for local SEO audits</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand tokens derived from provided style */
+      --text-color: rgba(244,231,197,0.86);
+      --accent: #C8A45D;
+      --accent-hover: #f6de9f;
+      --line: rgba(200,164,93,0.26);
+      --surface: #050d18;
+      --surface-2: #0c182b;
+      --radius: 12px;
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #050d18;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease, background .12s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      background: var(--accent-hover);
+      filter: none;
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+      border-radius: 12px;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1xsjyTUlAMo7oAZjjH6Bvx70A0BbygU1a" alt="How many keywords per 1000 words — local SEO audits" />
+        </div>
+        <h1 class="title">How many keywords per 1000 words? Practical guidance for local SEO audits</h1>
+        <p class="subline">A practical, audit-focused guide to counting keyword occurrences and prioritising local signals.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://orvus.net/useful-knowledge/local-seo-keywords-per-1000-words/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">Teams still use the 'keywords per 1000 words' metric because it is fast to compute and repeatable across a set of pages. This article explains how to calculate the metric, how practitioners interpret common ranges, and why local pages usually aim for lower exact match counts. The guidance is practical and audit focused, showing where density can help decisions and where it should not drive them.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Use the (occurrences ÷ words) × 1000 formula as a reproducible audit metric, not a ranking target.</span></div><div class="highlight-card"><span class="highlight-text">For local pages favour 3 to 8 exact match occurrences per 1000 words and emphasise title, H1, meta, and schema.</span></div><div class="highlight-card"><span class="highlight-text">Prioritise intent matching, metadata fixes, and measurable outcomes over chasing small density changes.</span></div>
+     </div>
+  <h2>Why auditors still measure 'keywords per 1000 words'</h2><h3>Audit context: when density checks help</h3><p>Auditors measure keywords per 1000 words because it is a simple, repeatable way to compare pages. The metric lets teams spot pages with extreme under use or obvious repetition quickly, which can be useful during a content review cycle. For local projects this quick check can flag pages that need a closer look by intent or metadata.</p><p>Search engines now favour helpful, natural writing over mechanical repetition, so a density check is never a replacement for intent matching and structured signals. That principle comes from official guidance that treats keyword stuffing as a negative signal and recommends focusing on useful content <a href="https://developers.google.com/search/docs/advanced/guidelines/avoid-keyword-stuffing" target="_blank" rel="noopener">Google Search Central</a>.</p><p>The occurrence per 1000 words formula is a small instrument inside a larger <a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">search architecture</a>. Use it to complement architecture work such as intent driven content organisation, technical SEO, and measurement that ties search to revenue. In audits it is a diagnostic, not a target.</p>
+
+  <div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+    <p class="tool-purpose">quick occurrence count for content audits</p>
+    <ul class="tool-checklist-list">
+      <li class="tool-checklist-item">
+        <label for="tool-check-vzevdc-0">
+          <input id="tool-check-vzevdc-0" type="checkbox" />
+          <span>Count occurrences</span>
+        </label>
+      </li>
+      <li class="tool-checklist-item">
+        <label for="tool-check-met6k4-1">
+          <input id="tool-check-met6k4-1" type="checkbox" />
+          <span>Include headings and meta</span>
+        </label>
+      </li>
+      <li class="tool-checklist-item">
+        <label for="tool-check-la3dek-2">
+          <input id="tool-check-la3dek-2" type="checkbox" />
+          <span>Run TF IDF report</span>
+        </label>
+      </li>
+    </ul>
+    <p class="tool-notes">Use as a first pass</p>
+  </div>
+
+<p>Google's public guidance makes the core point: avoid keyword stuffing and focus on helpful content. That guidance implies there is no engine published density threshold to chase, and that natural phrasing matters more than exact match counts <a href="https://developers.google.com/search/docs/advanced/guidelines/avoid-keyword-stuffing" target="_blank" rel="noopener">Google Search Central</a>.</p><p>In practice the search quality systems reward pages that satisfy user intent and provide clear answers. For local pages that often means accurate location signals, clear service descriptions, and consistent NAP alongside coherent body copy. Editors can prioritise phrasing that reads well for users instead of forcing repeated exact matches.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure>
+<p>Use a clear formula auditors can reproduce: take the number of keyword occurrences, divide by the total word count, and multiply by 1000. That gives occurrences per 1000 words and makes comparisons fair across page lengths. The formula is (occurrences ÷ total words) × 1000, a simple arithmetic step auditors use to compare pages consistently <a href="https://ahrefs.com/blog/keyword-density/" target="_blank" rel="noopener">Ahrefs Blog</a>.</p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1ScUpurK4cY2LJ-YIyz6x-IeDV8_acq9E=s1200" alt="Small business owner reviewing a website audit on a laptop showing local seo analytics in a minimalist dark blue workspace with subtle C8A45D accents" /></a>
+      <div class="side-text"><p>Example methodology, described without invented performance data: pick the keyword you are auditing, count how many exact match occurrences appear in the body, count the words in the body, compute the ratio, and multiply by 1000. Report the result as the metric for that page. Use the same counting rules across the audit set so the numbers are comparable.</p></div>
+    </div>
+<p>Decide in advance whether to count only exact matches or to include phrase variants and semantic terms. For many audits it is useful to report both an exact match occurrence and a semantic coverage note. Count headings and meta separately and report them as signals, not as part of the body density figure unless you explicitly define them into the scope.</p>
+
+    <div class="cta-section">
+      <h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Request a short diagnostic and next step plan via the consultation listed on the services page</h3>
+      <div class="cta-intro"><p>Run a quick diagnostic: apply the formula to three representative pages and compare occurrences, metadata, and schema, then prioritise the page with the worst intent mismatch for a short rewrite.</p></div>
+      <a href="https://orvus.net/services" target="_blank" rel="noopener" class="cta-button">Inquire about a consultation</a>
+    </div>
+
+<h2>What search engines actually say about keyword use</h2><h3>Google's guidance on keyword stuffing</h3><p>Google's public guidance makes the core point: avoid keyword stuffing and focus on helpful content. That guidance implies there is no engine published density threshold to chase, and that natural phrasing matters more than exact match counts <a href="https://developers.google.com/search/docs/advanced/guidelines/avoid-keyword-stuffing" target="_blank" rel="noopener">Google Search Central</a>.</p><h3>Why natural language matters more than exact-match counts</h3><p>In practice the search quality systems reward pages that satisfy user intent and provide clear answers. For local pages that often means accurate location signals, clear service descriptions, and consistent NAP alongside coherent body copy. Editors can prioritise phrasing that reads well for users instead of forcing repeated exact matches.</p><h2>The formula: how to calculate keywords per 1000 words</h2><h3>Step-by-step calculation</h3><p>Use a clear formula auditors can reproduce: take the number of keyword occurrences, divide by the total word count, and multiply by 1000. That gives occurrences per 1000 words and makes comparisons fair across page lengths. The formula is (occurrences ÷ total words) × 1000, a simple arithmetic step auditors use to compare pages consistently <a href="https://ahrefs.com/blog/keyword-density/" target="_blank" rel="noopener">Ahrefs Blog</a>.</p><p>Example methodology, described without invented performance data: pick the keyword you are auditing, count how many exact match occurrences appear in the body, count the words in the body, compute the ratio, and multiply by 1000. Report the result as the metric for that page. Use the same counting rules across the audit set so the numbers are comparable.</p><h3>How to handle phrases, variations, and semantic terms</h3><p>Decide in advance whether to count only exact matches or to include phrase variants and semantic terms. For many audits it is useful to report both an exact match occurrence and a semantic coverage note. Count headings and meta separately and report them as signals, not as part of the body density figure unless you explicitly define them into the scope.</p><p>Many practitioners use ranges as a pragmatic guide rather than a rule. A commonly cited operational range for general content is about five to fifteen exact match occurrences per 1000 words, used to avoid under use and to discourage repetition <a href="https://ahrefs.com/blog/keyword-density/" target="_blank" rel="noopener">Ahrefs Blog</a>.</p><p>Choose a target range based on page purpose and intent. Informational, long form pages can tolerate wider semantic coverage while transactional or landing pages should be concise and place keywords in title, H1, and metadata. Treat the range as editorial balance and favour synonyms and related terms to cover topic breadth without repeating exact matches.</p><p>For local SEO pages many teams aim lower on exact match counts, usually around three to eight occurrences per 1000 words, combined with clear placement in title, H1, and metadata rather than pushing body density up arbitrarily <a href="https://moz.com/learn/seo/keyword-density" target="_blank" rel="noopener">Moz</a>.</p><p>High impact local placement includes the title tag, H1, meta description, and structured data such as schema.org markup. Consistent NAP across site pages and directories reinforces location signals. For many local pages, improving these placements and adding schema is higher leverage than increasing body density.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://orvus.net/services" target="_blank" rel="noopener">Orvus Unique Services</a></div>
+      <a href="https://orvus.net/services" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1H_h1lsT61lq2b7T9TJp_cP-rw6fSFKSG" alt="Orvus Unique Services" /></a>
+    </div>
+
+<p>Use a <a href="https://orvus.net" target="_blank" rel="noopener">compact checklist</a> during audits. Steps include: apply the occurrences per 1000 words formula, inspect title and H1 for location, verify meta descriptions, run a TF IDF or semantic terms check, and confirm schema and NAP consistency.</p><p>Prioritise pages by user intent alignment, traffic and conversion potential, and business criticality. Pages with clear intent mismatch or missing local signals should come first. When in doubt, measure impressions and queries before performing broad rewrites <a href="https://yoast.com/keyword-density/" target="_blank" rel="noopener">Yoast</a>.</p><p>There are two pragmatic approaches to measurement, including free online checkers such as the SE Ranking keyword density tool <a href="https://seranking.com/free-tools/check-keyword-density.html" target="_blank" rel="noopener">SE Ranking</a>. Use an occurrence counter or text analysis script for quick audits, and complement that with TF IDF or semantic term reports from site audit tools to understand coverage. The combination prevents overfitting to a single metric and gives a broader view of topical depth <a href="https://ahrefs.com/blog/keyword-density/" target="_blank" rel="noopener">Ahrefs Blog</a>.</p><p>Track term occurrences, semantic term coverage, impressions, and click data for target queries. Use Search Console to monitor query level performance and to check whether adjustments change impressions or clicks over time. Avoid treating small density shifts as meaningful without corroborating signal changes.</p>
+
+<section class="faq-accordion"><input type="checkbox" id="faq-tpjicn" class="faq-toggle" checked /><label for="faq-tpjicn" class="faq-summary" role="button" tabindex="0">How many keywords per 1000 words should local pages use?</label><div class="faq-content"><p>Use the (occurrences ÷ words) × 1000 formula for audits, treat density as a heuristic, and often aim for about three to eight exact match occurrences per 1000 words for local pages while prioritising metadata and structured data.</p></div></section>
+
+<h2>Decision criteria: when to rewrite copy and when to fix signals</h2><h3>Evaluating intent match and page purpose</h3><p>Decide to rewrite body copy when intent mismatch is evident or when the page does not answer common user questions for the target query. If impressions are low for the expected query and intent appears aligned, then metadata or schema may be the limiting factor.</p><h3>When local signals matter more than body density</h3><p>For local pages, missing or inconsistent NAP and absent schema are often larger issues than a low exact match count. Fix metadata and structured data first, then consider measured tweaks to body copy if query performance remains weak <a href="https://developers.google.com/search/docs/advanced/guidelines/avoid-keyword-stuffing" target="_blank" rel="noopener">Google Search Central</a>.</p>
+
+<h2>Common mistakes and pitfalls when using density as a proxy</h2><h3>Mistaking correlation for causation</h3><p>One common error is assuming density correlations prove causation. Industry analyses can show patterns, but they do not establish that a specific density caused a ranking change. Use density as one of multiple signals during diagnosis and testing.</p><h3>Over-optimising for an invented target</h3><p>Another pitfall is chasing a numeric target and producing awkward, repetitive copy. That creates a poor user experience and can trigger search quality systems. Prioritise natural language and semantic breadth over forced repetition <a href="https://yoast.com/keyword-density/" target="_blank" rel="noopener">Yoast</a>.</p>
+
+<h2>Practical examples: calculating density for a local services page</h2><h3>Worked example with methodology</h3><p>Describe the method with labelled placeholders. First, define the target keyword. Second, extract the page body only and count words, noting whether headings and captions are included. Third, count exact match occurrences in the body. Fourth, compute the formula and report the result. Present both exact match occurrences and a short note on semantic coverage.</p><p>When reporting to stakeholders show the computed occurrences per 1000 words alongside checks for title, H1, meta presence, and schema. Label each figure as a diagnostic, and recommend complementary fixes such as a metadata update or schema insertion rather than a body rewrite by itself, or use a quick page analyzer such as the Internet Marketing Ninjas keyword density tool <a href="https://www.internetmarketingninjas.com/seo-tools/keyword-density/" target="_blank" rel="noopener">Internet Marketing Ninjas</a> <a href="https://ahrefs.com/blog/keyword-density/" target="_blank" rel="noopener">Ahrefs Blog</a>.</p><h3>How to report results to stakeholders</h3><p>Keep stakeholder reports short. State the metric, explain what it implies, and list immediate next steps. For local pages that means noting whether location appears in title and H1, whether schema is present, and whether NAP is consistent. Frame recommendations as conditional improvements that depend on measurement quality and constraints.</p>
+
+<h2>How to monitor outcomes without chasing density</h2><h3>Which KPIs to watch instead</h3><p>Primary KPIs are impressions and clicks for the target queries, click-through rate, and user behavior metrics that indicate satisfaction. Search Console provides query level impressions and click data which are more directly tied to user demand than body density alone <a href="https://yoast.com/keyword-density/" target="_blank" rel="noopener">Yoast</a>.</p><h3>How long to wait before judging changes</h3><p>Allow time for search systems to reprocess changes. Measure before and after trends rather than making instant judgments. Avoid simultaneous edits across many variables when you want to attribute an effect to a specific change.</p>
+
+<h2>Workflow: embedding checks into content production</h2><h3>Where to run density checks in the editing process</h3><p>Run density checks at draft review, pre publish audit, and during periodic refresh audits. Integrate the formula into your <a href="https://orvus.net/about" target="_blank" rel="noopener">content checklist</a> so editors can diagnose potential issues rapidly.</p><h3>Who owns the checks and how to pass them off</h3><p>Define ownership clearly. Content editors handle phrasing and semantic coverage, SEO or system owners handle metadata and schema, and analytics owners monitor outcomes. Use small automations to count occurrences and populate reporting templates and tools like <a href="https://mangools.com/kwfinder/" target="_blank" rel="noopener">KWFinder</a> to reduce manual friction <a href="https://ahrefs.com/blog/keyword-density/" target="_blank" rel="noopener">Ahrefs Blog</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure>
+
+<h2>Conclusion: a pragmatic local SEO policy for copy</h2><h3>Simple policy notes you can implement today</h3><p>Adopt a simple policy: use the occurrences per 1000 words formula for audits, treat density as a heuristic, and favour three to eight exact match occurrences per 1000 words for local pages while emphasising title, H1, meta, and schema placement <a href="https://moz.com/learn/seo/keyword-density" target="_blank" rel="noopener">Moz</a>.</p><h3>When to seek deeper diagnostics</h3><p>If you see persistent low impressions or clear intent mismatch despite adequate metadata and schema, escalate to a diagnostic that maps intent, content gaps, and technical constraints. Systems thinking and measurement clarity are higher leverage than chasing single numeric targets.</p>
+
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-43opy4" class="faq-toggle" /><label for="faq-43opy4" class="faq-summary" role="button" tabindex="0">What is the formula for keywords per 1000 words?</label><div class="faq-content"><p>Divide the number of keyword occurrences by the total word count, then multiply by 1000 to get occurrences per 1000 words.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-53juoo" class="faq-toggle" /><label for="faq-53juoo" class="faq-summary" role="button" tabindex="0">Is there a single optimal density I should aim for?</label><div class="faq-content"><p>No, there is no engine published optimal density. Use pragmatic ranges as editorial guidance and prioritise natural phrasing and local signals.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-labn3c" class="faq-toggle" /><label for="faq-labn3c" class="faq-summary" role="button" tabindex="0">For local pages should I increase body density or fix metadata first?</label><div class="faq-content"><p>Fix metadata, schema, and NAP consistency first. For many local pages these fixes are higher leverage than raising body exact match density.</p></div></section>
+</section>
+
+<section class="article-ending">Treat density as one signal in a wider search architecture. When audit work is organised around clear intent, metadata, and measurement, small numeric checks help prioritise work without becoming the main goal. If a page shows persistent problems after basic fixes, consider a deeper diagnostic that maps intent, content gaps, and technical constraints.</section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
