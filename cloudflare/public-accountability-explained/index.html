@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What do you mean by public accountability? A practical guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #8b222d; /* derived darker accent */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,0.03);
+      --radius: 0px; /* from --mc-radius */
+
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; color: rgba(255,255,255,.92); }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/148T4G3-OGQazQiyVsCtN-JE4g6oKMeBv" alt="Public accountability: practical guide banner" />
+        </div>
+        <h1 class="title">What do you mean by public accountability? A practical guide</h1>
+        <p class="subline">A concise, practical guide to how public accountability works and why it matters.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/public-accountability-explained/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">This guide explains what public accountability means in the public sector and why it matters for citizens. It draws on scholarly frameworks and international guidance to show how accountability works in practice.
+
+The aim is practical clarity. Readers will find a concise definition, a description of formal and participatory mechanisms, simple criteria for assessment, and low-effort steps to follow up on audit findings or budget records.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Public accountability means explanation, justification and consequences for public actors.</span></div><div class="highlight-card"><span class="highlight-text">Transparency helps accountability, but institutions to act on information are essential.</span></div><div class="highlight-card"><span class="highlight-text">Combining formal audits and participatory monitoring increases the chance of effective oversight.</span></div>
+     </div>
+  <h2>What public accountability means: a clear definition and why it matters</h2>
+<p>Public accountability is commonly defined as the obligation of public actors to explain and justify actions and to face consequences for their decisions and performance, a framing used in scholarship and policy guidance; Mark Bovens' conceptual framework remains a common reference for this definition <a href="https://onlinelibrary.wiley.com/doi/10.1111/j.1468-0386.2007.00378.x" target="_blank" rel="noopener">Bovens' conceptual framework</a>.</p>
+
+<section class="faq-accordion"><input type="checkbox" id="faq-ty150l" class="faq-toggle" checked /><label for="faq-ty150l" class="faq-summary" role="button" tabindex="0">What does public accountability look like in my local government?</label><div class="faq-content"><p>Public accountability in local government typically looks like published audit reports, open budget documents, active legislative or council oversight, and accessible complaint channels that lead to follow-up actions when issues are identified.</p></div></section>
+
+<p>The literature shows that accountability can take different forms, including political, administrative and legal types, and that who answers to whom varies with institutional arrangement and constitutional design <a href="https://onlinelibrary.wiley.com/doi/10.1111/j.1468-0386.2007.00378.x" target="_blank" rel="noopener">Bovens' conceptual framework</a>.</p>
+
+<p>For citizens, the practical importance of public accountability is straightforward: it creates a basis for explanation of decisions, a route to corrective action, and a way to link performance to consequences in public office; this role is emphasised in policy guidance on public integrity <a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">OECD Public Governance guidance</a>.</p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1_XeqI8Y2llhv4pFlIWSK63Qb3nVscfOv=s1200" alt="Minimalist vector infographic of an audit document icon with a highlighted budget table and small chart icons representing public accountability in navy white and red" /></a>
+      <div class="side-text"><p>Public actors in this context include elected officials, public servants, and institutions that manage public resources and services. The aim is not only to publish records but to have systems that can require explanations and, when needed, apply sanctions or corrective measures <a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">OECD Public Governance guidance</a>.</p></div>
+    </div>
+
+<p>Why it matters for <a href="https://michaelcarbonara.com/strength-and-security/" target="_blank" rel="noopener">trust</a>: when explanations are routine, accessible and linked to follow-up, citizens are better able to judge performance and hold officials to account. That causal link is a central reason why many governance reforms focus on accountability mechanisms rather than information release alone <a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">OECD Public Governance guidance</a>.</p>
+
+<h2>How public accountability relates to transparency and responsibility</h2>
+<p>Transparency, responsibility and accountability are related but distinct concepts. Transparency generally refers to the provision of information, responsibility denotes duties and obligations, and accountability means the obligation to explain and face consequences for actions <a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">OECD Public Governance guidance</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<p>In practice, transparency enables accountability by making information available, but information alone rarely produces answerability or sanctions without institutions that can act on that information; international guidance highlights this distinction and cautions against equating transparency with full accountability <a href="https://www.worldbank.org/en/topic/governance/brief/citizen-engagement" target="_blank" rel="noopener">World Bank guidance on citizen engagement</a>.</p>
+
+<p>Designers of reforms therefore often pair disclosure measures with bodies or procedures that can investigate, follow up and, where appropriate, sanction. For example, publishing expenditure records is useful; coupling that disclosure with audit follow-up and legislative review is what creates enforceable accountability in many systems <a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">OECD Public Governance guidance</a>.</p>
+
+<p>There are frequent examples where more data did not by itself create consequences. The policy literature advises practitioners to look for chains of action from information disclosure to oversight inquiry to remedial steps, rather than assuming that publication alone solves problems <a href="https://www.worldbank.org/en/topic/governance/brief/citizen-engagement" target="_blank" rel="noopener">World Bank guidance on citizen engagement</a>.</p>
+
+<div class="cta-section">
+  <h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay informed and get involved with Michael Carbonara's campaign</h3>
+  <div class="cta-intro"><p>Consult primary guidance such as OECD and World Bank notes and read local audit reports to understand how information is turned into action in your jurisdiction.</p></div>
+  <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign</a>
+</div>
+
+<p>Understanding these distinctions helps citizens and journalists ask the right questions: is the information published sufficient, who can act on it, and what mechanisms exist to ensure follow-up? Answering these makes it clearer where reforms should focus.</p>
+
+<h2>Standard accountability mechanisms: audits, oversight and anti-corruption bodies</h2>
+<p>Independent audits, often performed by <a href="https://thedocs.worldbank.org/en/doc/987831611680061905-0090022021/original/SupremeAuditInstitutions.pdf" target="_blank" rel="noopener">supreme audit institutions</a>, are a core formal mechanism to verify public accounts and assess performance. Audits produce reports that, when followed up, can form the factual basis for accountability actions <a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">OECD Public Governance guidance</a>.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+
+<p>Legislative oversight is another channel. Legislatures and their committees can summon officials, review budgets and require explanations, creating political accountability where votes and public scrutiny matter; this role is part of systems described in governance guidance and comparative budget work <a href="https://www.internationalbudget.org/open-budget-survey/" target="_blank" rel="noopener">Open Budget Survey</a>.</p>
+
+<p>Judicial review and administrative tribunals can hold officials to legal standards and provide remedies for unlawful action. These legal channels represent another dimension of accountability, where courts or tribunals can require compliance with law and procedure <a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">OECD Public Governance guidance</a>.</p>
+
+<p>Anti-corruption bodies and integrity agencies are special-purpose institutions intended to investigate wrongdoing and recommend or apply sanctions. They work alongside <a href="https://internationalbudget.org/initiative/audit-accountability/" target="_blank" rel="noopener">audits and oversight</a>, and their effectiveness depends on independence, funding and legal mandate <a href="https://www.internationalbudget.org/open-budget-survey/" target="_blank" rel="noopener">Open Budget Survey</a>.</p>
+
+<p>In many countries, these formal instruments are the backbone of accountability. Their reports, hearings and rulings form the record that <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">citizens and journalists use</a> to understand whether public actors have met their obligations <a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">OECD Public Governance guidance</a>.</p>
+
+<h2>Participatory and social accountability: citizen monitoring and budgeting</h2>
+<p>Participatory and social accountability tools aim to involve citizens directly in monitoring public services and budgets. Examples include social audits, citizen report cards and participatory budgeting forums, which allow community members to review performance and set spending priorities <a href="https://www.undp.org/topics/democratic-governance-and-peacebuilding" target="_blank" rel="noopener">UNDP guidance on democratic governance</a>.</p>
+
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick checks for budget transparency and citizen engagement</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-iwj701-0">
+                        <input id="tool-check-iwj701-0" type="checkbox" />
+                        <span>Open Budget Survey score</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-7wjom4-1">
+                        <input id="tool-check-7wjom4-1" type="checkbox" />
+                        <span>Audit report published</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-t1ey01-2">
+                        <input id="tool-check-t1ey01-2" type="checkbox" />
+                        <span>Participatory budgeting forum</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use official national or local sources</p>
+            </div>
+
+<p>International agencies such as the World Bank and UNDP promote these approaches as complements to formal mechanisms, not replacements. Participatory methods can increase responsiveness at local levels where face-to-face forums and local monitoring reveal issues that large-scale audits may miss <a href="https://www.worldbank.org/en/topic/governance/brief/citizen-engagement" target="_blank" rel="noopener">World Bank guidance on citizen engagement</a>.</p>
+
+<p>These approaches work best when they are well designed and linked to formal follow-up. Evidence shows that participatory monitoring can prompt corrective action when it produces verifiable findings and when authorities take complaints seriously, but effectiveness varies by context and design <a href="https://www.undp.org/topics/democratic-governance-and-peacebuilding" target="_blank" rel="noopener">UNDP guidance on democratic governance</a>.</p>
+
+<p>Typical strengths of participatory approaches include local knowledge, timely feedback and direct citizen voice. Typical limits include uneven coverage, the need for facilitation, and dependence on officials to respond with concrete steps <a href="https://www.worldbank.org/en/topic/governance/brief/citizen-engagement" target="_blank" rel="noopener">World Bank guidance on citizen engagement</a>.</p>
+
+<h2>How to assess public accountability: practical criteria and indicators</h2>
+<p>Simple indicators can help citizens and journalists judge whether public actors are meaningfully accountable. Look for publication of timely audit reports, evidence of legislative scrutiny, and clear performance indicators with measurable targets <a href="https://www.internationalbudget.org/open-budget-survey/" target="_blank" rel="noopener">Open Budget Survey</a>.</p>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text">Other practical checks include whether audits lead to follow-up actions, whether complaint channels are available and used, and whether institutions <a href="https://www.transparency.org/en/publications/safeguarding-independence-supreme-audit-institutions" target="_blank" rel="noopener">publish responses to findings</a>. These checks focus attention on whether information leads to consequences rather than on information alone <a href="https://www.transparency.org/en/our-priorities/accountability" target="_blank" rel="noopener">Transparency International on accountability</a>.</div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1T9Hd6Lz2H7IBmPsyejoHLPELUdWGJoQ-=s1200" alt="Minimal 2D vector infographic with icons for audits legislative oversight and community meetings in Michael Carbonara color palette highlighting public accountability" /></a>
+    </div>
+
+<p>Questions citizens can ask include: Are recent audit reports public and accessible? Has the legislature discussed the findings? Were corrective actions proposed, and did any sanctions or administrative changes follow? Tracking a few cases over time shows whether accountability is working.</p>
+
+<p>Using comparative tools is helpful. The Open Budget Survey is an example of a dataset that highlights differences in budget openness across jurisdictions and points to areas where transparency and accountability are weak <a href="https://www.internationalbudget.org/open-budget-survey/" target="_blank" rel="noopener">Open Budget Survey</a>.</p>
+
+<p>Practical steps to apply these checks include <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">consulting public records</a>, following audit findings in local media, submitting complaints through official channels, and engaging in participatory forums where they exist. These actions make oversight a routine part of civic life rather than an exceptional event <a href="https://www.undp.org/topics/democratic-governance-and-peacebuilding" target="_blank" rel="noopener">UNDP guidance on democratic governance</a>.</p>
+
+<h2>Common mistakes and pitfalls when seeking accountability</h2>
+<p>Relying on transparency alone is a common mistake. Publishing data is valuable, but without institutions that investigate and enforce, information often fails to produce answers or sanctions. Policy guidance warns against treating disclosure as a cure-all <a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">OECD Public Governance guidance</a>.</p>
+
+<p>Another pitfall is expecting quick fixes. Accountability systems develop over time and depend on legal frameworks, institutional capacity and political will. Reforms that ignore enforcement and capacity often deliver limited results <a href="https://www.transparency.org/en/our-priorities/accountability" target="_blank" rel="noopener">Transparency International on accountability</a>.</p>
+
+<p>Citizens can also face legal or procedural barriers when using oversight channels, such as restricted access to documents, narrow standing to bring complaints, or delays that blunt the impact of evidence. Understanding these constraints helps set realistic strategies.</p>
+
+<p>Finally, neglecting context is risky. What works in one country or locality may not transfer directly to another. The literature suggests tailoring mixes of formal audits and participatory monitoring to local institutions and civic capacities <a href="https://www.worldbank.org/en/topic/governance/brief/citizen-engagement" target="_blank" rel="noopener">World Bank guidance on citizen engagement</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<h2>Practical examples and next steps for citizens and civic groups</h2>
+<p>Scenario one, reading an audit: find the latest audit report, note key findings, and check whether the audit recommends actions. Then see if the legislature or executive published a response. That chain from audit to response is a basic test of accountability <a href="https://www.internationalbudget.org/open-budget-survey/" target="_blank" rel="noopener">Open Budget Survey</a>.</p>
+<p>Scenario two, raising a complaint: gather documentation, submit it through the official complaint channel, and ask for a timeline for response. If no action follows, consider notifying oversight bodies or local reporters to increase scrutiny <a href="https://www.transparency.org/en/our-priorities/accountability" target="_blank" rel="noopener">Transparency International on accountability</a>.</p>
+<p>Scenario three, joining participatory budgeting: participate in the forum, propose priorities, and use the forum record to track allocations. If promises are not implemented, use audit reports and oversight channels to press for explanations <a href="https://www.undp.org/topics/democratic-governance-and-peacebuilding" target="_blank" rel="noopener">UNDP guidance on democratic governance</a>.</p>
+<p>When to escalate: start with administrative or oversight channels, then consider legislative committees or anti-corruption bodies if evidence suggests wrongdoing. Media attention can help, but it is one of several tools and not a substitute for institutional follow-up <a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">OECD Public Governance guidance</a>.</p>
+<p>In summary, public accountability links information to explanation and consequences. Combining formal audits, oversight and, where appropriate, participatory monitoring gives the best chance that citizens can understand decisions and seek remedies <a href="https://www.internationalbudget.org/open-budget-survey/" target="_blank" rel="noopener">Open Budget Survey</a>.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-6gtu6b" class="faq-toggle" /><label for="faq-6gtu6b" class="faq-summary" role="button" tabindex="0">How is public accountability different from transparency?</label><div class="faq-content"><p>Transparency is the provision of information. Public accountability adds an obligation to explain actions and to face consequences through oversight, audits or legal channels.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-q1qxkz" class="faq-toggle" /><label for="faq-q1qxkz" class="faq-summary" role="button" tabindex="0">What can ordinary citizens do to demand accountability?</label><div class="faq-content"><p>Citizens can consult audit reports, use complaint channels, participate in local budgeting forums, and ask oversight bodies or legislators to follow up on findings.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-8b3o55" class="faq-toggle" /><label for="faq-8b3o55" class="faq-summary" role="button" tabindex="0">Do participatory approaches replace formal audits?</label><div class="faq-content"><p>No. Participatory methods complement formal instruments by adding local monitoring and voice, but they rely on formal follow-up to produce lasting consequences.</p></div></section>
+</section>
+
+<section class="article-ending">Public accountability is a practical set of relationships and institutions that connect information to action. Citizens and civic groups who use audit reports, oversight channels and participatory forums can make oversight a regular part of civic life.
+
+Understanding the difference between transparency, responsibility and accountability helps set realistic expectations about what reforms can achieve and where to focus civic effort.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://onlinelibrary.wiley.com/doi/10.1111/j.1468-0386.2007.00378.x" target="_blank" rel="noopener">https://onlinelibrary.wiley.com/doi/10.1111/j.1468-0386.2007.00378.x</a></li><li><a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">https://www.oecd.org/gov/ethics/</a></li><li><a href="https://www.worldbank.org/en/topic/governance/brief/citizen-engagement" target="_blank" rel="noopener">https://www.worldbank.org/en/topic/governance/brief/citizen-engagement</a></li><li><a href="https://michaelcarbonara.com/strength-and-security/" target="_blank" rel="noopener">https://michaelcarbonara.com/strength-and-security/</a></li><li><a href="https://thedocs.worldbank.org/en/doc/987831611680061905-0090022021/original/SupremeAuditInstitutions.pdf" target="_blank" rel="noopener">https://thedocs.worldbank.org/en/doc/987831611680061905-0090022021/original/SupremeAuditInstitutions.pdf</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.internationalbudget.org/open-budget-survey/" target="_blank" rel="noopener">https://www.internationalbudget.org/open-budget-survey/</a></li><li><a href="https://internationalbudget.org/initiative/audit-accountability/" target="_blank" rel="noopener">https://internationalbudget.org/initiative/audit-accountability/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">https://michaelcarbonara.com/</a></li><li><a href="https://www.undp.org/topics/democratic-governance-and-peacebuilding" target="_blank" rel="noopener">https://www.undp.org/topics/democratic-governance-and-peacebuilding</a></li><li><a href="https://www.transparency.org/en/our-priorities/accountability" target="_blank" rel="noopener">https://www.transparency.org/en/our-priorities/accountability</a></li><li><a href="https://www.transparency.org/en/publications/safeguarding-independence-supreme-audit-institutions" target="_blank" rel="noopener">https://www.transparency.org/en/publications/safeguarding-independence-supreme-audit-institutions</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
