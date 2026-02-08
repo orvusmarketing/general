@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Is PageRank still used by Google? Practical guidance for website ranking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand tokens derived from provided style */
+      --text-color: rgba(244,231,197,0.86);
+      --accent: #C8A45D;
+      --accent-hover: #f6de9f;
+      --line: rgba(200,164,93,0.26);
+      --surface: #050d18;
+      --surface-2: #0b1628;
+      --radius: 12px;
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease, background .14s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      background: var(--accent-hover);
+      color: #050d18;
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+      border-radius: 12px;
+      background: transparent !important;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1iBtXZQBXok-5jfZWs6_JmP63Mid_ZeBV" alt="Website ranking infographic — Is PageRank still used by Google?" />
+        </div>
+        <h1 class="title">Is PageRank still used by Google? Practical guidance for website ranking</h1>
+        <p class="subline">Practical guidance on whether PageRank still influences rankings and how teams should prioritise link work.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://orvus.net/useful-knowledge/website-ranking-is-pagerank-still-used/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">PageRank introduced the idea that links could be treated as weighted votes. Over the decades that followed, search engines expanded on that idea and combined link analysis with many other signals. This article clarifies whether PageRank still affects website ranking, explains how Google treats link signals today, and gives a practical framework for teams to prioritize link work without chasing obsolete public metrics.
+
+The guidance here is intended for operators and marketing teams who need clear systems for SEO and measurement. It focuses on diagnostic steps, prioritization rules, and reporting templates that fit into search architecture and growth systems.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">PageRank is the conceptual origin of link-based signals, but public PageRank scores are no longer maintained.</span></div><div class="highlight-card"><span class="highlight-text">Monitor referring domain quality, anchor diversity, and link relevance rather than chasing a single legacy PR number.</span></div><div class="highlight-card"><span class="highlight-text">Integrate link metrics into dashboards and prioritize fixes using an impact versus effort diagnostic.</span></div>
+     </div>
+  <h2>Short answer: does PageRank still affect website ranking?</h2>
+<p>Short answer: <a href="https://loganix.com/google-pagerank/" target="_blank" rel="noopener">PageRank</a> is the original conceptual foundation for link-based signals, but Google stopped exposing a public PageRank value and link signals now operate as one class among many in Google's automated ranking systems, so you should not expect a single public PR number to explain website ranking today. <a href="http://infolab.stanford.edu/~backrub/google.html" target="_blank" rel="noopener">Stanford paper by Brin and Page</a></p>
+<p>That means links still matter in many cases, but they are blended with relevance, content quality, and technical signals inside multi-system ranking models. Google documents that links are one set of signals among many in how search works. <a href="https://developers.google.com/search/docs/essentials/how-search-works" target="_blank" rel="noopener">How Search works</a></p>
+<div class="cta-section"><h3 class="cta-headline">Request a consultation for an audit-based diagnostic</h3><div class="cta-intro"><p>If you want a quick diagnostic, run a short audit that checks referring domain quality, anchor diversity, and technical issues before planning outreach.</p></div><a href="https://orvus.net/services" target="_blank" rel="noopener" class="cta-button">Inquire about consultation</a></div>
+<p>How to read the short answer for <a href="https://orvus.net/about" target="_blank" rel="noopener">your site</a>. Start by treating links as one lever among several. Whether you should prioritize link work depends on your funnel, competitive context, and data from a short diagnostic.</p>
+<p>Many SEOs historically chased toolbar PageRank numbers. Those public scores were discontinued and are no longer maintained, so they do not reflect Google’s internal link-weighting. Stop treating legacy PR values as a Google signal. <a href="https://moz.com/blog/does-pagerank-still-matter" target="_blank" rel="noopener">Does PageRank still matter? analysis</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure>
+<h2>What PageRank is: the original idea behind link-based ranking</h2>
+<p>PageRank began as a way to treat links as weighted votes, where a link from a well linked page counts more than a link from an isolated page. The model framed link analysis as a graph problem and remains the conceptual origin of link-based ranking. <a href="http://infolab.stanford.edu/~backrub/google.html" target="_blank" rel="noopener">Stanford paper by Brin and Page</a></p>
+<p>The idea was formalized in early patents that described systems for ranking using link structure and related signals. These documents show how link-weighting entered search engineering, though they do not describe how modern production systems blend many additional features. <a href="https://patents.google.com/patent/US6285999B1/en" target="_blank" rel="noopener">US patent on ranking methods</a></p>
+<p>Conceptually, PageRank taught engineers to think in terms of network influence and source importance. That conceptual frame still guides how link signals are evaluated, even when the production implementations are far more complex and proprietary.</p>
+<h2>How Google describes links today inside automated ranking systems</h2>
+<p>Google’s public guidance emphasizes that search ranking is produced by multiple automated systems and that links are one category of signals those systems use. This framing makes clear that links are important but not singular. <a href="https://developers.google.com/search/docs/essentials/how-search-works" target="_blank" rel="noopener">How Search works</a></p>
+<p>Google has also described ranking systems in more focused commentary, noting that signals are combined and that no single public metric captures how pages are weighed in ranking decisions. This is why public PR numbers were deprecated. <a href="https://developers.google.com/search/blog/2024/03/ranking-systems" target="_blank" rel="noopener">Google Search Central blog on ranking systems</a></p>
+<section class="faq-accordion"><input type="checkbox" id="faq-ybxu5f" class="faq-toggle" checked /><label for="faq-ybxu5f" class="faq-summary" role="button" tabindex="0">Does PageRank still matter for my website ranking in 2026?</label><div class="faq-content"><p>PageRank is the historical foundation for link-based signals, but public PageRank scores are obsolete; links still influence ranking as one among many signals, so prioritize diagnostics, content relevance, and technical fixes before time intensive link acquisition.</p></div></section>
+<p>For operators this means you should treat link data as input to diagnostics and reporting, not as a single source of truth for website ranking.</p>
+<h2>Why public PageRank scores disappeared and what that means for SEOs</h2>
+<p>Toolbar PageRank and other public PR proxies were simplified views of complex link signals. Google stopped updating those public scores, so they became unreliable as indicators of internal link-weighting. <a href="https://moz.com/blog/does-pagerank-still-matter" target="_blank" rel="noopener">Does PageRank still matter? analysis</a></p>
+<p>Common misunderstandings arise when teams equate a third-party PR proxy with Google’s internal ranking calculus. In practice, those external numbers were approximate and incomplete, so relying on them can misdirect effort and measurement.</p>
+<p>Practical takeaway: avoid chasing a single PageRank value. Focus instead on defensible link quality signals and integrate them into your search architecture and dashboards.</p>
+<h2>Modern link signals to track for healthy website ranking</h2>
+<p>Instead of a single PR score, monitor the quality of referring domains, the <a href="https://uprankd.com/news/guides/how-google-interprets-internal-links-beyond-simple-page-rank-flow" target="_blank" rel="noopener">topical relevance of linking pages</a>, and trends in unique referring domains. These measures are far more actionable for improving website ranking. <a href="https://moz.com/blog/does-pagerank-still-matter" target="_blank" rel="noopener">Does PageRank still matter? analysis</a></p>
+<p>Track anchor text diversity and ensure anchor phrases are contextually relevant to the target content rather than being purely exact match. Anchor diversity reduces risk and helps search systems assess topical connection. <a href="https://searchengineland.com/is-pagerank-still-used-by-google-392345" target="_blank" rel="noopener">Search Engine Land analysis</a></p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://orvus.net/services" target="_blank" rel="noopener">Orvus Unique Services</a></div>
+      <a href="https://orvus.net/services" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1H_h1lsT61lq2b7T9TJp_cP-rw6fSFKSG" alt="Orvus Unique Services" /></a>
+    </div>
+<p>Look for sustained <a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">referral trends</a> rather than one off spikes. A steady increase in high quality referring domains often signals earned attention, which tends to be more defensible in measurement and in diagnostic work.</p>
+<h2>Where PageRank-like calculations still appear: patents and internal methods</h2>
+<p>Google’s patent filings and related technical disclosures show that link-weighting concepts, which grew from the original PageRank idea, are part of how search engines reason about the web. These documents illustrate why link structure remains a conceptually valid feature for ranking. <a href="https://patents.google.com/patent/US6285999B1/en" target="_blank" rel="noopener">PageRank-related patent</a></p>
+<p>At the same time, Google’s public documentation stresses that link signals are integrated into a broader set of ranking systems. That combination is a major reason why exact internal weights and interactions are not available to the public. <a href="https://developers.google.com/search/docs/essentials/how-search-works" target="_blank" rel="noopener">How Search works</a></p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1LN4SXWMJ_xcuEUgcONqP0d7gC12S6n9w=s1200" alt="Small team reviewing SEO dashboards and backlink reports on a laptop in a minimalist navy office showing website ranking trends" /></a>
+      <div class="side-text"><p>In practice, that means your diagnostic should assume link signals are present but blended with content relevance, user experience, and other quality metrics, and that single-number proxies will not reproduce Google’s internal view.</p></div>
+    </div>
+<h2>Balancing links with content relevance and other signals for website ranking</h2>
+<p>For many sites, improving content relevance and fixing technical SEO issues produces similar or greater gains in visibility than raw link volume, because Google combines many signals when deciding rankings. Prioritize the highest impact fixes first. <a href="https://developers.google.com/search/docs/essentials/how-search-works" target="_blank" rel="noopener">How Search works</a></p>
+<p>There are scenarios where links remain more influential, such as highly competitive informational queries or categories where external authority matters for trust. Use competitor diagnostics to see where link authority correlates with top results. <a href="https://searchengineland.com/is-pagerank-still-used-by-google-392345" target="_blank" rel="noopener">Search Engine Land analysis</a></p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">internal dashboard to track referring domain quality and anchor diversity</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-3dre46-0">
+                        <input id="tool-check-3dre46-0" type="checkbox" />
+                        <span>Referring domains</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-nuzlob-1">
+                        <input id="tool-check-nuzlob-1" type="checkbox" />
+                        <span>Top anchors</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-v6o6xc-2">
+                        <input id="tool-check-v6o6xc-2" type="checkbox" />
+                        <span>Page context</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-tca9bw-3">
+                        <input id="tool-check-tca9bw-3" type="checkbox" />
+                        <span>New links this month</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-utqzx4-4">
+                        <input id="tool-check-utqzx4-4" type="checkbox" />
+                        <span>Lost links this month</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-ls7pmd-5">
+                        <input id="tool-check-ls7pmd-5" type="checkbox" />
+                        <span>Notes</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">update weekly</p>
+            </div>
+<p>When allocating time, compare effort and expected impact. Small content or technical changes often require less effort and can remove blocking issues before link work scales. Use a 30 to 90 day diagnostic window to validate assumptions.</p>
+<h2>A practical framework: assess, prioritize, and monitor link-related risks</h2>
+<p>Assess. Start with quick checks for referring domain quality, unusual link patterns, and anchor diversity. Look for unnatural spikes and for links coming from off-topic or low quality sites. <a href="https://moz.com/blog/does-pagerank-still-matter" target="_blank" rel="noopener">Does PageRank still matter? analysis</a></p>
+<p>Prioritize. Rank candidate actions by likely impact and required effort. Compare link fixes with content rewrites and technical work using a simple impact versus effort matrix. Google’s emphasis on combined signals suggests balancing investments across those axes. <a href="https://developers.google.com/search/docs/essentials/how-search-works" target="_blank" rel="noopener">How Search works</a></p>
+<p>Monitor. Build dashboards that track referring domain counts, trendlines for top landing pages by referral, and anchor text distribution. Avoid reporting obsolete public PR numbers and focus on trend and quality metrics instead. <a href="https://searchengineland.com/is-pagerank-still-used-by-google-392345" target="_blank" rel="noopener">Search Engine Land analysis</a></p>
+<h2>Decision criteria: when to invest in link building versus other fixes</h2>
+<p>Signals that favor link investment include a clear authority gap vs competitors, search result pages that favor high authority domains, and queries where external endorsements influence visibility. In those cases selective link acquisition can be useful. <a href="https://searchengineland.com/is-pagerank-still-used-by-google-392345" target="_blank" rel="noopener">Search Engine Land analysis</a></p>
+<p>Deprioritize link work when you have crawl errors, duplicate or thin content, slow pages, or missing schema that block indexing and user experience. Those technical and content issues often limit the return on link investments. <a href="https://developers.google.com/search/docs/essentials/how-search-works" target="_blank" rel="noopener">How Search works</a></p>
+<p>Use a 30 to 90 day diagnostic window to test channel adjustments and observe whether changes to content, technical fixes, or link signals move key KPIs.</p>
+<h2>Common mistakes SEOs make with links and PageRank thinking</h2>
+<p>Chasing public PageRank numbers or third-party PR proxies as if they reflect Google's score is a common error. Those legacy numbers are deprecated and can mislead prioritization. <a href="https://moz.com/blog/does-pagerank-still-matter" target="_blank" rel="noopener">Does PageRank still matter? analysis</a></p>
+<p>Another frequent mistake is valuing link volume over topical relevance and referring domain quality. Large numbers of low quality links rarely improve durable visibility and can increase measurement noise. <a href="https://searchengineland.com/is-pagerank-still-used-by-google-392345" target="_blank" rel="noopener">Search Engine Land analysis</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure>
+<p>Corrective actions include focusing on contextual relevance, building links from authoritative pages inside your niche, and embedding link metrics into regular search architecture reporting.</p>
+<h2>Examples and scenarios: ecommerce, local services, and informational queries</h2>
+<p>Ecommerce example. Product category pages can benefit from <a href="https://www.rankability.com/ranking-factors/google/internal-links/" target="_blank" rel="noopener">referral links</a> that establish category authority, especially when competitor sites show strong external signals in search results. Use link diagnostics to see whether external authority correlates with ranking for your category. <a href="https://searchengineland.com/is-pagerank-still-used-by-google-392345" target="_blank" rel="noopener">Search Engine Land analysis</a></p>
+<p>Local services example. Local citations and relevant local links matter alongside on page signals and local ranking features. In local contexts, links are one component in a mix that includes proximity and relevance. <a href="https://developers.google.com/search/docs/essentials/how-search-works" target="_blank" rel="noopener">How Search works</a></p>
+<p>Informational content example. For competitive informational queries, links can still be an authority signal. Prioritize content depth and topical coverage, and use selective link outreach to support pages that demonstrate high intent and editorial value. <a href="https://moz.com/blog/does-pagerank-still-matter" target="_blank" rel="noopener">Does PageRank still matter? analysis</a></p>
+<h2>Measurement and attribution: tying links into revenue-focused reporting</h2>
+<p>Track referral conversions and assisted conversions to understand how referral traffic contributes to revenue, while recognizing that attribution is multi-signal and multi-touch. Use referral data as one input inside broader attribution models. <a href="https://developers.google.com/search/docs/essentials/how-search-works" target="_blank" rel="noopener">How Search works</a></p>
+<p>Avoid attributing revenue solely to link counts. Where possible run experiments or cohort analyses to see whether link-driven referral pathways correlate with conversion improvements. Use conservative language in reports to reflect uncertainty.</p>
+<p>Minimal reporting template: referring domains trend, top landing pages by referral, anchor text distribution snapshot, and assisted conversions for referral cohorts. Track these weekly or monthly depending on traffic volume. <a href="https://searchengineland.com/is-pagerank-still-used-by-google-392345" target="_blank" rel="noopener">Search Engine Land analysis</a></p>
+<h2>How this affects your SEO roadmap in 2026</h2>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Short term actions, in the next 30 to 90 days, typically include a link profile audit, quick technical fixes, and content prioritization to remove blockers before sustained outreach. These steps create a stable base for selective link work. <a href="https://moz.com/blog/does-pagerank-still-matter" target="_blank" rel="noopener">Does PageRank still matter? analysis</a></p></div>
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1hEoTigi1hlAzuvqmvb86MEnAgCZRIFmc=s1200" alt="Minimal 2D vector infographic with four icons for audit prioritize monitor and a rising trendline representing website ranking on a navy background" /></a>
+    </div>
+<p>Medium term investments include improving content architecture, embedding link metrics into dashboards, and investing in selective, high quality link acquisition tied to funnel stages. <a href="https://orvus.net" target="_blank" rel="noopener">Make measurement and automation</a> part of the roadmap. <a href="https://developers.google.com/search/docs/essentials/how-search-works" target="_blank" rel="noopener">How Search works</a></p>
+<h2>Conclusion: practical next steps for healthier website ranking</h2>
+<p>Recap. PageRank is historically important as the conceptual origin of link-based signals, but public PageRank scores are obsolete. Links remain one class of signals inside multi-system ranking models, so treat them as one lever among many. <a href="http://infolab.stanford.edu/~backrub/google.html" target="_blank" rel="noopener">Stanford paper by Brin and Page</a></p>
+<p>Prioritized checklist: run a short audit of referring domains, fix critical technical issues, prioritize content improvements, then plan selective link work tied to business outcomes. Integrate these metrics into <a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">dashboards</a> rather than chasing a single number. <a href="https://moz.com/blog/does-pagerank-still-matter" target="_blank" rel="noopener">Does PageRank still matter? analysis</a></p>
+<p>Final note: the best next step depends on your funnel, data quality, and constraints. Use diagnostics and short experiments to validate investments and to align link work with measurable outcomes.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-gmdnac" class="faq-toggle" /><label for="faq-gmdnac" class="faq-summary" role="button" tabindex="0">Is PageRank still published by Google?</label><div class="faq-content"><p>No. Google stopped publishing public PageRank scores and the legacy toolbar values are no longer maintained, so they do not reflect Google's internal link-weighting.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-7nuics" class="faq-toggle" /><label for="faq-7nuics" class="faq-summary" role="button" tabindex="0">Should I chase PageRank numbers reported by third-party tools?</label><div class="faq-content"><p>No. Third-party PR proxies are approximations and can mislead prioritization; focus instead on referring domain quality, link relevance, and content and technical fixes.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-w3fcnb" class="faq-toggle" /><label for="faq-w3fcnb" class="faq-summary" role="button" tabindex="0">What are the most useful link metrics to track?</label><div class="faq-content"><p>Track high quality referring domains, anchor text diversity, topical relevance of linking pages, and referral trends alongside conversion and assisted conversion metrics.</p></div></section>
+</section><section class="article-ending">If you are managing SEO for a product or service site, start with a short diagnostic that checks referring domain quality, anchor diversity, and technical blockers. Use a 30 to 90 day window to test changes and embed link metrics into your dashboards so decisions are driven by data and constraints rather than legacy numbers.
+
+Orvus Limited can help teams build these diagnostics and measurement systems in a way that fits existing constraints and funnels.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="http://infolab.stanford.edu/~backrub/google.html" target="_blank" rel="noopener">http://infolab.stanford.edu/~backrub/google.html</a></li><li><a href="https://developers.google.com/search/docs/essentials/how-search-works" target="_blank" rel="noopener">https://developers.google.com/search/docs/essentials/how-search-works</a></li><li><a href="https://moz.com/blog/does-pagerank-still-matter" target="_blank" rel="noopener">https://moz.com/blog/does-pagerank-still-matter</a></li><li><a href="https://patents.google.com/patent/US6285999B1/en" target="_blank" rel="noopener">https://patents.google.com/patent/US6285999B1/en</a></li><li><a href="https://developers.google.com/search/blog/2024/03/ranking-systems" target="_blank" rel="noopener">https://developers.google.com/search/blog/2024/03/ranking-systems</a></li><li><a href="https://searchengineland.com/is-pagerank-still-used-by-google-392345" target="_blank" rel="noopener">https://searchengineland.com/is-pagerank-still-used-by-google-392345</a></li><li><a href="https://orvus.net/services" target="_blank" rel="noopener">https://orvus.net/services</a></li><li><a href="https://orvus.net/about" target="_blank" rel="noopener">https://orvus.net/about</a></li><li><a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">https://orvus.net/category/useful-knowledge/</a></li><li><a href="https://orvus.net" target="_blank" rel="noopener">https://orvus.net</a></li><li><a href="https://uprankd.com/news/guides/how-google-interprets-internal-links-beyond-simple-page-rank-flow" target="_blank" rel="noopener">https://uprankd.com/news/guides/how-google-interprets-internal-links-beyond-simple-page-rank-flow</a></li><li><a href="https://www.rankability.com/ranking-factors/google/internal-links/" target="_blank" rel="noopener">https://www.rankability.com/ranking-factors/google/internal-links/</a></li><li><a href="https://loganix.com/google-pagerank/" target="_blank" rel="noopener">https://loganix.com/google-pagerank/</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
