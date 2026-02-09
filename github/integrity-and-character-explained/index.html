@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What is integrity and character?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      --text-color: #ffffff;
+      --accent: #ae2736;
+      --accent-hover: #8a1f2d;
+      --line: rgba(255,255,255,.16);
+      --surface: #0b2664;
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px;
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/124mqaClOhxWvB4STi9vbxFttZPH-ZY4a" alt="Integrity and character overview" />
+        </div>
+        <h1 class="title">What is integrity and character?</h1>
+        <p class="subline">A neutral, source-based overview of integrity, character, and practical evaluation tools.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/integrity-and-character-explained/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">This article offers a neutral, source based explanation of integrity and character for readers seeking clear definitions and practical ways to evaluate these qualities. It draws on philosophical definitions and contemporary character science to outline differences, measurement approaches, and evidence based practices. Voters and civic readers will find a short framework and illustrative scenarios to apply when assessing public figures.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Integrity links what people say they value to what they actually do.</span></div><div class="highlight-card"><span class="highlight-text">Character is a multidimensional set of strengths such as honesty, courage, and humility.</span></div><div class="highlight-card"><span class="highlight-text">Practical development focuses on small, repeated actions, reflection, and social supports.</span></div>
+     </div>
+  <h2>What experts mean by integrity and character</h2><h3>Philosophical and psychological roots</h3><p>Scholars typically define integrity as the consistency between an individuals stated values and their observable actions, a framing that links moral language to behavior in everyday decisions and public life. <a href="https://plato.stanford.edu/entries/integrity/" target="_blank" rel="noopener">Stanford Encyclopedia of Philosophy</a></p><p>Character is treated as a broader, multidimensional set of enduring moral strengths or dispositions, such as honesty, courage, and temperance, organized in a taxonomy used across psychology and education. <a href="https://global.oup.com/academic/product/character-strengths-and-virtues-9780195167013" target="_blank" rel="noopener">Peterson and Seligmans foundational handbook</a></p><section class="faq-accordion"><input type="checkbox" id="faq-3wzf8g" class="faq-toggle" checked /><label for="faq-3wzf8g" class="faq-summary" role="button" tabindex="0">How can a voter assess whether a public figure acts with integrity?</label><div class="faq-content"><p>Compare the persons stated values with documented actions and records, check for accountability mechanisms, and rely on primary sources rather than summaries.</p></div></section><h3>How practitioners use the terms today</h3><p>Contemporary organizations that study character emphasize measurable strengths and practical habits, and they present integrity as one way those strengths are expressed in choices and commitments. <a href="https://www.viacharacter.org/character-strengths" target="_blank" rel="noopener">VIA Institute on Characters summary of strengths</a></p>
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1QrUquz0I_dZKODAqItUuPLad8tDrrP2w=s1200" alt="Minimal 2D vector infographic of a notebook pen worksheet and coffee cup on a tidy desk symbolizing integrity and character in a Michael Carbonara inspired color palette" /></a>
+      <div class="side-text"><p>In applied settings, educators and program designers use values clarification, role-modeling, and small ethical acts to create opportunities for people to align words and actions, while recognizing the role of social accountability and context.</p></div>
+    </div><p>Contemporary programs often pair individual reflection with community accountability to support follow through.</p><p>Researchers emphasize adapting measures and practices to local norms and contexts when designing character development activities.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>Key differences and overlap: integrity and character explained</p>
+<h2>Key differences and overlap: integrity and character explained</h2><h3>How the two concepts overlap</h3><p>Character is the broader category of moral traits a person tends to show over time, while integrity names the specific consistency between what someone says they value and how they act in particular situations. This contrast helps explain why a person can score high on many character strengths yet still fail to act with integrity in some instances. <a href="https://plato.stanford.edu/entries/integrity/" target="_blank" rel="noopener">Stanford Encyclopedia of Philosophy</a></p><p>A practical way to see overlap is to think of honesty, courage, and humility as character strengths, and integrity as the practice of applying those strengths when choices put values on the line.</p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Join the campaign to receive updates on candidate priorities and events</h3><div class="cta-intro"><p>Later in this article you will find a simple checklist to apply when assessing statements and actions. The checklist is meant as a neutral prompt to compare stated values with observable behavior.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Sign up to join the campaign</a></div><h3>When they diverge in practice</h3><p>Research and practice note that context matters: accountability structures, incentives, and social norms change whether character strengths translate into consistent behavior. In some cases a person may reliably show compassion but avoid difficult disclosures that would be required for integrity in a public role. <a href="https://www.viacharacter.org/character-strengths" target="_blank" rel="noopener">VIA Institute on Characters page</a></p><p>Illustrative vignettes help make the distinction concrete. For example, someone may generally act courageously in personal life yet fail to own a public mistake when institutional pressures are high. That pattern describes strong character in some domains and a gap in integrity in a specific setting.</p><h2>Why integrity and character matter for public life and leadership</h2><h3>Public expectations and civic trust</h3><p>Leaders are often evaluated on whether their actions match their stated priorities, because alignment supports accountability and civic trust. Organizations that study character argue that these qualities matter for norms and institutional credibility, while stopping short of asserting direct policy outcomes. <a href="https://characterlab.org/what-is-character/" target="_blank" rel="noopener">Character Lab research brief</a></p><p>For example, <a href="https://michaelcarbonara.com/michael-carbonara-launches-campaign-for-congress/" target="_blank" rel="noopener">his campaign site</a> emphasizes themes such as accountability and service as central to his public profile, which is an example of a candidate stating priorities that voters can compare with records and statements.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><p>Public discussion of integrity and character benefits from source based checks, such as consulting <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">primary statements</a>, official filings, or documented actions, rather than relying solely on summaries or opinion pieces.</p><h3>How researchers connect character to social outcomes</h3><p>Civic and educational organizations suggest that promoting character strengths can support cooperative norms and constructive civic engagement, though they also note limits in causal claims and the need for longer term evidence. <a href="https://greatergood.berkeley.edu/article/item/building_character_practices" target="_blank" rel="noopener">Greater Good Science Center guidance on building character</a></p><p>Researchers are careful to say that while character and integrity are relevant to social trust, the size and persistence of effects from interventions remain open questions that call for more longitudinal trials.</p><h2>How experts assess and measure integrity and character</h2><h3>Common measurement approaches</h3><p>Practitioners use a combination of self report inventories, structured surveys of character strengths, and behavioral observation to assess attributes that contribute to integrity and character. The VIA Survey and similar instruments are designed to inventory strengths like honesty and resilience while acknowledging limits of self report. <a href="https://www.viacharacter.org/character-strengths" target="_blank" rel="noopener">VIA Institute on Characters survey tools</a> (see <a href="https://ies.ed.gov/ncee/wwc/Document/23" target="_blank" rel="noopener">IES evidence review</a>)</p><p>Behavioral observation and contextual indicators, such as documented decisions, voting records, or adherence to codes of conduct, provide additional evidence about how values translate into action. <a href="https://www.winginstitute.org/evidence-based-decision-making-treatment-integrity" target="_blank" rel="noopener">Resources on treatment integrity</a></p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">A short checklist to compare stated values with observable actions</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-ycioh2-0">
+                        <input id="tool-check-ycioh2-0" type="checkbox" />
+                        <span>Stated value</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-z4x2il-1">
+                        <input id="tool-check-z4x2il-1" type="checkbox" />
+                        <span>Observable action</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-534k43-2">
+                        <input id="tool-check-534k43-2" type="checkbox" />
+                        <span>Source or record</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use primary sources where possible</p>
+            </div><h3>Limits and cultural variation in assessment</h3><p>Measurement challenges include reliability of self reports, cultural variation in how strengths are expressed, and the difficulty of attributing long term outcomes to short interventions. Researchers note that instruments must be adapted to local contexts and interpreted with caution. <a href="https://www.apa.org/education/undergrad/ethics/moral-development" target="_blank" rel="noopener">APA discussion of moral development and measurement</a> (see <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4865398/" target="_blank" rel="noopener">implementation quality literature</a>)</p><p>Longitudinal trials and mixed method studies are recommended to improve confidence in claims about how interventions change behavior over time, because single point measures may not capture habits or situational variance.</p><h2>Evidence-based practices to build integrity and character</h2><h3>Classroom and community methods</h3><p>Character science organizations recommend practices such as values clarification, deliberate practice of small ethical acts, role-modeling, reflective exercises, and community accountability to support honest behavior and consistent choices. These practices appear across educational briefs and program guides as common steps for development. <a href="https://characterlab.org/what-is-character/" target="_blank" rel="noopener">Character Lab research brief</a></p><p>Programs often operationalize integrity through codes of conduct, public commitments, and structured feedback that make values and consequences visible in everyday settings.</p><h3>Individual practices for adults</h3><p>At the individual level, habit formation strategies focus on repeated practice, feedback loops from peers or mentors, and small, achievable actions that build confidence in aligning words and deeds. Practitioners encourage reflective exercises that name values and plan one concrete step to act on them. <a href="https://greatergood.berkeley.edu/article/item/building_character_practices" target="_blank" rel="noopener">Greater Good Science Center practices</a></p><p>These approaches aim to create sustainable routines rather than one time trainings, and programs commonly pair individual reflection with community accountability to support follow through.</p><p>Researchers note the current limits of evidence, and they call for more large scale longitudinal trials to measure effect sizes and generalizability across communities.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>Michael Carbonara Logo</p>
+<h2>Common pitfalls and misconceptions about integrity and character</h2><h3>Over-simplifying moral traits</h3><p>Labeling a person simply as having or lacking integrity often overlooks situational factors, cultural norms, and accountability systems that shape behavior. Research cautions against these oversimplifications and recommends context sensitive assessments. <a href="https://plato.stanford.edu/entries/integrity/" target="_blank" rel="noopener">Stanford Encyclopedia of Philosophy</a></p><p>Similarly, treating character as a single trait misses the multidimensional taxonomy that researchers use to describe strengths like honesty, temperance, and humility.</p><h3>Assuming quick fixes</h3><p>Character building is not an instant solution. Evidence from education and psychology stresses habit formation and structural supports, and it warns that short workshops without follow up are unlikely to produce lasting behavioral change. <a href="https://www.apa.org/education/undergrad/ethics/moral-development" target="_blank" rel="noopener">APA overview of moral education limits</a></p><p>Readers should be wary of programs that claim broad, immediate results without longitudinal evaluation or demonstrated adaptation to local cultures.</p><h2>Practical examples and short scenarios of integrity and character</h2><h3>Everyday examples</h3><p>Everyday integrity can look like acknowledging an honest mistake, correcting the record, and accepting reasonable consequences. These simple actions reveal consistency between stated values and visible behavior and serve as teachable moments for observers. <a href="https://global.oup.com/academic/product/character-strengths-and-virtues-9780195167013" target="_blank" rel="noopener">Peterson and Seligmans taxonomy</a></p><p>An everyday example of character without integrity might be a person known for generosity who avoids disclosing a conflict of interest when it matters to others evaluation of their decisions.</p><h3>Leadership scenarios for voters to consider</h3><p>When evaluating public figures, voters can look for patterns across statements, official records, and independent reporting to see whether a declared priority aligns with actions. Voters benefit from comparing primary sources rather than relying solely on summaries. <a href="https://characterlab.org/what-is-character/" target="_blank" rel="noopener">Character Lab guidance on evaluation</a></p><p>Short checklist items might include verifying a publics statement, checking for consistent related actions, and noting whether accountability structures were present when decisions were made.</p><h2>A simple framework to evaluate integrity and character in people and institutions</h2><h3>Three practical criteria</h3><p>Use three criteria to structure a source based evaluation: stated values, observable behavior, and accountability structures. Checking each with primary records and credible documentation reduces reliance on hearsay. <a href="https://plato.stanford.edu/entries/integrity/" target="_blank" rel="noopener">Stanford Encyclopedia of Philosophy</a></p><p>For each criterion, ask for at least one verifiable source: a public statement, an official record, or a documented outcome. Record the sources and note where gaps or contradictions occur.</p><h3>How to apply the framework to public figures</h3><p>Apply the framework by collecting public statements, reviewing relevant records, and noting whether mechanisms existed to enforce norms, such as recusal policies or oversight bodies. Keep judgments cautious and incremental, and avoid broad labels that ignore context or culture. <a href="https://characterlab.org/what-is-character/" target="_blank" rel="noopener">Character Lab recommendations</a></p><p>In civic contexts, this approach supports informed voter evaluation by emphasizing evidence, attribution, and humility about measurement limits.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-mlwd0u" class="faq-toggle" /><label for="faq-mlwd0u" class="faq-summary" role="button" tabindex="0">How do integrity and character differ?</label><div class="faq-content"><p>Character refers to a set of enduring moral strengths, while integrity describes the consistency between stated values and observable actions.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-iyp2rj" class="faq-toggle" /><label for="faq-iyp2rj" class="faq-summary" role="button" tabindex="0">Can integrity be measured reliably?</label><div class="faq-content"><p>Researchers use surveys, behavioral observation, and records to assess integrity, but they note limits such as cultural variation and the need for longitudinal data.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-v4wgum" class="faq-toggle" /><label for="faq-v4wgum" class="faq-summary" role="button" tabindex="0">What practical steps help build integrity?</label><div class="faq-content"><p>Common practices include values clarification, repeated small ethical actions, role-modeling, reflective exercises, and community accountability structures.</p></div></section>
+</section><section class="article-ending">In public life, careful, source based evaluation helps voters judge whether leaders align words and actions. Use the simple checklist in this article to compare stated values with observable behavior, and remain attentive to context, cultural variation, and the limits of measurement.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://plato.stanford.edu/entries/integrity/" target="_blank" rel="noopener">https://plato.stanford.edu/entries/integrity/</a></li><li><a href="https://global.oup.com/academic/product/character-strengths-and-virtues-9780195167013" target="_blank" rel="noopener">https://global.oup.com/academic/product/character-strengths-and-virtues-9780195167013</a></li><li><a href="https://www.viacharacter.org/character-strengths" target="_blank" rel="noopener">https://www.viacharacter.org/character-strengths</a></li><li><a href="https://characterlab.org/what-is-character/" target="_blank" rel="noopener">https://characterlab.org/what-is-character/</a></li><li><a href="https://michaelcarbonara.com/michael-carbonara-launches-campaign-for-congress/" target="_blank" rel="noopener">https://michaelcarbonara.com/michael-carbonara-launches-campaign-for-congress/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://greatergood.berkeley.edu/article/item/building_character_practices" target="_blank" rel="noopener">https://greatergood.berkeley.edu/article/item/building_character_practices</a></li><li><a href="https://ies.ed.gov/ncee/wwc/Document/23" target="_blank" rel="noopener">https://ies.ed.gov/ncee/wwc/Document/23</a></li><li><a href="https://www.winginstitute.org/evidence-based-decision-making-treatment-integrity" target="_blank" rel="noopener">https://www.winginstitute.org/evidence-based-decision-making-treatment-integrity</a></li><li><a href="https://www.apa.org/education/undergrad/ethics/moral-development" target="_blank" rel="noopener">https://www.apa.org/education/undergrad/ethics/moral-development</a></li><li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4865398/" target="_blank" rel="noopener">https://pmc.ncbi.nlm.nih.gov/articles/PMC4865398/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
