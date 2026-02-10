@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What is not covered under FOIA? A practical federal guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #94212d; /* derived darker accent */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.90); margin-bottom: 1.4rem; }
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:0.9rem; margin:1.6rem 0; }
+    .article-body .highlight-card{ background: linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); padding:0.9rem 1rem; border-left:4px solid var(--accent); border:1px solid rgba(255,255,255,.10); font-weight:700; }
+    .article-body .faq-accordion{ margin:1rem 0; }
+
+    .cta-button{ background: var(--accent); }
+    .cta-button:hover{ background: var(--accent-hover); filter: brightness(1.01); }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/12GREbz_V3OponVg7jNaOutanyHpKkd4e" alt="What is not covered under FOIA? banner" />
+        </div>
+        <h1 class="title">What is not covered under FOIA? A practical federal guide</h1>
+        <p class="subline">A concise guide to what federal FOIA does not disclose and practical steps requesters can take.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/freedom-of-opinion-and-information-what-is-not-covered-under-foia/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">The Freedom of Information Act sets a federal standard for public access to agency records while recognizing certain legal limits. This article explains what FOIA does not cover, summarizes the nine statutory exemptions, and offers practical steps for requesters.
+
+It emphasizes the presumption of disclosure, agency duties to segregate and redact, and the administrative options available when records are withheld. The goal is to help voters, journalists, and researchers assess whether a withheld record was properly protected and what to do next.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Federal FOIA assumes disclosure but lists nine exemptions that allow agencies to protect specific categories of information.</span></div><div class="highlight-card"><span class="highlight-text">Agencies are expected to redact and disclose segregable nonexempt material rather than refuse entire records.</span></div><div class="highlight-card"><span class="highlight-text">Requesters can appeal agency denials, seek OGIS mediation, or litigate when exemptions are improperly applied.</span></div>
+     </div>
+  <h2>freedom of opinion and information: what federal FOIA covers and what it does not</h2>
+<p>The federal Freedom of Information Act starts from a presumption of disclosure, but it also lists specific categories of records agencies may withhold. The statute that creates this balance is 5 U.S.C. § 552 and it frames federal agency duties on access to records <a href="https://www.govinfo.gov/content/pkg/USCODE-2021-title5/html/USCODE-2021-title5-subtitleII-partI-chap5-sec552.htm" target="_blank" rel="noopener">5 U.S.C. § 552</a>.</p>
+<p>In practice, that means freedom of opinion and information at the federal level is substantial but not absolute: nine exemptions permit agencies to protect classified material, privacy interests, law-enforcement details, confidential business information, and other narrowly defined categories.</p>
+<div class="cta-section"><h3 class="cta-headline">Stay informed on issues and campaign updates</h3><div class="cta-intro"><p>Federal FOIA presumes disclosure but allows specific, enumerated exemptions; use this article to identify which category may apply to a withheld record.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the Campaign</a></div>
+<p>Federal FOIA applies to executive branch agencies and similar federal entities, not automatically to state or local records, which are governed by separate state sunshine laws.</p>
+<h3>Basic definition and statutory source</h3>
+<p>FOIA's presumption of disclosure is embedded in the statute itself, which requires agencies to make records available unless a statutory exemption applies <a href="https://www.govinfo.gov/content/pkg/USCODE-2021-title5/html/USCODE-2021-title5-subtitleII-partI-chap5-sec552.htm" target="_blank" rel="noopener">5 U.S.C. § 552</a>.</p>
+<h3>How presumption of disclosure works</h3>
+<p>When a requester asks for records, agencies must consider whether any exemption allows withholding and, when possible, release segregable, nonexempt portions of a record rather than deny the whole file; federal guidance explains this obligation <a href="https://www.justice.gov/oip/doj-guide-freedom-information-act-0" target="_blank" rel="noopener">DOJ FOIA Guide</a>.</p>
+<p>Where federal FOIA stops and state laws begin</p>
+<p>Federal exemptions do not automatically apply to state or local public records; readers seeking state-level records should consult the relevant state sunshine law and records office for governing rules <a href="https://www.congress.gov/crs-product/R46238" target="_blank" rel="noopener">CRS overview of FOIA and state laws</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>The nine FOIA exemptions and how they limit freedom of opinion and information in practice</h2>
+<p>FOIA lists nine exemptions that permit agencies to withhold records in whole or in part. Each exemption targets a different public interest the law protects, from national-security classification to internal agency deliberations and trade secrets <a href="https://www.justice.gov/oip/doj-guide-freedom-information-act-0" target="_blank" rel="noopener">DOJ FOIA Guide</a>.</p>
+<p>Below are plain-language descriptions of each exemption and notes on the kinds of records agencies commonly cite when asserting them.</p>
+<h3>Quick summary table of Exemptions 1 through 9</h3>
+<p>Exemption 1 covers properly classified national-security information; Exemption 2 protects internal agency rules and practices in limited circumstances; Exemption 3 shields records barred from disclosure by other statutes; Exemption 4 protects confidential commercial information and trade secrets; Exemption 5 covers privileged interagency or intra-agency communications; Exemption 6 protects personal privacy; Exemption 7 covers law-enforcement records with multiple subparts; Exemption 8 concerns financial regulation records; and Exemption 9 protects geological and geophysical information related to wells <a href="https://www.govinfo.gov/content/pkg/USCODE-2021-title5/html/USCODE-2021-title5-subtitleII-partI-chap5-sec552.htm" target="_blank" rel="noopener">5 U.S.C. § 552</a>.</p>
+<h3>Which exemptions are most commonly invoked and why</h3>
+<p>Agencies most frequently assert Exemption 1 for classified material, Exemption 3 when another statute applies, Exemption 4 for business submissions, and Exemptions 6 and 7 to protect privacy and law-enforcement interests; guidance and practice explain how those exemptions are applied <a href="https://www.archives.gov/foia/exemptions" target="_blank" rel="noopener">NARA summary of FOIA exemptions</a>.</p>
+<h3>When multiple exemptions are asserted</h3>
+<p>Agencies may cite more than one exemption for the same document; when they do, they should explain the legal basis for each claim and identify which portions, if any, can be released after redaction <a href="https://www.rcfp.org/foia-resources/exemptions/" target="_blank" rel="noopener">Reporters Committee FOIA exemptions guide</a>.</p>
+<h2>How agencies apply exemptions: guidance, redaction, and segregability</h2>
+<p>Federal practice favors releasing reasonably segregable nonexempt material and using redaction rather than blanket denials, and DOJ guidance sets out the expectation that agencies disclose what can legally be released <a href="https://www.justice.gov/oip/doj-guide-freedom-information-act-0" target="_blank" rel="noopener">DOJ FOIA Guide</a>.</p>
+<p>OGIS provides mediation and practical assistance when requesters and agencies disagree about segregability and redaction, and its materials explain common steps for resolving disputes <a href="https://ogis.archives.gov/what-ogis-does" target="_blank" rel="noopener">OGIS resources</a></p>
+<section class="faq-accordion"><input type="checkbox" id="faq-a5wzl2" class="faq-toggle" checked /><label for="faq-a5wzl2" class="faq-summary" role="button" tabindex="0">What is not covered under FOIA?</label><div class="faq-content"><p>Not all government-held material is public. FOIA excludes specific categories of records identified in nine statutory exemptions, and agencies must justify withholding and release segregable nonexempt material when possible.</p></div></section>
+<p>Agency practices vary across departments; some agencies use detailed redaction logs and line-by-line explanations, while others provide more general descriptions of withheld material. Requesters should read agency FOIA responses carefully for segregability claims and redaction explanations <a href="https://www.rcfp.org/foia-resources/exemptions/" target="_blank" rel="noopener">Reporters Committee guidance</a>.</p>
+<h3>DOJ OIP guidance on disclosure and redaction</h3>
+<p>DOJ's Office of Information Policy explains that agencies must identify and release reasonably segregable portions of a record and that redaction is preferred where only limited information is protected <a href="https://www.justice.gov/oip/doj-guide-freedom-information-act-0" target="_blank" rel="noopener">DOJ FOIA Guide</a>.</p>
+<h3>OGIS role and mediation</h3>
+<p>OGIS can mediate disputes after administrative appeals and offers best-practice advice on redaction and partial release as an alternative to litigation <a href="https://ogis.archives.gov/what-ogis-does" target="_blank" rel="noopener">OGIS mediation page</a>.</p>
+<h3>Common agency practices and variation</h3>
+<p>Because agencies differ in resourcing and policy, requesters often see variation in how much detail an agency provides about withheld material; reading FOIA logs and prior decisions helps set realistic expectations <a href="https://www.congress.gov/crs-product/R46238" target="_blank" rel="noopener">CRS overview</a>.</p>
+<h2>Exemption 1: classified national-security information and executive-order limits</h2>
+<p>Exemption 1 applies only to information properly classified under applicable executive-order rules; it does not cover information labeled classified without meeting the legal standards for classification <a href="https://www.govinfo.gov/content/pkg/USCODE-2021-title5/html/USCODE-2021-title5-subtitleII-partI-chap5-sec552.htm" target="_blank" rel="noopener">5 U.S.C. § 552</a>.</p>
+<p>DOJ and NARA guidance explain how classification interacts with FOIA claims and note that courts can review classification decisions to ensure they meet statutory and executive-order criteria <a href="https://www.justice.gov/oip/doj-guide-freedom-information-act-0" target="_blank" rel="noopener">DOJ FOIA Guide</a>.</p>
+<h3>What qualifies as properly classified</h3>
+<p>Proper classification requires a lawful basis under executive orders and a demonstrated harm to national security if released; labels alone are not dispositive in judicial review <a href="https://www.archives.gov/foia/exemptions" target="_blank" rel="noopener">NARA on exemptions and classification</a>.</p>
+<h3>Executive orders and classification rules</h3>
+<p>Executive orders set classification categories and procedures, and agencies must follow those procedures to rely on Exemption 1 in FOIA responses <a href="https://www.justice.gov/oip/doj-guide-freedom-information-act-0" target="_blank" rel="noopener">DOJ FOIA Guide</a>.</p>
+<h3>Judicial review and declassification basics</h3>
+<p>Court review can test whether an agency properly classified material; overclassification concerns have prompted litigants to seek narrower rulings or in-camera review in some FOIA lawsuits <a href="https://www.congress.gov/crs-product/R46238" target="_blank" rel="noopener">CRS FOIA overview</a>.</p>
+<h2>Exemption 3: statutory bars and why some records are exempt by other laws</h2>
+<p>Exemption 3 applies when another federal statute expressly exempts certain records or information from disclosure; agencies rely on that separate statute to justify withholding <a href="https://www.justice.gov/oip/doj-guide-freedom-information-act-0" target="_blank" rel="noopener">DOJ FOIA Guide</a>.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>To evaluate an Exemption-3 claim, requesters should identify the cited statute and check whether that statute contains a specific disclosure bar; NARA and DOJ provide guidance on commonly cited Exemption-3 statutes <a href="https://www.archives.gov/foia/exemptions" target="_blank" rel="noopener">NARA exemptions page</a>.</p>
+<h3>How Exemption 3 works and when it applies</h3>
+<p>Exemption 3 is a statutory bar: its protection depends on the text of the other statute and whether Congress intended to exempt the material from FOIA disclosure <a href="https://www.justice.gov/oip/doj-guide-freedom-information-act-0" target="_blank" rel="noopener">DOJ FOIA Guide</a>.</p>
+<h3>Examples of statutes that operate as bars</h3>
+<p>Various federal statutes, including certain national-security and regulatory statutes, can function as Exemption-3 bars; requesters should consult authoritative lists or agency citations to confirm applicability <a href="https://www.congress.gov/crs-product/R46238" target="_blank" rel="noopener">CRS list and overview</a>.</p>
+<h3>Open questions about new Exemption 3 statutes</h3>
+<p>Recent statutory additions and evolving agency interpretations have created open questions about which new enactments qualify as Exemption-3 bars, so requesters may need to consult legal guides or past decisions when challenging a claim <a href="https://www.rcfp.org/foia-resources/exemptions/" target="_blank" rel="noopener">Reporters Committee resources</a>.</p>
+<h2>Exemption 4: commercial, trade-secret, and proprietary information</h2>
+<p>Exemption 4 protects confidential commercial information and trade secrets that would harm competitive interests if disclosed; agencies apply a harm-based test before withholding such submissions <a href="https://www.govinfo.gov/content/pkg/USCODE-2021-title5/html/USCODE-2021-title5-subtitleII-partI-chap5-sec552.htm" target="_blank" rel="noopener">5 U.S.C. § 552</a>.</p>
+<p>Business submissions to agencies, such as procurement proposals or confidential studies, are common areas where Exemption 4 is invoked and redaction is often used to limit disclosure to non-sensitive data <a href="https://foia.blogs.archives.gov/2019/10/21/department-of-justice-releases-new-guidance-on-foia-exemption-4/" target="_blank" rel="noopener">NARA blog on Exemption 4 guidance</a>.</p>
+<h3>What counts as confidential commercial information</h3>
+<p>Confidential commercial information generally includes trade secrets, pricing data, and proprietary methods that a business treats as confidential and that a competitor could exploit if released <a href="https://www.rcfp.org/foia-resources/exemptions/" target="_blank" rel="noopener">Reporters Committee guide</a>.</p>
+<h3>How agencies treat business submissions and procurement records</h3>
+<p>Agencies often accept business confidentiality claims at the administrative stage, but they must still apply the legal harm test and redact narrowly when possible rather than withholding entire records <a href="https://www.justice.gov/oip/doj-guide-freedom-information-act-0" target="_blank" rel="noopener">DOJ FOIA Guide</a>.</p>
+<h3>When redaction or withholding is appropriate</h3>
+<p>If release would reveal competitively sensitive details, agencies may redact or withhold those portions; public procurement histories often show redaction of pricing or proprietary technical information while preserving non-sensitive content <a href="https://www.rcfp.org/foia-resources/exemptions/" target="_blank" rel="noopener">Reporters Committee examples</a>.</p>
+<h2>Privacy and law-enforcement protections: using Exemptions 6 and 7</h2>
+<p>Exemption 6 protects personal privacy and requires a balancing test weighing privacy intrusion against any public interest in disclosure, while Exemption 7 covers law-enforcement records and includes multiple subparts that address investigation details and law-enforcement techniques <a href="https://www.govinfo.gov/content/pkg/USCODE-2021-title5/html/USCODE-2021-title5-subtitleII-partI-chap5-sec552.htm" target="_blank" rel="noopener">5 U.S.C. § 552</a>.</p>
+<p>Agencies commonly redact names, identifying details, or investigative material when privacy interests or ongoing law-enforcement concerns outweigh disclosure.</p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Steps to request OGIS mediation for FOIA disputes</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-zkpcz5-0">
+                        <input id="tool-check-zkpcz5-0" type="checkbox" />
+                        <span>Requester name</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-fe63ut-1">
+                        <input id="tool-check-fe63ut-1" type="checkbox" />
+                        <span>Agency</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-nc7p7e-2">
+                        <input id="tool-check-nc7p7e-2" type="checkbox" />
+                        <span>Agency FOIA case number</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-toi530-3">
+                        <input id="tool-check-toi530-3" type="checkbox" />
+                        <span>Issue summary</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-16zpjh-4">
+                        <input id="tool-check-16zpjh-4" type="checkbox" />
+                        <span>Date of final agency action</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">OGIS mediation is an administrative option to resolve disputes</p>
+            </div>
+<p>The Exemption-6 balancing test asks whether disclosure would constitute a clearly unwarranted invasion of personal privacy, and agencies must explain how privacy interests outweigh public interest when they withhold personal data <a href="https://www.archives.gov/foia/exemptions" target="_blank" rel="noopener">NARA on privacy and law-enforcement</a>.</p>
+<h3>Exemption 6 privacy balancing test</h3>
+<p>Under Exemption 6, routine privacy interests such as names and contact information are usually protected where disclosure would not advance a significant public interest; agencies must show the nature of the privacy intrusion to justify withholding <a href="https://www.justice.gov/oip/doj-guide-freedom-information-act-0" target="_blank" rel="noopener">DOJ FOIA Guide</a>.</p>
+<h3>Exemption 7 and law-enforcement records categories</h3>
+<p>Exemption 7 includes subparts that allow withholding to protect ongoing investigations, witness safety, techniques, and other law-enforcement concerns; requesters should note which subpart an agency cites when assessing the claim <a href="https://www.archives.gov/foia/exemptions" target="_blank" rel="noopener">NARA explanation</a>.</p>
+<h3>Practical examples of redaction vs withholding</h3>
+<p>Common redactions under Exemptions 6 and 7 include names and identifying details, witness statements, or operational details; when disclosure could reasonably endanger a person or an investigation, agencies may withhold whole records <a href="https://www.rcfp.org/foia-resources/exemptions/" target="_blank" rel="noopener">Reporters Committee examples</a>.</p>
+<h2>When agencies must segregate and redact: obligations and best practices</h2>
+<p>DOJ OIP guidance requires agencies to disclose reasonably segregable nonexempt portions of records and to provide specific explanations when withholding or refusing to segregate material <a href="https://www.justice.gov/oip/doj-guide-freedom-information-act-0" target="_blank" rel="noopener">DOJ FOIA Guide</a>.</p>
+<p>OGIS and other resources outline redaction best practices and encourage agencies to provide line-item explanations or redaction logs when feasible <a href="https://ogis.archives.gov/what-ogis-does" target="_blank" rel="noopener">OGIS guidance</a>.</p>
+<h3>DOJ and OGIS standards on segregability</h3>
+<p>Agencies should identify exempt passages, justify withholding, and release nonexempt text; failure to consider segregability can be raised in appeals or OGIS mediation <a href="https://www.justice.gov/oip/doj-guide-freedom-information-act-0" target="_blank" rel="noopener">DOJ FOIA Guide</a>.</p>
+<h3>Redaction best practices for agencies and requesters</h3>
+<p>Best practices include providing redaction rationale, using consistent redaction conventions, and offering a description of withheld categories so requesters can evaluate appeals; these practices improve transparency and reduce disputes <a href="https://ogis.archives.gov/what-ogis-does" target="_blank" rel="noopener">OGIS redaction resources</a>.</p>
+<h3>What to look for in agency responses</h3>
+<p>Requesters should check for a clear listing of the exemptions claimed, an explanation of segregability analysis, and a description of any nonexempt material released or withheld <a href="https://www.rcfp.org/foia-resources/exemptions/" target="_blank" rel="noopener">Reporters Committee checklist</a>.</p>
+<h2>Common requester errors and how to avoid them</h2>
+<p>Vague or overly broad requests are a frequent reason requesters do not receive usable records; specifying dates, topics, and record types improves success and makes segregability more likely <a href="https://www.rcfp.org/foia-resources/exemptions/" target="_blank" rel="noopener">Reporters Committee tips</a>.</p>
+<p>Failing to pursue administrative appeals or to seek OGIS assistance can leave disputes unresolved; requesters should follow appeal deadlines and consider OGIS mediation when appropriate <a href="https://ogis.archives.gov/what-ogis-does" target="_blank" rel="noopener">OGIS appeal guidance</a>.</p>
+<h3>Vague or overly broad requests</h3>
+<p>Examples of vague requests include asking for "all records" without time limits or subject boundaries; narrowing the scope helps agencies locate segregable nonexempt material and aids redaction efforts.</p>
+<h3>Failing to appeal or follow administrative processes</h3>
+<p>After an adverse determination, administrative appeal paths are available and often required before litigation; appeals should point to precedent or specific legal reasons why a claimed exemption does not apply <a href="https://www.justice.gov/oip/doj-guide-freedom-information-act-0" target="_blank" rel="noopener">DOJ FOIA Guide</a>.</p>
+<h3>Not citing public interest or narrowing for segregability</h3>
+<p>Citing a clear public interest and proposing narrow search terms or document types increases the chance that an agency will release nonexempt material rather than withhold broadly <a href="https://www.rcfp.org/foia-resources/exemptions/" target="_blank" rel="noopener">Reporters Committee advice</a>.</p>
+<h2>How journalists, researchers, and the public use guidance and precedents</h2>
+<p>Reporters and researchers use practical guides and CRS overviews to frame requests and appeals; such resources translate exemptions into expectations about what agencies will release <a href="https://www.rcfp.org/foia-resources/exemptions/" target="_blank" rel="noopener">Reporters Committee resources</a>.</p>
+<p><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">FOIA logs</a>, case summaries, and prior agency decisions help set expectations about segregability and common redactions, and they can be cited in follow-up requests or appeals.</p>
+<h3>Resources: Reporters Committee and CRS overviews</h3>
+<p>The Reporters Committee provides practical, example-driven explanations of exemptions and strategies for appeals, while CRS offers authoritative legal overviews that help with statutory interpretation <a href="https://www.congress.gov/crs-product/R46238" target="_blank" rel="noopener">CRS FOIA overview</a>.</p>
+<h3>Using case summaries and FOIA logs</h3>
+<p>FOIA logs reveal how agencies have handled similar requests and whether particular exemptions were routinely applied; citing those logs in follow-up requests can sharpen an agency's attention to segregability.</p>
+<h3>When to cite precedent in a follow-up request</h3>
+<p>Cite prior agency releases or court decisions that show similar material was disclosed to argue against an exemption claim; include specific document identifiers or FOIA log entries when possible <a href="https://www.rcfp.org/foia-resources/exemptions/" target="_blank" rel="noopener">Reporters Committee guidance</a>.</p>
+<h2>Federal vs state: why state public-record laws may differ from the federal standard</h2>
+<p>Federal FOIA exemptions do not bind state or local public-record laws; each state has its own sunshine law and rules about privacy, commercial data, and law-enforcement records <a href="https://www.congress.gov/crs-product/R46238" target="_blank" rel="noopener">CRS overview</a>.</p>
+<p>Some state laws are broader in privacy protection, others are more open than federal FOIA; requesters should locate the applicable state public-record statute and contact the state records office for guidance. See related <a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">constitutional rights</a> resources or use the state <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">records office contact</a> if needed.</p>
+<h3>Federal exemptions do not automatically apply to states</h3>
+<p>Because state statutes differ, a record withheld under a federal exemption might be available under a state law, and vice versa; always check the controlling state law for local records.</p>
+<h3>Common differences in state sunshine laws</h3>
+<p>Typical differences include varying definitions of personal data, different procedural timelines, and distinct exemptions for law enforcement or commercial records, which affect access and redaction practices.</p>
+<h3>How to find the relevant state law and office</h3>
+<p>Start with the state records office or attorney general website to find the statute and administrative guidance; many state offices publish public-records guides or contact points for requests.</p>
+<h2>A short checklist for assessing whether a record is likely exempt</h2>
+<p>Use a compact checklist when reviewing an agency withholding: which exemption(s) are asserted, is an Exemption-3 statute cited, can nonexempt portions be segregated, would release cause privacy/commercial/security harm, and what remedies are available <a href="https://www.rcfp.org/foia-resources/exemptions/" target="_blank" rel="noopener">Reporters Committee checklist</a>.</p>
+<p>Ask whether the agency provided a clear segregability analysis, a description of withheld categories, and a statement about appeal rights before deciding next steps.</p>
+<h3>Key questions to ask about the record and exemption claims</h3>
+<p>Five concise questions help evaluate withholding claims: which exemption applies, is there a statutory bar, is segregability practical, what specific harm would occur, and what administrative remedies remain.</p>
+<h3>How to evaluate segregability and public-interest balancing</h3>
+<p>Look for line-item redactions, category descriptions, and any mention of public-interest balancing; when privacy is claimed, assess whether disclosure would meaningfully illuminate government activity.</p>
+<h3>Next steps: appeal, OGIS, or litigation</h3>
+<p>If the agency's explanation is inadequate, file an administrative appeal, request OGIS mediation, or consult counsel about litigation as a final option <a href="https://ogis.archives.gov/what-ogis-does" target="_blank" rel="noopener">OGIS mediation</a>.</p>
+<h2>Practical scenarios: three brief examples applying exemptions</h2>
+<p>Example 1, a journalist requests an internal agency report on a regulatory decision. The agency releases the report with redactions for proprietary data and limited investigatory details; the release reflects Exemptions 4 and 7 being applied and redaction used to protect sensitive passages <a href="https://www.rcfp.org/foia-resources/exemptions/" target="_blank" rel="noopener">Reporters Committee examples</a>.</p>
+<p>Example 2, a company submits confidential pricing to an agency during procurement. The agency withholds pricing lines under Exemption 4 but releases non-sensitive portions of the submission, following the harm-based test for commercial confidentiality <a href="https://www.justice.gov/oip/doj-guide-freedom-information-act-0" target="_blank" rel="noopener">DOJ FOIA Guide</a>.</p>
+<p>Example 3, a family requests personnel records that contain personal contact data. The agency redacts personal identifiers under Exemption 6 and provides a public-summary where appropriate to balance privacy and public interest <a href="https://www.archives.gov/foia/exemptions" target="_blank" rel="noopener">NARA examples on privacy</a>.</p>
+<h3>Example 1: journalist request for agency report</h3>
+<p>When a public-interest justification exists for disclosure, requesters should highlight that interest and cite precedent to improve the chance redactions will be narrow rather than a full denial.</p>
+<h3>Example 2: company commercial submission to an agency</h3>
+<p>Companies should mark confidential information clearly and explain why disclosure would harm competitive standing; agencies must then apply the Exemption-4 harm test before withholding.</p>
+<h3>Example 3: family privacy request for personnel records</h3>
+<p>When privacy claims are asserted, requesters can propose redactions to protect sensitive identifiers while seeking release of non-sensitive employment details.</p>
+<h2>Conclusion: balancing freedom of opinion and information with valid protections</h2>
+<p>FOIA creates a statutory presumption of disclosure while enumerating nine exemptions that permit withholding in narrowly defined circumstances; understanding these categories helps requesters evaluate withheld records <a href="https://www.govinfo.gov/content/pkg/USCODE-2021-title5/html/USCODE-2021-title5-subtitleII-partI-chap5-sec552.htm" target="_blank" rel="noopener">5 U.S.C. § 552</a>.</p>
+<p>Agencies are expected to redact and disclose segregable material where possible, and DOJ and OGIS guidance are practical starting points for appeals or mediation when disclosures are incomplete <a href="https://www.justice.gov/oip/doj-guide-freedom-information-act-0" target="_blank" rel="noopener">DOJ FOIA Guide</a>.</p>
+<p>For state or local records, consult the relevant state sunshine law and records office, and use administrative appeals, OGIS mediation, or legal counsel when appropriate to challenge improper withholding <a href="https://www.congress.gov/crs-product/R46238" target="_blank" rel="noopener">CRS overview</a>.</p>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Readers seeking FOIA request tips and redaction best practices should consult the referenced guides and consider narrowing requests to improve the likelihood of useful, partially released records.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1Fi-STyK7jlDz0aqUrBsrr-S0VDL09_kG=s1200" alt="freedom of opinion and information vector infographic with shield redaction checklist and courthouse icons on deep blue background" /></a>
+    </div>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-777pe1" class="faq-toggle" /><label for="faq-777pe1" class="faq-summary" role="button" tabindex="0">What kinds of records does federal FOIA exclude from disclosure?</label><div class="faq-content"><p>Federal FOIA allows agencies to withhold records that fall under one of nine exemptions, such as properly classified national-security information, confidential commercial data, law-enforcement records, and certain privacy-protected information. Each exemption is narrowly defined and applied case by case.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-oltp7a" class="faq-toggle" /><label for="faq-oltp7a" class="faq-summary" role="button" tabindex="0">If an agency withholds material, what can I do next?</label><div class="faq-content"><p>You can file an administrative appeal with the agency, request mediation from the Office of Government Information Services, and, if necessary, pursue litigation. Appeals should point to agency errors on segregability or incorrect exemption application.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-limsb1" class="faq-toggle" /><label for="faq-limsb1" class="faq-summary" role="button" tabindex="0">Do federal FOIA exemptions apply to state or local records?</label><div class="faq-content"><p>No. State and local public-record laws are separate. Consult the applicable state sunshine law and the state records office to determine access rules and exemptions.</p></div></section>
+</section>
+
+<section class="article-ending">FOIA balances the public interest in government transparency with legal protections for privacy, national security, and commercial confidentiality. Use the checklists and resources in this guide to evaluate agency claims and pursue appeals or mediation when appropriate.
+
+For local or state records, consult the relevant state sunshine law and records office, since federal exemptions do not govern state public-record rules.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.govinfo.gov/content/pkg/USCODE-2021-title5/html/USCODE-2021-title5-subtitleII-partI-chap5-sec552.htm" target="_blank" rel="noopener">https://www.govinfo.gov/content/pkg/USCODE-2021-title5/html/USCODE-2021-title5-subtitleII-partI-chap5-sec552.htm</a></li><li><a href="https://www.justice.gov/oip/doj-guide-freedom-information-act-0" target="_blank" rel="noopener">https://www.justice.gov/oip/doj-guide-freedom-information-act-0</a></li><li><a href="https://www.congress.gov/crs-product/R46238" target="_blank" rel="noopener">https://www.congress.gov/crs-product/R46238</a></li><li><a href="https://ogis.archives.gov/what-ogis-does" target="_blank" rel="noopener">https://ogis.archives.gov/what-ogis-does</a></li><li><a href="https://www.rcfp.org/foia-resources/exemptions/" target="_blank" rel="noopener">https://www.rcfp.org/foia-resources/exemptions/</a></li><li><a href="https://www.archives.gov/foia/exemptions" target="_blank" rel="noopener">https://www.archives.gov/foia/exemptions</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.justice.gov/oip" target="_blank" rel="noopener">https://www.justice.gov/oip</a></li><li><a href="https://www.rcfp.org/foia-resources/exemptions/" target="_blank" rel="noopener">https://www.rcfp.org/foia-resources/exemptions/</a></li><li><a href="https://foia.blogs.archives.gov/2019/10/21/department-of-justice-releases-new-guidance-on-foia-exemption-4/" target="_blank" rel="noopener">https://foia.blogs.archives.gov/2019/10/21/department-of-justice-releases-new-guidance-on-foia-exemption-4/</a></li><li><a href="https://ogis.archives.gov/what-ogis-does" target="_blank" rel="noopener">https://ogis.archives.gov/what-ogis-does</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">https://michaelcarbonara.com/constitutional-rights/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.rcfp.org/foia-resources/exemptions/" target="_blank" rel="noopener">https://www.rcfp.org/foia-resources/exemptions/</a></li><li><a href="https://ogis.archives.gov/what-ogis-does" target="_blank" rel="noopener">https://ogis.archives.gov/what-ogis-does</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
