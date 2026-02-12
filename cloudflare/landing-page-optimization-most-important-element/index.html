@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What is the most important element of a landing page? Above-the-fold clarity and testing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand tokens derived from ORVUS style */
+      --text-color: rgba(244,231,197,0.86); /* from --orvus-ink-soft */
+      --accent: #C8A45D; /* from --orvus-gold */
+      --accent-hover: #f6de9f; /* from --orvus-gold-strong */
+      --line: rgba(200,164,93,0.26); /* from --orvus-border-soft */
+      --surface: #050d18; /* from --orvus-bg-soft */
+      --surface-2: rgba(5,13,24,0.06);
+      --radius: 12px;
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: #f4e7c5; /* headings use brighter token from ORVUS */
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: #f4e7c5;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #050d18;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: #f4e7c5;
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: #f4e7c5;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1HOIaXuRZCxsjIGBgU6a2pIHklHqItvNN" alt="Landing page optimization: above-the-fold clarity" />
+        </div>
+        <h1 class="title">What is the most important element of a landing page? Above-the-fold clarity and testing</h1>
+        <p class="subline">A practical guide on why above-the-fold clarity and sequential testing drive landing page results.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://orvus.net/useful-knowledge/landing-page-optimization-most-important-element/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">Landing page optimisation is a practical discipline that ties first impressions to measurable funnel outcomes. Teams that focus on clarity in the headline and hero area often see the most reliable early gains because these elements determine whether visitors stay long enough to click or submit.
+
+This guide explains why above-the-fold clarity matters, how to test it first, and how to structure follow-up experiments on CTAs, forms, and trust signals so work compounds into repeatable systems.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Above-the-fold headline and hero clarity most consistently predicts whether visitors stay and engage.</span></div><div class="highlight-card"><span class="highlight-text">Run headline and hero tests first, then test CTAs, forms, and trust signals in sequence.</span></div><div class="highlight-card"><span class="highlight-text">Tie experiments to visit-to-click, click-to-submit, and revenue-per-visitor for reliable decisions.</span></div>
+     </div>
+  <h2>What landing page optimization means and why clarity matters</h2>
+<p>Landing page optimization is the practice of improving a page so more visitors complete the next desired action. Typical primary goals are visit-to-click, click-to-submit, and revenue-per-visitor, and optimisations should link directly to those metrics. Clear above-the-fold messaging is often the first lever worth testing when improving these outcomes.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://orvus.net/services" target="_blank" rel="noopener">Orvus Unique Services</a></div>
+      <a href="https://orvus.net/services" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1H_h1lsT61lq2b7T9TJp_cP-rw6fSFKSG" alt="Orvus Unique Services" /></a>
+    </div>
+<p>A concise definition: landing page optimization is the systematic work to align messaging, visual hierarchy, and interaction so that the first impression matches visitor intent and the funnel objective. That alignment reduces bounce and increases the chance a visitor clicks or submits a form.</p>
+<p>Users scan pages rapidly and decide within seconds whether to continue. Usability research shows people read headings and then scan for cues that confirm relevance, which is why headline and hero clarity matter for early engagement <a href="https://unbounce.com/reports/conversion-benchmark-report-2024/" target="_blank" rel="noopener">Conversion Benchmark Report 2024</a>.</p>
+<h2>Why the above-the-fold value proposition is the most important element in landing page optimization</h2>
+<p>The above-the-fold value proposition bundles the headline, subhead, and hero area into the first promise a visitor sees. When that bundle communicates a specific, relevant benefit fast, visitors tend to stay and engage; when it is vague or misaligned, bounce increases. This pattern shows up consistently across benchmarks and usability studies <a href="https://www.nngroup.com/articles/landing-page-usability/" target="_blank" rel="noopener">Landing Page Usability</a>.</p>
+<p>Practitioner reports find a high correlation between headline/hero clarity and improved visit-to-click rates, making this element a priority before tweaking CTAs or form fields <a href="https://unbounce.com/reports/conversion-benchmark-report-2024/" target="_blank" rel="noopener">Conversion Benchmark Report 2024</a>.</p>
+<p>Alignment with entry intent matters. If visitors arrive from an ad or search result, the hero area should echo that intent in visuals and the immediate benefit statement so expectations are met and engagement follows <a href="https://www.nngroup.com/articles/landing-page-usability/" target="_blank" rel="noopener">Landing Page Usability</a>.</p>
+<h2>Designing a clear headline and hero area that reduces bounce</h2>
+<p>Start with specificity. A clear <a href="https://www.klientboost.com/landing-pages/landing-page-headlines/" target="_blank" rel="noopener">headline</a> states what the visitor can do or achieve in one line. The subhead can add a qualifier or context that narrows the audience or explains the next step. Short, scannable lines are easier to parse.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-k9jhl2" class="faq-toggle" checked /><label for="faq-k9jhl2" class="faq-summary" role="button" tabindex="0">What is the most important element of a landing page?</label><div class="faq-content"><p>The most important element is the above-the-fold value proposition, meaning the headline, supporting subhead, and hero area, because this bundle sets expectations and determines whether visitors stay to interact.</p></div></section>
+<p>Pick hero visuals that support the headline rather than compete with it. Use imagery or short videos that demonstrate the product in context or show the key outcome, cropped and composed to preserve visual hierarchy and guide the eye to the call to action. Evidence from UX research shows that hero alignment with intent reduces bounce when the asset and copy tell the same story <a href="https://baymard.com/research/landing-page-usability" target="_blank" rel="noopener">E commerce UX and Landing Page Research</a>.</p>
+<p>Testable headline and hero variants to start with include: a functional headline that names the action, a benefit headline that names the outcome, the same headline with a clarifying subhead, and the headline paired with an asset shifted from decorative to contextual. Each variant should have a clear hypothesis and a primary metric such as visit-to-click.</p>
+<h2>Designing examples and short checklist</h2>
+<p><a href="https://replo.app/blog/how-to-improve-landing-page-conversion-rate" target="_blank" rel="noopener">Example headline lines</a> to adapt: "Schedule a 30 minute diagnostic for your store" or "Reduce checkout drop-off on product pages". Keep language audience-focused and avoid generic claims. For scanning, use sentence case, limit length, and place the CTA where the eye rests after the hero.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure>
+<p>Quick checklist: clear primary benefit, one extra clarifying line, hero asset aligned with intent, visual contrast that prioritises headline, CTA visible within the first screen.</p>
+<h2>A prioritised testing framework for landing page optimization</h2>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/12rZPis2Pj2KRL6WuSPKPV7TxbIr6FdGr=s1200" alt="Screenshot style hero section of a SaaS landing page for landing page optimization showing headline subhead product image and prominent CTA in Orvus Ltd brand colors" /></a>
+      <div class="side-text"><p>Run sequential A/B tests that change one broad element at a time. The recommended 2026 order is headline and hero first, CTA treatments second, form reductions or progressive profiling third, and trust-signal placement fourth. This sequence reduces noise and increases the likelihood test results map to real behavioural change <a href="https://unbounce.com/reports/conversion-benchmark-report-2024/" target="_blank" rel="noopener">Conversion Benchmark Report 2024</a>.</p></div>
+    </div>
+<p>Stage tests so a passed headline/hero experiment becomes the control for later CTA work. That way CTA experiments measure their own effect rather than compensating for unclear messaging <a href="https://vwo.com/blog/ab-testing-headlines-ctas/" target="_blank" rel="noopener">How to A/B test headlines and CTAs</a>.</p>
+<p>For each test define a single primary metric: visit-to-click for headline/hero, click-to-submit for form work, and revenue-per-visitor when you can tie variants to purchases. Track secondary metrics to detect regressions or side effects.</p>
+<h2>CTA treatments: when wording, size, and placement move the needle</h2>
+<p>CTAs often produce meaningful uplifts, but their impact depends on prior headline and hero clarity. If visitors do not understand the offer, changing button text or color usually yields limited gains. Treat CTAs as the second stage in an optimisation sequence and test them only after the above-the-fold message is confirmed.</p>
+<p>Run a headline versus headline-plus-hero A/B test, and use visit-to-click as the primary metric to determine if adding hero support improves initial engagement. If that test shows a meaningful lift, hold the winner as control and then test CTA variables for incremental gains.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Start a consultation</h3><div class="cta-intro"><p>Run a headline vs headline+hero test with visit-to-click as the primary metric and log a clear hypothesis before launching.</p></div><a href="https://orvus.net/services" target="_blank" rel="noopener" class="cta-button">Inquire</a></div>
+<p>CTA variables to test include copy (action oriented versus benefit oriented), size and padding, color contrast relative to background, and sequencing (single primary CTA versus primary plus secondary). Use click-through rate as the primary metric for CTA experiments and monitor downstream conversion signals for quality.</p>
+<h2>Forms and progressive profiling: reducing friction on lead pages</h2>
+<p>Form friction is a primary bottleneck on lead capture pages. The number of required fields and input complexity predict abandonment; simplifying the form often reduces drop-off and increases submissions <a href="https://baymard.com/research/landing-page-usability" target="_blank" rel="noopener">E commerce UX and Landing Page Research</a>.</p>
+<p>Start by removing optional fields, then consider combining fields such as "First and last name" into one line. If more data is necessary, use progressive profiling to collect the minimum required information first and ask for additional details in later interactions.</p>
+<p>Test the trade-off between lead quality and quantity by running parallel variants: a short-form variant with higher volume and a longer-form variant that captures more qualifying data. Measure click-to-submit and the downstream lead-to-opportunity rate to judge net value <a href="https://unbounce.com/reports/conversion-benchmark-report-2024/" target="_blank" rel="noopener">Conversion Benchmark Report 2024</a>.</p>
+<p>Mini decision tree: if your funnel lacks lead volume, prioritise shorter forms; if your follow-up costs are high and qualification is critical, stage fields and use progressive profiling while measuring lead quality over time.</p>
+<h2>Trust signals and social proof: when and where to show them</h2>
+<p>Trust signals increase conversion likelihood for new or low-familiarity visitors, but their effect size varies by vertical and existing brand trust. For high-familiarity audiences these signals often add little marginal lift, while for new visitors they can be influential <a href="https://support.google.com/google-ads/answer/2404191" target="_blank" rel="noopener">About landing pages (Landing page experience guidance)</a>.</p>
+<p>Placement guidance: if trust is a key barrier, surface short credibility signals near the hero or as a compact row under the subhead. For transactional pages, include badges or short review snippets near the CTA or the submit area to reduce last-step anxiety. In many cases test placement rather than assume a single correct spot <a href="https://baymard.com/research/landing-page-usability" target="_blank" rel="noopener">E commerce UX and Landing Page Research</a>.</p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">a small audit tool to track trust-signal placement performance</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-pkhr8n-0">
+                        <input id="tool-check-pkhr8n-0" type="checkbox" />
+                        <span>Placement</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-smqsyi-1">
+                        <input id="tool-check-smqsyi-1" type="checkbox" />
+                        <span>Signal type</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-n0cssy-2">
+                        <input id="tool-check-n0cssy-2" type="checkbox" />
+                        <span>Traffic source</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">use this to prioritise which signals to test</p>
+            </div>
+<p>When adding trust signals, keep them factual and compact. Use short policy copy or explicit security cues only where they address real visitor concerns, and measure the click-to-submit change rather than relying on intuition.</p>
+<h2>Measurement and attribution: linking landing page tests to revenue</h2>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Define metrics before launching tests. For headline and hero experiments use visit-to-click, for CTA and immediate interaction changes use click-to-submit, and for end-to-end impact track revenue-per-visitor where possible. Be explicit about primary and secondary metrics to avoid misinterpreting results <a href="https://cxl.com/blog/most-important-landing-page-element/" target="_blank" rel="noopener">Which landing-page element matters most? A review of experiments</a>.</p></div>
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1Kh4ek0SV-Wzb87z8sSX-ojbiU4PZ1NO3=s1200" alt="Minimal 2D vector infographic showing prioritized testing sequence for landing page optimization with icons for headline hero CTA forms and trust signals on dark blue Orvus Ltd palette" /></a>
+    </div>
+<p>When possible, tie experiments to revenue attribution. That can mean tagging variants in the analytics layer, sending test identifiers into the order or CRM system, or using an attribution model that maps test traffic to purchase events. Even simple tagging reduces the risk of false positives in short test windows <a href="https://unbounce.com/reports/conversion-benchmark-report-2024/" target="_blank" rel="noopener">Conversion Benchmark Report 2024</a>.</p>
+<p>Common measurement pitfalls include small sample sizes, mixed traffic where multiple campaigns overlap, and stopping tests early. Use conservative stopping rules and ensure your test traffic is large enough to detect the expected effect.</p>
+<h2>Common mistakes and low-value micro-optimisations to avoid</h2>
+<p>Avoid spending time on low-traffic microcopy tweaks that cannot produce statistically meaningful changes. Small copy changes on pages with limited visits tend to show noise rather than real effects and can distract from higher-leverage work.</p>
+<p>Do not run CTA tests before headline and hero clarity is resolved. If the value proposition is unclear, CTA changes measure a compensating action and can mislead teams about the true driver of change <a href="https://vwo.com/blog/ab-testing-headlines-ctas/" target="_blank" rel="noopener">How to A/B test headlines and CTAs</a>.</p>
+<p>Watch for sequential interference: when multiple tests touch the same visitor experience at once you risk confounding results. Stage experiments and document which pages or components are in each test window.</p>
+<h2>Practical examples and test scenarios by funnel stage</h2>
+<h3>Ecommerce product page example</h3>
+<p>Scenario: a product card drives paid traffic to a product page with moderate traffic and noticeable checkout drop-off. Step 1: confirm <a href="https://lovable.dev/guides/landing-page-best-practices-convert" target="_blank" rel="noopener">headline and hero alignment</a> with the ad creative by testing the current headline against a variant that mirrors the ad benefit, using visit-to-click as the primary metric.</p>
+<p>Step 2: if the headline/hero winner improves engagement, keep it and run CTA variants that test copy and prominence, measuring click-through and add-to-cart. Step 3: if add-to-cart improves but checkout drops, investigate form friction in checkout and test field reductions or layout changes while tracking click-to-submit and revenue-per-visitor <a href="https://baymard.com/research/landing-page-usability" target="_blank" rel="noopener">E commerce UX and Landing Page Research</a>.</p>
+<h3>B2B lead-gen landing page example</h3>
+<p>Scenario: a B2B landing page with targeted search traffic but low form submissions. Step 1: prioritize headline plus hero clarity, testing a benefit-led headline against a function-led headline with visit-to-click as the primary metric <a href="https://unbounce.com/reports/conversion-benchmark-report-2024/" target="_blank" rel="noopener">Conversion Benchmark Report 2024</a>.</p>
+<p>Step 2: if the winner raises visit-to-click, test a shortened form versus the control to measure click-to-submit changes. Step 3: if quantity rises but lead quality falls, add progressive profiling and measure downstream lead-to-opportunity rates before scaling.</p>
+<h2>A concise audit checklist: headline, CTA, form, trust</h2>
+<p>20-minute audit steps: 1) Read the headline aloud and ask whether a new visitor knows what to do here. 2) Check the hero asset for alignment with the headline. 3) Confirm CTA prominence and whether its wording matches the value proposition. 4) Count required form fields and note any complex inputs. 5) Note any missing trust signals for low-familiarity visitors.</p>
+<p>Document baseline metrics: visits, visit-to-click, click-to-submit, and any revenue-per-visitor data available. Record a succinct hypothesis for each change and the expected direction of movement for the primary metric.</p>
+<h2>When to engage a systems partner for landing page optimization</h2>
+<p>Consider an <a href="https://orvus.net/services" target="_blank" rel="noopener">embedded partner</a> when multiple channels underperform, measurement is fragmented, or teams lack bandwidth to run disciplined, sequential experiments. Look for partners who focus on audit, prioritisation, tooling, and workflow integration rather than one-off fixes.</p>
+<p>As a systems builder, a partner often helps rebuild measurement layers, design repeatable experiment sequences, and create internal tooling to reduce manual steps. <a href="https://orvus.net/about" target="_blank" rel="noopener">Orvus Limited</a> can act in this role when teams need external help to build those systems, depending on constraints and context.</p>
+<h2>Next steps: a 30 to 90 day priority plan for landing page optimization</h2>
+<p>30 days: run an audit and complete one headline/hero A/B test on a priority page, using visit-to-click as the primary metric. 60 days: implement the headline/hero winner and run CTA experiments against the new control. 90 days: focus on forms and progressive profiling, and add or test trust signals while beginning to tie winning variants into <a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">template</a> or components for reuse <a href="https://vwo.com/blog/ab-testing-headlines-ctas/" target="_blank" rel="noopener">How to A/B test headlines and CTAs</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure>
+<p>When a variant wins reliably, operationalise it into a template or a reusable component in your CMS so product and engineering handoffs are minimal. Document the experiment, the effect on primary metrics, and any constraints observed.</p>
+<h2>Conclusion: focus first on clarity, then measure and iterate</h2>
+<p>The primary lever for landing page optimization is above-the-fold clarity: a clear headline, a supporting subhead, and a hero area that aligns with visitor intent. Prioritise headline and hero testing, then move to CTA work, form reduction, and trust signals while tying changes to the right metrics <a href="https://unbounce.com/reports/conversion-benchmark-report-2024/" target="_blank" rel="noopener">Conversion Benchmark Report 2024</a>.</p>
+<p>Start with a single, measurable experiment and build a sequence. That approach reduces wasted effort and helps teams scale winning ideas into growth systems rather than one-off fixes.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-m29cxg" class="faq-toggle" /><label for="faq-m29cxg" class="faq-summary" role="button" tabindex="0">What is the single most important element to test on a landing page?</label><div class="faq-content"><p>Start with the above-the-fold value proposition: headline, subhead, and hero area. If visitors do not grasp the benefit quickly, other changes are unlikely to move core metrics.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-gggbi1" class="faq-toggle" /><label for="faq-gggbi1" class="faq-summary" role="button" tabindex="0">How should I measure a headline or hero test?</label><div class="faq-content"><p>Use visit-to-click as the primary metric for headline and hero experiments, and track click-to-submit and revenue-per-visitor as secondary signals to detect downstream effects.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-w80z96" class="faq-toggle" /><label for="faq-w80z96" class="faq-summary" role="button" tabindex="0">When should I use progressive profiling instead of a short form?</label><div class="faq-content"><p>Use progressive profiling when lead quality matters more than raw volume and you can capture minimal contact data first, then request additional details in later touches.</p></div></section>
+</section><section class="article-ending">Start with a single headline or headline-plus-hero experiment and use visit-to-click as the primary metric. Document results, scale winners into templates, and then move to CTA and form work so your optimisation efforts build a durable testing system.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://orvus.net/services" target="_blank" rel="noopener">https://orvus.net/services</a></li><li><a href="https://unbounce.com/reports/conversion-benchmark-report-2024/" target="_blank" rel="noopener">https://unbounce.com/reports/conversion-benchmark-report-2024/</a></li><li><a href="https://www.nngroup.com/articles/landing-page-usability/" target="_blank" rel="noopener">https://www.nngroup.com/articles/landing-page-usability/</a></li><li><a href="https://baymard.com/research/landing-page-usability" target="_blank" rel="noopener">https://baymard.com/research/landing-page-usability</a></li><li><a href="https://www.klientboost.com/landing-pages/landing-page-headlines/" target="_blank" rel="noopener">https://www.klientboost.com/landing-pages/landing-page-headlines/</a></li><li><a href="https://replo.app/blog/how-to-improve-landing-page-conversion-rate" target="_blank" rel="noopener">https://replo.app/blog/how-to-improve-landing-page-conversion-rate</a></li><li><a href="https://unbounce.com/reports/conversion-benchmark-report-2024/" target="_blank" rel="noopener">https://unbounce.com/reports/conversion-benchmark-report-2024/</a></li><li><a href="https://vwo.com/blog/ab-testing-headlines-ctas/" target="_blank" rel="noopener">https://vwo.com/blog/ab-testing-headlines-ctas/</a></li><li><a href="https://support.google.com/google-ads/answer/2404191" target="_blank" rel="noopener">https://support.google.com/google-ads/answer/2404191</a></li><li><a href="https://cxl.com/blog/most-important-landing-page-element/" target="_blank" rel="noopener">https://cxl.com/blog/most-important-landing-page-element/</a></li><li><a href="https://lovable.dev/guides/landing-page-best-practices-convert" target="_blank" rel="noopener">https://lovable.dev/guides/landing-page-best-practices-convert</a></li><li><a href="https://orvus.net/about" target="_blank" rel="noopener">https://orvus.net/about</a></li><li><a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">https://orvus.net/category/useful-knowledge/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
