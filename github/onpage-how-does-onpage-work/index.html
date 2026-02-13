@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>How does OnPage work? Practical systems guide for operators</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand tokens derived from provided style */
+      --text-color: #f4e7c5; /* --orvus-ink */
+      --accent: #C8A45D; /* --orvus-gold */
+      --accent-hover: #f6de9f; /* --orvus-gold-strong */
+      --line: rgba(200,164,93,0.26); /* --orvus-border-soft */
+      --surface: #050d18; /* --orvus-bg-soft */
+      --surface-2: #0b1628;
+      --radius: 18px;
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #000 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #050d18;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+      border-radius: 12px;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1IDGeFQNS64rDauFBoi9tJMc5VVGUnytq" alt="How does OnPage work? Practical systems guide banner" />
+        </div>
+        <h1 class="title">How does OnPage work? Practical systems guide for operators</h1>
+        <p class="subline">A systems view of onpage work that helps teams prioritise fixes and measure results.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://orvus.net/useful-knowledge/onpage-how-does-onpage-work/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">Onpage work sits at the intersection of content, technical controls and user experience. It is about making pages understandable to search engines and useful to users.
+This guide offers a systems view of onpage, showing practical checks and workflows that help teams prioritise work, hand off fixes, and measure results without treating onpage as a one-off task.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Onpage combines content signals and technical indexability into a single systems problem that feeds measurement.</span></div><div class="highlight-card"><span class="highlight-text">A simple four-step workflow, scan then prioritise then implement then monitor, keeps onpage work operational.</span></div><div class="highlight-card"><span class="highlight-text">Prioritise indexability blockers first, then high-impact content aligned to intent, then performance refinements.</span></div>
+     </div>
+  <h2>What onpage means today: definition and context</h2><p>Onpage refers to the collection of content signals, structured data, internal linking and UX factors that search engines use to interpret and rank individual pages. This definition focuses on page-level controls rather than offpage signals and frames the work as part of a broader search architecture and measurement system <a href="https://moz.com/learn/seo/on-page-factors" target="_blank" rel="noopener">Moz on-page factors guide</a></p>
+    <div class="side-by-side special-image-left">
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1Ni1UzUjLR-clon7Ad3Qnn--c6KZGjURO=s1200" alt="Marketing team reviewing site crawl and Search Console data on a laptop for onpage optimization in a minimalist navy office setting" /></a>
+      <div class="side-text"><p>Thinking of onpage as a systems problem helps teams avoid one-off edits. When you treat titles, headings, metadata and structured data as parts of a content architecture, the work becomes about measurement and repeatable workflows rather than single fixes.</p></div>
+    </div><div class="cta-section"><h3 class="cta-headline">Book a short consultation to scope an onpage diagnostic</h3><div class="cta-intro"><p>If you want a short diagnostic that checks indexability and obvious content issues, consider a compact scan first to prioritise work without heavy overhead.</p></div><a href="https://orvus.net/services" target="_blank" rel="noopener" class="cta-button">Inquire about a consultation</a></div><p>At page level, the main areas to check are titles and headings, meta descriptions, structured data, internal linking, content quality, and performance metrics such as Core Web Vitals. Each area contributes to how a page signals topic and intent to search engines and to how users experience the page in real conditions <a href="https://developers.google.com/search/docs/fundamentals/seo-starter-guide" target="_blank" rel="noopener">Google Search Central SEO Starter Guide</a></p><p>Framing onpage inside search architecture and growth systems makes it easier to connect edits to KPIs and revenue where measurement exists. That approach also highlights why onpage work is iterative: content evolves, technical constraints change, and attribution setups improve over time.</p><h2>Core onpage components: content, meta, structure</h2>
+    <div class="side-by-side special-image-left">
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1Ni1UzUjLR-clon7Ad3Qnn--c6KZGjURO=s1200" alt="Marketing team reviewing site crawl and Search Console data on a laptop for onpage optimization in a minimalist navy office setting" /></a>
+      <div class="side-text">Title tags and meta descriptions are primary signals for page topic and intent. A clear, unique title helps search engines understand the target query and supports consistent reporting across an account <a href="https://developers.google.com/search/docs/fundamentals/seo-starter-guide" target="_blank" rel="noopener">Google Search Central SEO Starter Guide</a></div>
+    </div><p>In audits you should look for missing or duplicate titles and shallow meta descriptions. These are common, quick wins to fix and to document for editors. For example, flag pages with identical title tags and provide suggested rewrites that reflect the page purpose and funnel stage.</p><p>Headings and content hierarchy distribute topical relevance through a page. Use H2 and H3 sections to break content into clear subtopics. A deep but organised structure helps both users and crawlers understand which parts of the page are primary and which are supportive <a href="https://moz.com/learn/seo/on-page-factors" target="_blank" rel="noopener">Moz on-page factors guide</a></p><p>Internal linking is a structural control that passes relevance and helps indexation. Audit for orphaned pages, excessive nofollow or broken internal links, and missing contextual links from topically related pages. Provide an internal linking recommendation alongside each content rewrite so editors can implement both together.</p><h2>Technical indexability and onpage performance</h2><p>Canonical tags, robots directives and sitemaps determine whether content is discoverable and which URL a search engine should index. Canonical inconsistencies and robots blocks are common blockers that stop otherwise good content from appearing in search results <a href="https://developers.google.com/search/docs/fundamentals/seo-starter-guide" target="_blank" rel="noopener">Google Search Central SEO Starter Guide</a> <a href="https://trafficradius.com.au/the-ultimate-seo-audit-checklist/" target="_blank" rel="noopener">traffic radius checklist</a></p><p>Quick checks include canonical consistency across templates, ensuring noindex directives are intentional, and verifying sitemap coverage for key sections. Document the expected canonical for each URL you recommend changing so engineers have clear acceptance criteria.</p><p>Page speed and Core Web Vitals influence how pages render and how users experience them. Performance problems can mask content value if pages take too long to render or if interactive elements are delayed <a href="https://www.screamingfrog.co.uk/technical-seo-checklist/" target="_blank" rel="noopener">Screaming Frog technical SEO checklist</a></p><p>For performance, include a simple triage: identify render-blocking resources, measure largest contentful paint, and prioritize fixes that unblock usable content for most users. Where heavy templates or client side rendering are used, document which components need server-side improvements or lazy loading. Measure largest contentful paint with a Core Web Vitals audit resource <a href="https://sitecare.com/core-web-vitals-audit/" target="_blank" rel="noopener">Core Web Vitals audit</a></p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">quick indexability diagnostic for a single page</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-sosgnb-0">
+                        <input id="tool-check-sosgnb-0" type="checkbox" />
+                        <span>canonical consistency</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-rxhhks-1">
+                        <input id="tool-check-rxhhks-1" type="checkbox" />
+                        <span>robots directive</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-r729ol-2">
+                        <input id="tool-check-r729ol-2" type="checkbox" />
+                        <span>sitemap presence</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-td2k4a-3">
+                        <input id="tool-check-td2k4a-3" type="checkbox" />
+                        <span>page speed summary</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">run this after a crawl</p>
+            </div><h2>Content quality and intent: aligning pages to user needs</h2><p>Intent-driven content architecture aims to match page content to the user need and funnel stage. Pages should have a clear purpose, whether that is awareness, comparison or conversion, and the content should reflect that goal <a href="https://moz.com/learn/seo/on-page-factors" target="_blank" rel="noopener">Moz on-page factors guide</a></p><p>Markers of high quality content include sufficient depth for the query, original perspectives or data, clear next steps for users, and alignment to funnel stage. Low quality signals include sparse content, obvious duplication and no clear call to action.</p><p>During an editorial review, use manual sampling and content scoring to capture nuance that automated scans miss. A short rubric with 4 to 6 checks can help editors consistently rate pages for relevance, depth and conversion clarity.</p><h2>The typical onpage audit workflow: scan, prioritize, implement, monitor</h2><p>Most teams follow a four-step workflow: scan with crawlers and page speed tools, prioritise issues with a scoring framework, implement fixes via tickets and content edits, then monitor results through webmaster consoles and analytics <a href="https://www.screamingfrog.co.uk/technical-seo-checklist/" target="_blank" rel="noopener">Screaming Frog technical SEO checklist</a></p><p>Start with an automated crawl to surface obvious technical issues and to build a domain map <a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">domain map</a>. Then layer in Search Console and log data to confirm which pages are actually crawled and where rendering fails.</p><p><section class="faq-accordion"><input type="checkbox" id="faq-vy8lbq" class="faq-toggle" checked /><label for="faq-vy8lbq" class="faq-summary" role="button" tabindex="0">How should a team begin onpage work when resources are limited?</label><div class="faq-content"><p>Start with a compact scan that identifies indexability blockers and pages with traffic. Prioritise fixes that unblock indexation and improve content on pages already receiving impressions. Package work as tickets with clear acceptance criteria and monitor results over a 30 to 90 day window.</p></div></section></p><p>When you handoff fixes, provide prioritized tickets with clear acceptance criteria. Acceptance criteria should include the expected canonical, sample title and meta text, any HTML snippets for structured data, and a short QA checklist so engineers and editors know when a ticket is done.</p><h2>Scoring and prioritization frameworks for onpage fixes</h2><p>Scoring frameworks typically combine three dimensions: severity of the issue, implementation effort and estimated business impact. Each dimension gets a score and a weighted sum produces a prioritisation order that teams can action <a href="https://www.semrush.com/features/on-page-seo-checker/" target="_blank" rel="noopener">SEMrush on-page checker methodology</a></p><p>Severity captures how much the issue prevents discovery or harms user experience. Effort is a practical engineering and editorial estimate. Business impact considers where the page sits in the funnel and the traffic or conversions it currently generates.</p><p>Weights should be adjusted to your funnel and constraints. For example, low traffic pages that block indexation might be deprioritised if your team needs to focus on high conversion pages first. Keep the framework simple and document the rationale for weights so stakeholders can critique the choices.</p><h2>Decision criteria: what to fix first and why</h2><p>A clear heuristic is to fix indexability blockers first, then address high-impact content that aligns to intent, followed by performance and UX refinements. Indexability problems make other optimisations ineffective because the page cannot be crawled or indexed <a href="https://developers.google.com/search/docs/fundamentals/seo-starter-guide" target="_blank" rel="noopener">Google Search Central SEO Starter Guide</a></p><p>Where analytics and attribution are limited, prioritise changes that are easier to measure, such as title and meta updates on pages already receiving impressions. If you can link a content rewrite to increased clicks or conversions, measurement becomes clearer and the case for wider rollouts is stronger <a href="https://ahrefs.com/blog/on-page-seo/" target="_blank" rel="noopener">Ahrefs on-page guide</a></p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://orvus.net/services" target="_blank" rel="noopener">Orvus Unique Services</a></div>
+      <a href="https://orvus.net/services" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1H_h1lsT61lq2b7T9TJp_cP-rw6fSFKSG" alt="Orvus Unique Services" /></a>
+    </div><p>Document decisions for stakeholders with a short note on expected outcomes, acceptance criteria and a monitoring window. That record reduces rework and helps teams learn which kinds of onpage work produce measurable improvement in their setup. Learn more about our team on the <a href="https://orvus.net/about" target="_blank" rel="noopener">Orvus about page</a>.</p><h2>Common mistakes and onpage pitfalls to avoid</h2><p>Over-scoring low-impact fixes wastes limited engineering time. Not all duplicate titles matter equally; some occur in paginated or faceted sections where the canonical strategy needs attention rather than mass title edits <a href="https://www.screamingfrog.co.uk/technical-seo-checklist/" target="_blank" rel="noopener">Screaming Frog technical SEO checklist</a></p><p>Relying only on automated scans can create noisy or misleading priorities. Automated tools can detect duplicates and missing tags, but they cannot judge whether content matches user intent or whether a suggested title fits brand voice <a href="https://www.semrush.com/features/on-page-seo-checker/" target="_blank" rel="noopener">SEMrush on-page checker methodology</a></p><p>Prevent rework with clear acceptance criteria, QA steps and a short monitoring plan. Include rollback notes for changes that cause unexpected regressions in clicks or indexation.</p><h2>Practical examples and scenarios: ecommerce and services</h2><p>Example: ecommerce product category pages. A common pattern is faceted navigation that produces many near-duplicate URLs. The fix often combines canonical strategy, robots exclusions for low-value parameter combinations, and improved category descriptions that add unique content to the canonical URL <a href="https://www.screamingfrog.co.uk/technical-seo-checklist/" target="_blank" rel="noopener">Screaming Frog technical SEO checklist</a></p><p>For product pages, focus on unique product descriptions, correct structured data for product and price, and ensuring the canonical points to the primary commerce URL. That combination addresses both indexability and content quality in a coordinated way.</p><p>Example: service landing pages. Align the page content to the user intent for the service. If the intent is local, include clear local signals, contact details and conversion cues. For comparison or consideration queries, provide evidence and next steps so users can progress through the funnel <a href="https://moz.com/learn/seo/on-page-factors" target="_blank" rel="noopener">Moz on-page factors guide</a></p><p>Turn findings into an implementation checklist by pairing each recommendation with an acceptance criterion and an owner. For example, list the title tag change, the expected canonical, the sample meta description and a QA step that confirms the change in Search Console.</p><h2>Measuring impact: KPIs, dashboards and attribution notes</h2><p>Key monitoring KPIs after onpage changes include indexation status, clicks, impressions, CTR and engagement metrics like time on page or bounce rate. These metrics give a direct signal when a change affects search visibility or user behaviour <a href="https://www.semrush.com/features/on-page-seo-checker/" target="_blank" rel="noopener">SEMrush on-page checker methodology</a></p><p>Attribution remains a common challenge. Tying a page change to revenue usually requires a robust analytics configuration and a clear testing window. Without cross-channel attribution, teams should rely on conservative signals such as incremental clicks and uplift in organic conversions while controlling for other channel changes <a href="https://ahrefs.com/blog/on-page-seo/" target="_blank" rel="noopener">Ahrefs on-page guide</a></p><p>Build dashboards that surface indexation regressions, sharp drops in clicks or sudden changes in CTR. Use simple alerts for unexpected drops and weekly reports for gradual trends. Keep dashboards tied to your prioritisation so the most important pages are visible.</p>
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure><h2>Embedding onpage work into growth systems and workflows</h2><p>Handoff patterns that work include creating prioritized tickets with acceptance criteria, testing windows and a clear rollback plan. Tickets should specify the change, expected Search Console signals and a QA checklist so engineers and editors do not need repeated clarification <a href="https://www.semrush.com/features/on-page-seo-checker/" target="_blank" rel="noopener">SEMrush on-page checker methodology</a></p><p>Small automations and dashboards can reduce recurring work. For example, schedule a weekly crawl that feeds a dashboard of new noindex pages or a title duplication report. These internal utilities help teams detect regressions quickly and focus on high leverage fixes aligned to growth systems. Consider pairing automated reports with our <a href="https://orvus.net/services" target="_blank" rel="noopener">services</a>.</p><h2>Tools and data sources for reliable onpage audits</h2><p>Common tool categories are site crawlers, Search Console or Bing Webmaster tools, log analyzers, page speed tools and uptime or monitoring services. These sources together reveal indexability, crawling frequency and performance problems <a href="https://developers.google.com/search/docs/fundamentals/seo-starter-guide" target="_blank" rel="noopener">Google Search Central SEO Starter Guide</a></p><p>Choose tools to match constraints. If you have limited engineering time, prefer data sources that support quick verification, such as Search Console and sampling server logs. If attribution is a priority, ensure analytics can tie page sessions to conversions before committing to a large content rewrite program <a href="https://www.screamingfrog.co.uk/technical-seo-checklist/" target="_blank" rel="noopener">Screaming Frog technical SEO checklist</a></p><p>Outputs from an audit should be a ranked implementation checklist, clear acceptance criteria and a monitoring plan that feeds dashboards. That structure makes it easier to embed onpage work into ongoing growth operations.</p><h2>Next steps: a concise onpage checklist to get started</h2><p>Immediate checks to run in the next week: confirm sitemap coverage for priority sections, check for accidental noindex, spot duplicate titles, and run a simple page speed triage. For an external checklist reference, see the on-page checklist <a href="https://www.semrush.com/blog/on-page-seo-checklist/" target="_blank" rel="noopener">Semrush guide</a>.</p><p>For scheduling, run a short diagnostic then set a 30 to 90 day prioritisation window to implement high value fixes and monitor outcomes. Tailor the cadence to your team constraints and the traffic volumes of the pages you care about <a href="https://www.screamingfrog.co.uk/technical-seo-checklist/" target="_blank" rel="noopener">Screaming Frog technical SEO checklist</a></p><p>Finally, document your choices and expected KPIs. A small monitoring dashboard and a weekly review cycle keep onpage work visible in your search architecture and make it easier to compound improvements over time.</p>
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-7kaw8j" class="faq-toggle" /><label for="faq-7kaw8j" class="faq-summary" role="button" tabindex="0">What is onpage work in SEO?</label><div class="faq-content"><p>Onpage work covers the page-level signals that search engines use to interpret content, including titles, headings, structured data, internal links and performance. It is part of a larger search architecture and should be audited with both technical and editorial checks.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-wtl5t5" class="faq-toggle" /><label for="faq-wtl5t5" class="faq-summary" role="button" tabindex="0">How quickly will I see results from onpage changes?</label><div class="faq-content"><p>Timing varies by crawl frequency, the nature of changes and analytics quality. Some signal changes can show in a few days, but meaningful measurement often needs a defined monitoring window and control for other channel activity.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-3qu1n9" class="faq-toggle" /><label for="faq-3qu1n9" class="faq-summary" role="button" tabindex="0">Which metrics should I track after an onpage audit?</label><div class="faq-content"><p>Track indexation status, clicks, impressions, CTR and engagement metrics like time on page. Use dashboards to detect regressions and a monitoring plan to validate the impact of edits.</p></div></section>
+</section><section class="article-ending">Use the compact checklist and prioritisation approach to turn audits into repeatable work streams. Over time these practices help search architecture support revenue and measurement more reliably.
+If your team needs help designing a prioritised audit or embedding monitoring, a short consultation can clarify next steps within your constraints.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://moz.com/learn/seo/on-page-factors" target="_blank" rel="noopener">https://moz.com/learn/seo/on-page-factors</a></li><li><a href="https://developers.google.com/search/docs/fundamentals/seo-starter-guide" target="_blank" rel="noopener">https://developers.google.com/search/docs/fundamentals/seo-starter-guide</a></li><li><a href="https://www.screamingfrog.co.uk/technical-seo-checklist/" target="_blank" rel="noopener">https://www.screamingfrog.co.uk/technical-seo-checklist/</a></li><li><a href="https://orvus.net/services" target="_blank" rel="noopener">https://orvus.net/services</a></li><li><a href="https://sitecare.com/core-web-vitals-audit/" target="_blank" rel="noopener">https://sitecare.com/core-web-vitals-audit/</a></li><li><a href="https://www.semrush.com/features/on-page-seo-checker/" target="_blank" rel="noopener">https://www.semrush.com/features/on-page-seo-checker/</a></li><li><a href="https://ahrefs.com/blog/on-page-seo/" target="_blank" rel="noopener">https://ahrefs.com/blog/on-page-seo/</a></li><li><a href="https://www.semrush.com/blog/on-page-seo-checklist/" target="_blank" rel="noopener">https://www.semrush.com/blog/on-page-seo-checklist/</a></li><li><a href="https://trafficradius.com.au/the-ultimate-seo-audit-checklist/" target="_blank" rel="noopener">https://trafficradius.com.au/the-ultimate-seo-audit-checklist/</a></li><li><a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">https://orvus.net/category/useful-knowledge/</a></li><li><a href="https://orvus.net/about" target="_blank" rel="noopener">https://orvus.net/about</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
