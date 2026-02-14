@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What's a good hook to start with? Practical templates and quick tests</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand tokens derived from provided style */
+      --text-color: #f4e7c5;
+      --accent: #C8A45D;
+      --accent-hover: #f6de9f;
+      --line: rgba(200,164,93,0.26);
+      --surface: #050d18;
+      --surface-2: #fafafa;
+      --radius: 12px;
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1GAfx43kwLkd2rbXO1wTHxCCSe3E-MCMh" alt="Writing a hook — practical templates and quick tests" />
+        </div>
+        <h1 class="title">What's a good hook to start with? Practical templates and quick tests</h1>
+        <p class="subline">Practical templates, a short decision framework, and fast tests to improve opening lines.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://orvus.net/useful-knowledge/writing-a-hook-practical-templates/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">A good opening line can determine whether a reader continues or leaves. For teams that publish regularly, thinking of the hook as part of a content system makes it easier to choose and test openers.
+This guide collects practical templates, a short decision framework, and a compact testing approach. It draws on university writing guides and UX research to keep recommendations grounded and actionable.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">A hook is the opening element that captures attention and previews the payoff.</span></div><div class="highlight-card"><span class="highlight-text">Six repeatable hook types cover most practical needs: question, anecdote, surprising fact, bold statement, dialogue, and scenario.</span></div><div class="highlight-card"><span class="highlight-text">Use a short checklist and fast A/B tests to find what works for your audience and channel.</span></div>
+     </div>
+  <h2>What is a hook and why writing a hook well matters</h2><h3>Definition and core purpose</h3><p>A hook is the opening sentence or element intended to capture attention and signal the value the rest of the piece will deliver, a definition found in long‑standing writing resources and practical guides like the University of North Carolina Writing Center <a href="https://writingcenter.unc.edu/tips-and-tools/introductions/" target="_blank" rel="noopener">University of North Carolina Writing Center</a>.</p><p>In pedagogy materials this definition ties directly to purpose: the opener should match the assignment and the audience rather than act as a one‑size‑fits‑all trick, a point emphasised by Purdue OWL <a href="https://owl.purdue.edu/owl/general_writing/academic_writing/essay_writing/introductions.html" target="_blank" rel="noopener">Purdue OWL</a>.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Score a candidate hook on clarity, payoff, and audience match</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-ozhwv4-0">
+                        <input id="tool-check-ozhwv4-0" type="checkbox" />
+                        <span>Clear payoff</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-vhiepx-1">
+                        <input id="tool-check-vhiepx-1" type="checkbox" />
+                        <span>Audience match</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-r3xwhx-2">
+                        <input id="tool-check-r3xwhx-2" type="checkbox" />
+                        <span>Hook type</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use as a quick team rubric</p>
+            </div><h3>writing a hook</h3><p>Online, the first sentence often determines whether a reader continues. UX research shows readers scan and form first impressions quickly so frontloading relevance in opening lines improves the chance someone stays on the page <a href="https://www.nngroup.com/articles/how-users-read-on-the-web/" target="_blank" rel="noopener">Nielsen Norman Group</a>.</p>
+    <div class="side-by-side special-image-left">
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1tU186wpdaPP5lL7S_MWLA-ExxNLOliJQ=s1200" alt="Small team reviewing copy on a laptop during a planning session focused on writing a hook in a minimalist navy office with warm gold accents" /></a>
+      <div class="side-text"><p>For busy operators this means a hook should do two jobs at once: attract attention and preview a clear payoff. When those two line up with the headline and the subheading the content becomes easier to scan and justify reading further.</p></div>
+    </div><p>Editors and teams can treat the hook as part of search architecture and content architecture: it must align with the article intent, the headline, and the measurement plan so that traffic and downstream engagement map to a recognisable payoff <a href="https://blog.hubspot.com/marketing/how-to-write-a-hook" target="_blank" rel="noopener">HubSpot Blog</a>.</p><h2>The six practical types to try when writing a hook</h2><p>Contemporary content guides consistently list six repeatable hook types to try: question, anecdote, surprising fact, bold statement, dialogue, and scenario, each adaptable across formats and channels <a href="https://blog.reedsy.com/writing/hooks/" target="_blank" rel="noopener">Reedsy Blog</a>. See <a href="https://buffer.com/resources/good-hooks/" target="_blank" rel="noopener">Buffer's guide</a>.</p>
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure>
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure><p>Question hooks ask directly and are useful when the reader arrives with a specific problem. Template: "Want to stop X without Y?" Use when intent is clear and the article delivers a practical payoff.</p><p>Anecdote and scenario hooks use a short narrative to make a point vivid. Template: "When X happened to Y, the outcome was Z." Use for case studies and longform posts where readers expect context.</p><p>Surprising fact hooks present an unexpected piece of information to provoke curiosity. Template: "Most X do not Y, even though Z." This works when you can follow with evidence or clear explanation.</p><p>Bold statement hooks state a strong position to polarise or focus attention. Template: "X is no longer the answer for Y." Use carefully and match the claim to the article's payoff.</p><p>Dialogue hooks drop the reader into a moment of speech. Template: '"We thought X would fix it," she said.' Use for narrative pieces and to humanise complex topics.</p><p>Scenario hooks describe a short, relatable setup that previews consequences. Template: "Imagine you wake up to X and realize Y." This fits tutorials and planning guides where readers picture themselves in the scenario.</p><p>Rather than defaulting to a single type, match the hook type to tone and audience. University guides recommend choosing an opener based on purpose and reader expectations, not habit <a href="https://owl.purdue.edu/owl/general_writing/academic_writing/essay_writing/introductions.html" target="_blank" rel="noopener">Purdue OWL</a>.</p><h2>A compact framework to choose the right hook for your audience</h2><p>Step 1: identify audience intent. Ask what the reader is trying to achieve when they land on the page. Are they researching, comparing, or ready to act? Frame the answer as a one line intent statement.</p><p>Step 2: define the payoff up front. Convert the intent into a short payoff sentence the hook can preview. For example, "a quick checklist to reduce churn" or "three signals to spot underperforming ads." Making payoff explicit keeps the opener honest.</p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Explore Orvus consultation for quick, practical help using the checklist</h3><div class="cta-intro"><p>Try the 60 second checklist: pick audience intent, state the payoff in one sentence, then choose a hook type that signals that payoff.</p></div><a href="https://orvus.net/services" target="_blank" rel="noopener" class="cta-button">Inquire about consultation</a></div><p>Step 3: pick type and constraints. Choose a hook type that communicates the payoff under your channel limits, for example a single sentence for social or a 25 to 40 word opener for longform. Note channel constraints and keep the hook measurable in tests.</p><p>Use the compact checklist below in content planning meetings to speed decisions and make hooks easy to A/B test without lengthy debates <a href="https://www.grammarly.com/blog/how-to-write-a-hook/" target="_blank" rel="noopener">Grammarly Blog</a> and see the <a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">Orvus blog</a>.</p><h2>Frontloading relevance: writing a hook that works for web readers</h2><p>UX research on web reading finds that visitors scan headlines, subheadings, and the first sentence before deciding to read. That implies the first sentence must preview the payoff in clear terms <a href="https://www.nngroup.com/articles/how-users-read-on-the-web/" target="_blank" rel="noopener">Nielsen Norman Group</a>.</p><p>Tactics to make the first sentence signal value include previewing a specific outcome, keeping the sentence short, and using audience cues such as job role or problem. For example, replace vague openers with concrete preview lines that match search intent.</p><p>Formatting helps scanning. Use short paragraphs, break ideas into single sentence lines, and reserve bold or italics for the single phrase that expresses the payoff. Align the hook wording with the headline and any subheading so the reader sees a consistent promise <a href="https://blog.hubspot.com/marketing/how-to-write-a-hook" target="_blank" rel="noopener">HubSpot Blog</a>.</p><p>Microcopy matters too. Preview text in email and the first line visible on mobile are parts of the same hook system. When you adapt longform openings for the web, trim to the payoff and place it in the first visible line.</p><h2>Starter templates and short examples you can use now when writing a hook</h2><p>Use the headline plus context plus payoff structure as a modular template. Start with a short headline, add one line of context, then deliver the payoff preview. This keeps the opener compact and testable <a href="https://blog.hubspot.com/marketing/how-to-write-a-hook" target="_blank" rel="noopener">HubSpot Blog</a>. More examples: <a href="https://medium.com/never-stop-writing/10-intros-guaranteed-to-hook-your-readers-instantly-56663aa257ac" target="_blank" rel="noopener">Medium</a>.</p><p>Longform blog starter examples:</p><p>Question: "Want a faster onboarding flow without rewrites?" Note: use when the article delivers concrete steps.</p><p>Anecdote: "On day one we lost 20 percent of signups until a small change fixed the flow." Note: adapt to anonymised example for confidentiality.</p><p>Social and microcopy starters:</p><p>Surprising fact: "Most carts fail at the last step." Note: use for social posts linking to deeper analysis. See <a href="https://contentstudio.io/blog/social-media-hooks" target="_blank" rel="noopener">Social hooks examples</a>.</p><p>Bold statement: "Stop A B testing layouts blindly." Note: pair with a quick tip in the thread.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://orvus.net/services" target="_blank" rel="noopener">Orvus Unique Services</a></div>
+      <a href="https://orvus.net/services" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1H_h1lsT61lq2b7T9TJp_cP-rw6fSFKSG" alt="Orvus Unique Services" /></a>
+    </div><p>Email subject and preview line starters:</p><p>Subject: "Three quick checks before you launch" Preview: "A 60 second checklist to reduce avoidable errors." Note: use when the email maps to a short deliverable. See <a href="https://orvus.net/services" target="_blank" rel="noopener">Orvus services</a>.</p><p>Quick edits to convert a long intro into a web‑friendly hook: remove background paragraphs, pull the payoff into sentence one, and replace passive phrasing with an active promise of what the reader will learn <a href="https://www.grammarly.com/blog/how-to-write-a-hook/" target="_blank" rel="noopener">Grammarly Blog</a>.</p><h2>Decision criteria and a simple A/B testing approach for hooks</h2><p>There is limited peer reviewed synthesis that one hook type always wins, so teams should test hooks in their own context and channel rather than assume a universal winner <a href="https://www.grammarly.com/blog/how-to-write-a-hook/" target="_blank" rel="noopener">Grammarly Blog</a>.</p><p>Choose a primary metric that matches intent. For discovery pages CTR is often the right choice. For longform consider engagement metrics that tie to downstream goals such as scroll depth or time on page.</p><p>Design fast iterations. Run short A/B tests with two to four candidates, use even sample allocation where possible, and capture qualitative signals from session recordings or comments. When sample sizes are small, treat tests as directional and run sequential rounds prioritized by impact.</p><p>When to stop or iterate: stop when a variant consistently improves the chosen metric across two sequential windows or when qualitative signals show clearer alignment with intent. Otherwise iterate by changing a single variable, for example tone or specificity, not multiple elements at once <a href="https://blog.hubspot.com/marketing/how-to-write-a-hook" target="_blank" rel="noopener">HubSpot Blog</a>.</p><h2>Common mistakes to avoid when writing a hook</h2><p>Payoff mismatch, where the opener promises something the piece does not deliver, harms trust and increases bounce. Match the opener to the article content and the audience expectation as university writing guides recommend <a href="https://writingcenter.unc.edu/tips-and-tools/introductions/" target="_blank" rel="noopener">University of North Carolina Writing Center</a>.</p><p>Overly clever or dense openings often fail for scanning readers; simplify language and state the payoff plainly. Short sentences and concrete nouns help scanning behaviour identified in UX research <a href="https://www.nngroup.com/articles/how-users-read-on-the-web/" target="_blank" rel="noopener">Nielsen Norman Group</a>.</p><section class="faq-accordion"><input type="checkbox" id="faq-bqkmqv" class="faq-toggle" checked /><label for="faq-bqkmqv" class="faq-summary" role="button" tabindex="0">What's a good hook to start with?</label><div class="faq-content"><p>A good starting hook previews a clear payoff for a specific audience; use a short template that matches intent and test variants quickly to see what performs in your channel.</p></div></section><p>Ignoring channel constraints is common. A line that works in longform may be too slow for social or email subject lines. Test and adapt rather than shoehorn the same opening into every format <a href="https://blog.reedsy.com/writing/hooks/" target="_blank" rel="noopener">Reedsy Blog</a>.</p><h2>Annotated examples, a writer's checklist, and next steps</h2><p>Annotated examples, before and after:</p>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Original: "In this post we will discuss many considerations for onboarding." Revised: "A 3 step checklist to reduce onboarding churn." Rationale: tightened payoff and clear action, useful when intent is 'reduce churn' <a href="https://blog.hubspot.com/marketing/how-to-write-a-hook" target="_blank" rel="noopener">HubSpot Blog</a>.</p></div>
+      <a href="https://orvus.net/about" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1xQ9gkYbCexJGt3K5vhv2SiIOSJ0nGxml=s1200" alt="Minimal 2D vector infographic with three stacked icons representing headline context and payoff for writing a hook on deep blue background" /></a>
+    </div><p>Original: "Some people say X but others disagree." Revised: "Why X often fails for early stage stores." Rationale: specific audience cue and clearer promise of value.</p><p>Original: "There are several reasons why Y happens." Revised: "The single metric that predicts Y." Rationale: sharper focus and testable claim for readers.</p><p>Compact writer checklist for planning and sprints:</p><ol><li>Identify audience intent in one sentence</li><li>Write the payoff preview as one line</li><li>Choose a hook type that signals the payoff</li><li>Trim to the first visible line for web and mobile</li><li>Pick a primary metric and run a short A/B test</li></ol>
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure>
+    <figure class="special-image-standalone">
+      <a href="https://orvus.net" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1peGLtNOyoeimNJddbNFlFOD_l-Yge3Fx" alt="Orvus Ltd. Logo" />
+      </a>
+    </figure><p>Next steps: use the checklist in one planning meeting, pick two candidate hooks, and run a short test in the most relevant channel. Because broad meta-analyses are limited, results are context dependent and should guide local decisions <a href="https://www.grammarly.com/blog/how-to-write-a-hook/" target="_blank" rel="noopener">Grammarly Blog</a>.</p><p>Resources: the writing center guides and current content marketing templates are practical starting points for teams learning to systematise hooks <a href="https://writingcenter.unc.edu/tips-and-tools/introductions/" target="_blank" rel="noopener">University of North Carolina Writing Center</a> and <a href="https://orvus.net/about" target="_blank" rel="noopener">about Orvus</a>.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-ain0u6" class="faq-toggle" /><label for="faq-ain0u6" class="faq-summary" role="button" tabindex="0">How long should a hook be for web readers?</label><div class="faq-content"><p>Keep the visible first sentence short and focused on the payoff, typically one concise sentence that previews the value the content will deliver.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-2zlv3p" class="faq-toggle" /><label for="faq-2zlv3p" class="faq-summary" role="button" tabindex="0">Which hook type should I choose first?</label><div class="faq-content"><p>Start with clarity: pick the type that most directly signals the payoff to your audience, then test alternatives in small A/B rounds.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-j0i1xa" class="faq-toggle" /><label for="faq-j0i1xa" class="faq-summary" role="button" tabindex="0">Can I reuse the same hook across channels?</label><div class="faq-content"><p>Reuse the idea but adapt length and tone for each channel; what works in longform often needs trimming for social or email.</p></div></section>
+</section><section class="article-ending">Try the checklist in your next planning meeting and treat each hook as a testable variable. Over time, small improvements to opening lines compound into clearer engagement and fewer wasted drafts.
+If you need help turning a set of headings into testable hooks or building a lightweight A/B process into existing workflows, consider a short consultation to map constraints and priorities.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://writingcenter.unc.edu/tips-and-tools/introductions/" target="_blank" rel="noopener">https://writingcenter.unc.edu/tips-and-tools/introductions/</a></li><li><a href="https://owl.purdue.edu/owl/general_writing/academic_writing/essay_writing/introductions.html" target="_blank" rel="noopener">https://owl.purdue.edu/owl/general_writing/academic_writing/essay_writing/introductions.html</a></li><li><a href="https://www.nngroup.com/articles/how-users-read-on-the-web/" target="_blank" rel="noopener">https://www.nngroup.com/articles/how-users-read-on-the-web/</a></li><li><a href="https://blog.hubspot.com/marketing/how-to-write-a-hook" target="_blank" rel="noopener">https://blog.hubspot.com/marketing/how-to-write-a-hook</a></li><li><a href="https://www.grammarly.com/blog/how-to-write-a-hook/" target="_blank" rel="noopener">https://www.grammarly.com/blog/how-to-write-a-hook/</a></li><li><a href="https://blog.reedsy.com/writing/hooks/" target="_blank" rel="noopener">https://blog.reedsy.com/writing/hooks/</a></li><li><a href="https://orvus.net/services" target="_blank" rel="noopener">https://orvus.net/services</a></li><li><a href="https://buffer.com/resources/good-hooks/" target="_blank" rel="noopener">https://buffer.com/resources/good-hooks/</a></li><li><a href="https://medium.com/never-stop-writing/10-intros-guaranteed-to-hook-your-readers-instantly-56663aa257ac" target="_blank" rel="noopener">https://medium.com/never-stop-writing/10-intros-guaranteed-to-hook-your-readers-instantly-56663aa257ac</a></li><li><a href="https://contentstudio.io/blog/social-media-hooks" target="_blank" rel="noopener">https://contentstudio.io/blog/social-media-hooks</a></li><li><a href="https://orvus.net/category/useful-knowledge/" target="_blank" rel="noopener">https://orvus.net/category/useful-knowledge/</a></li><li><a href="https://orvus.net/about" target="_blank" rel="noopener">https://orvus.net/about</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
