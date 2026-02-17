@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Can police see Nextdoor posts?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #95212e; /* derived darker */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* from --mc-panel-2 */
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/nextdoor-neighbor-map.jpg" alt="Nextdoor neighbor map" />
+        </div>
+        <h1 class="title">Can police see Nextdoor posts?</h1>
+        <p class="subline">Practical guidance on what Nextdoor stores and how law enforcement requests are handled.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/nextdoor-neighbor-can-police-see-posts/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">This article answers a common question: can police see Nextdoor posts? It explains the platform's visibility categories and summarizes how Nextdoor responds to law enforcement requests according to its published policy and reports.
+
+The goal is practical: readers will learn what Nextdoor stores, what may be disclosed, and clear steps to limit unnecessary exposure while recognizing the limits of platform controls.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Nextdoor distinguishes public posts, neighborhood-only posts, and private messages, and treats them differently for visibility.</span></div><div class="highlight-card"><span class="highlight-text">Nextdoor publishes aggregated counts of government and law enforcement requests in its Transparency Report 2024.</span></div><div class="highlight-card"><span class="highlight-text">Privacy settings reduce casual exposure but do not prevent disclosure if the platform receives valid legal process.</span></div>
+     </div>
+  <h2>What "nextdoor neighbor" visibility means: public posts, neighborhood posts, private messages</h2><p>The term nextdoor neighbor in everyday use refers to how your profile and posts appear within the service and to people nearby. According to Nextdoor's Privacy Policy, the company distinguishes public posts, neighborhood-only posts, and private messages, and it explains that public posts are generally visible beyond a single neighborhood <a href="https://nextdoor.com/privacy_policy/" target="_blank" rel="noopener">Nextdoor Privacy Policy</a></p><section class="faq-accordion"><input type="checkbox" id="faq-ut1g8v" class="faq-toggle" checked /><label for="faq-ut1g8v" class="faq-summary" role="button" tabindex="0">Can police access posts made on Nextdoor and how does the platform handle requests?</label><div class="faq-content"><p>Nextdoor separates public posts, neighborhood-only posts, and private messages; the company retains those records and states it will disclose content in response to lawful subpoenas, warrants, or emergency requests, as summarized in its privacy policy and transparency reporting.</p></div></section><p>Neighborhood-only posts are designed to be seen by verified neighbors and local moderators and are not open to the general public, but the company stores those posts and may disclose them under lawful process, as Nextdoor's help documentation makes clear <a href="https://help.nextdoor.com/s/article/post-visibility-and-neighborhoods" target="_blank" rel="noopener">Nextdoor Help Center</a></p><p>Private messages are not displayed publicly on the site, but like neighborhood posts they are retained by the platform and can be provided to third parties when Nextdoor is served with valid legal process, according to the company's policy <a href="https://nextdoor.com/privacy_policy/" target="_blank" rel="noopener">Nextdoor Privacy Policy</a></p><h2>How Nextdoor stores and shares content behind the scenes</h2>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>Nextdoor explains that neighborhood posts and private messages are stored as part of normal platform operations and that copies are retained for operational and legal reasons; the privacy policy describes the categories of information the company may keep and how it handles requests for that information <a href="https://nextdoor.com/privacy_policy/" target="_blank" rel="noopener">Nextdoor Privacy Policy</a></p><p>Within a neighborhood, verified neighbors and local moderators can read neighborhood posts, and those roles are separate from public viewers outside the neighborhood; the help center outlines how verification and moderator access work for neighborhood content <a href="https://help.nextdoor.com/s/article/post-visibility-and-neighborhoods" target="_blank" rel="noopener">Nextdoor Help Center</a></p>
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1WaGvsmHBR_DWjSj60yZ_bYKTK62d2VXP=s1200" alt="Minimal 2D vector UI card showing post visibility options with globe house and lock icons on a deep blue background with white icons and red accents for nextdoor neighbor" /></a>
+      <div class="side-text"><p>Retention by the company does not mean content is publicly available, but retained records may be supplied to law enforcement or other authorities when Nextdoor receives lawful process, so internal access and external disclosure are distinct matters in the platform's documentation <a href="https://nextdoor.com/privacy_policy/" target="_blank" rel="noopener">Nextdoor Privacy Policy</a></p></div>
+    </div><h2>Can police get Nextdoor posts? How law enforcement requests are handled</h2>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Nextdoor states that it responds to lawful legal process such as subpoenas, warrants, and some emergency requests and that when served with such orders it may disclose stored content including posts and messages <a href="https://nextdoor.com/privacy_policy/" target="_blank" rel="noopener">Nextdoor Privacy Policy</a></p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1kCU1CFihBXLoovu6VhG15yip2F_Nr7Ws=s1200" alt="Minimal 2D vector infographic of posts messages and a legal gavel in Michael Carbonara color palette background hex 0b2664 clean minimalist layout nextdoor neighbor" /></a>
+    </div><p>The company also publishes a transparency report that aggregates counts and high-level descriptions of government and law enforcement requests and of the disclosures Nextdoor made in response, which helps show how often platforms receive formal requests <a href="https://nextdoor.com/transparency-report/2024/" target="_blank" rel="noopener">Nextdoor Transparency Report 2024</a>. State-level analyses are sometimes available as well, for example a California report <a href="https://oag.ca.gov/sites/default/files/Nextdoor%20Cal%20TOS%20Report%2C%202025%20Q1%20%26%20Q2.pdf/Nextdoor%20Cal%20TOS%20Report%2C%202025%20Q1%20%26%20Q2.pdf" target="_blank" rel="noopener">California AG report</a></p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay informed and join the campaign</h3><div class="cta-intro"><p>Check Nextdoor's Transparency Report and review your privacy settings to see the most recent information about how the platform handles requests, without relying on informal accounts.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the Campaign</a></div><p>Civil liberties groups advise that platform controls limit casual visibility but do not block disclosure when providers receive valid subpoenas or warrants, so privacy settings reduce exposure but are not a legal shield against formal requests <a href="https://www.eff.org/deeplinks/2024/04/law-enforcement-requests-online-data-users-what-know" target="_blank" rel="noopener">EFF guidance</a></p><h2>What Nextdoor's transparency reporting shows and what it does not</h2><p>The 2024 Transparency Report provides aggregated counts and general descriptions of the types of government and law enforcement requests Nextdoor receives and the company responses, offering a high-level view of requests without releasing case-level details <a href="https://nextdoor.com/transparency-report/2024/" target="_blank" rel="noopener">Nextdoor Transparency Report 2024</a></p><p>Because the report is aggregated, it may not show jurisdictional differences or the specifics of preservation or emergency procedures in any single case, and the report itself suggests consulting the policy or legal counsel for case-specific questions <a href="https://nextdoor.com/transparency-report/2024/" target="_blank" rel="noopener">Nextdoor Transparency Report 2024</a></p><h2>Practical steps neighbors can take to reduce what police could access</h2><p>Start by reviewing account privacy and post audience settings and remove unnecessary address details from your profile; Nextdoor's privacy settings pages show step-by-step actions such as adjusting who can see posts and what profile fields are visible <a href="https://help.nextdoor.com/s/article/privacy-settings" target="_blank" rel="noopener">Nextdoor Help Center</a> and you can <a href="https://michaelcarbonara.com/privacy/" target="_blank" rel="noopener">review our privacy page</a> for related guidance.</p><p>Keep posts factual and avoid sharing sensitive personal identifiers or exact home details in neighborhood posts or messages, and prefer neighborhood-only posts when appropriate because casual public visibility is greater for public posts <a href="https://nextdoor.com/privacy_policy/" target="_blank" rel="noopener">Nextdoor Privacy Policy</a></p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><p>Remember that these steps limit casual exposure but, as civil liberties groups note, they do not prevent disclosure if Nextdoor receives valid legal process <a href="https://www.aclu.org/resources/privacy-technology/digital-privacy-police-access-social-media" target="_blank" rel="noopener">ACLU guidance</a></p><h2>Understanding legal differences: subpoenas, warrants, emergency disclosures</h2><p>A subpoena is typically a formal request for information that may be narrower, while a warrant is an order issued by a judge that may require production of specified data; Nextdoor's policy explains it responds to subpoenas, warrants, and certain emergency requests according to applicable law <a href="https://nextdoor.com/privacy_policy/" target="_blank" rel="noopener">Nextdoor Privacy Policy</a></p><p>The transparency report summarizes requests but does not always show how local legal standards affect a specific request, so outcomes can vary by jurisdiction and by the exact nature of the legal order <a href="https://nextdoor.com/transparency-report/2024/" target="_blank" rel="noopener">Nextdoor Transparency Report 2024</a></p><p>If you need case specific advice about a preservation or emergency disclosure request, consult an attorney rather than relying solely on general platform statements, since legal standards differ across jurisdictions and situations <a href="https://www.eff.org/deeplinks/2024/04/law-enforcement-requests-online-data-users-what-know" target="_blank" rel="noopener">EFF guidance</a></p><h2>If police contact you or request your posts: steps to take and what to say</h2><p>First ask whether the request is accompanied by formal legal process and ask to see written documentation such as a subpoena or warrant before providing account details; civil liberties guidance recommends verifying the identity of the requester and requesting proof of legal authority <a href="https://www.eff.org/deeplinks/2024/04/law-enforcement-requests-online-data-users-what-know" target="_blank" rel="noopener">EFF guidance</a> and consider contacting counsel or <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">contacting us</a> if you need assistance.</p><p>Sample wording for informal requests that lack legal process includes brief refusals such as I cannot provide account information without written legal process, and Please provide a copy of any warrant or subpoena, noting you will consult counsel, which both protects your position and signals the need for formal procedure <a href="https://nextdoor.com/privacy_policy/" target="_blank" rel="noopener">Nextdoor Privacy Policy</a></p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">A short verification checklist to use when law enforcement asks for posts</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-3f3a97-0">
+                        <input id="tool-check-3f3a97-0" type="checkbox" />
+                        <span>Verify badge and agency</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-rsxpbr-1">
+                        <input id="tool-check-rsxpbr-1" type="checkbox" />
+                        <span>Request written legal process</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-q53ubj-2">
+                        <input id="tool-check-q53ubj-2" type="checkbox" />
+                        <span>Note the request time</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Keep copies of any documents</p>
+            </div><p>In urgent emergency situations Nextdoor may act more quickly to preserve or disclose information, so document the interaction, note the names and badge numbers provided, and seek legal advice promptly if you are unsure how to respond <a href="https://nextdoor.com/transparency-report/2024/" target="_blank" rel="noopener">Nextdoor Transparency Report 2024</a></p><h2>Common mistakes users make about Nextdoor and police access</h2><p>A common misunderstanding is assuming neighborhood-only posts are immune from legal process; Nextdoor's documentation states neighborhood posts are available to verified neighbors and moderators but can be disclosed under lawful process <a href="https://nextdoor.com/privacy_policy/" target="_blank" rel="noopener">Nextdoor Privacy Policy</a></p><p>Another frequent error is oversharing profile details such as full address or identifying numbers in posts or profile fields; the privacy settings help pages explain which profile fields are visible and how to limit them <a href="https://help.nextdoor.com/s/article/privacy-settings" target="_blank" rel="noopener">Nextdoor Help Center</a></p><p>Before posting, double check audience settings and membership boundaries for your neighborhood so you understand who can see a given post and reduce the chance you share more than intended <a href="https://help.nextdoor.com/s/article/post-visibility-and-neighborhoods" target="_blank" rel="noopener">Nextdoor Help Center</a></p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Real world scenarios: examples of when police sought social platform data</h2><p>Illustrative scenarios include requests where police seek post content and account metadata to investigate local incidents; the transparency report and platform policy together indicate Nextdoor can supply post content and related metadata when compelled by legal process <a href="https://nextdoor.com/transparency-report/2024/" target="_blank" rel="noopener">Nextdoor Transparency Report 2024</a></p><p>Another scenario is preservation requests where an agency asks Nextdoor to hold records while investigators pursue formal orders; the platform's reporting and policy describe preservation or emergency procedures in general terms and recommend consulting the company documentation for specifics <a href="https://nextdoor.com/privacy_policy/" target="_blank" rel="noopener">Nextdoor Privacy Policy</a></p><h2>Where to find primary sources and next steps</h2><p>For the latest details consult Nextdoor's Privacy Policy and Help Center for explicit descriptions of visibility, retention, and account controls, and review the Transparency Report for aggregated information on requests the company received <a href="https://nextdoor.com/privacy_policy/" target="_blank" rel="noopener">Nextdoor Privacy Policy</a> and Nextdoor's Policy Hub <a href="https://about.nextdoor.com/policy/" target="_blank" rel="noopener">Nextdoor Policy Hub</a>. For related updates see our <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news page</a>.</p><p>For broader privacy context and templates about verifying legal requests consult civil liberties resources such as guidance from EFF and the ACLU, and seek an attorney for advice about jurisdiction specific legal questions <a href="https://www.eff.org/deeplinks/2024/04/law-enforcement-requests-online-data-users-what-know" target="_blank" rel="noopener">EFF guidance</a></p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-cs7jjm" class="faq-toggle" /><label for="faq-cs7jjm" class="faq-summary" role="button" tabindex="0">Can police see my neighborhood-only Nextdoor posts?</label><div class="faq-content"><p>Neighborhood-only posts are visible to verified neighbors and local moderators, and Nextdoor states those posts are stored and can be disclosed if the company receives lawful legal process.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-y9rwbz" class="faq-toggle" /><label for="faq-y9rwbz" class="faq-summary" role="button" tabindex="0">Are private messages on Nextdoor safe from police requests?</label><div class="faq-content"><p>Private messages are not publicly visible but Nextdoor's policy says they are retained and may be provided to law enforcement in response to valid subpoenas, warrants, or emergency orders.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-rwuwpt" class="faq-toggle" /><label for="faq-rwuwpt" class="faq-summary" role="button" tabindex="0">What should I do if law enforcement asks for my Nextdoor posts?</label><div class="faq-content"><p>Ask for written documentation of the request, verify the requester's identity, and consult legal counsel before providing account information; use brief refusal wording for informal requests lacking legal process.</p></div></section>
+</section><section class="article-ending">If you are concerned about a specific legal request or investigation, consult an attorney for advice tailored to your jurisdiction and situation. Regularly reviewing Nextdoor's Privacy Policy and the Transparency Report will keep you informed about any changes to how the company handles requests.</section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
