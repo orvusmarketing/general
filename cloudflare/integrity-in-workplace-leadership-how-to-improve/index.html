@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>How to improve integrity as a leader? A practical guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens (from provided style) */
+      --text-color: #ffffff;         /* from --mc-ink */
+      --accent: #ae2736;             /* from --mc-accent */
+      --accent-hover: color-mix(in srgb, var(--accent) 86%, #000 14%);
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664;           /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px;                /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Scoped additions for article interactive elements */
+    .article-body .faq-accordion{ border-left-color: var(--accent); }
+    .article-body .highlight-card{ border-left-color: var(--accent); }
+    .article-body .tool-block{ border-left-color: var(--accent); }
+    .article-body .cta-section .cta-button{ background: var(--accent); }
+    .article-body .cta-section .cta-button:hover{ background: var(--accent-hover); }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1LpOOOBIzC2ZeuW17_qGGUD-poVULXAxb" alt="How to improve integrity as a leader? Banner image" />
+        </div>
+        <h1 class="title">How to improve integrity as a leader? A practical guide</h1>
+        <p class="subline">Practical, evidence-based steps for leaders to strengthen integrity in teams.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/integrity-in-workplace-leadership-how-to-improve/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">Integrity in leadership matters because it shapes how teams trust decisions and follow directions. This article offers a practical, evidence-based guide to what integrity means in organizational settings and how leaders can begin improving it with measurable steps.
+
+The guidance here draws on foundational academic work and recent governance and practitioner reports. It is written for managers, civic readers, and voters seeking neutral, practical steps, and it stresses measurement and local pilots rather than universal promises.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Integrity in leadership combines personal conduct and institutional systems to make ethical expectations credible.</span></div><div class="highlight-card"><span class="highlight-text">A five-step framework-assess, model, set policy, measure, enforce-turns values into repeatable practice.</span></div><div class="highlight-card"><span class="highlight-text">Combine leader coaching with structural reforms and measure local impact before scaling.</span></div>
+     </div>
+  <h2>What is integrity in workplace leadership? Definition and context</h2>
+  <p>Integrity in workplace leadership combines a leader's personal ethics with observable, consistent behavior that others can learn from. Foundational research shows ethical leadership functions through social learning, meaning leaders shape norms by modeling behavior and expectations, and that definition underpins many contemporary approaches to organizational integrity <a href="https://doi.org/10.1016/j.leaqua.2005.03.002" target="_blank" rel="noopener">Leadership Quarterly study</a>.</p>
+  <p>At the same time, integrity does not rest on individual choices alone. OECD guidance describes integrity as a system property that combines personal conduct with institutional supports such as codes of conduct, reporting channels, and oversight to make ethical expectations credible and sustainable <a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">OECD guidance on ethics</a>.</p>
+  <section class="faq-accordion"><input type="checkbox" id="faq-kxonih" class="faq-toggle" checked /><label for="faq-kxonih" class="faq-summary" role="button" tabindex="0">What practical steps can a leader take now to improve integrity in their team?</label><div class="faq-content"><p>Start with a baseline self-assessment, publish a clear team values statement, run a concise 360 feedback cycle, track incidents, and plan a 30-60-90 pilot that you will measure and review.</p></div></section>
+  <p>In everyday workplaces, employees report that they judge leader integrity by patterns they can observe: consistent decisions, transparent explanations, equal treatment, and visible follow-through on mistakes. Practitioner surveys find that when these elements are missing, workers notice gaps between stated values and daily practice <a href="https://www.gallup.com/workplace/349484/state-of-the-global-workplace.aspx" target="_blank" rel="noopener">Gallup workplace research</a>.</p>
+  <p>To be clear, phrases like ethical leadership and codes of conduct are complementary. Ethical leadership refers to the leader behaviors and how they influence others, while codes and reporting channels are the institutional elements that support and enforce those behaviors. This combined view helps explain why leaders who act ethically but work in weak systems often struggle to sustain integrity in a complex organization.</p>
+  <h2>Why integrity in workplace leadership matters: evidence and organizational outcomes</h2>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+  <p>Multiple lines of research link ethical leadership to higher employee trust and improved conduct. Foundational academic work describes ethical leadership as correlated with greater trust, more ethical behavior among staff, and clearer norms, though the findings are reported as correlations rather than deterministic causal claims <a href="https://doi.org/10.1016/j.leaqua.2005.03.002" target="_blank" rel="noopener">Leadership Quarterly study</a>.</p>
+  <p>Practitioner surveys add practical perspective by identifying which behaviors employees associate most strongly with integrity: consistent treatment, clear communication about decisions, and fair accountability processes. These survey findings underline that perception of integrity is shaped by day-to-day managerial practices as much as by formal statements <a href="https://www.gallup.com/workplace/349484/state-of-the-global-workplace.aspx" target="_blank" rel="noopener">Gallup workplace research</a>.</p>
+  <p>Evidence is robust on directional patterns but more limited when it comes to precise effect sizes across sectors. Recent practitioner reports and reviews note that contextual factors, such as organizational size and sector, affect outcomes and that leaders should measure results locally rather than assuming uniform impact <a href="https://hbr.org/2025/03/building-trust-as-a-leader" target="_blank" rel="noopener">Harvard Business Review guidance</a>.</p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1DXCSgtOe8pvh408_s25MZCiosTCEDtpn=s1200" alt="Minimal vector infographic of a closed corporate handbook and pen with shield handshake and scales icons symbolizing integrity in workplace leadership on deep blue background with white and red accents" /></a>
+      <div class="side-text"><p>For leaders, the practical implication is to treat integrity work as measurable and iterative. Use baseline assessments and simple indicators to check whether employees perceive greater consistency and trust over time, and be cautious about interpreting correlations as guarantees of specific organizational results.</p></div>
+    </div>
+
+  <h2>A practical framework to improve integrity in workplace leadership</h2>
+  <p>Leaders can adopt a five-step framework that blends individual action and systemic design: assess, model, set policy, measure, and enforce. This structure appears repeatedly in governance guidance and practitioner toolkits as a practical sequence for change <a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">OECD guidance on ethics</a>.</p>
+  <p>Step 1, <a href="https://www.opm.gov/policy-data-oversight/assessment-and-selection/other-assessment-methods/integrityhonesty-tests/" target="_blank" rel="noopener">assess</a>: start with honesty about baseline performance using <a href="https://sites.utexas.edu/curtispe/2020/02/25/integrity-self-assessment-tool/" target="_blank" rel="noopener">self-reflection tools</a>, 360-degree feedback, and simple incident counts to establish where integrity gaps appear and why. Step 2, model: leaders should make visible commitments and behaviors that reflect stated values, using coaching and targeted training where needed. Step 3, set policy: document expectations with clear codes and accessible reporting channels. Step 4, measure: adopt routine feedback cycles that combine surveys and incident metrics. Step 5, enforce: apply transparent consequences and review procedures so enforcement is seen as fair and consistent. Practical guides recommend pairing modeling and coaching with structural changes to increase the likelihood of durable improvement <a href="https://www.shrm.org/resourcesandtools/tools-and-samples/toolkits/pages/buildinganethicalworkplace.aspx" target="_blank" rel="noopener">SHRM toolkit</a>.</p>
+  <p>Who should own each step? Leaders typically sponsor the work and model behavior, human resources or an ethics office can own design and measurement, and an oversight function or independent reviewer should handle escalation and periodic audits. Clear role assignment reduces gaps and prevents confusion about responsibility.</p>
+  <div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Join the campaign movement and stay involved</h3><div class="cta-intro"><p>Review the checklist and measurement section below to choose the assessment approach that best fits your team and to plan a simple pilot before wider rollout.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the Campaign</a></div>
+  <p>When implemented together, coaching for leaders and updated policies produce more consistent outcomes than either approach on its own. <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">Practitioner guidance</a> emphasizes this combined approach as a practical way to align expectations, support behavior change, and create credible enforcement mechanisms <a href="https://www.ibe.org.uk/publications/integrity-frameworks-2025.html" target="_blank" rel="noopener">Institute of Business Ethics guidance</a>.</p>
+  <h2>Implementation steps leaders can take this quarter</h2>
+  <p>For a manager who wants to start quickly, a 30-60-90 plan can translate the framework into concrete actions. In the first 30 days, complete a <a href="https://sites.utexas.edu/curtispe/2020/02/25/integrity-self-assessment-tool/" target="_blank" rel="noopener">self-assessment</a> and prepare a concise team values statement. In days 31 to 60, introduce a simple feedback loop such as a short <a href="https://michaelcarbonara.com/survey/" target="_blank" rel="noopener">anonymous pulse survey</a> and begin documenting minor incidents. In days 61 to 90, review early data, adjust team processes, and communicate any policy clarifications to the team. These short cycles are recommended by practitioner reports as a pragmatic way to pilot changes before broader rollout <a href="https://www.shrm.org/resourcesandtools/tools-and-samples/toolkits/pages/buildinganethicalworkplace.aspx" target="_blank" rel="noopener">SHRM toolkit</a>.</p>
+  <p>Mini-plan for managers: 1) Self-assess using a short reflection form that asks about consistency, transparency, and accountability. 2) Share a two-paragraph team values statement that ties back to concrete behaviors. 3) Invite a brief 360-degree feedback check with a small set of peers and direct reports. 4) Start a simple incident log for any ethics-related reports or near misses.</p>
+  <p>When communicating values and policies to teams, use neutral language that explains the purpose of each item and how it will be applied. Avoid slogans; instead, describe what behavior looks like in practice and how people can raise concerns. Where possible, reference public guidance or sector norms to ground changes in recognized standards rather than personal preference.</p>
+  <p>Leaders should remember to pilot and measure local impact. Context matters, and what works in one team or organization may not translate directly to another. Running a short pilot with clear indicators reduces the risk of costly missteps.</p>
+  <h2>How to measure integrity: assessments and metrics</h2>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text">Validated approaches typically combine self-reflection, 360-degree feedback, and incident or ethics report metrics to form a dependable baseline. This mixed-methods approach is recommended by foundational research and practitioner toolkits because each method compensates for the limits of the others: self-assessment provides leader insight, 360 feedback adds external perception, and incident metrics supply behavioral signals <a href="https://doi.org/10.1016/j.leaqua.2005.03.002" target="_blank" rel="noopener">Leadership Quarterly study</a>.</div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1-Bb_dYldPpADJXD0OmcrR45SRIk-32m3=s1200" alt="Minimalist 2D vector infographic showing a five step process with white icons inside accent rings on deep blue background integrity in workplace leadership" /></a>
+    </div>
+  <p>Design choices matter. For 360-degree feedback, set clear objectives, preserve anonymity where appropriate, choose a limited set of behaviorally specific questions, and decide on a realistic frequency, for example twice a year rather than monthly. Anonymity increases candor but can reduce the ability to follow up; choose a design that balances learning with actionability and clearly communicate that trade-off to participants <a href="https://www.shrm.org/resourcesandtools/tools-and-samples/toolkits/pages/buildinganethicalworkplace.aspx" target="_blank" rel="noopener">SHRM toolkit</a>.</p>
+  <p>Incident and reporting metrics should track both numbers and patterns: count reports and near-miss logs, categorize common issues, and monitor time-to-resolution. Response rates on surveys are a crucial signal of engagement, while qualitative comments help interpret numerical trends. Use short, pre-specified indicators for pilot evaluation and schedule a review cadence to decide when to expand or recalibrate measures.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+  <p>When evaluating results, distinguish signal from noise: a single complaint can be important but is not the same as an ongoing pattern. Look for sustained changes in survey scores, repeated items in incident categories, or shifts in response rates as signs that interventions are having an effect.</p>
+  <h2>Accountability systems and organizational policy design</h2>
+  <p>Effective integrity systems typically include a clear code of conduct, accessible reporting channels, and an independent oversight or review mechanism. Governance bodies recommend these elements as mutual supports that make rules meaningful and enforcement credible <a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">OECD guidance on ethics</a>.</p>
+  <p>Codes should be concise, behaviorally specific, and written in plain language. Reporting channels should be multiple and accessible, with defined roles for receiving and triaging reports. Oversight models range from an internal ethics officer to an independent review panel; the right choice depends on organizational size and risk profile.</p>
+  <div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Combine 360 feedback and incident tracking for integrity checks</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-uhu5u1-0">
+                        <input id="tool-check-uhu5u1-0" type="checkbox" />
+                        <span>Self-reflection form</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-708xo0-1">
+                        <input id="tool-check-708xo0-1" type="checkbox" />
+                        <span>360 feedback survey</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-juv7mb-2">
+                        <input id="tool-check-juv7mb-2" type="checkbox" />
+                        <span>Incident log</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use twice-yearly for pilots</p>
+            </div>
+  <p>Design trade-offs are inevitable. Confidential channels increase reporting but may limit transparency about outcomes. Public reporting of outcomes can build trust but must protect privacy and due process. A balanced approach documents steps taken, anonymizes individual details, and explains the rationale for any action to maintain credibility while respecting confidentiality <a href="https://www.ibe.org.uk/publications/integrity-frameworks-2025.html" target="_blank" rel="noopener">Institute of Business Ethics guidance</a>.</p>
+  <p>Transparent consequences should be documented and paired with procedural safeguards. Due process and an opportunity to respond are core to credible accountability; organizations that skip these steps risk perceptions of unfairness that can undermine the system's legitimacy.</p>
+  <h2>Common pitfalls and how to avoid them</h2>
+  <p>One common mistake is relying solely on training while leaving structural weaknesses intact. Training without policy change often produces short-term awareness but limited system-level improvement. Practitioner reviews suggest combining leader modeling with structural reforms to raise the chance of durable change <a href="https://www.shrm.org/resourcesandtools/tools-and-samples/toolkits/pages/buildinganethicalworkplace.aspx" target="_blank" rel="noopener">SHRM toolkit</a>.</p>
+  <p>Measurement pitfalls include low response rates, poorly worded questions, and over-reliance on self-report. To mitigate these risks, design concise surveys, ensure anonymity where appropriate, and complement survey data with incident metrics. Treat early data as directional rather than definitive and plan for iterative improvement.</p>
+  <p>When an integrity gap appears, course-correct by commissioning an independent review, clarifying expectations in writing, and updating reporting or oversight arrangements. Publicly acknowledge the steps taken and share learning so the organization can rebuild credibility in a measured way, consistent with governance guidance and best practice.</p>
+  <h2>Practical examples and scenarios: sample plans for different settings</h2>
+  <p>Small team leader example: a team lead in a private firm starts with a 30-60-90 plan that begins with a personal self-assessment and a brief team values statement, follows with a small-scale anonymous feedback run in month two, and uses a simple incident log to spot recurring problems. After 90 days, the leader reviews patterns and adjusts team meeting norms based on feedback. This approach mirrors practitioner recommendations for rapid pilots and iterative learning <a href="https://www.shrm.org/resourcesandtools/tools-and-samples/toolkits/pages/buildinganethicalworkplace.aspx" target="_blank" rel="noopener">SHRM toolkit</a>.</p>
+  <p>Public-sector manager example: a public manager uses the OECD guidance to align codes of conduct and to set up multiple reporting channels that include an independent review desk. The manager pairs policy updates with staff briefings and periodic published summaries of anonymized outcomes to maintain public accountability while protecting individuals.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+  <p>Private-sector HR pilot example: HR launches a pilot that pairs leader coaching with updated reporting protocols, collects 360 feedback and incident metrics over six months, and measures changes in response rates and specific survey items. The pilot design explicitly plans for a controlled expansion if early signals show consistent improvement <a href="https://www.ibe.org.uk/publications/integrity-frameworks-2025.html" target="_blank" rel="noopener">Institute of Business Ethics guidance</a>.</p>
+  <h2>Next steps: sustaining integrity and measuring long-term progress</h2>
+  <p>To sustain integrity, embed checks into routine processes such as onboarding, performance reviews, and leadership development programs. Making integrity part of established organizational rhythms reduces the risk that it becomes a one-off project and helps normalize desired behaviors over time <a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">OECD guidance on ethics</a>.</p>
+  <p>Pair short-term pilots with longer-term measurement plans. Use periodic reviews to decide whether to scale, adapt, or retire interventions. Keep reporting simple and focused on a few high-quality indicators rather than burdening teams with excessive metrics.</p>
+  <p>Open questions remain about the long-term impact of training versus structural reform and about standard metrics that work across sectors. Organizations are encouraged to run local pilot evaluations and to share findings with peers to support broader learning and continuous improvement.</p>
+  <p>For readers in Florida's civic and business communities who want to learn more about local candidates' stated values, <a href="https://michaelcarbonara.com/republican-candidate-for-congress-michael-car/" target="_blank" rel="noopener">candidate profiles</a> and campaign statements can provide context; for example, campaign pages often describe a candidate's emphasis on service, accountability, and economic opportunity without promising outcomes.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-tom76o" class="faq-toggle" /><label for="faq-tom76o" class="faq-summary" role="button" tabindex="0">How do I start measuring integrity in my team?</label><div class="faq-content"><p>Begin with a simple baseline: a short self-reflection for leaders, a concise 360 feedback run, and an incident log. Use combined indicators to form a pilot baseline and review results after 30 to 90 days.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-7t2x5h" class="faq-toggle" /><label for="faq-7t2x5h" class="faq-summary" role="button" tabindex="0">Can training alone improve leader integrity?</label><div class="faq-content"><p>Training helps raise awareness but is rarely sufficient by itself; pairing leader coaching with clear policies and reporting channels improves the likelihood of lasting change.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-2ch4vd" class="faq-toggle" /><label for="faq-2ch4vd" class="faq-summary" role="button" tabindex="0">How often should 360-degree feedback be run?</label><div class="faq-content"><p>For most teams, twice a year provides useful intervals for learning without survey fatigue, though frequency should be tailored to context and pilot results.</p></div></section>
+</section>
+
+<section class="article-ending">Sustaining integrity requires regular review and modest, measurable steps. Commit to short pilots, keep data simple, and make transparency and due process part of enforcement so improvements are credible and durable.
+
+Where questions remain, share local findings with peers and governance bodies to contribute to broader learning rather than relying on any single intervention as a guaranteed solution.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://doi.org/10.1016/j.leaqua.2005.03.002" target="_blank" rel="noopener">https://doi.org/10.1016/j.leaqua.2005.03.002</a></li><li><a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">https://www.oecd.org/gov/ethics/</a></li><li><a href="https://www.gallup.com/workplace/349484/state-of-the-global-workplace.aspx" target="_blank" rel="noopener">https://www.gallup.com/workplace/349484/state-of-the-global-workplace.aspx</a></li><li><a href="https://hbr.org/2025/03/building-trust-as-a-leader" target="_blank" rel="noopener">https://hbr.org/2025/03/building-trust-as-a-leader</a></li><li><a href="https://www.shrm.org/resourcesandtools/tools-and-samples/toolkits/pages/buildinganethicalworkplace.aspx" target="_blank" rel="noopener">https://www.shrm.org/resourcesandtools/tools-and-samples/toolkits/pages/buildinganethicalworkplace.aspx</a></li><li><a href="https://www.ibe.org.uk/publications/integrity-frameworks-2025.html" target="_blank" rel="noopener">https://www.ibe.org.uk/publications/integrity-frameworks-2025.html</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://sites.utexas.edu/curtispe/2020/02/25/integrity-self-assessment-tool/" target="_blank" rel="noopener">https://sites.utexas.edu/curtispe/2020/02/25/integrity-self-assessment-tool/</a></li><li><a href="https://www.opm.gov/policy-data-oversight/assessment-and-selection/other-assessment-methods/integrityhonesty-tests/" target="_blank" rel="noopener">https://www.opm.gov/policy-data-oversight/assessment-and-selection/other-assessment-methods/integrityhonesty-tests/</a></li><li><a href="https://www.psychometrics.com/mbtiblog/selection/integrity-testing-selecting-employees/" target="_blank" rel="noopener">https://www.psychometrics.com/mbtiblog/selection/integrity-testing-selecting-employees/</a></li><li><a href="https://michaelcarbonara.com/survey/" target="_blank" rel="noopener">https://michaelcarbonara.com/survey/</a></li><li><a href="https://michaelcarbonara.com/republican-candidate-for-congress-michael-car/" target="_blank" rel="noopener">https://michaelcarbonara.com/republican-candidate-for-congress-michael-car/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
