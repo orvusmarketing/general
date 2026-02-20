@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>How much has the cost of living gone up in 12 months? — A practical guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #8b202b; /* darker hover fallback */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(11,38,100,0.94);
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+      border-radius: var(--radius);
+      background: transparent !important;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.88); margin-bottom: 1.2rem; }
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:1rem; margin:1.6rem 0; }
+    .article-body .highlight-card{ background: linear-gradient(135deg, rgba(255,255,255,.03), rgba(255,255,255,.06)); border-left:4px solid var(--accent); padding:1rem; color: var(--text-color); font-weight:700; border:1px solid rgba(255,255,255,.12); }
+    .article-body .side-by-side{ display:flex; gap:1rem; align-items:flex-start; margin:1.6rem 0; }
+    .article-body .side-by-side img{ max-width:320px; height:auto; display:block; }
+    .article-body .product-image-right{ flex-direction:column; align-items:center; }
+    .article-body .tool-block{ background: linear-gradient(135deg, rgba(255,255,255,.03), rgba(255,255,255,.06)); border-left:4px solid var(--accent); border:1px solid rgba(255,255,255,.12); padding:1rem; }
+    .article-body .faq-accordion{ border-left:4px solid var(--accent); border:1px solid rgba(255,255,255,.12); padding:0; }
+    .article-body .faq-summary{ color: var(--text-color); font-weight:800; padding:1rem; display:block; }
+    .article-body .faq-content{ color: rgba(255,255,255,.92); padding:1rem; }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/rising-cost-of-living-in-america.jpg" alt="Illustration for How much has the cost of living gone up in 12 months?" />
+        </div>
+        <h1 class="title">How much has the cost of living gone up in 12 months? — A practical guide</h1>
+        <p class="subline">A practical guide to locating and interpreting the official 12-month consumer price change.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/rising-cost-of-living-in-america-12-month-change/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">This guide helps readers find and interpret the official 12-month change in the rising cost of living in america. It focuses on the government sources and straightforward steps a reporter or concerned resident can follow to compute or verify the published percent change.
+
+The article explains which BLS and BEA products to cite, the calculation method, the difference between CPI and PCE, the main component drivers, and how to check regional variation without inventing numbers.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">The BLS CPI monthly news release is the primary source for the headline 12-month percent change.</span></div><div class="highlight-card"><span class="highlight-text">BEA&#39;s PCE price index uses different weights and is the Federal Reserve&#39;s preferred policy gauge.</span></div><div class="highlight-card"><span class="highlight-text">Regional price parities and BLS regional CPIs show local differences that national figures can mask.</span></div>
+     </div>
+  <h2>What economists and agencies mean by the rising cost of living in america</h2>
+<p>The phrase rising cost of living in america refers to measured increases in consumer prices over time, usually reported as a percentage change. For headline public reporting, economists and journalists commonly use a 12-month percent change to describe how prices now compare with the same month a year earlier, and that percent is derived from published consumer price indexes.</p>
+<p>The Bureau of Labor Statistics publishes the monthly Consumer Price Index, which is the standard BLS series reporters quote for a national headline figure and for component breakdowns, and the BLS documentation explains the 12-month comparison method in plain terms <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">Consumer Price Index home page</a></p>
+<div class="cta-section"><h3 class="cta-headline">Stay informed and get involved with Michael Carbonara</h3><div class="cta-intro"><p>Check the latest BLS monthly CPI news release to see the published 12-month percent change for the series you need.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the Campaign</a></div>
+<p>The BLS CPI and the BEA Personal Consumption Expenditures price index are different official measures. The BEA PCE uses different weights and coverage, and the Federal Reserve often cites the PCE for policy analysis, so both names appear in careful reporting <a href="https://www.bea.gov/data/prices-inflation/personal-consumption-expenditures-price-index" target="_blank" rel="noopener">Personal Consumption Expenditures Price Index</a></p>
+<p>Reporters favor the 12-month figure because it gives a simple year-over-year comparison that avoids regular seasonal patterns and is easy for readers to understand. When you see a headline about how much prices have changed in the past year, it is usually this 12-month percent change that is being quoted.</p>
+
+<h2>Where to get the official 12-month headline number (BLS monthly CPI release)</h2>
+<p>The authoritative source for a quick, article-ready national 12-month percent change is the BLS CPI monthly news release, which carries index levels and the published 12-month percent change for headline and many component series <a href="https://www.bls.gov/news.release/cpi.nr0.htm" target="_blank" rel="noopener">Consumer Price Index Summary - monthly news release</a></p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1ifu65pvDD6EEWj8rDaOzqsi9rIL8czgw=s1200" alt="Minimalist vector infographic with produce icon fuel pump and upward trend bars on deep navy background representing rising cost of living in america" /></a>
+      <div class="side-text"><p>The BLS release shows both seasonally adjusted and not-seasonally-adjusted series and includes component tables for categories such as food, energy and shelter. Use the release title and date when you cite it in text.</p></div>
+    </div>
+
+<p>Sample attribution you can copy and paste: "According to the BLS monthly CPI news release, the 12‑month change in the CPI for All Urban Consumers was X percent in [month]." Replace X with the published figure from the release and include the release date in parentheses when possible.</p>
+
+<h2>How to calculate the 12-month percent change and use seasonal adjustment</h2>
+<p>Compute the 12-month percent change with the standard formula: (Index_this_month / Index_same_month_prior_year − 1) × 100. Each term refers to the published index level for the series and month you choose to compare, and the BLS documentation gives this formula and guidance for which series to use <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">Consumer Price Index home page</a></p>
+<p>Seasonally adjusted series remove regular monthly patterns and are often used to compare short-term trends; not-seasonally-adjusted series show the raw index level and are appropriate for strict year-over-year comparisons if you want the unadjusted path. The BLS release provides both, and the documentation explains when each is appropriate.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-0jtuwj" class="faq-toggle" checked /><label for="faq-0jtuwj" class="faq-summary" role="button" tabindex="0">How much has the cost of living gone up in 12 months?</label><div class="faq-content"><p>To know the current 12-month change, check the latest BLS monthly CPI news release for the published 12-month percent change or compute it using the formula (Index_this_month / Index_same_month_prior_year − 1) × 100, and consider the BEA PCE for complementary context.</p></div></section>
+<p>Common pitfalls include mixing an adjusted series for one month with an unadjusted series for another, or quoting a month-to-month percentage as if it were the 12-month change. Stick to one series type and clearly label whether the figure is seasonally adjusted or not.</p>
+
+<h2>CPI versus PCE: which measure to show and why the Fed prefers PCE</h2>
+<p>CPI and PCE differ mainly in weighting and coverage. CPI is a BLS consumer price index with its own expenditure weights and item definitions, while the BEA PCE uses broader expenditure measures and a different formula for weights, so the two series can report different levels and growth rates <a href="https://www.bea.gov/data/prices-inflation/personal-consumption-expenditures-price-index" target="_blank" rel="noopener">Personal Consumption Expenditures Price Index</a></p>
+<p>The Federal Reserve tends to prefer the PCE price index for policy analysis because its weighting method and scope capture changes in consumer spending and substitution differently than CPI; when describing that preference, attribute it to the Federal Reserve and the BEA explanation <a href="https://www.federalreserve.gov/monetarypolicy.htm" target="_blank" rel="noopener">Why the Federal Reserve watches the PCE price index</a></p>
+
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<p>If your audience needs context, present both the CPI 12-month change and the PCE price index side by side and label each clearly. For many news headlines the BLS CPI release is the first-stop source, with PCE offered as a complementary series for policy context. For additional commentary on economic themes, see the site's American Prosperity section <a href="https://michaelcarbonara.com/american-prosperity/" target="_blank" rel="noopener">American Prosperity</a>.</p>
+
+<h2>The main drivers of recent changes: shelter, food and energy</h2>
+<p>Three categories frequently drive short-term moves in the headline cost of living: shelter (including owners' equivalent rent and rent), food, and energy. These categories account for a large share of month-to-month and 12-month variation in headline indexes according to agency component data <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">Consumer Price Index home page</a></p>
+<p>Shelter usually moves more slowly but carries a high weight in the CPI, so it can dominate the headline when it changes. Food and energy are more volatile and can cause sharp short-term swings in the overall percent change, so many stories mention those components explicitly when they move noticeably.</p>
+
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>To explain the household impact, mention specific component indexes from the BLS or the USDA ERS food price analysis for readers who care most about groceries or fuel costs <a href="https://www.ers.usda.gov/topics/food-prices-costs/food-prices/" target="_blank" rel="noopener">Food price outlook and consumer food price indexes</a></p>
+
+<h2>Regional and state variation: why national figures can mask local experience</h2>
+<p>National 12-month figures can mask meaningful variation across states and metro areas. The BEA's Regional Price Parities and the BLS regional CPI series quantify those local differences, which reporters should check when covering state or city-level experience <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-local" target="_blank" rel="noopener">Regional Price Parities by state and local area</a></p>
+
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Steps to find local RPPs or regional CPI data</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-4392i1-0">
+                        <input id="tool-check-4392i1-0" type="checkbox" />
+                        <span>State or region</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-c4wfoy-1">
+                        <input id="tool-check-c4wfoy-1" type="checkbox" />
+                        <span>Series name</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-syohmc-2">
+                        <input id="tool-check-syohmc-2" type="checkbox" />
+                        <span>Reference period</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Verify series and date</p>
+            </div>
+
+<p>If you report a local percentage, name the specific series and reference period you used and consider adding a short note explaining that local price levels and inflation rates differ from the national CPI.</p>
+
+<h2>How to present the headline number responsibly in an article or post</h2>
+<p>Be explicit in your headline and lead about which index you are using and the month referenced. A safe headline line reads: "According to the BLS monthly CPI news release, the 12-month change in the CPI for All Urban Consumers was X% in [month]" and you should replace X with the published number from the release <a href="https://www.bls.gov/news.release/cpi.nr0.htm" target="_blank" rel="noopener">Consumer Price Index Summary - monthly news release</a></p>
+<p>Round carefully and provide context. Small differences in rounding can change a short headline, so note exact figures in body copy and explain component drivers such as shelter, food or energy when relevant. When comparing CPI and PCE, label each clearly so readers know which series each number comes from.</p>
+
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<p>Two short attribution templates: "According to the BLS monthly CPI news release (date), the 12-month change was X percent." and "The BEA reports the PCE price index at Y percent for the same period." Use conditional phrasing when describing likely effects on household budgets rather than asserting outcomes.</p>
+
+<h2>What a 12-month change does and does not tell you about household budgets</h2>
+<p>A headline 12-month CPI change is an average across many items and may not reflect any one household's experience, especially if a household spends a larger share of income on rapidly changing items like fuel or groceries. Component-level indexes give a clearer view of those specific pressures <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">Consumer Price Index home page</a></p>
+<p>If you spend more on rent than the average household, shelter changes will matter more to you. If fuel or groceries take a bigger share of your budget, check the BLS component tables or USDA ERS food price analysis to see those specific indexes and trends <a href="https://www.ers.usda.gov/topics/food-prices-costs/food-prices/" target="_blank" rel="noopener">Food price outlook and consumer food price indexes</a></p>
+<p>Practical budget checks include comparing your recent spending categories with the CPI component weights and tracking the component indexes that match your biggest monthly expenses. That approach gives readers a more personalized sense of how the rising cost of living in america affects their household.</p>
+
+<h2>Common reporting and interpretation mistakes to avoid</h2>
+<p>Avoid quoting different indexes without labeling them and do not present month-to-month figures as if they were 12-month changes; these are common errors that mislead readers and violate basic statistical clarity <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">Consumer Price Index home page</a></p>
+<p>Do not mix seasonally adjusted and not-seasonally-adjusted series in the same comparison. The BLS guidance explains why seasonality adjustments matter, and mixing formats can produce incorrect conclusions <a href="https://www.bls.gov/news.release/cpi.nr0.htm" target="_blank" rel="noopener">Consumer Price Index Summary - monthly news release</a></p>
+<p>Also avoid attributing complex economic outcomes directly to a single monthly percent change. A short headline number is a snapshot, not a causal explanation of broader household or labor market trends.</p>
+
+<h2>A simple, repeatable workflow: find the latest CPI, compute, compare to PCE and local data</h2>
+<p>Step 1: Open the latest BLS CPI monthly news release and note the series name and whether the series is seasonally adjusted or not. The release provides both index levels and the published 12-month percent change for many series <a href="https://www.bls.gov/news.release/cpi.nr0.htm" target="_blank" rel="noopener">Consumer Price Index Summary - monthly news release</a></p>
+<p>Step 2: If you compute the change yourself, apply the formula (Index_this_month / Index_same_month_prior_year − 1) × 100 to the index levels you noted. Clearly state the series and adjustment you used in any published figure.</p>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text">Step 3: For policy context check the BEA PCE page and for local reporting consult BEA Regional Price Parities or the appropriate BLS regional CPI series. Note the series name and reference period in captions or notes so readers can verify your source <a href="https://www.bea.gov/data/prices-inflation/personal-consumption-expenditures-price-index" target="_blank" rel="noopener">Personal Consumption Expenditures Price Index</a></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1bJWIY3MXsOctS-klvbPcHAjrsHNyrpWG=s1200" alt="Minimal 2D vector infographic showing shelter food and energy icons with simple bars indicating changes in costs in a Michael Carbonara palette rising cost of living in america" /></a>
+    </div>
+
+<p>Suggested caption wording: "Source: BLS monthly CPI news release (series name, seasonally adjusted or not), compiled by author on [date]." That line documents the method and shows readers where to find the original data.</p>
+
+<h2>Practical examples and scenarios (how to run the numbers without inventing current figures)</h2>
+<p>Use placeholders when illustrating a calculation in copy. For example: "If Index_month = A and Index_month_prior_year = B, then 12-month change = (A / B − 1) × 100." Replace A and B with the index levels from the BLS release to produce the actual percentage <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">Consumer Price Index home page</a></p>
+<p>To show a regional example without new data, write: "According to BEA Regional Price Parities for [state], local price levels differ from the national average; replace [state] and the placeholder value with the latest RPP figure from BEA." That phrasing explains the comparison while avoiding invented numbers <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-local" target="_blank" rel="noopener">Regional Price Parities by state and local area</a></p>
+<p>Always remind readers and editors not to guess national or local percentage points. The correct practice is to pull the latest published figures from BLS or BEA for any numeric claim. You can also consult the FRED CPI series for downloadable time series data <a href="https://fred.stlouisfed.org/series/CPIAUCSL" target="_blank" rel="noopener">Consumer Price Index on FRED</a>.</p>
+
+<h2>How to cite and attribute these statistics correctly in news copy</h2>
+<p>Three short attribution templates to use: "According to the BLS monthly CPI news release (date), the 12‑month change was X percent." "The BEA reports the PCE price index at Y percent for the same period." "The Federal Reserve often references the PCE price index for policy analysis." Use the exact page title and release date when adding a link in web copy <a href="https://www.bls.gov/news.release/cpi.nr0.htm" target="_blank" rel="noopener">Consumer Price Index Summary - monthly news release</a></p>
+<p>Link to the exact BLS or BEA page you used and include the release date in parentheses to make verification straightforward. Avoid language that implies policy guarantees or certain outcomes when describing likely effects on household budgets.</p>
+
+<h2>Quick glossary of technical terms readers may see</h2>
+<p>CPI: The Consumer Price Index is the BLS's measure of changes in the price of a fixed basket of goods and services for urban consumers; see the BLS documentation for details <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">Consumer Price Index home page</a></p>
+<p>PCE: The Personal Consumption Expenditures price index is the BEA measure of prices for consumer spending and uses different weighting and coverage than CPI; the Federal Reserve often refers to PCE in policy discussions <a href="https://www.bea.gov/data/prices-inflation/personal-consumption-expenditures-price-index" target="_blank" rel="noopener">Personal Consumption Expenditures Price Index</a></p>
+<p>Seasonally adjusted: A series processed to remove regular seasonal patterns so month-to-month comparisons are clearer. Owners' equivalent rent: A CPI component that estimates how much homeowners would pay to rent their home and that carries a large weight in shelter measures.</p>
+
+<h2>Conclusion and next steps: where to check for the latest number</h2>
+<p>For a current headline 12-month percent change, check the BLS monthly CPI news release as your primary source and consider the BEA PCE page for complementary policy context <a href="https://www.bls.gov/news.release/cpi.nr0.htm" target="_blank" rel="noopener">Consumer Price Index Summary - monthly news release</a></p>
+<p>Follow the step-by-step workflow in this article to compute or verify a number, and consult BEA Regional Price Parities or BLS regional CPI series when reporting on state or metro experience. See the site news for related posts <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news</a>.</p>
+<p>Careful attribution, clear labeling of series, and brief component context will make your reporting more useful to readers who want to understand how the rising cost of living in america relates to their household budgets. Learn more about the author on the about page <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">About</a>.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-ga18yz" class="faq-toggle" /><label for="faq-ga18yz" class="faq-summary" role="button" tabindex="0">What is the standard 12-month measure for cost-of-living changes?</label><div class="faq-content"><p>Journalists typically use the BLS Consumer Price Index 12-month percent change as the headline measure; the BEA PCE is a common complementary series for policy context.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-0xc47z" class="faq-toggle" /><label for="faq-0xc47z" class="faq-summary" role="button" tabindex="0">Should I use seasonally adjusted or unadjusted CPI values?</label><div class="faq-content"><p>Use seasonally adjusted series to compare short-term trends; use unadjusted year-over-year values if you want the raw 12-month change, and always state which you used.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-6ffvru" class="faq-toggle" /><label for="faq-6ffvru" class="faq-summary" role="button" tabindex="0">Where can I find local price differences?</label><div class="faq-content"><p>Check BEA Regional Price Parities and the BLS regional CPI series for state and metro-level differences and cite the exact series and reference period.</p></div></section>
+</section><section class="article-ending">Check the BLS monthly CPI release for the official published 12-month percent change and use BEA PCE or regional price parity pages to add policy context or local detail. Name the series and reference period you used so readers can verify your figures.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">https://www.bls.gov/cpi/</a></li><li><a href="https://www.bea.gov/data/prices-inflation/personal-consumption-expenditures-price-index" target="_blank" rel="noopener">https://www.bea.gov/data/prices-inflation/personal-consumption-expenditures-price-index</a></li><li><a href="https://www.bls.gov/news.release/cpi.nr0.htm" target="_blank" rel="noopener">https://www.bls.gov/news.release/cpi.nr0.htm</a></li><li><a href="https://michaelcarbonara.com/american-prosperity/" target="_blank" rel="noopener">https://michaelcarbonara.com/american-prosperity/</a></li><li><a href="https://www.ers.usda.gov/topics/food-prices-costs/food-prices/" target="_blank" rel="noopener">https://www.ers.usda.gov/topics/food-prices-costs/food-prices/</a></li><li><a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-local" target="_blank" rel="noopener">https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-local</a></li><li><a href="https://www.federalreserve.gov/monetarypolicy.htm" target="_blank" rel="noopener">https://www.federalreserve.gov/monetarypolicy.htm</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://fred.stlouisfed.org/series/CPIAUCSL" target="_blank" rel="noopener">https://fred.stlouisfed.org/series/CPIAUCSL</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
