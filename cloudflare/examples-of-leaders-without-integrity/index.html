@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What is a leader without integrity?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736;     /* from --mc-accent */
+      --accent-hover: #9c2330; /* derived darker variant */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664;    /* from --mc-bg */
+      --surface-2: #0b2664;
+      --radius: 0px;        /* from --mc-radius */
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1-YME3BO3txXYk3dV74zry_v6bpLtZczu" alt="What is a leader without integrity?" />
+        </div>
+        <h1 class="title">What is a leader without integrity?</h1>
+        <p class="subline">Neutral, evidence-based guidance to detect and respond to leadership integrity concerns.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/examples-of-leaders-without-integrity/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">Integrity matters because leaders shape norms. This article defines what a leader without integrity looks like and why the distinction between isolated error and pattern is important.
+
+It explains common behaviors that enable integrity failures, summarizes the evidence about outcomes, and offers practical steps voters and organizations can take to detect and respond. The aim is neutral, evidence based guidance for readers who want primary sources and clear criteria.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">A leader without integrity typically shows a repeated mismatch between stated values and observable actions.</span></div><div class="highlight-card"><span class="highlight-text">Surveys link low leadership integrity to higher rates of employee misconduct and weaker ethical climates.</span></div><div class="highlight-card"><span class="highlight-text">System level measures like clear codes, reporting channels and independent oversight reduce integrity gaps.</span></div>
+     </div>
+  <h2>What we mean by a leader without integrity</h2>
+<p>A leader without integrity is best understood as a persistent mismatch between stated values and observable actions, where role modeling and consistent behavior are absent. The literature states that ethical leadership depends on alignment of words and actions and on leaders serving as social models for acceptable conduct, which makes the mismatch central to the definition, and this perspective helps explain why some patterns recur across organizations <a href="https://doi.org/10.1177/0149206305277799" target="_blank" rel="noopener">Ethical leadership: A social learning perspective</a></p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Learn more and consult primary documents</h3><div class="cta-intro"><p>For readers seeking primary sources and longer reviews, consult the cited scholarly and compliance documents and official integrity guidance to verify claims and context.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign updates</a></div>
+<p>Scholars use terms like ethical leadership and social learning to describe how leaders influence norms and behavior. Academic work emphasizes that integrity is visible when statements, decisions and daily practices are coherent, and that habitual divergence between talk and action is what research identifies as a leader lacking integrity <a href="https://link.springer.com/article/10.1023/B:SOCI.0000047582.10485.23" target="_blank" rel="noopener">Ethical Fading: The Role of Self ADDeception in Unethical Behavior</a></p>
+<p>In practice, defining a leader without integrity does not require proof of intent. Instead, researchers point to repeated patterns of inconsistency, selective rule enforcement and signals that ethical standards are negotiable. This framing is useful for voters and stakeholders who need neutral criteria to observe and record concerns without relying on conjecture</p>
+
+<h2>Academic definitions and why alignment of words and actions matters</h2>
+<p>Academic definitions center on social learning and role modeling. Researchers explain that leaders set behavioral expectations by what they tolerate and what they do, not only by what they say. When leaders contradict their stated values repeatedly, followers learn that the stated values are symbolic rather than operational, which weakens organizational norms <a href="https://doi.org/10.1177/0149206305277799" target="_blank" rel="noopener">Ethical leadership: A social learning perspective</a></p>
+<p>Measuring integrity in leaders often combines observed behavior, reports from followers and documented decisions. These measures are not perfect, but they aim to capture alignment over time rather than single isolated events. That emphasis on patterns helps distinguish ordinary mistakes from a persistent integrity gap</p>
+
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<h2>Why integrity in leadership matters for organizations and communities</h2>
+<p>Large workplace ethics surveys report that poor leadership integrity correlates with higher rates of employee misconduct and weaker ethical climates. For organizations this association raises operational and compliance concerns <a href="https://www.ethics.org/global-business-ethics-survey/" target="_blank" rel="noopener">Global Business Ethics Survey 2023</a> (see <a href="https://zengerfolkman.com/articles/can-honest-leaders-rebuild-integrity/" target="_blank" rel="noopener">Can Leaders Rebuild Integrity?</a>)</p>
+<p>Beyond compliance, a noticeable integrity gap at the top can erode stakeholder trust and create reputational exposure. Practitioner reviews note that when leaders fail to correct harmful patterns, organizations face downstream legal, reputational and operational harms that can be costly to address <a href="https://hbr.org/2019/04/what-to-do-about-toxic-employees" target="_blank" rel="noopener">What to Do About Toxic Employees</a></p>
+
+<h2>Common behaviors that signal a leader may lack integrity</h2>
+<p>Behavioral patterns to watch for often include information control, selective rule enforcement, retaliation against critics and self ADjustifying narratives from the leader. These behaviors are repeatedly documented as mechanisms that allow integrity failures to persist <a href="https://link.springer.com/article/10.1023/B:SOCI.0000047582.10485.23" target="_blank" rel="noopener">Ethical Fading: The Role of Self ADDeception in Unethical Behavior</a></p>
+<p>In day to day settings, these patterns can look like withholding relevant information from a decision record, bending rules for favored people, discouraging employees from raising concerns, or framing breaches as necessary exceptions. Short, observable examples make it easier to track whether an issue is isolated or part of a pattern</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-upx5g5" class="faq-toggle" checked /><label for="faq-upx5g5" class="faq-summary" role="button" tabindex="0">What are the observable signs that a leader may lack integrity?</label><div class="faq-content"><p>Observable signs include a persistent mismatch between words and actions, information control, selective enforcement, retaliation against critics and repeated failure to correct problems.</p></div></section>
+<p>When several of these behaviors appear together, the literature suggests they function as a set of enabling practices that reduce accountability and normalize rule breaking <a href="https://hbr.org/2019/04/what-to-do-about-toxic-employees" target="_blank" rel="noopener">What to Do About Toxic Employees</a></p>
+
+<h3>How these behaviors show up day to day, examples of leaders without integrity</h3>
+<p>Information control may be visible as selective sharing of meeting notes. Selective enforcement shows up when the leader punishes minor infractions by some employees while excusing comparable behavior by others. Retaliation appears when legitimate criticism is met with demotion or exclusion rather than investigation. These concrete patterns help observers gather evidence without resorting to speculation <a href="https://link.springer.com/article/10.1023/B:SOCI.0000047582.10485.23" target="_blank" rel="noopener">Ethical Fading: The Role of Self ADDeception in Unethical Behavior</a></p>
+
+<h2>How the literature explains why these behaviors spread</h2>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1jWmUw07HnVyFyyEvQVyTpY8dPzp4nouV=s1200" alt="Minimalist 2D vector close up of stacked official documents and a pen on a navy background representing examples of leaders without integrity" /></a>
+      <div class="side-text"><p>Social learning and role modeling explain much of the spread. When leaders act in ways that condone exceptions, employees infer that the exceptions are acceptable, and the behavior replicates through imitation and adjusted norms. This social learning perspective is central to construct development work on leadership integrity <a href="https://doi.org/10.1177/0149206305277799" target="_blank" rel="noopener">Ethical leadership: A social learning perspective</a> (see <a href="https://cclinnovation.org/wp-content/uploads/2020/03/ironyofintegrity.pdf" target="_blank" rel="noopener">The Irony of Integrity</a>)</p></div>
+    </div>
+<p>Organizational incentives and selective enforcement add a structural layer. If reward systems prioritize short term gains without transparent oversight, they can unintentionally encourage corners to be cut. Over time, small deviations accumulate and can become the operating norm unless checked by independent processes</p>
+
+<h2>What evidence shows about outcomes when leaders lack integrity</h2>
+<p>Survey results across sectors find a consistent association between leadership integrity deficits and higher misconduct rates. These surveys do not always claim direct causation, but they document reliable links between poor leadership behavior and a weaker ethical climate in organizations <a href="https://www.ethics.org/global-business-ethics-survey/" target="_blank" rel="noopener">Global Business Ethics Survey 2023</a></p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>Case analyses and practitioner pieces describe reputational, legal and operational harms following unchecked integrity failures. Such reviews caution that reputational damage often follows visible failures to act and that rebuilding trust requires clear, documented corrective steps and oversight <a href="https://hbr.org/2019/04/what-to-do-about-toxic-employees" target="_blank" rel="noopener">What to Do About Toxic Employees</a></p>
+
+<h2>System level responses recommended by international and public sector guidance</h2>
+<p>International guidance emphasizes system level measures such as clear codes of conduct, accessible reporting channels and independent oversight as core tools to reduce integrity gaps. These measures work by setting baseline expectations and creating consequences when leaders fall short <a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">Public Integrity and Ethics Resources</a></p>
+<p>Such systems do not replace culture work. The guidance advises combining formal structures with routine ethical climate checks and transparent enforcement so that standards are both clear and lived in practice</p>
+
+<h2>Practical mitigations organizations can put in place</h2>
+<p>Practical responses commonly recommended include safe reporting channels, strengthened whistleblower protections, routine ethics climate assessments and publicly tracked corrective actions. These measures aim to make early signals visible and to ensure remedial steps are recorded and verifiable <a href="https://www.ethics.org/global-business-ethics-survey/" target="_blank" rel="noopener">Global Business Ethics Survey 2023</a></p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">A quick internal checklist to detect leadership integrity gaps</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-s9v6nk-0">
+                        <input id="tool-check-s9v6nk-0" type="checkbox" />
+                        <span>Consistency of public statements</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-4k9i2a-1">
+                        <input id="tool-check-4k9i2a-1" type="checkbox" />
+                        <span>Evidence of selective enforcement</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-9lyrn5-2">
+                        <input id="tool-check-9lyrn5-2" type="checkbox" />
+                        <span>Reports of retaliation</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-pgg1yi-3">
+                        <input id="tool-check-pgg1yi-3" type="checkbox" />
+                        <span>Presence of reporting channels</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-3mfwg9-4">
+                        <input id="tool-check-3mfwg9-4" type="checkbox" />
+                        <span>Documentation of corrective actions</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use with independent review</p>
+            </div>
+<p><a href="https://michaelcarbonara.com/events/" target="_blank" rel="noopener">Targeted training</a> that addresses cognitive biases which enable ethical fading is also advised. Training alone is not sufficient, but when paired with transparent metrics and independent oversight it supports sustained change <a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">Public Integrity and Ethics Resources</a></p>
+
+<h2>How to evaluate leaders and decide when to act</h2>
+<p><a href="https://www.emerald.com/ijpl/article/doi/10.1108/IJPL-08-2025-0144/1338037/When-leaders-fail-the-pathology-of-conscience-dust" target="_blank" rel="noopener">Decision criteria</a> for boards, HR and stakeholders should focus on pattern of behavior, impact on stakeholders, evidence of concealment and failure to correct problems. These criteria help distinguish isolated errors from systemic integrity gaps and guide proportionate responses <a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">Public Integrity and Ethics Resources</a></p>
+<p>Independent review or oversight bodies are recommended when possible. Documenting findings and transparent follow up reduces the risk of ad hoc decisions and helps restore confidence among stakeholders when problems are identified</p>
+
+<h2>Common errors and pitfalls when addressing integrity failures</h2>
+<p>Common mistakes include ignoring early signs, treating systemic patterns as one off problems and failing to protect reporters. These errors often reduce the effectiveness of accountability efforts and allow harmful practices to continue <a href="https://link.springer.com/article/10.1023/B:SOCI.0000047582.10485.23" target="_blank" rel="noopener">Ethical Fading: The Role of Self ADDeception in Unethical Behavior</a></p>
+<p>Other pitfalls are selective enforcement and ad hoc discipline without documentation. The literature advises independent verification and public record keeping when appropriate to avoid those traps and to ensure corrective actions are credible</p>
+
+<h2>Practical examples and scenarios readers can use to test concerns</h2>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Scenario one, a board member notices repeated discrepancies between public statements and internal decisions. Reasonable steps include requesting meeting minutes, asking for documented rationale and seeking an independent review if records are incomplete. Framing questions around evidence helps keep the process focused and neutral <a href="https://hbr.org/2019/04/what-to-do-about-toxic-employees" target="_blank" rel="noopener">What to Do About Toxic Employees</a></p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1AaijoA0hFgwEwUXP3-nn8UKOTRolRl8K=s1200" alt="Minimal 2D vector infographic with shield check and magnifying glass icons on deep blue background illustrating examples of leaders without integrity" /></a>
+    </div>
+<p>Scenario two, an employee reports selective enforcement favoring senior staff. Suggested responses are to record the report, protect the reporter, examine parallel cases and publish findings and corrective steps where confidentiality rules allow. These steps emphasize process and documentation over accusation</p>
+
+<h2>A concise checklist for voters and local stakeholders</h2>
+<p>Five quick checks: compare public statements to documented decisions, note any consistent reports of retaliation, look for transparent decision records, confirm whether corrective actions are publicly tracked and verify that reporting channels exist. These checks point to primary sources to corroborate concerns <a href="https://www.ethics.org/global-business-ethics-survey/" target="_blank" rel="noopener">Global Business Ethics Survey 2023</a></p>
+<p>Primary sources to consult include <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">public filings</a>, official statements and reputable surveys. Use multiple sources to corroborate patterns rather than focusing on a single report</p>
+
+
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<h2>Early warning detection in modern work arrangements and limits of monitoring</h2>
+<p>Remote and hybrid work can obscure traditional early signals, for example by reducing in person oversight and informal reporting. The literature notes that researchers are still assessing how these arrangements change detection and reporting dynamics <a href="https://www.ethics.org/global-business-ethics-survey/" target="_blank" rel="noopener">Global Business Ethics Survey 2023</a></p>
+<p>The trade offs of AI monitoring and reporting tools include benefits for detection but also privacy and legal constraints. The guidance is to combine multiple detection channels with independent oversight and to evaluate monitoring tools against legal standards and organizational values</p>
+
+<h2>Conclusion and steps readers can take next</h2>
+<p>Key indicators of a leader lacking integrity include a persistent mismatch between words and actions, information control, selective enforcement and retaliation. These signs, taken together, point to elevated risk and warrant documented inquiry and independent review <a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">Public Integrity and Ethics Resources</a></p>
+<p>Practical next steps are to consult primary sources, document findings, <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">use formal reporting channels</a> and request independent review when patterns emerge. These measures are about reducing risk and strengthening accountability rather than guaranteeing particular outcomes</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-tcon78" class="faq-toggle" /><label for="faq-tcon78" class="faq-summary" role="button" tabindex="0">How do I tell the difference between a mistake and a pattern of integrity failure?</label><div class="faq-content"><p>Look for repetition and consistent impact across multiple incidents, evidence of concealment or selective enforcement, and failure to correct problems. Patterns, not single errors, indicate a systemic integrity issue.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-x8zfg1" class="faq-toggle" /><label for="faq-x8zfg1" class="faq-summary" role="button" tabindex="0">What should a voter do if they suspect a local leader lacks integrity?</label><div class="faq-content"><p>Collect primary sources such as statements and meeting records, use formal reporting channels when available, and ask elected officials for documented explanations or oversight steps.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-k6s1w6" class="faq-toggle" /><label for="faq-k6s1w6" class="faq-summary" role="button" tabindex="0">Can training alone fix leadership integrity problems?</label><div class="faq-content"><p>Training helps address biases but is not sufficient by itself. It should be paired with transparent metrics, reporting channels and independent oversight to be effective.</p></div></section>
+</section><section class="article-ending">If you see potential integrity gaps, start with documentation and primary sources, then follow formal reporting channels if they exist. Seeking independent review and transparent corrective steps helps protect stakeholders and reduce risk.
+
+These actions are about accountability and risk reduction, not guarantees of specific outcomes.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://doi.org/10.1177/0149206305277799" target="_blank" rel="noopener">https://doi.org/10.1177/0149206305277799</a></li><li><a href="https://link.springer.com/article/10.1023/B:SOCI.0000047582.10485.23" target="_blank" rel="noopener">https://link.springer.com/article/10.1023/B:SOCI.0000047582.10485.23</a></li><li><a href="https://www.ethics.org/global-business-ethics-survey/" target="_blank" rel="noopener">https://www.ethics.org/global-business-ethics-survey/</a></li><li><a href="https://hbr.org/2019/04/what-to-do-about-toxic-employees" target="_blank" rel="noopener">https://hbr.org/2019/04/what-to-do-about-toxic-employees</a></li><li><a href="https://www.oecd.org/gov/ethics/" target="_blank" rel="noopener">https://www.oecd.org/gov/ethics/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://zengerfolkman.com/articles/can-honest-leaders-rebuild-integrity/" target="_blank" rel="noopener">https://zengerfolkman.com/articles/can-honest-leaders-rebuild-integrity/</a></li><li><a href="https://cclinnovation.org/wp-content/uploads/2020/03/ironyofintegrity.pdf" target="_blank" rel="noopener">https://cclinnovation.org/wp-content/uploads/2020/03/ironyofintegrity.pdf</a></li><li><a href="https://www.emerald.com/ijpl/article/doi/10.1108/IJPL-08-2025-0144/1338037/When-leaders-fail-the-pathology-of-conscience-dust" target="_blank" rel="noopener">https://www.emerald.com/ijpl/article/doi/10.1108/IJPL-08-2025-0144/1338037/When-leaders-fail-the-pathology-of-conscience-dust</a></li><li><a href="https://michaelcarbonara.com/events/" target="_blank" rel="noopener">https://michaelcarbonara.com/events/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
