@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What are the key principles of transparency?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens (from provided style) */
+      --text-color: #ffffff; /* --mc-ink */
+      --accent: #ae2736;    /* --mc-accent */
+      --accent-hover: color-mix(in srgb, #ae2736 86%, #000 14%);
+      --line: rgba(255,255,255,.16); /* --mc-line */
+      --surface: #0b2664; /* --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px; /* --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+      margin: 1rem auto;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: 0 14px 34px rgba(0,0,0,.40);
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    /* Link styling adjusted to brand: keep anchor hrefs unchanged */
+    .article-body a{
+      color: var(--text-color);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 750;
+      transition: color .18s ease, text-decoration-color .18s ease, filter .18s ease;
+      word-break: break-word;
+    }
+    .article-body a:hover{ color: var(--accent); text-decoration-color: var(--accent); }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{ border-radius: 0; border-left: 0; border-right: 0; }
+      .content-wrapper{ padding-left: 0; padding-right: 0; }
+      .top, .cta-wrap, .main{ padding-left: clamp(14px, 4.6vw, 20px); padding-right: clamp(14px, 4.6vw, 20px); }
+      .article-body{ max-width: 100%; }
+      .article-body img{ max-width: 100% !important; }
+    }
+
+    /* Agent derived scoped CSS area */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.80); margin-bottom: 2rem; }
+    .article-body .article-ending{ margin-top: 2.6rem; padding-top: 1.2rem; border-top: 1px solid var(--line); font-style: italic; }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/transparency-in-government-procurement.jpg" alt="Key principles of transparency in government procurement" />
+        </div>
+        <h1 class="title">What are the key principles of transparency?</h1>
+        <p class="subline">A practical guide to disclosure standards, checklists, and assessment steps for voters and local practitioners.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/transparency-in-government-procurement-principles/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+          <div class="summary">
+            <p>This article explains the key principles of transparency in government procurement and offers practical checklists and assessment steps. It is intended for voters, civic readers, and local practitioners who want clear, sourced guidance.</p>
+            <p>Michael Carbonara is a candidate whose public information can provide local context for civic engagement. This guide focuses on neutral, evidence-based standards and primary references to help readers evaluate procurement disclosure in their community.</p>
+          </div>
+
+          <div class="article-highlights">
+            <div class="highlight-card"><span class="highlight-text">Transparency means publishing clear, timely, and reusable procurement information across the contracting cycle.</span></div>
+            <div class="highlight-card"><span class="highlight-text">OCDS and machine-readable data improve accessibility and enable automated oversight and analysis.</span></div>
+            <div class="highlight-card"><span class="highlight-text">Disclosure reduces corruption risk when combined with monitoring, enforcement, and civil society engagement.</span></div>
+          </div>
+
+          <h2>What transparency in government procurement means</h2>
+          <p>Transparency in government procurement refers to the practice of publishing clear, timely, and reusable information about public contracting across the full procurement cycle. The open contracting movement defines this approach as making procurement plans, notices, awards, and contracts publicly available so that citizens, businesses, and oversight bodies can access and analyze procurement activity, according to the Open Contracting Partnership <a href="https://www.open-contracting.org/what-is-open-contracting/" target="_blank" rel="noopener">Open Contracting Partnership</a>.</p>
+          <p>Clear disclosure covers more than occasional reports. It means consistent publication of the key documents and data elements that allow third parties to follow a procurement from planning through contract execution. Common items included under transparency are procurement plans, tender notices, award decisions, signed contracts, and bidder information, as described in international guidance <a href="https://www.open-contracting.org/what-is-open-contracting/" target="_blank" rel="noopener">Open Contracting Partnership</a>.</p>
+
+          <div class="side-by-side product-image-right">
+            <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+            <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+          </div>
+
+          <p>Disclosure is necessary but not by itself sufficient. The guidance notes that publication must be paired with oversight and means to verify records so that transparency can support accountability and auditability <a href="https://www.transparency.org/en/our-priorities/public-procurement" target="_blank" rel="noopener">Transparency International</a>.</p>
+
+          <h2>Why transparency matters for public procurement</h2>
+
+          <figure class="special-image-standalone">
+            <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+              <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+            </a>
+          </figure>
+
+          <p>Transparent procurement is intended to improve fairness in access to bidding and to broaden competition. When governments publish opportunities and evaluation criteria, more firms can consider bidding and plan responses, which can improve market access and reduce advantages that arise from closed processes, according to international analysis <a href="https://www.oecd.org/gov/government-at-a-glance-2024/" target="_blank" rel="noopener">OECD Government at a Glance</a>.</p>
+          <p>Transparency also supports oversight by auditors, journalists, and civil society. Public records make it possible to trace decisions, compare awarded prices to market rates, and identify irregularities that merit follow-up, as international guidance explains <a href="https://www.worldbank.org/en/topic/governance/brief/open-contracting" target="_blank" rel="noopener">World Bank open contracting guidance</a>.</p>
+
+          <div class="cta-section">
+            <h3 class="cta-headline">Stay informed and involved with Michael Carbonara</h3>
+            <div class="cta-intro"><p>Consult the primary standards and agency registers listed later to verify what is published and when.</p></div>
+            <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign</a>
+          </div>
+
+          <p>At the same time, disclosure alone does not guarantee better procurement outcomes. Reviews from international bodies show that stronger disclosure practices are linked to lower corruption risk when they are paired with monitoring, enforcement, and active civil society capacity; without these elements, effects vary by context <a href="https://www.oecd.org/gov/government-at-a-glance-2024/" target="_blank" rel="noopener">OECD Government at a Glance</a>.</p>
+          <p>Practitioners should treat transparency as one pillar in a broader integrity framework. Where enforcement is weak or oversight capacity is limited, publication may improve information flows but still leave gaps in accountability, as anti-corruption reviews note <a href="https://www.transparency.org/en/our-priorities/public-procurement" target="_blank" rel="noopener">Transparency International</a>.</p>
+
+          <h2>Core principles and standards: OCDS and the open contracting approach</h2>
+          <p>The Open Contracting Data Standard, known as OCDS, is a machine-readable data specification that maps procurement information to structured fields so data can be reused for oversight and analysis. OCDS is recommended practice for making procurement data accessible and enabling automated checks and dashboards <a href="https://standard.open-contracting.org/latest/en/" target="_blank" rel="noopener">OCDS overview</a>. See the implementation guidance <a href="https://standard.open-contracting.org/latest/en/guidance/" target="_blank" rel="noopener">Guidance - Open Contracting Data Standard</a>.</p>
+          <p>OCDS and the open contracting approach emphasize five operational principles: clarity, accessibility, accountability, fairness, and auditability. Each principle ties to concrete disclosure practices, such as publishing evaluation criteria to support fairness or maintaining versioned contract registers to enable auditability <a href="https://www.worldbank.org/en/topic/governance/brief/open-contracting" target="_blank" rel="noopener">World Bank open contracting guidance</a>.</p>
+
+          <section class="faq-accordion"><input type="checkbox" id="faq-64owg7" class="faq-toggle" checked /><label for="faq-64owg7" class="faq-summary" role="button" tabindex="0">What are the key principles of transparency in government procurement?</label><div class="faq-content"><p>Transparency in government procurement means publishing clear, timely, and reusable contracting information across the procurement cycle, supported by machine-readable standards, audit trails, and oversight mechanisms to enable fair competition and accountability.</p></div></section>
+
+          <p>Clarity means defining which documents and fields are published and ensuring their legal and procedural context is explained. Accessibility focuses on publishing in machine-readable formats and providing search or download options so third parties can analyze and combine records, as the standard explains <a href="https://standard.open-contracting.org/latest/en/" target="_blank" rel="noopener">OCDS overview</a>.</p>
+
+          <p>Accountability refers to linking published data to oversight processes, such as audit trails and complaint mechanisms, while fairness relates to publishing opportunities and criteria so competition is supported. Auditability requires complete recordkeeping and version histories so ex post review is possible, a point emphasized in multilateral guidance <a href="https://www.worldbank.org/en/topic/governance/brief/open-contracting" target="_blank" rel="noopener">World Bank open contracting guidance</a>.</p>
+
+          <h2>Practical checklist: what to publish and when</h2>
+          <p>To meet standard transparency expectations, governments should publish a core set of documents at predictable times. Pre-award disclosures should include procurement plans, tender notices, and clear evaluation criteria so prospective bidders can prepare and compete fairly, according to common assessment checklists <a href="https://www.open-contracting.org/what-is-open-contracting/" target="_blank" rel="noopener">Open Contracting Partnership</a> and the Open Contracting data standard <a href="https://www.open-contracting.org/data-standard/" target="_blank" rel="noopener">Open Contracting Data Standard</a>.</p>
+          <p>At award and post-award stages, publish award notices with prices, bidders lists, signed contracts, and any amendments. Maintain versioned contract registers that record changes and dates so auditors can reconstruct the procurement history, as guidance notes <a href="https://standard.open-contracting.org/latest/en/" target="_blank" rel="noopener">OCDS overview</a>.</p>
+
+          <div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">validate a procurement record against key disclosure items</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-zikpu4-0">
+                        <input id="tool-check-zikpu4-0" type="checkbox" />
+                        <span>Procurement plan</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-dxei1y-1">
+                        <input id="tool-check-dxei1y-1" type="checkbox" />
+                        <span>Tender notice</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-deq3ka-2">
+                        <input id="tool-check-deq3ka-2" type="checkbox" />
+                        <span>Award notice</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-mc6rmq-3">
+                        <input id="tool-check-mc6rmq-3" type="checkbox" />
+                        <span>Signed contract</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-zu5ypy-4">
+                        <input id="tool-check-zu5ypy-4" type="checkbox" />
+                        <span>Version history</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use this checklist for rapid spot checks</p>
+            </div>
+
+          <p>Machine-readable formats matter. Publishing PDF scans on a website is a start, but aligning datasets to OCDS makes the information reusable and easier to analyze at scale. That alignment supports automated indicators and comparisons across procurements <a href="https://standard.open-contracting.org/latest/en/" target="_blank" rel="noopener">OCDS overview</a>. See the World Bank JSON model <a href="https://documents1.worldbank.org/curated/en/744551614955316901/pdf/Open-Contracting-Data-Standard.pdf" target="_blank" rel="noopener">Open Contracting Data Standard PDF</a>.</p>
+          <p>Sequence disclosures so planning information is available early, notices appear on schedule, and award documents and contracts are posted promptly after decisions. Timeliness helps bidders make informed choices and supports prompt oversight <a href="https://www.open-contracting.org/what-is-open-contracting/" target="_blank" rel="noopener">Open Contracting Partnership</a>.</p>
+
+          <h2>How to assess procurement transparency: decision criteria and indicators</h2>
+
+          <div class="side-by-side special-image-left">
+            <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1fE_oEZU4nhobf56108wYNyaSjQB6S2mu=s1200" alt="Minimalist 2D vector infographic of a laptop and document icons showing structured data export on a deep navy background representing transparency in government procurement" /></a>
+            <div class="side-text"><p>Assessment frameworks typically check for a set of observable indicators: published procurement plans, timely tender notices, award decisions with prices, signed contracts, and machine-readable datasets aligned to OCDS. These indicators are commonly used in 2024-2026 reviews and monitoring tools <a href="https://www.oecd.org/gov/government-at-a-glance-2024/" target="_blank" rel="noopener">OECD Government at a Glance</a>.</p></div>
+          </div>
+
+          <p>Key assessment criteria include timeliness, completeness, machine readability, and linkage to oversight mechanisms. Timeliness asks whether a document was published when stakeholders needed it. Completeness checks whether essential fields are filled. Machine readability evaluates whether data can be processed, and linkage assesses whether records connect to audits or complaints <a href="https://standard.open-contracting.org/latest/en/" target="_blank" rel="noopener">OCDS overview</a>.</p>
+          <p>Simple assessment steps for practitioners are practical. Select a sample procurement, locate the procurement plan and tender notice, confirm award details and contract text, and then check for version histories and machine-readable exports. If datasets claim OCDS alignment, validate a sample record against the standard's fields <a href="https://www.open-contracting.org/what-is-open-contracting/" target="_blank" rel="noopener">Open Contracting Partnership</a>.</p>
+          <p>For scoring or reporting, document whether each indicator is present, the date of publication, and notes on any missing fields. Use this evidence to prioritize follow-up actions such as requesting missing contracts, asking for data exports, or seeking audit reviews <a href="https://www.oecd.org/gov/government-at-a-glance-2024/" target="_blank" rel="noopener">OECD Government at a Glance</a>.</p>
+
+          <h2>Common pitfalls and how to avoid them</h2>
+          <p>A common pitfall is publishing documents only as image PDFs or scanned files. That approach limits reusability and prevents automated checks. The recommended mitigation is to publish machine-readable datasets and structured exports aligned to standards like OCDS <a href="https://standard.open-contracting.org/latest/en/" target="_blank" rel="noopener">OCDS overview</a>.</p>
+          <p>Poor data quality and missing version histories also reduce auditability. When contract amendments are not recorded or dates are omitted, it becomes difficult to verify the sequence of decisions. The practical fix is to maintain versioned contract registers and to timestamp each modification so ex post review can reconstruct events, as guidance recommends <a href="https://www.worldbank.org/en/topic/governance/brief/open-contracting" target="_blank" rel="noopener">World Bank open contracting guidance</a>.</p>
+          <p>Weak enforcement and limited civil society capacity are systemic risks. Disclosure works best when independent monitors can use published data. Where local monitoring capacity is low, agencies can support training, publish machine-readable data, and prioritize high-impact disclosures to focus oversight resources, following practitioner guidance <a href="https://www.u4.no/publications/reducing-corruption-risks-in-public-procurement" target="_blank" rel="noopener">U4 guidance</a>.</p>
+
+          <h2>Practical scenarios and brief examples for implementers</h2>
+
+          <div class="side-by-side image-2-right">
+            <div class="side-text"><p>Scenario 1, pre-award publication: A small agency posts its annual procurement plan and a tender notice with evaluation criteria. Because the plan is machine-readable and includes deadlines, firms can schedule proposals and prepare required documents. Publishing the criteria helps bidders target their responses and reduces ambiguity about scoring, which aligns with open contracting practice <a href="https://www.open-contracting.org/what-is-open-contracting/" target="_blank" rel="noopener">Open Contracting Partnership</a>.</p></div>
+            <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1E2jkSeJ8otVEGcCKaHYX9QGyvDjx4PN8=s1200" alt="Minimalist 2D vector infographic with four icons for plan notice award and contract on dark blue background representing transparency in government procurement" /></a>
+          </div>
+
+          <p>Scenario 2, post-award audit: An auditor reviews an awarded contract by comparing the tender notice, the bidder list, the award notice with prices, and the signed contract. The presence of a versioned contract register and amendment history allows the auditor to confirm that changes were authorized and properly recorded, as recommended by multilateral guidance <a href="https://www.worldbank.org/en/topic/governance/brief/open-contracting" target="_blank" rel="noopener">World Bank open contracting guidance</a>.</p>
+
+          <figure class="special-image-standalone">
+            <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+              <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+            </a>
+          </figure>
+
+          <p>For small agencies with limited resources, prioritize disclosures that enable oversight with the least burden. Start with publishing procurement plans and award notices in machine-readable formats, then add contract texts and version histories as capacity allows. This staged approach reflects practical recommendations for improving transparency where resources are constrained <a href="https://www.u4.no/publications/reducing-corruption-risks-in-public-procurement" target="_blank" rel="noopener">U4 guidance</a>.</p>
+
+          <h2>Putting it together: a concise checklist and final takeaways</h2>
+          <p>Priority checklist: publish procurement plans early, post tender notices with evaluation criteria, publish award notices with prices, post signed contracts and any amendments, and provide machine-readable datasets aligned to OCDS. These actions form the baseline for transparent procurement practice, as standard guidance outlines <a href="https://standard.open-contracting.org/latest/en/" target="_blank" rel="noopener">OCDS overview</a>.</p>
+          <p>Support independent monitoring by linking published data to audit trails and complaint mechanisms. Engage civil society and auditors in using published datasets and prioritize training or <a href="https://michaelcarbonara.com/strength-and-security/" target="_blank" rel="noopener">tools</a> that make machine-readable data easier to access and analyze, following international recommendations <a href="https://www.oecd.org/gov/government-at-a-glance-2024/" target="_blank" rel="noopener">OECD Government at a Glance</a>. See related coverage on the <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news</a> page.</p>
+          <p>Final takeaway: Transparency in government procurement improves fairness and enables oversight when it is paired with accessible, machine-readable data and active monitoring. Transparency should be treated as one part of a broader integrity framework that includes enforcement and civil society engagement, according to multilateral guidance <a href="https://www.transparency.org/en/our-priorities/public-procurement" target="_blank" rel="noopener">Transparency International</a>. Learn more on the <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">about</a> page.</p>
+
+          <section class="faq-section" aria-label="Frequently Asked Questions">
+            <section class="faq-accordion"><input type="checkbox" id="faq-4rngar" class="faq-toggle" /><label for="faq-4rngar" class="faq-summary" role="button" tabindex="0">What is transparency in government procurement?</label><div class="faq-content"><p>Transparency in government procurement means publishing clear, timely, and reusable contracting information across the procurement cycle so that bidders, oversight bodies, and the public can access and review procurement activity.</p></div></section>
+            <section class="faq-accordion"><input type="checkbox" id="faq-tj8rqq" class="faq-toggle" /><label for="faq-tj8rqq" class="faq-summary" role="button" tabindex="0">What documents should governments publish to be considered transparent?</label><div class="faq-content"><p>Key documents include procurement plans, tender notices with evaluation criteria, award notices with prices, signed contracts, and versioned contract registers or amendment histories.</p></div></section>
+            <section class="faq-accordion"><input type="checkbox" id="faq-kc1sqh" class="faq-toggle" /><label for="faq-kc1sqh" class="faq-summary" role="button" tabindex="0">Does publishing data alone stop corruption?</label><div class="faq-content"><p>Publication alone helps information flow but reduces corruption risk most effectively when paired with monitoring, enforcement, and independent civil society capacity.</p></div></section>
+          </section>
+
+          <section class="article-ending"><p>Transparent procurement is a foundation for fair competition and public accountability, but it requires follow-through. Agencies, auditors, and civic groups can use the checklists here to prioritize disclosures that deliver the greatest oversight value.</p></section>
+
+          <section class="ba-refs">
+            <h3 class="ba-refs__title">References</h3>
+            <ul class="ba-refs__list">
+              <li><a href="https://www.open-contracting.org/what-is-open-contracting/" target="_blank" rel="noopener">https://www.open-contracting.org/what-is-open-contracting/</a></li>
+              <li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li>
+              <li><a href="https://www.transparency.org/en/our-priorities/public-procurement" target="_blank" rel="noopener">https://www.transparency.org/en/our-priorities/public-procurement</a></li>
+              <li><a href="https://www.oecd.org/gov/government-at-a-glance-2024/" target="_blank" rel="noopener">https://www.oecd.org/gov/government-at-a-glance-2024/</a></li>
+              <li><a href="https://www.worldbank.org/en/topic/governance/brief/open-contracting" target="_blank" rel="noopener">https://www.worldbank.org/en/topic/governance/brief/open-contracting</a></li>
+              <li><a href="https://standard.open-contracting.org/latest/en/" target="_blank" rel="noopener">https://standard.open-contracting.org/latest/en/</a></li>
+              <li><a href="https://www.u4.no/publications/reducing-corruption-risks-in-public-procurement" target="_blank" rel="noopener">https://www.u4.no/publications/reducing-corruption-risks-in-public-procurement</a></li>
+              <li><a href="https://standard.open-contracting.org/latest/en/guidance/" target="_blank" rel="noopener">https://standard.open-contracting.org/latest/en/guidance/</a></li>
+              <li><a href="https://www.open-contracting.org/data-standard/" target="_blank" rel="noopener">https://www.open-contracting.org/data-standard/</a></li>
+              <li><a href="https://documents1.worldbank.org/curated/en/744551614955316901/pdf/Open-Contracting-Data-Standard.pdf" target="_blank" rel="noopener">https://documents1.worldbank.org/curated/en/744551614955316901/pdf/Open-Contracting-Data-Standard.pdf</a></li>
+              <li><a href="https://michaelcarbonara.com/strength-and-security/" target="_blank" rel="noopener">https://michaelcarbonara.com/strength-and-security/</a></li>
+              <li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li>
+              <li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li>
+            </ul>
+          </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
