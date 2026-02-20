@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What info should governments make public?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: color-mix(in srgb, #ae2736 86%, #000 14%);
+      --line: rgba(255,255,255,.16);
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px; /* from --mc-radius */
+
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area (allowed selectors only) */
+    .article-body .tool-checklist-item input[type="checkbox"]{ accent-color: var(--accent); }
+    .cta-button{ background: var(--accent); }
+    .cta-button:hover{ background: var(--accent-hover); }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/government-data-transparency-map.jpg" alt="Government data transparency map" />
+        </div>
+        <h1 class="title">What info should governments make public?</h1>
+        <p class="subline">Which government datasets should be public, and why they matter.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/government-data-transparency-what-info-should-be-public/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+  <div class="summary">This article sets out which categories of government information international guidance recommends publishing and why those datasets matter. It explains practical publishing steps, technical standards that enable reuse, and how agencies can balance openness with privacy and security.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">International guidance consistently points to budgets, procurement and performance data as priority public releases.</span></div><div class="highlight-card"><span class="highlight-text">Machine-readable formats, persistent identifiers and clear licences are the technical minimums that enable reuse.</span></div><div class="highlight-card"><span class="highlight-text">Privacy and security reviews, plus documented decision rules, are required before publishing records that contain personal data.</span></div>
+     </div>
+  <h2>What government data transparency means and why it matters</h2><h3>Definition and common terms</h3><p>Government data transparency means making government-held information available for public access and reuse in ways that support scrutiny, civic oversight and practical reuse, including by journalists, auditors and local residents. This includes both raw datasets and public records, and it focuses on formats and access methods that enable analysis rather than locked or image-based files. International guidance frames a core set of recommended categories for publication that agencies are commonly asked to prioritize <a href="https://publicadministration.un.org/egovkb/en-us/Reports/UN-E-Government-Survey-2024" target="_blank" rel="noopener">United Nations E-Government Survey 2024</a></p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick pointer to international data toolkits for public dataset priorities</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-rsuh39-0">
+                        <input id="tool-check-rsuh39-0" type="checkbox" />
+                        <span>UN toolkit</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-i9s4j3-1">
+                        <input id="tool-check-i9s4j3-1" type="checkbox" />
+                        <span>World Bank toolkit</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-mywshz-2">
+                        <input id="tool-check-mywshz-2" type="checkbox" />
+                        <span>Project Open Data</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use these toolkits for reference when assessing publication priorities</p>
+            </div>
+<p>In practical terms, the phrase open government data is often used to describe datasets published in machine-readable forms so they can be combined and analysed. That contrasts with scanned PDFs or images of records that are technically public but hard to reuse. Project and technical toolkits encourage clear labels, metadata and formats that make datasets discoverable and interoperable <a href="https://project-open-data.cio.gov/" target="_blank" rel="noopener">Project Open Data</a></p>
+<h2>Core categories governments should publish</h2>
+<p>International surveys and open government initiatives commonly recommend a compact set of categories as the first priority for publication. These primary categories, identified across multiple international guidance documents, form a practical starting point for agencies and citizens to assess completeness and usefulness of portals <a href="https://www.opengovpartnership.org/" target="_blank" rel="noopener">Open Government Partnership</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p><b>Budgets and spending</b> - machine-readable budget and expenditure records support fiscal oversight and audit.</p>
+<p><b>Procurement and contracts</b> - contract awards, tender documents and vendor performance data reveal how public money is allocated.</p>
+<p><b>Legislation and regulations</b> - laws, statutory instruments and associated regulatory guidance ensure rules are visible.</p>
+<p><b>Service performance metrics</b> - operational indicators and outcomes allow comparison of services and identify gaps.</p>
+<p><b>Public meeting records</b> - agendas, minutes and voting records document decision processes.</p>
+<p><b>Core administrative and geospatial datasets</b> - registries, boundaries and reference data that enable linking and mapping.</p>
+<p>Each category has a practical purpose: budgets and procurement enable oversight of public spending, legislation and meeting records document decision-making, and geospatial or administrative registries allow datasets to be joined for analysis. The United Nations and Open Government Partnership both highlight these categories as commonly useful for public accountability and reuse <a href="https://publicadministration.un.org/egovkb/en-us/Reports/UN-E-Government-Survey-2024" target="_blank" rel="noopener">United Nations E-Government Survey 2024</a></p>
+<h2>Who uses published government data and for what purposes</h2>
+<p>A broad range of users rely on <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">published datasets</a>. Auditors and oversight bodies use financial and procurement records to check compliance; journalists use budget and contract data to investigate spending; civil society and researchers analyse performance metrics to test policy effects; developers and businesses build services and tools from open geospatial and administrative data <a href="https://opendatatoolkit.worldbank.org/en/" target="_blank" rel="noopener">Open Data Toolkit</a></p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a> - example: a searchable budget CSV published by a local finance office, with column headers for department, line item, amount, fiscal year and a persistent identifier for each transaction</div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>These different audiences use datasets for distinct but overlapping purposes. Journalists and auditors focus on traceability and provenance, researchers prioritise structure and completeness, and developers expect consistent identifiers and machine-readable formats so datasets can be combined into applications or visualisations <a href="https://opendatatoolkit.worldbank.org/en/" target="_blank" rel="noopener">Open Data Toolkit</a></p>
+<h2>Priority datasets: why budgets and procurement matter</h2>
+<p>Budget datasets give a line-by-line view of planned and actual spending that supports public scrutiny, auditing and analysis of fiscal priorities. When budgets are published in a structured format with persistent identifiers and clear budget classifications, they can be compared over time and integrated with other datasets for investigative or evaluative work <a href="https://publicadministration.un.org/egovkb/en-us/Reports/UN-E-Government-Survey-2024" target="_blank" rel="noopener">United Nations E-Government Survey 2024</a></p>
+<p>Procurement and contract records are closely related because they show how budgeted funds are spent in practice. Open procurement data can reveal winners, contract values and timelines, and when combined with contractor performance information it supports checks against conflicts of interest or unusually concentrated awards <a href="https://opendatatoolkit.worldbank.org/en/" target="_blank" rel="noopener">Open Data Toolkit</a></p>
+<h2>Technical standards and formats that enable reuse</h2>
+<p>To enable reuse, toolkits and technical guidance recommend publishing data in open, machine-readable formats such as CSV, JSON and GeoJSON. Those choices reduce friction for auditors, researchers and civic technologists who need to parse and combine files without manual retyping <a href="https://open.canada.ca/en/working-data-api/best-practices" target="_blank" rel="noopener">Best Practices: Working with Data and APIs</a></p>
+<h3>Question about format and licence</h3>
+<section class="faq-accordion"><input type="checkbox" id="faq-ox0p43" class="faq-toggle" checked /><label for="faq-ox0p43" class="faq-summary" role="button" tabindex="0">What government information should be published to support public oversight?</label><div class="faq-content"><p>Publish machine-readable budgets, procurement records, legislation, service performance metrics, public meeting records and core administrative datasets, while applying privacy and security assessments and providing metadata, licences and programmatic access.</p></div></section>
+<p>Standardized metadata, explicit open licences and persistent identifiers are essential complements to file formats. Metadata explains fields and provenance, licences clarify reuse terms, and persistent identifiers let users link records across datasets. Technical toolkits also advise offering programmatic access through <a href="https://resources.data.gov/resources/documenting-apis/" target="_blank" rel="noopener">APIs</a> and bulk download to support automated reuse and reduce ad hoc scraping <a href="https://theodi.org/article/how-to-publish-open-data/" target="_blank" rel="noopener">How to publish open data</a></p>
+<h2>A practical publishing framework agencies can follow</h2>
+<p>Operational toolkits converge on a sequence of practical steps agencies can adopt, starting with an inventory of held datasets and a classification by sensitivity. An inventory makes publication priorities visible and helps identify overlap or gaps across departments <a href="https://project-open-data.cio.gov/" target="_blank" rel="noopener">Project Open Data</a></p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/13AL4OvYDMzcZLHFAD8X1Jw4y8_H1Lgrw=s1200" alt="Minimal 2D vector infographic of a laptop and tablet showing stylized data tables and an export icon representing government data transparency" /></a>
+      <div class="side-text"><p>After inventory and classification, recommended steps include a privacy and security risk review, preparation of machine-readable exports, production of standardized metadata, application of persistent identifiers, and deployment of APIs or bulk download options. These steps are described consistently across major toolkits as a practical workflow rather than a single mandatory process <a href="https://opendatatoolkit.worldbank.org/en/" target="_blank" rel="noopener">Open Data Toolkit</a></p></div>
+    </div>
+<p>Publishing is not a one-time event. Governance arrangements, <a href="https://www.gsa.gov/governmentwide-initiatives/open-gsa/open-data-plan" target="_blank" rel="noopener">publication schedules</a> and service-level commitments help ensure datasets are updated, maintained and discoverable. Toolkits recommend documenting responsibilities and timelines so users can rely on the availability of crucial datasets over time <a href="https://project-open-data.cio.gov/" target="_blank" rel="noopener">Project Open Data</a></p>
+<h2>Privacy, security and legal decision criteria for release</h2>
+<p>Not all government-held records can be published in raw form. Agencies should classify datasets for sensitivity and carry out privacy and security risk assessments before release, and those assessments should be documented to explain why specific records are withheld or altered <a href="https://theodi.org/article/how-to-publish-open-data/" target="_blank" rel="noopener">How to publish open data</a></p>
+<p>Anonymisation and data minimization are standard mitigation techniques when personal data are involved. Practical guidance recommends removing or aggregating identifiers and using tested anonymization methods to reduce re-identification risk while preserving analytical value <a href="https://ico.org.uk/for-organisations/guide-to-data-protection/anonymisation/" target="_blank" rel="noopener">Anonymisation guidance from the Information Commissioner's Office</a></p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay informed and get involved with the campaign</h3><div class="cta-intro"><p>If you need practical guidance on privacy, risk review and publishing workflows, consult the international toolkits and data publication guides produced by organisations such as the United Nations and the Open Data Institute.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign</a></div>
+<p>Legal constraints and national security exceptions are legitimate limits to publication. Agencies should record decision rules and legal bases for non-disclosure so users understand whether a dataset was withheld for privacy, security or statutory reasons <a href="https://theodi.org/article/how-to-publish-open-data/" target="_blank" rel="noopener">How to publish open data</a></p>
+<h2>Common mistakes and pitfalls in publishing open data</h2>
+<p>Technical errors often reduce usefulness. Common mistakes include publishing only non-machine-readable files such as scanned PDFs, omitting metadata, using inconsistent identifiers across releases, and failing to provide bulk download or API access <a href="https://project-open-data.cio.gov/" target="_blank" rel="noopener">Project Open Data</a></p>
+<p>Privacy and disclosure pitfalls also occur when microdata are released without effective anonymization or when aggregation is insufficient to prevent re-identification. Practical guidance stresses the need for sensitivity classification and tested anonymisation methods before any public release <a href="https://ico.org.uk/for-organisations/guide-to-data-protection/anonymisation/" target="_blank" rel="noopener">Anonymisation guidance from the Information Commissioner's Office</a></p>
+<p>Governance failures, such as unclear ownership of datasets or no maintenance funding, quickly make portals stale. Publishing schedules, documented metadata vocabularies and assigned data stewards help prevent data quality and discoverability problems <a href="https://project-open-data.cio.gov/" target="_blank" rel="noopener">Project Open Data</a></p>
+<h2>Challenges for local governments and resourcing options</h2>
+<p>Smaller jurisdictions often lack capacity and budget to maintain regular publishing, which creates a practical gap between expectations and what local portals can sustain. International reviews note harmonization and resourcing as recurring challenges for local government publishing programs <a href="https://www.opengovpartnership.org/" target="_blank" rel="noopener">Open Government Partnership</a></p>
+<p>Practical approaches include shared platforms, phased publishing where simple high-value datasets are released first, and partnerships with regional or national open data services to host catalogs and APIs. These models reduce duplication and create economies of scale for maintenance and metadata harmonization <a href="https://opendatatoolkit.worldbank.org/en/" target="_blank" rel="noopener">Open Data Toolkit</a></p>
+<p>Where resources are limited, prioritising datasets that enable oversight and immediate reuse, such as budget and procurement files, can deliver the most value for limited effort while deferring lower-priority releases to later phases <a href="https://publicadministration.un.org/egovkb/en-us/Reports/UN-E-Government-Survey-2024" target="_blank" rel="noopener">United Nations E-Government Survey 2024</a></p>
+<h2>Practical examples and scenarios readers can check</h2>
+<p>Checklist: when you visit a <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">government data portal</a>, look for machine-readable formats (CSV, JSON, GeoJSON), clear metadata explaining fields, an explicit open licence, an update date, an API or bulk download option, and persistent identifiers for records. These elements together indicate a dataset is likely reusable <a href="https://project-open-data.cio.gov/" target="_blank" rel="noopener">Project Open Data</a></p>
+<p>Scenario - budget file: a well-published budget export will include departmental codes, line items, fiscal years and consistent classification, and it should have a metadata record explaining field definitions and a licence permitting reuse <a href="https://publicadministration.un.org/egovkb/en-us/Reports/UN-E-Government-Survey-2024" target="_blank" rel="noopener">United Nations E-Government Survey 2024</a></p>
+<p>Scenario - procurement dataset: an effective procurement release lists tender IDs, award dates, contractor names, amounts and links to contract documents. Persistent identifiers let a user track a contractor across multiple awards and combine records with performance data <a href="https://opendatatoolkit.worldbank.org/en/" target="_blank" rel="noopener">Open Data Toolkit</a></p>
+<p>Scenario - meeting records: useful meeting minutes are published in text or structured form, include attendee lists and recorded votes where applicable, and are dated and archived with stable URLs or identifiers to support accountability and historical research <a href="https://publicadministration.un.org/egovkb/en-us/Reports/UN-E-Government-Survey-2024" target="_blank" rel="noopener">United Nations E-Government Survey 2024</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>Clear ownership and publication schedules are central to sustainable portals. Agencies should name data stewards, publish update calendars and document service-level agreements for dataset availability and API response expectations to build user trust <a href="https://project-open-data.cio.gov/" target="_blank" rel="noopener">Project Open Data</a></p>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Impact metrics include downloads, API calls, citations by auditors or media, and reported reuse in research or third-party tools. Tracking a small set of metrics helps agencies prioritise maintenance and demonstrate public value from publishing work <a href="https://opendatatoolkit.worldbank.org/en/" target="_blank" rel="noopener">Open Data Toolkit</a></p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/17QIMYp4DgaqL4vSFz2plmjN-BkFwn6Vb=s1200" alt="Minimal 2D vector infographic with icons for budgets procurement APIs and metadata representing government data transparency in navy white and red accents" /></a>
+    </div>
+<h2>Conclusion: practical next steps for readers and officials</h2>
+<p>Top priorities for publication are <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">machine-readable budgets</a>, procurement records and clear metadata with open licences; these releases deliver immediate oversight value and reusability for journalists, auditors and civic technologists <a href="https://project-open-data.cio.gov/" target="_blank" rel="noopener">Project Open Data</a></p>
+<p>Citizens can ask local officials for a simple checklist: is the dataset machine-readable, is there metadata and a licence, is there an update date and a bulk download or API? Officials can prioritise publishing these high-value datasets and document privacy and security assessments where appropriate <a href="https://opendatatoolkit.worldbank.org/en/" target="_blank" rel="noopener">Open Data Toolkit</a></p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-j4ttlm" class="faq-toggle" /><label for="faq-j4ttlm" class="faq-summary" role="button" tabindex="0">What is government data transparency?</label><div class="faq-content"><p>Government data transparency means publishing government-held information in accessible, machine-readable forms so the public, journalists and auditors can inspect and reuse it.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-fhwiyz" class="faq-toggle" /><label for="faq-fhwiyz" class="faq-summary" role="button" tabindex="0">Which datasets should I ask my local government to publish first?</label><div class="faq-content"><p>Start with machine-readable budgets, procurement and contract records, along with metadata and an explicit open licence, because these provide immediate oversight value.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-ilsiqb" class="faq-toggle" /><label for="faq-ilsiqb" class="faq-summary" role="button" tabindex="0">How do agencies protect personal data when publishing?</label><div class="faq-content"><p>Agencies should classify sensitivity, run privacy risk assessments, and apply anonymisation or aggregation techniques where personal data could be disclosed.</p></div></section>
+</section><section class="article-ending">If you want to evaluate a local portal, use the checklist in this guide and ask officials for metadata, licence terms and a publication schedule. Toolkits from international organisations provide step-by-step advice for agencies considering phased publishing or shared platforms.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://publicadministration.un.org/egovkb/en-us/Reports/UN-E-Government-Survey-2024" target="_blank" rel="noopener">https://publicadministration.un.org/egovkb/en-us/Reports/UN-E-Government-Survey-2024</a></li><li><a href="https://project-open-data.cio.gov/" target="_blank" rel="noopener">https://project-open-data.cio.gov/</a></li><li><a href="https://www.opengovpartnership.org/" target="_blank" rel="noopener">https://www.opengovpartnership.org/</a></li><li><a href="https://opendatatoolkit.worldbank.org/en/" target="_blank" rel="noopener">https://opendatatoolkit.worldbank.org/en/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://theodi.org/article/how-to-publish-open-data/" target="_blank" rel="noopener">https://theodi.org/article/how-to-publish-open-data/</a></li><li><a href="https://ico.org.uk/for-organisations/guide-to-data-protection/anonymisation/" target="_blank" rel="noopener">https://ico.org.uk/for-organisations/guide-to-data-protection/anonymisation/</a></li><li><a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">https://michaelcarbonara.com/</a></li><li><a href="https://open.canada.ca/en/working-data-api/best-practices" target="_blank" rel="noopener">https://open.canada.ca/en/working-data-api/best-practices</a></li><li><a href="https://resources.data.gov/resources/documenting-apis/" target="_blank" rel="noopener">https://resources.data.gov/resources/documenting-apis/</a></li><li><a href="https://www.gsa.gov/governmentwide-initiatives/open-gsa/open-data-plan" target="_blank" rel="noopener">https://www.gsa.gov/governmentwide-initiatives/open-gsa/open-data-plan</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
