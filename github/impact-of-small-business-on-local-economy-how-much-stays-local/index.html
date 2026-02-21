@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>How much money stays local when you shop local? — Practical estimates and methods</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* derived brand tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #951f2c; /* derived darker accent */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #000 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      background: var(--accent-hover);
+      filter: none;
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/impact-of-small-business-on-local-economy-main-street.jpg" alt="How much money stays local when you shop local?" />
+        </div>
+        <h1 class="title">How much money stays local when you shop local? — Practical estimates and methods</h1>
+        <p class="subline">Methods for estimating how much of a purchase remains inside your community.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/impact-of-small-business-on-local-economy-how-much-stays-local/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">Local spending choices have different economic effects depending on what is purchased and where the supply chain runs. This article explains the main methods researchers and practitioners use to estimate how much of a consumer dollar stays in the community, and it gives practical steps to run simple local calculations.
+
+The campaign states that economic opportunity and local entrepreneurship are priorities, and understanding how local capture works can inform community discussions about small-business support. The article is neutral and focused on methods, not advocacy.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">LM3 spend-tracing and input-output analyses offer complementary ways to estimate how consumer dollars circulate locally.</span></div><div class="highlight-card"><span class="highlight-text">Services, local food, and local construction spending typically retain a higher share of dollars inside a community than retail goods tied to national supply chains.</span></div><div class="highlight-card"><span class="highlight-text">Well-documented LM3 worksheets and practitioner templates let communities produce reproducible range-based estimates rather than single-point claims.</span></div>
+     </div>
+  <h2>Quick answer: how much of a purchase typically stays in the community?</h2><h3>Short summary</h3><p>The impact of small business on local economy is best described as a range rather than a single figure: community studies using LM3-style tracing and academic input-output analyses commonly show wide variation by sector, geography, and assumptions, so expect results reported as bands instead of precise percentages.</p><p>Practitioner LM3 and community studies often report that locally owned retailers and restaurants recirculate a larger share of each consumer dollar locally than national chains, with practical study ranges commonly cited by practitioners across cases; the exact share depends on the purchase type and local linkages <a href="https://neweconomics.org/uploads/files/LM3-2014.pdf" target="_blank" rel="noopener">LM3 toolkit</a>. See <a href="https://www.nefconsulting.com/what-we-do/evaluation-impact-assessment/local-multiplier-3/" target="_blank" rel="noopener">NEF Consulting's LM3 overview</a>.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>Services, locally produced food, and construction-related spending typically keep more money in a community because they rely more on local labor and suppliers than retail goods that travel through national supply chains <a href="https://www.ers.usda.gov/webdocs/publications/98854/economic-impact-local-food.pdf" target="_blank" rel="noopener">Local food systems and economic development synthesis</a>.</p>
+<h3>Why this matters to residents</h3>
+<p>Understanding the share of spending that stays local helps residents, voters, and community groups weigh the economic effects of where they spend and which local policies might increase local retention over time.</p>
+
+<div class="cta-section">
+  <h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay informed and get involved</h3>
+  <div class="cta-intro"><p>Download a one-page LM3 quick guide to follow the core steps used in community spend-tracing studies and reproduce a basic worksheet for a single purchase.</p></div>
+  <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the Campaign</a>
+</div>
+
+<h2>What the LM3 and input-output methods measure and how they differ</h2>
+<h3>What LM3 traces and the basic steps for the impact of small business on local economy</h3>
+<p>The LM3 approach is a spend-tracing toolkit used by nonprofits and local governments to estimate how much of every dollar spent at a local business is re-spent locally; it starts with a purchase basket and follows how the initial receipts flow to local wages, suppliers, and spending cycles <a href="https://neweconomics.org/uploads/files/LM3-2014.pdf" target="_blank" rel="noopener">LM3 toolkit</a>. See <a href="https://www.lm3online.com/about-us/" target="_blank" rel="noopener">LM3 Online</a>.</p>
+<p>LM3-style exercises typically separate first-round local capture from subsequent re-spending rounds, documenting assumptions at each step so results can be reported as ranges rather than a single number.</p>
+<h3>What input-output analysis measures and its strengths</h3>
+<p>Input-output analysis uses sectoral coefficients to map how spending in one industry affects output and employment across an economy; academic and government studies use these models to assess employment and supply-chain effects with national or regional tables that summarize typical interindustry flows <a href="https://www.ers.usda.gov/webdocs/publications/xxx/xxxxx.pdf" target="_blank" rel="noopener">USDA input-output overview</a>.</p>
+<p>Input-output work is useful when you want consistent sector-level multipliers or need to compare employment impacts, but it relies on precomputed coefficients and may be less granular about local ownership than LM3 tracing.</p>
+<h3>Key differences, comparability limits, and why methodology matters</h3>
+<p>The main practical difference is that LM3 traces actual local receipts and reported re-spending behavior for a defined boundary, while input-output analysis applies broader sectoral relationships that assume typical supplier patterns; as a result, the two methods answer related but distinct questions about local capture.</p>
+<p>Because geographic boundaries, data sources, and assumptions differ across studies, community-level estimates are best presented as ranges with clear documentation of the underlying choices <a href="https://neweconomics.org/uploads/files/LM3-2014.pdf" target="_blank" rel="noopener">LM3 toolkit</a>.</p>
+<h2>A step-by-step LM3-style approach to estimate how much of a purchase stays local</h2>
+<h3>Define the community boundary and a purchase basket</h3>
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1TZSQTad04Lz_byDjTu7BZjhcSbYOkO-m=s1200" alt="Minimalist vector infographic of a stylized storefront with coins upward arrow and map pin illustrating the impact of small business on local economy" /></a>
+      <div class="side-text"><p>Step 1, choose a clear geographic boundary for the exercise, for example a city, county, or a custom trade area, and state it up front. This boundary affects which suppliers and wages are counted as local and therefore has a first-order effect on results <a href="https://neweconomics.org/uploads/files/LM3-2014.pdf" target="_blank" rel="noopener">LM3 toolkit</a>.</p></div>
+    </div>
+<p>Step 2, select a representative purchase basket for the scenario you want to test, such as a typical meal at a local cafe, a hardware purchase, or a home renovation. Describe what is included and what is excluded, for instance delivery fees, marketplace commissions, or items clearly sourced from outside the defined boundary.</p>
+<h3>Trace first-round local spend and estimate re-spending</h3>
+<p>Step 3, estimate which shares of the initial dollar go to local wages, local suppliers, and nonlocal purchases. For each dollar in the basket, allocate fractions to categories you can justify with local knowledge or supplier checks, and record sources for each allocation.</p>
+<p>Step 4, estimate re-spending: some of the wages and supplier receipts are then spent again locally. LM3 templates provide worksheets to track rounds of re-spending until the additional local capture becomes negligible; practitioner templates include typical baskets and example re-spend assumptions to guide these choices <a href="https://amiba.net/wp-content/uploads/2023/05/LM3-Toolkit-AMIBA.pdf" target="_blank" rel="noopener">AMIBA LM3 templates</a>.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-5ctyi1" class="faq-toggle" checked /><label for="faq-5ctyi1" class="faq-summary" role="button" tabindex="0">How much of what I spend at a local business stays in my community?</label><div class="faq-content"><p>There is no single answer; typical community studies report a wide range depending on the purchase and method, so treat estimates as context-specific ranges and check the assumptions behind them.</p></div></section>
+<h3>Document assumptions and report ranges</h3>
+<p>Step 5, present results as a range built from transparent lower- and upper-bound assumptions for each allocation. State the geographic boundary, the treatment of online marketplaces, and any excluded items so readers can judge how context-specific the estimate is.</p>
+<p>Practitioner toolkits emphasize repeating the exercise with different baskets or using sensitivity checks rather than reporting a single precise percentage <a href="https://neweconomics.org/uploads/files/LM3-2014.pdf" target="_blank" rel="noopener">LM3 toolkit</a>.</p>
+<h2>Why sector and supply chains matter: services, food, retail, and construction</h2>
+<h3>Sectors that typically retain more locally</h3>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Services, local food production, and construction often retain more dollars locally because they involve higher shares of local labor and locally sourced inputs, which anchor more of the initial payment inside the defined community <a href="https://www.ers.usda.gov/webdocs/publications/98854/economic-impact-local-food.pdf" target="_blank" rel="noopener">Local food systems and economic development synthesis</a>.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1WEpcEFx7gaql6kmbt9btsklXLTiGPEJq=s1200" alt="2D vector infographic showing circular flow of money between wages suppliers and re spending in a community highlighting impact of small business on local economy" /></a>
+    </div>
+<p>For example, labor-heavy services such as haircuts or local home repair spend a larger fraction of revenue on wages that are likely to be earned and re-spent in the same community, increasing the local multiplier effect.</p>
+<h3>Categories that often leak value to national supply chains</h3>
+<p>Many retail goods are produced and distributed through national supply chains, which means a sizeable share of the purchase can leave the local area quickly through supplier invoices, brand royalties, or centralized distribution centers; this leakage reduces the local capture of a retail dollar <a href="https://www.civiceconomics.com/andersonville_study.pdf" target="_blank" rel="noopener">Independent versus chain study</a>.</p>
+<p>Where a product is sourced, the ownership model of the seller, and procurement choices determine how much of the receipt is available for local re-spending.</p>
+<h3>How local labor and supplier networks change the outcome</h3>
+<p>Access to local suppliers and the choices businesses make about procurement matter: a locally owned restaurant that buys produce from nearby farms will retain more value than one that imports most ingredients, all else equal, because shorter supply chains keep receipts circulating inside the community <a href="https://www.ers.usda.gov/webdocs/publications/98854/economic-impact-local-food.pdf" target="_blank" rel="noopener">Local food systems and economic development synthesis</a>.</p>
+<p>Policy and private actions that help firms source locally or build supplier networks can therefore shift retention rates over time, though the magnitude depends on the preexisting supplier base and implementation capacity.</p>
+<h2>Policy and business actions that can increase the share of spending kept locally</h2>
+<h3>Buy-local procurement and public purchasing choices</h3>
+<p>Local procurement policies and public purchasing choices can direct more public and institutional spending toward local firms or suppliers, increasing local capture of those dollars when carefully designed to comply with procurement rules and competition requirements <a href="https://amiba.net/wp-content/uploads/2023/05/LM3-Toolkit-AMIBA.pdf" target="_blank" rel="noopener">AMIBA LM3 templates</a>.</p>
+<p>These policies often work best when paired with clear sourcing standards and investments to help local firms meet institutional procurement needs instead of simply giving preference without capacity building.</p>
+<h3>Support for local supplier networks and business retention</h3>
+<p>Practitioner reports repeatedly identify supplier development, technical assistance, and business retention programs as ways to increase local sourcing by expanding the pool of capable local vendors and reducing barriers for local firms to bid on larger contracts <a href="https://amiba.net/wp-content/uploads/2023/05/LM3-Toolkit-AMIBA.pdf" target="_blank" rel="noopener">AMIBA LM3 templates</a>.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+
+<h3>Measurement and data investments to track changes</h3>
+<p>Raising local capture reliably requires ongoing data collection and measurement so communities can tell whether procurement changes or supplier development efforts actually shift spending patterns rather than assuming effects a priori <a href="https://neweconomics.org/uploads/files/LM3-2014.pdf" target="_blank" rel="noopener">LM3 toolkit</a>.</p>
+<p>Practitioner guides recommend periodic LM3-style pilots and baseline procurement inventories as a practical way to monitor progress and make adjustments.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Common mistakes and measurement pitfalls to avoid</h2>
+<h3>Mixing incompatible methods or geographic boundaries</h3>
+<p>A frequent error is comparing LM3 tracing results directly to input-output multipliers without reconciling differences in assumptions or geographic scope; doing so can lead to misleading conclusions because the methods measure related but different phenomena <a href="https://neweconomics.org/uploads/files/LM3-2014.pdf" target="_blank" rel="noopener">LM3 toolkit</a>.</p>
+<p>Always check whether a reported multiplier uses the same trade area and whether it counts the same categories of spending before comparing numbers.</p>
+<h3>Reporting a single precise percentage without assumptions</h3>
+<p>Reporting a single percentage without listing assumptions is another common pitfall; community-level estimates should be communicated as ranges tied to documented choices about boundaries, supplier sourcing, and treatment of online or out-of-area fees <a href="https://neweconomics.org/uploads/files/LM3-2014.pdf" target="_blank" rel="noopener">LM3 toolkit</a>.</p>
+<p>Well-documented ranges reduce the risk that stakeholders interpret a single number as a universal fact rather than a context-dependent estimate.</p>
+<h3>Failing to account for digital commerce and supply-chain leakage</h3>
+<p>Online marketplaces, franchise arrangements, and centralized distribution networks often cause money to leave the local area faster than traditional in-person purchases; excluding these factors or treating them inconsistently can bias local-capture estimates upward <a href="https://www.civiceconomics.com/andersonville_study.pdf" target="_blank" rel="noopener">Independent versus chain study</a>.</p>
+<p>Practitioners advise explicitly accounting for marketplace fees, franchise royalty flows, and internet-driven fulfillment patterns when building baskets.</p>
+<h2>Worked examples and simple calculations you can try for your town</h2>
+<h3>Example 1: a meal at a local cafe</h3>
+<p>Start with a simple purchase basket: a $20 meal at a local cafe. Break the dollar down into shares such as labor, local food, nonlocal ingredients, rent, utilities, and owner profit using local knowledge or conservative assumptions. For transparency, show a lower- and upper-bound assumption for each share and sum the locally retained fractions for a first-round capture estimate <a href="https://neweconomics.org/uploads/files/LM3-2014.pdf" target="_blank" rel="noopener">LM3 toolkit</a>.</p>
+<p>Then estimate re-spending by assuming a share of wages and owner profit is spent locally and tracking a second-round capture; repeat until additional rounds add little to the total retained amount.</p>
+<h3>Example 2: buying tools from an independent hardware store</h3>
+<p>For a hardware purchase, determine which portion of the sale is for locally sourced items, local labor, and goods supplied through national distributors. Independent hardware stores often retain more local value for services such as key cutting, tool rental, or small local repairs, while packaged goods may involve national supply chains <a href="https://www.civiceconomics.com/andersonville_study.pdf" target="_blank" rel="noopener">Independent versus chain study</a>.</p>
+<p>Use conservative assumptions for the portion of packaged goods that leave the local economy and run sensitivity checks to see how changing those assumptions affects the overall retained share.</p>
+<h3>Example 3: a home renovation using local contractors</h3>
+<p>Home renovation projects illustrate how construction-related spending can generate high local retention when local labor and locally supplied materials are used. Break a project into labor, materials sourced locally, and materials sourced from outside the region and then estimate re-spending of local wages <a href="https://www.ers.usda.gov/webdocs/publications/xxx/xxxxx.pdf" target="_blank" rel="noopener">USDA input-output overview</a>.</p>
+<p>Because construction often involves significant local labor, a larger fraction of a renovation dollar can stay within the community compared with a purchase of imported goods, though the final outcome depends on supplier availability and firm choices.</p>
+
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">LM3-style worksheet steps to estimate local retention for one purchase</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-vagrg9-0">
+                        <input id="tool-check-vagrg9-0" type="checkbox" />
+                        <span>Geographic boundary</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-iccycb-1">
+                        <input id="tool-check-iccycb-1" type="checkbox" />
+                        <span>Purchase basket</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-il9dn9-2">
+                        <input id="tool-check-il9dn9-2" type="checkbox" />
+                        <span>First-round local share</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-p4ujdt-3">
+                        <input id="tool-check-p4ujdt-3" type="checkbox" />
+                        <span>Re-spend assumptions</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-qlwfp7-4">
+                        <input id="tool-check-qlwfp7-4" type="checkbox" />
+                        <span>Notes</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use conservative assumptions for sensitivity checks</p>
+            </div>
+
+<h3>Converting an LM3 worksheet into a local report</h3>
+<p>Document every assumption, show the worksheet calculations, and present a lower and upper bound for the retained share. Include context such as the business ownership model, the geographic trade area, and excluded items so readers can reuse or replicate the calculation for similar purchases <a href="https://amiba.net/wp-content/uploads/2023/05/LM3-Toolkit-AMIBA.pdf" target="_blank" rel="noopener">AMIBA LM3 templates</a>.</p>
+<p>Share spreadsheets or appendices with the raw allocations so stakeholders can test alternative assumptions easily.</p>
+<h2>How to use these estimates as a consumer, voter, or community group</h2>
+<h3>Practical next steps for consumers</h3>
+<p>As a consumer, use ranges from LM3-style estimates to compare categories: if you want to prioritize local capture, favor services and locally produced food where possible, and ask local businesses about their sourcing choices to make better-informed decisions. See related stories on our <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news page</a>.</p>
+<p>Remember that not every purchase yields the same local impact and that documented assumptions make comparisons fairer.</p>
+<h3>Where to find LM3 and practitioner resources</h3>
+<p>Primary resources include the LM3 toolkit and practitioner templates that provide worksheets and example baskets; these documents guide the stepwise calculations and common assumptions communities use to estimate retention <a href="https://neweconomics.org/uploads/files/LM3-2014.pdf" target="_blank" rel="noopener">LM3 toolkit</a>. Also see the LM3 community guide at <a href="https://ccednet-rcdec.ca/resource/the-money-trail-measuring-your-impact-on-the-local-economy-using-lm3/" target="_blank" rel="noopener">CCEDNet</a> and our <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">homepage</a> for related links.</p>
+<p>Local chambers, community foundations, and independent business alliances also often publish case studies and templates that communities can adapt for their own work <a href="https://amiba.net/wp-content/uploads/2023/05/LM3-Toolkit-AMIBA.pdf" target="_blank" rel="noopener">AMIBA LM3 templates</a>.</p>
+<h3>How communities can commission or adapt studies</h3>
+<p>Communities can pilot small LM3-style studies, collect baseline procurement data, or partner with a local nonprofit or chamber to replicate templates in their context; documenting assumptions and repeating the exercise over time allows tracking of changes. See local events at <a href="https://michaelcarbonara.com/events/" target="_blank" rel="noopener">Michael Carbonara events</a>.</p>
+<p>For voter information and civic conversations, present results as ranges with clear notes on scope and methods so that the discussion stays factual and transparent <a href="https://neweconomics.org/uploads/files/LM3-2014.pdf" target="_blank" rel="noopener">LM3 toolkit</a>.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-45bwl3" class="faq-toggle" /><label for="faq-45bwl3" class="faq-summary" role="button" tabindex="0">What is the LM3 method?</label><div class="faq-content"><p>LM3 is a spend-tracing toolkit that follows how an initial dollar circulates through local wages and suppliers, used by municipalities and nonprofits to estimate local retention.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-nq5yvg" class="faq-toggle" /><label for="faq-nq5yvg" class="faq-summary" role="button" tabindex="0">Why do study results vary so much?</label><div class="faq-content"><p>Results differ because studies use different geographic boundaries, assumptions about local sourcing and re-spending, and measurement methods such as LM3 tracing or input-output analysis.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-gzoeo0" class="faq-toggle" /><label for="faq-gzoeo0" class="faq-summary" role="button" tabindex="0">Can local policies increase the share of spending that stays local?</label><div class="faq-content"><p>Yes, policies like local procurement, supplier development, and business retention programs can raise capture, but measurable gains depend on implementation, data collection, and local supplier capacity.</p></div></section>
+</section>
+
+<section class="article-ending">Estimating how much money stays local requires clear choices about boundaries, baskets, and re-spending assumptions. Use LM3-style worksheets and input-output perspectives together to get a fuller picture, and present results as ranges tied to documented assumptions.
+
+Communities that track procurement and repeat LM3-style pilots over time can judge whether policy or business interventions are shifting where dollars circulate.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://neweconomics.org/uploads/files/LM3-2014.pdf" target="_blank" rel="noopener">https://neweconomics.org/uploads/files/LM3-2014.pdf</a></li><li><a href="https://www.ers.usda.gov/webdocs/publications/98854/economic-impact-local-food.pdf" target="_blank" rel="noopener">https://www.ers.usda.gov/webdocs/publications/98854/economic-impact-local-food.pdf</a></li><li><a href="https://www.nefconsulting.com/what-we-do/evaluation-impact-assessment/local-multiplier-3/" target="_blank" rel="noopener">https://www.nefconsulting.com/what-we-do/evaluation-impact-assessment/local-multiplier-3/</a></li><li><a href="https://www.ers.usda.gov/webdocs/publications/xxx/xxxxx.pdf" target="_blank" rel="noopener">https://www.ers.usda.gov/webdocs/publications/xxx/xxxxx.pdf</a></li><li><a href="https://amiba.net/wp-content/uploads/2023/05/LM3-Toolkit-AMIBA.pdf" target="_blank" rel="noopener">https://amiba.net/wp-content/uploads/2023/05/LM3-Toolkit-AMIBA.pdf</a></li><li><a href="https://www.civiceconomics.com/andersonville_study.pdf" target="_blank" rel="noopener">https://www.civiceconomics.com/andersonville_study.pdf</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.lm3online.com/about-us/" target="_blank" rel="noopener">https://www.lm3online.com/about-us/</a></li><li><a href="https://ccednet-rcdec.ca/resource/the-money-trail-measuring-your-impact-on-the-local-economy-using-lm3/" target="_blank" rel="noopener">https://ccednet-rcdec.ca/resource/the-money-trail-measuring-your-impact-on-the-local-economy-using-lm3/</a></li><li><a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">https://michaelcarbonara.com/</a></li><li><a href="https://michaelcarbonara.com/events/" target="_blank" rel="noopener">https://michaelcarbonara.com/events/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
