@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What percentage of millionaires own a small business? A data-driven explainer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand tokens derived from provided style input */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736;     /* from --mc-accent */
+      --accent-hover: #8e2028; /* derived darker accent (optional) */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664;    /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* from --mc-panel-2 */
+      --radius: 0px;         /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+    .article-body{ color: var(--text-color); }
+    .article-body a{ color: var(--text-color); font-weight:750; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 2px; }
+    .article-body a:hover{ color: var(--accent); text-decoration-color: var(--accent); }
+    .cta-button:hover{ background: var(--accent-hover); filter: none; }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/small-business-gdp-skyline.jpg" alt="Small-business GDP skyline" />
+        </div>
+        <h1 class="title">What percentage of millionaires own a small business? A data-driven explainer</h1>
+        <p class="subline">A reproducible, data-focused guide to estimating how many millionaires own small businesses.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/small-business-gdp-millionaires-ownership/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">This article explains how to answer the question of how many millionaires own small businesses, and why the answer depends on definitions and data choices. It is written for civic readers, journalists, and researchers who want a clear, step-by-step approach to reproduce or refine localized estimates.
+
+The piece uses recent wealth reports and U.S. microdata as its evidence base and focuses on transparent methods rather than a single definitive number. It emphasizes reproducibility and careful labeling of assumptions so readers can judge which point in a suggested range fits their purpose.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Global wealth reports and household survey microdata together support a headline range for business-owning millionaires rather than a single precise percentage.</span></div><div class="highlight-card"><span class="highlight-text">U.S. microdata from the Federal Reserve indicate a strong presence of nonfarm business equity among top-wealth households.</span></div><div class="highlight-card"><span class="highlight-text">For GDP connections, map household business equity to SUSB and SBA firm-size classifications and report a documented range.</span></div>
+     </div>
+  <h2>What the question means: definitions and context</h2>
+<p>The phrase "millionaire" and the term "small business" are used in different ways by wealth reports, surveys, and business statistics, and those differences change headline percentages. Most global wealth reports and industry analyses treat a high-net-worth individual or millionaire as someone with at least US$1 million in investable or net assets, which sets a common baseline for comparisons and reporting, and helps explain why many summaries use that cutoff in their tables and charts <a href="https://www.capgemini.com/insights/research-library/world-wealth-report-2024/" target="_blank" rel="noopener">Capgemini World Wealth Report</a>.</p>
+<p>In U.S. household data, researchers often distinguish net worth from investable assets, and household surveys like the Federal Reserve’s Survey of Consumer Finances collect microdata on nonfarm business equity rather than a single business-ownership flag; that nuance matters when counting how many millionaires have active small businesses <a href="https://www.federalreserve.gov/econres/scfindex.htm" target="_blank" rel="noopener">Survey of Consumer Finances</a>.</p>
+<p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure></p>
+<p>Separately, U.S. small-business definitions used for GDP and firm statistics are typically based on firm size by employees or receipts, as used by the SBA Office of Advocacy and the Census Bureau’s SUSB program; using those classifications affects whether a business-holder is counted as a small-business-owning millionaire for GDP-related comparisons <a href="https://cdn.advocacy.sba.gov/wp-content/uploads/2019/07/23155446/Small-Business-GDP.pdf" target="_blank" rel="noopener">SBA Office of Advocacy small business GDP update</a>.</p>
+<h2>How common is small-business ownership among millionaires - headline estimates</h2>
+<p>Short answer, with caveats: a defensible, evidence-based headline range is roughly 20 to 40 percent globally and roughly 25 to 45 percent for the U.S., depending on definitions and sample choices. This range synthesizes global wealth-report summaries and U.S. microdata showing significant business-equity holdings among top-wealth households <a href="https://www.capgemini.com/insights/research-library/world-wealth-report-2024/" target="_blank" rel="noopener">Capgemini World Wealth Report</a>. Additional coverage of recent wealth trends is available from media reports <a href="https://www.cnbc.com/2025/03/06/wealth-creation-is-booming-as-us-multimillionaire-population-jumps.html" target="_blank" rel="noopener">CNBC</a>.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay informed about campaign priorities and events</h3><div class="cta-intro"><p>This range is a summary, not a single, exact percentage. Use the stated definitions and data steps below to reproduce a localized estimate for your question.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign</a></div>
+<p>Why a range rather than a single number? Different reports count founders, active owners, passive equity holders, and business equity in ways that change the numerator. Some wealth reports focus on entrepreneur origins, which can undercount current owners, while household surveys capture asset holdings but require classification to identify firm size and active status <a href="https://www.knightfrank.com/research/the-wealth-report" target="_blank" rel="noopener">Knight Frank The Wealth Report</a>.</p>
+<p>Which parts of that range are higher confidence? The evidence that many U.S. millionaire households hold nonfarm business equity comes from SCF microdata and is relatively high confidence for the U.S. context, while the global mid-20s to mid-30s entrepreneur shares reported in wealth reports are medium confidence because they depend on different definitions and country mixes <a href="https://www.federalreserve.gov/econres/scfindex.htm" target="_blank" rel="noopener">Survey of Consumer Finances</a>.</p>
+<h2>Key data sources and what each can (and cannot) tell you</h2>
+<p>SCF microdata, strengths and limits: the Federal Reserve’s SCF provides household-level data on assets and liabilities including nonfarm business equity, which allows researchers to flag households above chosen wealth cutoffs and to measure holdings of business equity; the dataset is detailed but requires careful sample weighting and attention to timing <a href="https://www.federalreserve.gov/econres/scfindex.htm" target="_blank" rel="noopener">Survey of Consumer Finances</a>.</p>
+<p>Global wealth reports and registries: firms such as Capgemini and Knight Frank publish HNWI summaries that often report entrepreneur or business-owner shares among millionaires; these reports are useful for headline international comparisons but use different HNWI definitions and may aggregate markets with very different entrepreneur shares <a href="https://www.capgemini.com/insights/research-library/world-wealth-report-2024/" target="_blank" rel="noopener">Capgemini World Wealth Report</a>. Additional perspective on Knight Frank's annual coverage is available at their wealth report hub <a href="https://www.knightfrank.com/wealthreport" target="_blank" rel="noopener">Knight Frank Wealth Report hub</a>.</p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/10vsryGIeMA2wq4sIqQY39daNxnjkTU9l=s1200" alt="Minimal 2D vector close up of a small storefront facade with clean icons showing shop elements and economy symbols representing small business gdp" /></a>
+      <div class="side-text"><p>Business statistics for size and GDP: the SBA Office of Advocacy’s small-business GDP analysis and the Census Bureau’s SUSB program supply the firm-size classifications and GDP allocation rules researchers use to decide which business equity counts as small business; these sources are the basis for commonly cited estimates of how much small businesses contribute to national GDP <a href="https://cdn.advocacy.sba.gov/wp-content/uploads/2019/07/23155446/Small-Business-GDP.pdf" target="_blank" rel="noopener">SBA Office of Advocacy small business GDP update</a>.</p></div>
+    </div>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Steps to access and prepare SCF microdata for business-ownership flags</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-8uuuuv-0">
+                        <input id="tool-check-8uuuuv-0" type="checkbox" />
+                        <span>Data file</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-kcdpv9-1">
+                        <input id="tool-check-kcdpv9-1" type="checkbox" />
+                        <span>Codebook</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-99nbaf-2">
+                        <input id="tool-check-99nbaf-2" type="checkbox" />
+                        <span>Business equity variable</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-usw8b8-3">
+                        <input id="tool-check-usw8b8-3" type="checkbox" />
+                        <span>Wealth cutoff</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-qge3rn-4">
+                        <input id="tool-check-qge3rn-4" type="checkbox" />
+                        <span>Sample weights</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Check sample weights and replicate weights</p>
+            </div>
+<p>OECD and cross-country context: OECD overviews of SMEs and entrepreneurship provide comparative context for how entrepreneur shares vary across advanced and emerging markets, which is useful when interpreting wealth-report ranges that pool many countries <a href="https://www.oecd.org/industry/smes/" target="_blank" rel="noopener">OECD SME and Entrepreneurship Outlook</a>.</p>
+<h2>A practical framework to estimate the percentage - step-by-step</h2>
+<p>Step 1. Choose a millionaire definition and population. For comparability with many wealth reports, use an investable-assets or HNWI cutoff of US$1 million, but for household-balance analyses you may prefer a net-worth threshold; state your choice clearly and justify it with the reporting trade-offs described in wealth-report documentation <a href="https://www.capgemini.com/insights/research-library/world-wealth-report-2024/" target="_blank" rel="noopener">Capgemini World Wealth Report</a>.</p>
+<p>Step 2. Identify business-asset ownership in microdata. Using SCF microdata, flag households that meet your wealth cutoff and then identify those with positive nonfarm business equity; compute the share of the millionaire sample with business equity using the survey weights provided <a href="https://www.federalreserve.gov/econres/scfindex.htm" target="_blank" rel="noopener">Survey of Consumer Finances</a>.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-r8sis5" class="faq-toggle" checked /><label for="faq-r8sis5" class="faq-summary" role="button" tabindex="0">How common is it for millionaires to own a small business?</label><div class="faq-content"><p>Synthesis of recent wealth reports and U.S. microdata suggests a defensible headline range of roughly 20 to 40 percent globally and about 25 to 45 percent for the U.S., with the exact value depending on definition and data choices.</p></div></section>
+<p>Step 3. Classify which holdings count as a small business for your purpose. Map firms to SUSB or SBA size bands by employees or receipts where possible; if microdata do not directly identify firm size, use auxiliary firm-level data or reasonable assumptions and sensitivity tests to estimate the share of business equity that belongs to small firms <a href="https://www.census.gov/programs-surveys/susb.html" target="_blank" rel="noopener">SUSB program page</a>.</p>
+<p>Step 4. Present a range and state caveats. Report a primary estimate plus a lower and upper bound that reflect alternative definitions and classification choices, and document all assumptions so readers can reproduce or adjust the calculation <a href="https://www.capgemini.com/insights/research-library/world-wealth-report-2024/" target="_blank" rel="noopener">Capgemini World Wealth Report</a>.</p>
+<p>Short example. If SCF microdata show X percent of households with investable assets above US$1 million hold nonfarm business equity, and SUSB matching suggests Y percent of that business equity is in small firms, estimate the small-business-owner share as X times Y, then present alternative X and Y values to show uncertainty <a href="https://www.federalreserve.gov/econres/scfindex.htm" target="_blank" rel="noopener">Survey of Consumer Finances</a>.</p>
+<h2>How to interpret ranges and choose decision criteria</h2>
+<p>Prefer conservative or inclusive definitions depending on purpose. Use an investable-asset HNWI cutoff to align with global wealth reporting and to facilitate comparisons, and choose net-worth cutoffs when the analysis focuses on household balance sheets rather than investable wealth, and state the choice explicitly <a href="https://www.capgemini.com/insights/research-library/world-wealth-report-2024/" target="_blank" rel="noopener">Capgemini World Wealth Report</a>.</p>
+<p>Adjust for country and sector variation. Expect higher entrepreneur shares in some emerging markets and in sectors such as technology and services, and lower shares in economies where wealth is more concentrated in financial assets or real estate; the OECD overviews help explain these patterns <a href="https://www.oecd.org/industry/smes/" target="_blank" rel="noopener">OECD SME and Entrepreneurship Outlook</a>.</p>
+<p>Report uncertainty clearly. Presenting a range, labeling assumptions, and listing data limitations gives readers the context needed to interpret where an estimate sits within the suggested 20 to 40 percent global range and the 25 to 45 percent U.S. range <a href="https://www.knightfrank.com/research/the-wealth-report" target="_blank" rel="noopener">Knight Frank The Wealth Report</a>.</p>
+<h2>Typical errors and pitfalls to avoid when reporting percentages</h2>
+<p>Do not mix definitions across sources without conversion. Combining a net-worth-based estimate with an investable-asset HNWI share will misstate the percentage unless you convert or clearly document the definitions; this mismatching is a common source of reporting error <a href="https://www.federalreserve.gov/econres/scfindex.htm" target="_blank" rel="noopener">Survey of Consumer Finances</a>.</p>
+<p>Be cautious with dated small-business GDP figures. The SBA estimate often cited for small business contributions to GDP covers a historical period and a specific methodology, so use it as a baseline but note its vintage and methodological assumptions when interpreting implications for current GDP shares <a href="https://cdn.advocacy.sba.gov/wp-content/uploads/2019/07/23155446/Small-Business-GDP.pdf" target="_blank" rel="noopener">SBA Office of Advocacy small business GDP update</a>.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>Avoid inferring causality. Observing that many millionaires have had small-business ties does not prove business ownership by itself caused wealth attainment; longitudinal data are required to make causal claims and those are beyond the scope of cross-sectional wealth summaries <a href="https://www.capgemini.com/insights/research-library/world-wealth-report-2024/" target="_blank" rel="noopener">Capgemini World Wealth Report</a>.</p>
+<h2>Practical examples and scenarios: U.S. and cross-country illustrations</h2>
+<p>U.S. example. Using SCF 2022 microdata to flag households above an investable-assets threshold and to count nonfarm business equity gives a relatively high-confidence view that business-asset holdings are concentrated among wealthier households; applying SUSB-based firm-size mappings then produces an estimate of the share of U.S. millionaires with small-business ownership consistent with the middle of the 25 to 45 percent U.S. range <a href="https://www.federalreserve.gov/econres/scfindex.htm" target="_blank" rel="noopener">Survey of Consumer Finances</a>.</p>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Global example. Capgemini and Knight Frank summaries for recent years report entrepreneur and founder shares among millionaires often clustering in the mid-20s to mid-30s percent range, which supports the suggested global 20 to 40 percent headline range when combined with country and sector adjustments <a href="https://www.capgemini.com/insights/research-library/world-wealth-report-2024/" target="_blank" rel="noopener">Capgemini World Wealth Report</a>. See related updates in my <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news</a>.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1nFjFhZBYaElg7HDln7wpMq1ZvIWq7q7l=s1200" alt="Minimalist 2D vector infographic with pie chart magnifying glass and office building icons representing small business gdp on a deep navy background" /></a>
+    </div>
+<p>Sector variation matters. Technology and services sectors frequently account for a larger share of entrepreneur millionaires in many markets, while economies with large real-estate or financial-asset concentrations will show lower shares; this sectoral pattern affects how a headline range should be localized <a href="https://www.knightfrank.com/research/the-wealth-report" target="_blank" rel="noopener">Knight Frank The Wealth Report</a>.</p>
+<p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure></p>
+<h2>Implications for small business GDP and takeaways for readers</h2>
+<p>Connecting the percentage of millionaires with small-business ownership to the role of small businesses in the economy requires careful mapping from household business equity to firm-level GDP shares; the SBA and SUSB statistics are the standard references for that mapping and show that small firms contribute a substantial portion of U.S. GDP, often summarized around two-fifths of total GDP in common SBA presentations <a href="https://cdn.advocacy.sba.gov/wp-content/uploads/2019/07/23155446/Small-Business-GDP.pdf" target="_blank" rel="noopener">SBA Office of Advocacy small business GDP update</a>.</p>
+<p>Takeaways for readers. A reasonable working estimate for planning or reporting is to present a primary percentage with a clear lower and upper bound, note the millionaire definition and firm-size criteria used, and avoid causal language when discussing wealth origins; this approach makes it clearer how the shared role of entrepreneurship relates to the broader small business gdp contribution. For more about the author, see the <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">about page</a>.</p>
+<p>Next steps for researchers and civic readers. Pick a cutoff, access SCF or comparable microdata, classify business holdings by SUSB or SBA size bands, and present a documented range, which lets others reproduce or refine your localized estimate <a href="https://www.census.gov/programs-surveys/susb.html" target="_blank" rel="noopener">SUSB program page</a>. For assistance, <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">contact</a>.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-ttmw3h" class="faq-toggle" /><label for="faq-ttmw3h" class="faq-summary" role="button" tabindex="0">How do researchers define &#39;millionaire&#39; in these estimates?</label><div class="faq-content"><p>Most global wealth reports use a US$1 million investable-assets or net-asset cutoff for HNWI definitions, while household surveys may use net worth; the choice should be stated clearly when reporting percentages.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-s8ly6h" class="faq-toggle" /><label for="faq-s8ly6h" class="faq-summary" role="button" tabindex="0">Does owning a business mean someone is a founder or active owner?</label><div class="faq-content"><p>Not necessarily. Surveys and reports distinguish founders, active owners, and passive equity holders, so classification matters when counting small-business owners among millionaires.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-29sjrp" class="faq-toggle" /><label for="faq-29sjrp" class="faq-summary" role="button" tabindex="0">Can I use the SBA GDP percentage directly to infer how many millionaires come from small businesses?</label><div class="faq-content"><p>No. The SBA small-business GDP share describes firm contributions to national output and is not a direct measure of millionaire origins without mapping household business equity to firm-level data.</p></div></section>
+</section><section class="article-ending">If you want a localized estimate for a particular country or sector, follow the step-by-step framework and disclose the millionaire cutoff and firm-size classification used. That transparency helps readers and reviewers understand how an estimate was derived and how it might change with different choices.
+
+For civic readers, the main practical conclusion is that small-business ownership is a common path to higher wealth for many households, and mapping those holdings to firm-level GDP statistics requires careful classification and documentation.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.capgemini.com/insights/research-library/world-wealth-report-2024/" target="_blank" rel="noopener">https://www.capgemini.com/insights/research-library/world-wealth-report-2024/</a></li><li><a href="https://www.federalreserve.gov/econres/scfindex.htm" target="_blank" rel="noopener">https://www.federalreserve.gov/econres/scfindex.htm</a></li><li><a href="https://cdn.advocacy.sba.gov/wp-content/uploads/2019/07/23155446/Small-Business-GDP.pdf" target="_blank" rel="noopener">https://cdn.advocacy.sba.gov/wp-content/uploads/2019/07/23155446/Small-Business-GDP.pdf</a></li><li><a href="https://www.knightfrank.com/research/the-wealth-report" target="_blank" rel="noopener">https://www.knightfrank.com/research/the-wealth-report</a></li><li><a href="https://www.oecd.org/industry/smes/" target="_blank" rel="noopener">https://www.oecd.org/industry/smes/</a></li><li><a href="https://www.census.gov/programs-surveys/susb.html" target="_blank" rel="noopener">https://www.census.gov/programs-surveys/susb.html</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.cnbc.com/2025/03/06/wealth-creation-is-booming-as-us-multimillionaire-population-jumps.html" target="_blank" rel="noopener">https://www.cnbc.com/2025/03/06/wealth-creation-is-booming-as-us-multimillionaire-population-jumps.html</a></li><li><a href="https://www.knightfrank.com/wealthreport" target="_blank" rel="noopener">https://www.knightfrank.com/wealthreport</a></li><li><a href="https://www.capgemini.com/insights/research-library/world-wealth-report/" target="_blank" rel="noopener">https://www.capgemini.com/insights/research-library/world-wealth-report/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li><li><a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">https://michaelcarbonara.com/</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
