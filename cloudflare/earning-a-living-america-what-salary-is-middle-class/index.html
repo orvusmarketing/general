@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What salary is middle class?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736;     /* from --mc-accent */
+      --accent-hover: #8f202c; /* derived hover shade */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664;    /* from --mc-bg */
+      --surface-2: rgba(255,255,255,0.04);
+      --radius: 0px;        /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/earning-a-living-america-map.jpg" alt="Earning a living in America — map" />
+        </div>
+        <h1 class="title">What salary is middle class?</h1>
+        <p class="subline">A practical guide to defining and calculating middle-class household income.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/earning-a-living-america-what-salary-is-middle-class/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">This article explains what analysts mean when they talk about the middle class and shows how you can estimate whether your household falls inside that band. It draws on the Census Bureau for medians, Pew Research Center for an operational rule, and Federal Reserve surveys for household financial context.
+
+The goal is practical: after reading this guide you will understand the main definitions, the steps to compute a household-level range, and the adjustments needed to make local and size-aware comparisons.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Researchers usually treat middle class as a band around the national median, not a single salary.</span></div><div class="highlight-card"><span class="highlight-text">Pew’s two-thirds to double-the-median rule is a common, transparent rule of thumb for national comparisons.</span></div><div class="highlight-card"><span class="highlight-text">Local medians and household-size adjustments materially change what the same income buys in different places.</span></div>
+     </div>
+  <h2>Quick answer: what 'middle class' means and why it depends on data</h2><h3>One-sentence summary: earning a living america</h3><p>“Middle class” is usually a relative income band tied to the national median household income, not a single fixed salary; this framing is the basis for widely used researcher rules and for practical comparisons across years and places, according to the Census release describing recent median estimates <a href="https://www.census.gov/newsroom/press-releases/2024/income-poverty-2023.html" target="_blank" rel="noopener">U.S. Census Bureau income release</a>.</p><p>Many analysts use a transparent working rule that defines middle income as roughly two-thirds to twice the national median, which lets analysts compare households without inventing an absolute cutoff <a href="https://www.pewresearch.org/social-trends/2024/10/18/defining-the-middle-class/" target="_blank" rel="noopener">Pew Research Center on defining the middle class</a>.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">quick spreadsheet steps to compute a household band</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-vudiso-0">
+                        <input id="tool-check-vudiso-0" type="checkbox" />
+                        <span>National median</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-1b4zj4-1">
+                        <input id="tool-check-1b4zj4-1" type="checkbox" />
+                        <span>Lower multiplier</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-eeel2t-2">
+                        <input id="tool-check-eeel2t-2" type="checkbox" />
+                        <span>Upper multiplier</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Enter the median as a number then multiply</p>
+            </div><p>The same national band buys different things in different places because ACS and state and metro medians vary, and household size matters; for local interpretation use metro medians or cost adjustments <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">ACS median tables</a>.</p><h2>What researchers mean by 'middle class' - definitions and context</h2><h3>Median-based bands (Pew approach)</h3><p>One common operational definition anchors “middle class” to the national median household income and then applies a multiplier band; this approach emphasizes comparability across time and across national aggregates and is often used in policy summaries <a href="https://www.pewresearch.org/social-trends/2024/10/18/defining-the-middle-class/" target="_blank" rel="noopener">Pew Research Center definition</a>.</p><h3>Percentile-based approaches</h3><p>Other researchers prefer percentile bands that pick a middle slice of the distribution, such as the 20th-80th or the 25th-75th percentiles; those choices change which households are counted as middle income because they focus on position in the income distribution rather than distance from the median <a href="https://www.brookings.edu/research/middle-income-definitions/" target="_blank" rel="noopener">Brookings explanation of percentile approaches</a>.</p><h3>Why definitions matter for interpretation</h3><p>Choice of definition affects the numeric cutoffs, the share of households included, and the policy questions the definition answers: median-based bands are simple for national comparisons, while percentile bands better reflect distributional questions within a population <a href="https://www.pewresearch.org/social-trends/2024/10/18/defining-the-middle-class/" target="_blank" rel="noopener">Pew Research Center on definition trade-offs</a>.</p><h2>How the Pew two-thirds to double-the-median rule works in practice</h2><h3>Exact band and rationale</h3><p>Pew’s working rule sets middle income as roughly 67 percent to 200 percent of the national median; the lower bound captures households not far below the median while the upper bound avoids classifying high earners as middle income <a href="https://www.pewresearch.org/social-trends/2024/10/18/defining-the-middle-class/" target="_blank" rel="noopener">Pew Research Center on the two-thirds to double rule</a>.</p><h3>Simple calculation using the national median</h3><p>To apply the rule, start with the Census national median household income, call it M, then compute the lower cutoff as 0.67 times M and the upper cutoff as 2.0 times M; the Census release is the standard source for the median used in that calculation <a href="https://www.census.gov/newsroom/press-releases/2024/income-poverty-2023.html" target="_blank" rel="noopener">U.S. Census Bureau income release</a>. You can also try Pew's short-read calculator for an interactive check <a href="https://www.pewresearch.org/short-reads/2024/09/16/are-you-in-the-american-middle-class/" target="_blank" rel="noopener">Are you in the U.S. middle class? Try our income calculator</a>.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><p>Researchers use this multiplier approach because it is transparent, easy to replicate in applied work, and simple to explain to nontechnical audiences; the Pew documentation explains the rationale and common use cases <a href="https://www.pewresearch.org/social-trends/2024/10/18/defining-the-middle-class/" target="_blank" rel="noopener">Pew Research Center guide</a>.</p><h2>Percentile-based definitions and alternative cutoffs</h2><h3>Common percentile bands used by researchers</h3><p>Percentile bands such as 20th-80th or 25th-75th select the middle portion of the distribution and are often preferred for distributional analysis because they directly capture ranks in the income ladder <a href="https://www.brookings.edu/research/middle-income-definitions/" target="_blank" rel="noopener">Brookings on percentile methods</a>.</p><h3>How percentile bands change the middle-class population share</h3><p>Using percentile cutoffs changes both the share of households included and the dollar cutoffs, since percentiles reflect the shape of the income distribution rather than fixed multipliers around a single summary statistic <a href="https://www.pewresearch.org/social-trends/2024/10/18/defining-the-middle-class/" target="_blank" rel="noopener">Pew Research Center on differences by approach</a>.</p><h3>When percentile definitions are preferred</h3><p>Analysts choose percentile bands when they need to study inequality, mobility, or how income is spread across the population because percentiles let them compare positional outcomes across regions or groups <a href="https://www.brookings.edu/research/middle-income-definitions/" target="_blank" rel="noopener">Brookings reasoning</a>.</p><h2>Geographic variation: why the national band buys different things in different places</h2><h3>State and metro median differences</h3><p>ACS tables and state and metro median tables show substantial variation in median household income across states and metropolitan areas, so a single national dollar band implies very different purchasing power depending on where a household lives <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">ACS median tables</a>.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure><p>Using the national band without local adjustment can mislead because the same nominal income will go farther in lower-cost areas and less far in high-cost metros; local medians or cost indexes correct for that difference <a href="https://www.census.gov/newsroom/press-releases/2024/income-poverty-2023.html" target="_blank" rel="noopener">U.S. Census Bureau income release</a>.</p><div class="cta-section"><h3 class="cta-headline">Check your local median and compute a local band</h3><div class="cta-intro"><p>Check your local median in the ACS tables to see how a national middle-class band maps to your area.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Find local median and tools</a></div><p>For practical local comparisons, analysts either convert the national band with a regional cost-of-living index or recompute the band using a local median from ACS; both approaches attempt to match purchasing power across geographies <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">ACS median tables</a>.</p><h2>Adjusting for household size: equivalence scales and practical conversions</h2><h3>Square-root method explained</h3><p>Equivalence scales adjust household income for the number of people who share resources; a common informal method divides household income by the square root of household size to create a per-person equivalent measure that many analysts rely on for comparability <a href="https://www.census.gov/programs-surveys/acs/methodology.html" target="_blank" rel="noopener">ACS methodology guidance</a>.</p><h3>When to use household adjustments</h3><p>Household adjustments are important when comparing single adults to larger families because larger households need more income to achieve similar living standards; applied work and ACS methodology notes document these practices <a href="https://www.census.gov/programs-surveys/acs/methodology.html" target="_blank" rel="noopener">Census methodology notes</a>.</p><p>As a practical conversion, apply the square-root adjustment after you compute the household band: divide the household income cutoffs by the square root of household size to compare per-adult equivalents, keeping the original band logic intact <a href="https://www.census.gov/programs-surveys/acs/methodology.html" target="_blank" rel="noopener">ACS adjustment guidance</a>.</p><h2>Which definition should you use? Decision criteria for readers</h2><h3>Purpose-driven choice (research, policy, personal)</h3><p>Pick a definition that matches your purpose: use the Pew band for quick national comparisons, percentile bands for distributional questions, and local medians plus equivalence adjustments for personal or local affordability estimates <a href="https://www.pewresearch.org/social-trends/2024/10/18/defining-the-middle-class/" target="_blank" rel="noopener">Pew Research Center guidance</a>.</p><section class="faq-accordion"><input type="checkbox" id="faq-siy4uk" class="faq-toggle" checked /><label for="faq-siy4uk" class="faq-summary" role="button" tabindex="0">Which definition of middle class should an individual use for personal estimates?</label><div class="faq-content"><p>For a quick personal estimate use the Pew two-thirds to double-the-median band with a local median if available; use percentile or more precise local adjustments when you need distributional or policy-level precision.</p></div></section><p>Also consider whether you need precision or simplicity: a simple multiplier band is easy to communicate while percentiles and local adjustments give more precise, context-aware answers when data permit <a href="https://www.brookings.edu/research/middle-income-definitions/" target="_blank" rel="noopener">Brookings on choosing methods</a>.</p><h3>Data availability and simplicity trade-offs</h3><p>If you lack local tables or microdata, the national median plus the Pew band gives a defensible quick answer; if you can access ACS metro medians and apply household equivalence, you will get a more realistic local classification <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">ACS tables</a>.</p><h2>Step-by-step: calculate your household's middle-class salary range</h2><h3>Gathering the right data</h3><p>Step 1, get the relevant median: use the Census national median if you want a national comparison, or pick a local metro or state median from ACS if you want a local result <a href="https://www.census.gov/newsroom/press-releases/2024/income-poverty-2023.html" target="_blank" rel="noopener">U.S. Census Bureau release</a>.</p><h3>Applying the band, equivalence, and local adjustment</h3><p>Step 2, choose the band: for the Pew approach multiply the median by 0.67 and by 2.0 to get lower and upper household cutoffs; for a percentile approach use ACS or survey percentiles to find the numeric cutoffs <a href="https://www.pewresearch.org/social-trends/2024/10/18/defining-the-middle-class/" target="_blank" rel="noopener">Pew Research Center method</a>.</p><p>Step 3, adjust for household size using an equivalence scale such as the square-root method, and optionally apply a local cost-of-living index or recompute using a local median from ACS for a realistic local range <a href="https://www.census.gov/programs-surveys/acs/methodology.html" target="_blank" rel="noopener">ACS methodology guidance</a>.</p><p>Put the steps together in a spreadsheet: enter the median, compute the two multipliers, then divide cutoffs by the square root of household size or scale by a cost index to produce per-household and per-person band estimates. See the site news for related examples <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">site news</a>.</p><h2>Examples: single adult and small family in a lower-cost area</h2><h3>Worked example: single adult</h3><p>Use a placeholder median M to illustrate: compute 0.67 times M and 2.0 times M as household cutoffs, then divide each cutoff by the square root of 1 to get per-person equivalents for a single adult; this shows the method without inventing a specific median value <a href="https://www.census.gov/newsroom/press-releases/2024/income-poverty-2023.html" target="_blank" rel="noopener">U.S. Census Bureau median guidance</a>.</p><h3>Worked example: family of four</h3><p>For a family of four, compute the household cutoffs the same way and then divide them by the square root of 4 to get per-adult equivalents; this demonstrates how household size reduces the per-person threshold needed to remain in a similar relative band <a href="https://www.census.gov/programs-surveys/acs/methodology.html" target="_blank" rel="noopener">ACS methodology for equivalence</a>.</p><p>In a lower-cost area you would also compare these results to the local median from ACS, which typically produces lower nominal cutoffs than a national median-based band and better reflects local purchasing power <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">ACS metro tables</a>. For more background on what counts as middle-class in different places see Pew's short-read guide <a href="https://www.pewresearch.org/short-reads/2024/09/16/are-you-in-the-american-middle-class/" target="_blank" rel="noopener">Are you in the U.S. middle class?</a>.</p><h2>Examples: same incomes in a high-cost metro area</h2><h3>How purchasing power changes</h3><p>Take an identical nominal income and compare it to a higher local median in a costly metro; the income may sit above the local median in a low-cost area but fall below the local median in a high-cost metro, changing how that household is classified <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">ACS metro median tables</a>. For how percentile methods differ, see Brookings' discussion of percentile approaches <a href="https://www.brookings.edu/research/middle-income-definitions/" target="_blank" rel="noopener">Brookings on percentile approaches</a>.</p><h3>Implications for household classification</h3><p>The Federal Reserve’s household well-being reports add context here: the same income can yield different outcomes for savings, debt burden, and housing affordability, so classification based on income alone omits important aspects of lived financial experience <a href="https://www.federalreserve.gov/publications/2024-economic-well-being-of-us-households-in-2023.htm" target="_blank" rel="noopener">Federal Reserve report on household well-being</a>.</p><p>That practical gap is why analysts combine income bands with measures of expenses, savings, and debt when they study who is actually able to meet typical costs of living in a given place <a href="https://www.federalreserve.gov/publications/2024-economic-well-being-of-us-households-in-2023.htm" target="_blank" rel="noopener">Federal Reserve context</a>. For further reading about national median methods, consult the Census CPS overview <a href="https://www.census.gov/programs-surveys/cps.html" target="_blank" rel="noopener">CPS</a>.</p><h2>Common mistakes and pitfalls to avoid</h2><h3>Treating one definition as authoritative</h3><p>Do not cite a single dollar figure without stating which definition and which year’s median you used, because different rules and different years will change the result substantially <a href="https://www.census.gov/newsroom/press-releases/2024/income-poverty-2023.html" target="_blank" rel="noopener">U.S. Census Bureau note on medians</a>.</p><h3>Ignoring household size and local costs</h3><p>Failing to adjust for household size or local cost differences is a common error that leads to misleading comparisons; use equivalence scales and local medians to avoid this trap <a href="https://www.census.gov/programs-surveys/acs/methodology.html" target="_blank" rel="noopener">ACS methodology on adjustments</a>.</p><p>Also be careful mixing nominal medians from different years without clarifying whether figures are inflation-adjusted, since year choice changes the numeric value and comparability of cutoffs <a href="https://www.census.gov/newsroom/press-releases/2024/income-poverty-2023.html" target="_blank" rel="noopener">Census guidance on year-to-year comparisons</a>.</p><h2>How Census, Pew, and the Federal Reserve provide different but complementary signals</h2><h3>What each source measures best</h3><p>The Census ACS gives the official median and the geographic detail needed to compute local bands, while Pew supplies a clear, operational middle-income rule for comparative work and the Federal Reserve supplies survey context on savings, debt, and financial strain <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">ACS details</a>.</p><h3>How to use them together</h3><p>Combine the Census median for the numeric baseline, use Pew’s multiplier band if you want a transparent national comparison, and consult Federal Reserve household reports to understand how income maps to financial well-being in practice <a href="https://www.pewresearch.org/social-trends/2024/10/18/defining-the-middle-class/" target="_blank" rel="noopener">Pew Research Center operational guide</a>.</p><p>State your method when reporting results: note whether you used the national or local median, which band type you chose, and whether you adjusted for household size or local cost differences <a href="https://www.census.gov/newsroom/press-releases/2024/income-poverty-2023.html" target="_blank" rel="noopener">Census release as primary source</a>. Learn more about the author <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">about Michael Carbonara</a>.</p><h2>Where to find the data and simple tools to do the math</h2><h3>Primary sources to check</h3><p>Find the national median and income tables on the Census site, use ACS tables for state and metro medians, read Pew’s explanation of the two-thirds to double rule, and consult the Federal Reserve for household financial context <a href="https://www.census.gov/newsroom/press-releases/2024/income-poverty-2023.html" target="_blank" rel="noopener">U.S. Census Bureau release</a>.</p><h3>Recommended simple tools and steps</h3><p>Basic tools are a spreadsheet and the ACS median tables: enter the median, multiply by 0.67 and 2.0, then apply a square-root household adjustment or a cost index to produce a local per-household and per-person range <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">ACS tables</a>. For tutorials and examples, check the site homepage <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">Michael Carbonara homepage</a>.</p><h2>Conclusion: practical next steps for readers</h2><h3>Summarize key choices</h3><p>Middle class is a relative, definitional construct; whether a household falls in the middle depends on your chosen method, the data year, household size, and local conditions, so be explicit about each choice you make <a href="https://www.pewresearch.org/social-trends/2024/10/18/defining-the-middle-class/" target="_blank" rel="noopener">Pew Research Center guidance</a>.</p><h3>Actionable next steps</h3><p>Three steps to check your status: pick a definition, get the relevant median from Census or ACS, then apply an equivalence adjustment for household size; optionally use local medians or a cost index for a more realistic result <a href="https://www.census.gov/programs-surveys/acs/methodology.html" target="_blank" rel="noopener">ACS methodology guidance</a>.</p><p>State your method when you report a result so readers can compare like with like and so policymakers and neighbors understand the basis for your classification <a href="https://www.census.gov/newsroom/press-releases/2024/income-poverty-2023.html" target="_blank" rel="noopener">U.S. Census Bureau release</a>.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-z5h41q" class="faq-toggle" /><label for="faq-z5h41q" class="faq-summary" role="button" tabindex="0">How do I find the median to use for my calculation?</label><div class="faq-content"><p>Use the U.S. Census Bureau release for the national median or the ACS tables for state and metro medians; pick the one that matches whether you want a national or local comparison.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-peszpa" class="faq-toggle" /><label for="faq-peszpa" class="faq-summary" role="button" tabindex="0">Should I adjust for household size?</label><div class="faq-content"><p>Yes, apply an equivalence scale such as the square-root method to make household income comparable across different household sizes.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-18nkxe" class="faq-toggle" /><label for="faq-18nkxe" class="faq-summary" role="button" tabindex="0">Which definition is best for personal estimates?</label><div class="faq-content"><p>For quick personal estimates use the Pew two-thirds to double-the-median band with a local median if available; use percentile or more complex adjustments when precision matters.</p></div></section>
+</section><section class="article-ending">Estimating whether a household is middle class requires choices: which definition, which median, and whether to adjust for household size and local costs. State your method when you report results so others can interpret your conclusion.
+
+If you want to dig deeper, consult the Census ACS tables for local medians, read Pew Research Center’s explanation of the multiplier approach, and use Federal Reserve reports for context on savings and debt.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.census.gov/newsroom/press-releases/2024/income-poverty-2023.html" target="_blank" rel="noopener">https://www.census.gov/newsroom/press-releases/2024/income-poverty-2023.html</a></li><li><a href="https://www.pewresearch.org/social-trends/2024/10/18/defining-the-middle-class/" target="_blank" rel="noopener">https://www.pewresearch.org/social-trends/2024/10/18/defining-the-middle-class/</a></li><li><a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">https://www.census.gov/programs-surveys/acs</a></li><li><a href="https://www.brookings.edu/research/middle-income-definitions/" target="_blank" rel="noopener">https://www.brookings.edu/research/middle-income-definitions/</a></li><li><a href="https://www.pewresearch.org/short-reads/2024/09/16/are-you-in-the-american-middle-class/" target="_blank" rel="noopener">https://www.pewresearch.org/short-reads/2024/09/16/are-you-in-the-american-middle-class/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.census.gov/programs-surveys/acs/methodology.html" target="_blank" rel="noopener">https://www.census.gov/programs-surveys/acs/methodology.html</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://www.federalreserve.gov/publications/2024-economic-well-being-of-us-households-in-2023.htm" target="_blank" rel="noopener">https://www.federalreserve.gov/publications/2024-economic-well-being-of-us-households-in-2023.htm</a></li><li><a href="https://www.census.gov/programs-surveys/cps.html" target="_blank" rel="noopener">https://www.census.gov/programs-surveys/cps.html</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li><li><a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">https://michaelcarbonara.com/</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
