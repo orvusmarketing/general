@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Understanding Poverty Measures: What Official Numbers Do (and Don’t) Capture</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Derived brand tokens from provided style */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #8f202c; /* derived darker accent (optional) */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Scoped additions for article components copied from source (kept minimal) */
+    .summary{ font-style: italic; color: rgba(255,255,255,.80); margin-bottom: 2rem; }
+    .article-highlights{ display:flex; flex-direction:column; gap:1rem; margin:2.2rem 0; }
+    .highlight-card{ background: linear-gradient(135deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.03) 100%); padding:1.15rem 1.35rem; border-left:4px solid var(--accent); border:1px solid rgba(255,255,255,.14); font-weight:750; color: var(--text-color); }
+    .faq-accordion{ border:1px solid rgba(255,255,255,.14); border-left:4px solid var(--accent); background: linear-gradient(135deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.03) 100%); padding:0; }
+    .faq-summary{ padding:1.25rem 1.2rem 1.25rem 2.9rem; font-weight:950; cursor:pointer; color:var(--text-color); display:flex; align-items:center; min-height:64px; }
+    .faq-content{ display:block; padding:1.05rem 1.2rem 1.15rem 1.2rem; color: rgba(255,255,255,.92); border-top:1px solid rgba(255,255,255,.12); }
+    .tool-block{ max-width:720px; margin:2.3rem auto; padding:1.3rem; border-left:4px solid var(--accent); background: linear-gradient(135deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.03) 100%); }
+    .tool-checklist-list{ list-style:none; padding:0; margin:0.4rem 0 0 0; display:grid; gap:0.55rem; }
+    .tool-checklist-item label{ display:flex; align-items:center; gap:0.65rem; padding:0.7rem 0.8rem; background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.10); }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/poverty-line-in-america.jpg" alt="Understanding Poverty Measures banner" />
+        </div>
+        <h1 class="title">Understanding Poverty Measures: What Official Numbers Do (and Don’t) Capture</h1>
+        <p class="subline">A clear, neutral guide to which official poverty measure to cite and where to find the original documentation.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/poverty-line-in-america-understanding-measures/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+          <div class="summary">Poverty statistics are a common feature of news coverage and policy debates, but a single phrase like poverty line in america can mask important differences in how official numbers are constructed. This piece explains the three main official figures you are likely to encounter and why the choice of measure matters for reporting and analysis.
+
+The article is meant for voters, local reporters, students, and civic readers who want a clear, neutral guide to which measure to cite and where to find the original documentation.</div>
+
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">The United States uses multiple official poverty measures that serve distinct purposes and are not interchangeable.</span></div><div class="highlight-card"><span class="highlight-text">The Supplemental Poverty Measure includes tax credits and many noncash benefits and adjusts for regional price differences.</span></div><div class="highlight-card"><span class="highlight-text">Use SPM for policy effects, OPM for long-run trends, and HHS guidelines for program eligibility.</span></div>
+     </div>
+
+  <h2>What we mean by the poverty line in America</h2>
+  <p>The phrase poverty line in america is often used as a shorthand for a single official threshold, but the United States maintains several, coexisting metrics that serve different purposes. The most widely reported series is the Official Poverty Measure, which uses pre-tax cash income thresholds and a long-running historical benchmark; for a concise overview, see the <a href="https://www.census.gov/topics/income-poverty/supplemental-poverty-measure/library/working-papers/topics/improvements-spm-2021.html" target="_blank" rel="noopener">Census Bureau summary on income and poverty</a>.</p>
+
+  <p>The Supplemental Poverty Measure changes both what counts as household resources and how thresholds are set. It includes tax credits and many noncash benefits, subtracts certain necessary expenses such as medical and work-related costs, and adjusts thresholds for regional price differences; the Census Bureau explains the SPM methodology in detail.</p>
+
+  <section class="faq-accordion"><input type="checkbox" id="faq-vdauek" class="faq-toggle" checked /><label for="faq-vdauek" class="faq-summary" role="button" tabindex="0">What should readers know before citing a poverty statistic?</label><div class="faq-content"><p>Name the measure used, state the producing agency, and say clearly what resources and costs the measure includes or excludes so readers can interpret the number correctly.</p></div></section>
+
+<p>Separately, HHS poverty guidelines are administrative figures used to set program eligibility and should not be treated as the same thing as either the Official Poverty Measure or the Supplemental Poverty Measure; the Office of the Assistant Secretary for Planning and Evaluation publishes those guidelines.</p>
+
+<p>Because these measures differ in purpose and construction, writers and readers should always name the specific measure they are citing and the agency that produces it when reporting numbers. Doing so makes clear whether a cited statistic is tracking long-term trends, the short-term effect of programs and taxes, or an eligibility cutoff for a federal program.</p>
+
+<h3>Why different measures exist</h3>
+<p>Multiple measures exist because a single statistic cannot both track a consistent historical series and reflect modern taxes, benefits, and local price variation at the same time. The Official Poverty Measure remains useful for long-run trend comparisons because it is a continuous series with a clearly specified resource concept, while research measures allow analysts to test how policy changes affect measured poverty in a single year.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<p>Both measures use the same underlying survey, the CPS ASEC, but they treat resources and thresholds differently; as a result, the number of people counted as poor can differ appreciably between the two measures for a given year.</p>
+
+<h3>Who publishes them and why it matters</h3>
+<p>The Census Bureau produces both the Official Poverty Measure and the Supplemental Poverty Measure and provides documentation and data products for each. HHS issues poverty guidelines for administrative purposes such as determining eligibility for certain programs, and those guidelines are calculated with a different intent and construction than the Census statistics.</p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/17MtxIT9nUZ1FZcrdZ63qOB999GNpFrY3=s1200" alt="Minimal vector infographic showing a metro skyline and small town main street side by side illustrating poverty line in america cost differences in navy white and red accents" /></a>
+      <div class="side-text"><p>The Official Poverty Measure relies on a pre-tax cash-income definition and thresholds originally derived from mid-twentieth century consumption patterns, estimated from the Current Population Survey Annual Social and Economic Supplement microdata; the Census Bureau outlines this basis in its annual report.</p></div>
+    </div>
+
+<p>By contrast, the Supplemental Poverty Measure revises the resource definition by adding tax credits and many noncash benefits and by subtracting out-of-pocket expenses that reduce resources available for other consumption. It also sets thresholds that reflect contemporary spending patterns and uses regional price differences in some calculations.</p>
+
+  <div class="cta-section">
+    <h3 class="cta-headline">Join Michael Carbonara&#39;s Campaign Updates</h3>
+    <div class="cta-intro"><p>For readers who want the original methodology pages, review the Census SPM documentation and the Census OPM overview to compare technical notes and tables.</p></div>
+    <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the Campaign</a>
+  </div>
+
+<p>Practically speaking, the SPM often reports a lower measured poverty rate when tax credits and noncash benefits are included, because those additions raise measured household resources. The Census SPM documentation provides examples of how changing the resource definition alters measured counts.</p>
+
+<p>The Supplemental Poverty Measure also applies state and local price adjustments using the Bureau of Economic Analysis <a href="https://www.bea.gov/research/papers/2017/supplemental-poverty-measure-comparison-geographic-adjustments-regional-price" target="_blank" rel="noopener">regional price data</a> when appropriate. That regional adjustment can matter a lot for metropolitan versus rural comparisons.</p>
+
+<h3>Resource definitions: what counts as income or benefit</h3>
+<p>OPM counts pre-tax cash income as reported in the CPS ASEC interview. It does not count many noncash benefits or tax credits in the same way the SPM does, which is a key reason the two measures can diverge for the same population in the same year.</p>
+
+<p>SPM explicitly adds tax credits such as refundable tax credits and many noncash benefits like SNAP and housing subsidies to the resource side, while subtracting certain necessary spending items that reduce a household's available resources for other needs.</p>
+
+<h3>Thresholds and price adjustments</h3>
+<p>OPM thresholds are updated for inflation but remain anchored to historical consumption patterns. SPM thresholds are constructed differently to reflect contemporary basic spending patterns and, in some applications, are adjusted for geographic price differences using BEA regional price parities.</p>
+
+<p>Those regional price adjustments can change who falls under a threshold in expensive metro areas compared with lower-cost rural areas because the SPM thresholds move in response to local prices.</p>
+
+<h3>Data sources and timing</h3>
+<p>Both OPM and SPM estimates are produced from CPS ASEC microdata, which is a household survey with well-known timing and reporting patterns. Methodological notes in the Census documentation explain how the same survey input leads to different outputs under the two measures.</p>
+
+<h2>Which measure to use for different questions</h2>
+<p>For evaluating the effect of taxes and benefit programs on poverty in a given year, the Supplemental Poverty Measure is the recommended single indicator because it incorporates the program resources and many of the costs that determine a household's real resources; the Census SPM page details this approach.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+
+<p>When discussing long-run official trends over decades, the Official Poverty Measure remains the canonical series to cite because it is the consistent historical series that many public comparisons rely on; the Census Bureau's historical discussion is the appropriate citation for trend work.</p>
+
+<p>If the focus is program eligibility or an administrative cutoff for benefits, cite the HHS poverty guidelines and the agency that issues them, because those numbers are specifically designed for administrative use and differ from either the OPM or the SPM.</p>
+
+<p>As a practical rule of thumb for <a href="https://michaelcarbonara.com/american-prosperity/" target="_blank" rel="noopener">writers and editors</a>, state which measure is being used and why, and include the producing agency in the same line of text. That clarity helps readers understand whether a statistic reflects programs and taxes, a long-run series, or eligibility criteria.</p>
+
+<h2>How surveys, underreporting, and costs shape poverty estimates</h2>
+<p>Survey-based measures rely on household reporting and therefore inherit the common problems of underreporting of income and benefits, item nonresponse, and recall error; foundational reviews discuss these measurement limits and their effects on poverty statistics.</p>
+
+<p>Underreporting can lead survey-based measures to understate resources that would otherwise reduce measured poverty. Analysts continue to study how best to correct or adjust for these reporting gaps so that benefits and incomes are more fully captured in statistical series.</p>
+
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Guide to inspecting CPS ASEC microdata and BEA price tables</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-tjf356-0">
+                        <input id="tool-check-tjf356-0" type="checkbox" />
+                        <span>CPS ASEC microdata</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-eewzh9-1">
+                        <input id="tool-check-eewzh9-1" type="checkbox" />
+                        <span>Census SPM table</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-w4s0rb-2">
+                        <input id="tool-check-w4s0rb-2" type="checkbox" />
+                        <span>BEA regional price parities</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use these sources to compare resources and thresholds</p>
+            </div>
+
+<p>Large out-of-pocket housing or <a href="https://michaelcarbonara.com/affordable-healthcare/" target="_blank" rel="noopener">healthcare</a> costs can materially affect whether a household is counted as poor depending on whether a measure subtracts those costs. The SPM subtracts certain necessary expenses to reflect their effect on household resources.</p>
+
+<p>Household composition and shared living arrangements also change per-person thresholds and the interpretation of who is considered poor. Reporting rules for household members matter when dividing thresholds across people in the same unit.</p>
+
+<h3>Underreporting and measurement error in CPS ASEC</h3>
+<p>The CPS ASEC remains the primary survey source for both official measures, but analysts note that some income types and benefits are underreported in household interviews. Those gaps lead researchers to examine supplemental data or adjustments to better reflect actual program receipt and tax credit claims.</p>
+
+<h3>Treatment of housing and health costs</h3>
+<p>How a measure treats housing subsidies, rent, mortgage interest, health premiums, and out-of-pocket medical spending affects who is classified as poor. The SPM's subtraction of certain expenses aims to reflect these consumption realities more closely than a simple cash-income count.</p>
+
+<h3>Household composition and shared living arrangements</h3>
+<p>Differences in who is counted as a household member, how childcare is reported, or how shared housing is recorded can change per-person resource calculations and therefore whether an individual is counted under a threshold.</p>
+
+<h2>Common mistakes and how to avoid them</h2>
+<p>A frequent error is mixing OPM and SPM numbers in the same analysis without explaining that the two measures use different resource definitions and thresholds. That practice can confuse readers about what has changed and why.</p>
+
+<p>Writers should avoid claiming that a measured change in the poverty rate is direct proof that a specific policy caused the change without considering measurement definitions, timing, and other factors that affect year-to-year estimates.</p>
+
+<p>Another common mistake is using HHS poverty guidelines as if they were the Official Poverty Measure. HHS guidelines are administrative figures for eligibility and are computed differently from the Census measures.</p>
+
+<p>Before publishing a number, follow a short verification checklist: name the measure, name the producing agency, state what resources and costs are included or excluded, and provide the data release or table you used. This small set of steps reduces the risk of mislabeling or misattribution.</p>
+
+<ul>
+<li>Verify the measure name and agency in the original table or methodology note</li>
+<li>Check whether the figure is OPM, SPM, or an HHS guideline</li>
+<li>Note any adjustments or geographic price differences applied</li>
+</ul>
+
+<h2>Practical examples and scenarios</h2>
+<p>Example 1, tax credits and the SPM. Imagine a household near the cash-income threshold under the OPM. When refundable tax credits and SNAP are added to resources in the SPM definition, the household's measured resources rise and it may no longer be below the SPM threshold. The Census SPM documentation provides conceptual examples of this effect.</p>
+
+<p>Example 2, a high cost metro versus a low cost rural area. In an expensive metro area, BEA regional price parities raise the local price level used for SPM thresholds, which can change whether residents are counted as poor compared with the same nominal income in a lower-cost area; the BEA regional price data explain how those adjustments work.</p>
+
+<p>Example 3, how a local reporter should cite a number. A short model sentence for local news: According to the Census Bureau's Supplemental Poverty Measure for 2024, which includes tax credits and many noncash benefits, X percent of households in the metro area had resources below the SPM threshold. That sentence names the measure, the producing agency, and what is included.</p>
+
+<p>When providing local context, state whether the figure is OPM or SPM and whether regional price adjustments or particular expense subtractions are applied. That transparency helps readers interpret the local meaning of a national statistic.</p>
+
+<h2>Closing: best practices and where to find source data</h2>
+<p>Rule of thumb: use the Supplemental Poverty Measure to evaluate the effect of taxes and benefits, use the Official Poverty Measure for long-run trend comparisons, and cite HHS poverty guidelines for program eligibility questions. Those recommendations align with the stated purposes of each series.</p>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Primary source pages to consult are the Census Bureau pages for both OPM and SPM, the HHS/ASPE page for poverty guidelines, and the BEA page for regional price parities.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1B49_p7InD4x_kXlvbMeIhFhElcYZTet-=s1200" alt="Minimal 2D vector infographic of three stacked white blocks with government scale and health icons conveying policy layers and poverty line in america" /></a>
+    </div>
+
+<p>Open research questions remain about improving survey capture of income and benefits and better reflecting large housing and healthcare burdens in statistical thresholds. Readers interested in deeper technical work should consult the linked agency documentation and methodological notes for guidance.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-lf01is" class="faq-toggle" /><label for="faq-lf01is" class="faq-summary" role="button" tabindex="0">What is the difference between the Official Poverty Measure and the Supplemental Poverty Measure?</label><div class="faq-content"><p>The Official Poverty Measure uses pre-tax cash income and a long-running historical threshold; the Supplemental Poverty Measure adjusts resources and thresholds to include tax credits and many noncash benefits and subtracts certain necessary expenses.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-2gusjt" class="faq-toggle" /><label for="faq-2gusjt" class="faq-summary" role="button" tabindex="0">Which measure should I cite when reporting a change in poverty this year?</label><div class="faq-content"><p>For assessing how taxes and benefits affected measured poverty in a single year, cite the Supplemental Poverty Measure; for long-run trend descriptions, cite the Official Poverty Measure; for eligibility cutoffs, cite HHS poverty guidelines.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-8vfo9q" class="faq-toggle" /><label for="faq-8vfo9q" class="faq-summary" role="button" tabindex="0">Where can I find the original data and methods for these measures?</label><div class="faq-content"><p>Consult the Census Bureau pages for OPM and SPM, the HHS/ASPE poverty guidelines page, and the BEA regional price parities documentation for thresholds and methodology.</p></div></section>
+</section>
+
+<section class="article-ending">Accurate reporting on poverty depends on naming the measure, citing the producing agency, and noting what resources and costs were included or excluded. The primary agency pages linked in this explainer are the right starting point for verifying any published figure.
+
+If you want more detail on a specific measure or a local application, consult the Census SPM and OPM documentation, the HHS poverty guidelines, and BEA regional price data for further technical guidance.</section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
