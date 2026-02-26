@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What percentage of American households make $100,000 or more?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #8f202b; /* optional darker accent */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* panel soft */
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area */
+    .article-body .highlight-card{ background: linear-gradient(135deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border-left-color: var(--accent); }
+    .cta-button{ background: var(--accent); }
+    .cta-button:hover{ background: var(--accent-hover); }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1c9sfv6M98uk52YxwQuKcyNx16suEtF35" alt="Household incomes map — percentage of U.S. households making $100,000 or more" />
+        </div>
+        <h1 class="title">What percentage of American households make $100,000 or more?</h1>
+        <p class="subline">A practical guide to interpreting Census household income counts and checking local data.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/household-finances-america-percent-us-households-100k/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+<div class="summary">This article explains what share of U.S. households report annual incomes of $100,000 or more, how the Census counts households, and why that headline varies across places. It draws directly on primary sources so readers, reporters, and voters can check the underlying tables and adjust figures for local prices.
+
+The focus is practical: how to interpret the national headline, how geography and household structure affect the numbers, and where to go to verify local claims. The article stays neutral and uses Census, ACS, Federal Reserve, and BEA sources for its analysis.</div>
+
+<div class="article-highlights">
+  <div class="highlight-card"><span class="highlight-text">Census reporting shows roughly one-third of U.S. households had incomes of $100,000 or more in 2023.</span></div>
+  <div class="highlight-card"><span class="highlight-text">Household composition and local prices strongly shape whether $100,000 means a high standard of living in a given place.</span></div>
+  <div class="highlight-card"><span class="highlight-text">Use ACS Table B19001 and BEA regional price parities to verify local shares and adjust for purchasing power.</span></div>
+</div>
+
+<h2>household finances america: what the Census counts as a household and how income is measured</h2>
+<p>The Census Bureau defines a household as all people who occupy a housing unit, and household income is the combined income of those members over the past 12 months, which shapes how thresholds such as $100,000 are counted and compared in national reports <a href="https://www.census.gov/topics/families/households/about.html" target="_blank" rel="noopener">About Households - Definitions and Concepts</a></p>
+
+<div class="side-by-side product-image-right">
+  <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+  <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+</div>
+
+<p>Because household income sums everyone in a housing unit, a figure reported for a household can reflect multiple earners living together. This means two or more workers in the same household can push combined income above $100,000 even if none earn that amount alone, a point emphasized in the Census income reports <a href="https://www.census.gov/library/publications/2024/demo/p60-283.html" target="_blank" rel="noopener">Income and Poverty in the United States: 2023</a></p>
+
+<p>It is also important to distinguish household-level income from person-level earnings. Household measures capture the economic resources available to residents of a single housing unit, while person-level data focus on wages or earnings for individuals, so comparisons across those measures require care and clear labeling in reporting <a href="https://www.census.gov/library/publications/2024/demo/p60-283.html" target="_blank" rel="noopener">Income and Poverty in the United States: 2023</a></p>
+
+<h2>household finances america: national snapshot - how many U.S. households earn $100,000 or more?</h2>
+<p>The most recent Census analysis reports that roughly one-third of U.S. households had annual household incomes of $100,000 or more in 2023, providing a simple headline for national coverage <a href="https://www.census.gov/library/publications/2024/demo/p60-283.html" target="_blank" rel="noopener">Income and Poverty in the United States: 2023</a></p>
+
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+  <p class="tool-purpose">Quick verification checklist for national and local $100k household shares</p>
+  <ul class="tool-checklist-list">
+    <li class="tool-checklist-item">
+      <label for="tool-check-7lils7-0">
+        <input id="tool-check-7lils7-0" type="checkbox" />
+        <span>ACS Table B19001</span>
+      </label>
+    </li>
+    <li class="tool-checklist-item">
+      <label for="tool-check-a0arjb-1">
+        <input id="tool-check-a0arjb-1" type="checkbox" />
+        <span>Income and Poverty report</span>
+      </label>
+    </li>
+    <li class="tool-checklist-item">
+      <label for="tool-check-ug24vg-2">
+        <input id="tool-check-ug24vg-2" type="checkbox" />
+        <span>BEA RPPs</span>
+      </label>
+    </li>
+  </ul>
+  <p class="tool-notes">Use the checklist to guide data retrieval and adjustment</p>
+</div>
+
+<p>The Census headline is based on survey tabulations of household income for the previous 12 months. That national share is a summary measure that helps indicate how common $100,000-or-higher households are, but it does not capture local differences in prices or household makeup that affect real living standards <a href="https://www.census.gov/library/publications/2024/demo/p60-283.html" target="_blank" rel="noopener">Income and Poverty in the United States: 2023</a></p>
+
+<p>The American Community Survey (ACS) household-income tables provide the underlying distribution that supports the national headline and let readers reproduce the share for any state or metro area by using Table B19001 in the ACS data tools <a href="https://data.census.gov/table/ACSDT1Y2023.B19001" target="_blank" rel="noopener">Table B19001: Household Income in the Past 12 Months (ACS 1-Year Estimates, 2023)</a></p>
+
+<p>In plain terms, saying 'about one-third of households' means that in a typical year about three out of every ten households nationwide reported combined incomes at or above $100,000; readers should note that survey timing and reporting lags can mean the most recent economic events are not fully reflected in 2023 figures <a href="https://data.census.gov/table/ACSDT1Y2023.B19001" target="_blank" rel="noopener">Table B19001: Household Income in the Past 12 Months (ACS 1-Year Estimates, 2023)</a></p>
+
+<h2>How the share varies across states and metro areas</h2>
+<p>ACS 2023 household-income tables show sizable variation in the share of households earning $100,000 or more across <a href="https://worldpopulationreview.com/state-rankings/percentage-of-households-making-over-100k" target="_blank" rel="noopener">states and metropolitan areas</a>, with higher proportions concentrated in many high-cost states and large metros <a href="https://data.census.gov/table/ACSDT1Y2023.B19001" target="_blank" rel="noopener">Table B19001: Household Income in the Past 12 Months (ACS 1-Year Estimates, 2023)</a></p>
+
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Join Michael Carbonara's campaign updates and volunteer list</h3><div class="cta-intro"><p>Check your state or metro in ACS Table B19001 to see the local share of households reporting $100,000 or more and compare that to nearby areas for context</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign</a></div>
+
+<p>Typical geographic patterns place higher shares in large metropolitan regions with higher average wages and living costs. Readers should expect noticeably different shares when they compare large, high-wage metros to smaller cities or rural counties, a pattern visible in ACS cross-tabs and related regional price statistics <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">Regional Price Parities by State and Metro Area (RPPs), 2023</a></p>
+
+<p>To find a local share, use ACS Table B19001 and select the geographic unit you want. The ACS table lists household counts by income bracket; calculate the percent at $100,000 or higher by summing the relevant bracket counts and dividing by total households in the chosen geography <a href="https://data.census.gov/table/ACSDT1Y2023.B19001" target="_blank" rel="noopener">Table B19001: Household Income in the Past 12 Months (ACS 1-Year Estimates, 2023)</a></p>
+
+<p>Because high-cost metros tend to have higher wage levels, a larger share of households there will report $100k-plus incomes. That pattern is often paired with higher local prices, which is why analysts recommend adjusting for purchasing power when comparing across places <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">Regional Price Parities by State and Metro Area (RPPs), 2023</a></p>
+
+<h2>Who is likelier to live in a $100,000+ household?</h2>
+<p>Census and Federal Reserve analyses show that household structure strongly affects the likelihood of reaching $100,000: married-couple and other multi-earner households are much more likely to report $100k-plus combined income than single-adult or single-earner households <a href="https://data.census.gov/table/ACSDT1Y2023.B19001" target="_blank" rel="noopener">Table B19001: Household Income in the Past 12 Months (ACS 1-Year Estimates, 2023)</a></p>
+
+<p>Age, education, and occupation patterns also correlate with household income, with higher household incomes more common where adults have higher educational attainment and work in higher-paying occupations, a relationship described in Federal Reserve reporting on economic well-being <a href="https://www.federalreserve.gov/publications/2024-economic-well-being-of-us-households-in-2023.htm" target="_blank" rel="noopener">Report on the Economic Well‑Being of U.S. Households in 2023</a></p>
+
+<section class="faq-accordion"><input type="checkbox" id="faq-7djxp9" class="faq-toggle" checked /><label for="faq-7djxp9" class="faq-summary" role="button" tabindex="0">What percentage of American households make $100,000 or more?</label><div class="faq-content"><p>According to the Census Income and Poverty report for 2023, roughly one-third of U.S. households had annual household incomes of $100,000 or more.</p></div></section>
+
+<p>Single-adult households and households with only one earner are, on average, less likely to reach a $100,000 combined income because the threshold requires either a high individual wage or multiple earners contributing to the household total, a distinction that matters when interpreting household-level statistics <a href="https://data.census.gov/table/ACSDT1Y2023.B19001" target="_blank" rel="noopener">Table B19001: Household Income in the Past 12 Months (ACS 1-Year Estimates, 2023)</a></p>
+
+<p>When reporting or evaluating claims about $100k households, it is useful to note whether the figures refer to married-couple households, family households, or all households, since composition drives much of the observed difference in shares across groups <a href="https://www.federalreserve.gov/publications/2024-economic-well-being-of-us-households-in-2023.htm" target="_blank" rel="noopener">Report on the Economic Well‑Being of U.S. Households in 2023</a></p>
+
+<h2>Trends over time: nominal growth versus inflation-adjusted change</h2>
+<p>The nominal share of households with $100,000 or more has increased since 2000, but part of that rise reflects inflation and demographic change rather than uniformly higher purchasing power for all households <a href="https://www.census.gov/library/publications/2024/demo/p60-283.html" target="_blank" rel="noopener">Income and Poverty in the United States: 2023</a></p>
+
+<p>Looking at inflation-adjusted measures gives a different picture of whether households are better off in real terms. Analysts use deflators and price parity adjustments to separate nominal increases from changes in real purchasing power <a href="https://www.federalreserve.gov/publications/2024-economic-well-being-of-us-households-in-2023.htm" target="_blank" rel="noopener">Report on the Economic Well‑Being of U.S. Households in 2023</a></p>
+
+<p>Demographic shifts, including changes in household size, the share of dual-earner families, and the age distribution of adults, also affect the observed share of $100k households. Researchers urge analysts to account for these factors when describing long-term trends <a href="https://www.pewresearch.org/social-trends/2024/06/10/trends-in-household-income-100k-share/" target="_blank" rel="noopener">Analysis: Trends in U.S. Household Income and the Share Earning $100,000 or More</a> <a href="https://usafacts.org/answers/what-is-the-income-of-a-us-household/country/united-states/" target="_blank" rel="noopener">USAFacts</a></p>
+
+<p>For a grounded comparison over time, use inflation-adjusted thresholds or convert past-dollar thresholds into current dollars before comparing shares across years; the Census report and Federal Reserve summaries provide guidance for these methods <a href="https://www.census.gov/library/publications/2024/demo/p60-283.html" target="_blank" rel="noopener">Income and Poverty in the United States: 2023</a></p>
+
+<h2>Purchasing power matters: adjusting $100,000 with regional price parities</h2>
+<p>The BEA regional price parities measure local price differences and are a standard tool to adjust nominal incomes for purchasing power, helping show how far $100,000 goes in different places <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">Regional Price Parities by State and Metro Area (RPPs), 2023</a></p>
+
+<p>Using RPPs, you can convert a national nominal amount into a local purchasing-power equivalent by dividing the nominal income by the RPP index for the area of interest and then interpreting the result against national prices; this method clarifies whether $100k buys more or less in a given metro compared with the national average <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">Regional Price Parities by State and Metro Area (RPPs), 2023</a></p>
+
+<p>For example, if a metro's RPP indicates local prices are above the national average, a household with $100,000 nominal income will have lower purchasing power there than in a place with below-average prices. The RPP method does not require inventing local wage data; it adjusts the dollar value to local cost levels <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">Regional Price Parities by State and Metro Area (RPPs), 2023</a></p>
+
+<h2>How reporters and voters should evaluate $100,000 household claims</h2>
+<p>When assessing claims about the share of households earning $100,000 or more, check source recency, geographic scale, whether figures are nominal or inflation-adjusted, and what household types are included; these criteria help determine how useful a claim is for local voters or readers <a href="https://www.census.gov/library/publications/2024/demo/p60-283.html" target="_blank" rel="noopener">Income and Poverty in the United States: 2023</a></p>
+
+<p>Use the Census Income and Poverty report for national context and trend discussion, ACS tables for state and metro specifics, and Federal Reserve analysis for complementary insights on household financial well-being and composition, depending on your reporting need <a href="https://data.census.gov/table/ACSDT1Y2023.B19001" target="_blank" rel="noopener">Table B19001: Household Income in the Past 12 Months (ACS 1-Year Estimates, 2023)</a>. See related coverage on the <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news page</a>.</p>
+
+<p>Ask clear questions of any local or campaign claim: is the figure nominal or adjusted for local prices, what year does it cover, and does it refer to all households or a subset such as family households? These questions reveal whether figures are comparable and relevant to the audience <a href="https://www.federalreserve.gov/publications/2024-economic-well-being-of-us-households-in-2023.htm" target="_blank" rel="noopener">Report on the Economic Well‑Being of U.S. Households in 2023</a></p>
+
+<h2>Common mistakes and pitfalls when citing $100,000 household figures</h2>
+<p>A frequent error is mixing nominal and inflation-adjusted comparisons. Citing a nominal $100k share from one year alongside an inflation-adjusted figure from another year can mislead readers, a point emphasized in Census and Federal Reserve guidance <a href="https://www.census.gov/library/publications/2024/demo/p60-283.html" target="_blank" rel="noopener">Income and Poverty in the United States: 2023</a></p>
+
+<p>Another pitfall is ignoring household composition. A national share may hide the fact that married-couple, dual-earner households are overrepresented among $100k households while single-earner households are underrepresented, so always check the family-type breakdowns in ACS or Federal Reserve tables <a href="https://data.census.gov/table/ACSDT1Y2023.B19001" target="_blank" rel="noopener">Table B19001: Household Income in the Past 12 Months (ACS 1-Year Estimates, 2023)</a></p>
+
+<p>Finally, do not apply national averages directly to local policy discussions without adjusting for price levels. Using BEA RPPs prevents overgeneralizing and helps align nominal income thresholds with local purchasing power <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">Regional Price Parities by State and Metro Area (RPPs), 2023</a></p>
+
+<h2>Practical examples and how to check local numbers yourself</h2>
+<p>Step 1: open ACS Table B19001 for the geographic area you want, such as a state or metro, and note the household counts in the income brackets that start at $100,000; divide the sum by total households to compute the local share <a href="https://data.census.gov/table/ACSDT1Y2023.B19001" target="_blank" rel="noopener">Table B19001: Household Income in the Past 12 Months (ACS 1-Year Estimates, 2023)</a> <a href="https://www.bls.gov/cex/cecomparison/acs_profile.htm" target="_blank" rel="noopener">(ACS overview)</a></p>
+
+<p>Step 2: retrieve the BEA regional price parity for the same area and use it to convert $100,000 nominal into a local purchasing-power equivalent so you can see whether that income buys more or less than the national average <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">Regional Price Parities by State and Metro Area (RPPs), 2023</a></p>
+
+<p>Step 3: when vetting local claims from candidates or organizations, ask whether the numbers are adjusted for inflation, what year is covered, and whether the share refers to all households or a restricted group; the Federal Reserve's treatment of household financial well-being offers useful framing questions for verification <a href="https://www.federalreserve.gov/publications/2024-economic-well-being-of-us-households-in-2023.htm" target="_blank" rel="noopener">Report on the Economic Well‑Being of U.S. Households in 2023</a></p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-ozqw9b" class="faq-toggle" /><label for="faq-ozqw9b" class="faq-summary" role="button" tabindex="0">How does the Census define a household?</label><div class="faq-content"><p>The Census defines a household as all people occupying a housing unit, and household income is the combined income of those members over the past 12 months.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-0uz9zj" class="faq-toggle" /><label for="faq-0uz9zj" class="faq-summary" role="button" tabindex="0">Does one-third mean most Americans earn $100,000?</label><div class="faq-content"><p>No. The headline refers to households, not individual earners, and reflects combined incomes; many individuals earn less while some households have multiple earners that raise the household total.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-coy3x2" class="faq-toggle" /><label for="faq-coy3x2" class="faq-summary" role="button" tabindex="0">How can I check the share for my state or metro?</label><div class="faq-content"><p>Use ACS Table B19001 to get household counts by income bracket for your chosen geography, then sum the $100,000-and-over brackets and divide by total households; adjust with BEA RPPs for local price differences.</p></div></section>
+</section>
+
+<section class="article-ending">For readers who want to dig deeper, the Income and Poverty report and ACS Table B19001 are the primary places to start. Use BEA regional price parities to translate nominal thresholds into local purchasing power before drawing direct comparisons across states or metros.
+
+If you are evaluating a statement from a candidate or local source, ask whether the figure is nominal or adjusted, what year it covers, and which household types are included.</section>
+
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.census.gov/topics/families/households/about.html" target="_blank" rel="noopener">https://www.census.gov/topics/families/households/about.html</a></li>
+      <li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li>
+      <li><a href="https://www.census.gov/library/publications/2024/demo/p60-283.html" target="_blank" rel="noopener">https://www.census.gov/library/publications/2024/demo/p60-283.html</a></li>
+      <li><a href="https://data.census.gov/table/ACSDT1Y2023.B19001" target="_blank" rel="noopener">https://data.census.gov/table/ACSDT1Y2023.B19001</a></li>
+      <li><a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area</a></li>
+      <li><a href="https://www.federalreserve.gov/publications/2024-economic-well-being-of-us-households-in-2023.htm" target="_blank" rel="noopener">https://www.federalreserve.gov/publications/2024-economic-well-being-of-us-households-in-2023.htm</a></li>
+      <li><a href="https://www.pewresearch.org/social-trends/2024/06/10/trends-in-household-income-100k-share/" target="_blank" rel="noopener">https://www.pewresearch.org/social-trends/2024/06/10/trends-in-household-income-100k-share/</a></li>
+      <li><a href="https://worldpopulationreview.com/state-rankings/percentage-of-households-making-over-100k" target="_blank" rel="noopener">https://worldpopulationreview.com/state-rankings/percentage-of-households-making-over-100k</a></li>
+      <li><a href="https://usafacts.org/answers/what-is-the-income-of-a-us-household/country/united-states/" target="_blank" rel="noopener">https://usafacts.org/answers/what-is-the-income-of-a-us-household/country/united-states/</a></li>
+      <li><a href="https://www.bls.gov/cex/cecomparison/acs_profile.htm" target="_blank" rel="noopener">https://www.bls.gov/cex/cecomparison/acs_profile.htm</a></li>
+      <li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li>
+      <li><a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">https://michaelcarbonara.com/</a></li>
+      <li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
