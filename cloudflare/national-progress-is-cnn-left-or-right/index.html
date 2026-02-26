@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Is CNN considered left leaning or right leaning?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #961e2e; /* derived darker accent */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* from --mc-panel-2 */
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area (limited selectors) */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.90); margin-bottom: 1.6rem; }
+    .article-body .article-highlights{ display:block; margin: 1.2rem 0 1.8rem; }
+    .article-body .highlight-card{ background: transparent; border-left: 4px solid var(--accent); padding: .9rem 1rem; margin-bottom: .6rem; }
+    .article-body .tool-block{ max-width:720px; margin:1.6rem auto; }
+    .article-body .cta-section .cta-button{ background: var(--accent); }
+    .article-body .faq-accordion{ border-left-color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1vQFLrzknkMdVwzLfcAmEFcy0Zlt5nzl4" alt="National progress newsdesk banner — Is CNN left or right?" />
+        </div>
+        <h1 class="title">Is CNN considered left leaning or right leaning?</h1>
+        <p class="subline">An evidence-based summary of how independent raters place CNN and why that matters for assessing coverage of national progress.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/national-progress-is-cnn-left-or-right/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">This article summarizes where independent raters and research place CNN and explains why classifications matter when readers evaluate coverage of national progress. It synthesizes public ratings and survey findings to give a practical, neutral guide readers can use to assess specific stories.
+
+The aim is to present evidence-based context, highlight methodological differences among rating systems, and offer a checklist and simple tools so readers can judge whether a given CNN piece reads more like reporting or commentary.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Independent ratings commonly place CNN between center and center-left, but methods vary.</span></div><div class="highlight-card"><span class="highlight-text">Audience perceptions of bias differ sharply by political identity, shaping how coverage of national progress is received.</span></div><div class="highlight-card"><span class="highlight-text">Distinguishing news from opinion and consulting primary reporting helps readers form a balanced view.</span></div>
+     </div>
+  <h2>Quick answer: how analysts typically classify CNN and what that means for national progress debates</h2><h3>Short summary of common classifications</h3><p>Independent media raters most often place CNN between center and center-left, which is a common finding across recent public charts and summaries; that placement reflects aggregated ratings rather than a single definitive label <a href="https://www.allsides.com/news-source/cnn-media-bias" target="_blank" rel="noopener">AllSides media bias page</a></p><p>Audiences do not all agree on that classification, and survey research shows perceptions vary sharply by political identity, so how viewers interpret CNN coverage of issues tied to national progress can differ considerably depending on their prior views <a href="https://www.pewresearch.org/journalism/2024/05/15/public-perceptions-of-news-organizations-2024/" target="_blank" rel="noopener">Pew Research Center public perceptions report</a></p><h3>Why classification matters for public debates on national progress</h3><p>Labels like left or right are shorthand that influence trust and the weight people assign to reporting about long-term topics such as economic growth, infrastructure, education, and other measures often discussed under national progress; understanding typical ratings helps readers place coverage in context without assuming absolute intent or outcomes <a href="https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2024" target="_blank" rel="noopener">Reuters Institute Digital News Report 2024</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>What 'left leaning' or 'right leaning' means in news coverage, and how that ties to national progress framing</h2><h3>Definitions used by researchers and raters</h3><p>In media analysis, calling an outlet left leaning or right leaning usually refers to observable patterns such as which stories are chosen, which sources are quoted, and the language used to frame issues rather than an absolute political allegiance; that operational approach is the standard in empirical work on media slant <a href="https://www.nber.org/papers/w12707" target="_blank" rel="noopener">NBER working paper on media slant</a></p><p>For topics tied to national progress, framing choices might emphasize different priorities, for example fiscal policy or social investment, and those emphases can make otherwise similar facts feel aligned with a political viewpoint</p><h3>How story selection, sourcing and framing create perceived slant</h3><p>Researchers measure slant by analyzing patterns such as which public officials, experts or datasets are repeatedly quoted, and how narratives are structured around causes and solutions, which creates detectable differences in coverage even when basic facts are reported</p><p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay informed about campaign priorities and national progress updates</h3><div class="cta-intro"><p>Use the checklist below to compare how a specific CNN piece handles story selection, sourcing and framing before assuming the outlet overall leans in a single direction</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the Campaign</a></div></p><h2>How media-rating systems work: methods that lead to different placements for CNN</h2><h3>Types of rating methods: crowd, expert review, content analysis</h3><p>Media-rating organizations use different approaches: crowd-sourced ratings rely on volunteer reviewers, expert reviews use trained coders, and content analysis examines language and sourcing systematically; these methodological choices influence where an outlet appears on a bias chart <a href="https://www.allsides.com/news-source/cnn-media-bias" target="_blank" rel="noopener">AllSides media bias page</a></p><h3>What each method counts and what it does not</h3><p>Some systems count opinion programming together with straight news, others separate them; including opinion content tends to pull aggregate scores toward more pronounced labels, while analyses that isolate news segments can show a more centrist placement <a href="https://app.adfontesmedia.com/chart/interactive" target="_blank" rel="noopener">Ad Fontes Media overview</a></p><p>Sampling frame, reviewer background and weighting rules also matter: a crowd that skews in one direction, or experts with different coding rules, will produce different placements even for the same outlet</p><h2>Where major raters and studies place CNN today</h2><h3>Snapshot of center to center-left placements</h3><p>AllSides lists CNN near the center to center-left area on its public page, and explains placement through its blend of ratings and review mechanisms <a href="https://www.allsides.com/news-source/cnn-media-bias" target="_blank" rel="noopener">AllSides media bias page</a></p><p><section class="faq-accordion"><input type="checkbox" id="faq-jqk5nw" class="faq-toggle" checked /><label for="faq-jqk5nw" class="faq-summary" role="button" tabindex="0">Is CNN considered left leaning or right leaning?</label><div class="faq-content"><p>Major third-party raters most commonly place CNN between center and center-left, but classifications vary by method and by whether opinion programming is counted; evaluating individual stories and separating news from opinion is essential for assessing coverage on national progress.</p></div></section></p><h3>How other evaluators and fact-checkers classify CNN</h3><p>Ad Fontes Media’s chart and methodology also place CNN in a broadly center to center-left region, with placement reflecting their program-level reviews and tested coding framework <a href="https://adfontesmedia.com/" target="_blank" rel="noopener">Ad Fontes Media</a></p><p>Other evaluators produce similar centrist-to-center-left placements while noting that CNN’s mix of straight reporting and commentary complicates single-label descriptions <a href="https://mediabiasfactcheck.com/cnn/" target="_blank" rel="noopener">Media Bias/Fact Check summary</a></p><h2>Why different audiences and contexts lead to different perceptions of CNN</h2><h3>Polling and partisan audience sorting</h3><p>Pew Research Center polling shows that partisan audiences perceive mainstream outlets differently, with conservative audiences more likely to view certain outlets as biased against them, which alters how the same coverage is received and assessed <a href="https://www.pewresearch.org/journalism/2024/05/15/public-perceptions-of-news-organizations-2024/" target="_blank" rel="noopener">Pew Research Center public perceptions report</a></p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1SuyEceZJ6BIlHz0bLlKNJadMyNWZTEQ6=s1200" alt="Minimal 2D vector infographic of a laptop and stacked newspapers symbolizing national progress in Michael Carbonara navy white and red accent palette" /></a>
+      <div class="side-text"><p>These perception gaps matter for national progress debates because viewers who distrust a source may discount reporting on infrastructure, the economy or social programs even if the underlying reporting is fact-based</p></div>
+    </div>
+<h3>Role of platform algorithms and echo chambers</h3><p>Platform algorithms and personalized feeds can amplify content that reinforces existing beliefs, creating impression that an outlet is more or less partisan depending on the mix of items an individual sees rather than the outlet’s full output <a href="https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2024" target="_blank" rel="noopener">Reuters Institute Digital News Report 2024</a></p><p>That amplification interacts with rating systems and audience sampling to produce divergent public views of the same network</p><h2>Decision criteria: a practical checklist to judge whether CNN's coverage leans left or right for your needs</h2><h3>Checklist items to apply to specific stories</h3><p>Check <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">multiple rating systems</a> and compare results rather than relying on a single chart, because different evaluators use different methods and samples <a href="https://www.allsides.com/news-source/cnn-media-bias" target="_blank" rel="noopener">AllSides media bias page</a></p><p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div></p><h3>How to weigh ratings versus primary reporting</h3><p>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>When coverage touches on political actors or campaign topics, consult primary records such as public filings and original documents referenced in reporting to verify claims</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1QFkLjj_pHu0gE8-dfG7JtZSFMPHsVv32=s1200" alt="Minimalist 2D vector infographic showing a rating scale magnifying glass and document icons in Michael Carbonara palette emphasizing national progress" /></a>
+    </div></p><p>Distinguish <a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">news segments</a> from opinion programming, read the original reporting cited in a piece, and review primary documents referenced by reporters to form your own judgment about whether coverage leans in one direction <a href="https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2024" target="_blank" rel="noopener">Reuters Institute Digital News Report 2024</a></p><p>Consider story selection, source balance and language tone: if a story repeatedly quotes only one side or uses loaded descriptors, that pattern is a concrete indicator to weigh when assessing perceived slant <a href="https://www.nber.org/papers/w12707" target="_blank" rel="noopener">NBER working paper on media slant</a></p><h2>Common mistakes and pitfalls when labeling a news network</h2><h3>Overgeneralizing from opinion shows</h3><p>One frequent error is treating an outlet’s opinion programming as representative of all its reporting; many outlets mix formats, and opinion shows are designed to be persuasive while news segments aim to report facts <a href="https://www.allsides.com/news-source/cnn-media-bias" target="_blank" rel="noopener">AllSides media bias page</a></p><p>That mixing helps explain why content analyses often find both factual reporting and commentary in a single outlet rather than a single uniform voice</p><h3>Relying on a single rating or anecdote</h3><p>Another pitfall is drawing broad conclusions from a single anecdote or a single rating service; methodological variance across reviewers and the inclusion or exclusion of opinion programming can push an outlet’s placement one way or another <a href="https://app.adfontesmedia.com/chart/interactive" target="_blank" rel="noopener">Ad Fontes Media</a></p><p>Polling about perceptions should not be conflated with content-level assessments without checking the underlying reporting, because audience views reflect exposure and trust as much as editorial choices <a href="https://www.pewresearch.org/journalism/2024/05/15/public-perceptions-of-news-organizations-2024/" target="_blank" rel="noopener">Pew Research Center public perceptions report</a></p><h2>Practical examples and short case reads where classification matters</h2><h3>How the same topic can be framed differently in straight reporting versus commentary</h3><p>Imagine a story about infrastructure spending: a straight news report might present budgets, timelines and quotes from officials and independent analysts, while an opinion segment could frame the same facts as evidence of mismanagement or of necessary investment depending on the host’s thesis</p><p>Content analyses note that outlets including CNN publish both types of pieces, which is why using a short checklist to separate reporting from commentary helps readers evaluate how a particular piece addresses national progress <a href="https://www.allsides.com/news-source/cnn-media-bias" target="_blank" rel="noopener">AllSides media bias page</a></p><p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Guide to compare reporting and opinion in a single story</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-5s1txy-0">
+                        <input id="tool-check-5s1txy-0" type="checkbox" />
+                        <span>Segment type</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-rxuxbh-1">
+                        <input id="tool-check-rxuxbh-1" type="checkbox" />
+                        <span>Sources quoted</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-yktr0o-2">
+                        <input id="tool-check-yktr0o-2" type="checkbox" />
+                        <span>Language tone</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-cijuv9-3">
+                        <input id="tool-check-cijuv9-3" type="checkbox" />
+                        <span>Evidence cited</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-rg7e69-4">
+                        <input id="tool-check-rg7e69-4" type="checkbox" />
+                        <span>Balance of viewpoints</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use for one article at a time</p>
+            </div></p><h3>Short, attributed examples of mixed output and how to read them</h3><p>When a network runs an investigative report that cites primary documents and independent experts, readers should weigh that differently than a panel discussion where guests debate policy; the distinction is practical not ideological <a href="https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2024" target="_blank" rel="noopener">Reuters Institute Digital News Report 2024</a></p><p>For national progress issues, this means you can use program labels and sourcing patterns to judge whether coverage is likely to advance one narrative or to present multiple perspectives</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Quick guide: trusted sources and tools to consult next</h2><h3>Where to look for ratings and primary reporting</h3><p>Check <a href="https://www.allsides.com/media-bias/media-bias-chart" target="_blank" rel="noopener">AllSides</a> and Ad Fontes for public bias charts, consult Media Bias/Fact Check for outlet summaries, and read the Reuters Institute and Pew Research reports for broader trust and audience context <a href="https://www.allsides.com/news-source/cnn-media-bias" target="_blank" rel="noopener">AllSides media bias page</a></p><p>When coverage touches on political actors or campaign topics, consult primary records such as public filings and original documents referenced in reporting to verify claims</p><h3>How to combine multiple sources for a balanced view</h3><p>Combine ratings, direct reading of the primary reporting, and awareness of audience sorting to form a balanced view rather than relying on a single label; repeated checks over time provide a more reliable picture than snapshot judgments <a href="https://adfontesmedia.com/" target="_blank" rel="noopener">Ad Fontes Media</a></p><h2>Conclusion: summarizing the evidence and next steps for readers concerned about national progress coverage</h2><h3>Key takeaways</h3><p>Major third-party raters typically place CNN in a center to center-left area, but classifications differ by method and by whether opinion programs are counted, so the label is not a final verdict on every piece of coverage <a href="https://www.allsides.com/news-source/cnn-media-bias" target="_blank" rel="noopener">AllSides media bias page</a></p><p>To <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">follow coverage of national progress</a> responsibly, separate news from opinion, consult multiple rating systems and read primary reporting before forming a view <a href="https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2024" target="_blank" rel="noopener">Reuters Institute Digital News Report 2024</a></p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-pctwpg" class="faq-toggle" /><label for="faq-pctwpg" class="faq-summary" role="button" tabindex="0">How do rating organizations decide where to place networks like CNN?</label><div class="faq-content"><p>Organizations use different methods such as crowd ratings, expert reviews and systematic content analysis; they may include or exclude opinion programming and apply different weighting, which affects placements.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-95cxj0" class="faq-toggle" /><label for="faq-95cxj0" class="faq-summary" role="button" tabindex="0">Does a center or center-left placement mean CNN is biased on all topics?</label><div class="faq-content"><p>No. A placement reflects aggregate patterns across many pieces; individual reports may be factual or more opinionated, so assessing specific articles and segments is necessary.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-dpbntk" class="faq-toggle" /><label for="faq-dpbntk" class="faq-summary" role="button" tabindex="0">What is a practical first step to evaluate a single CNN story about national progress?</label><div class="faq-content"><p>Check whether the segment is news or opinion, review the primary reporting and sources cited, and compare that item against multiple ratings or analyses for context.</p></div></section>
+</section><section class="article-ending">Use multiple evaluators and primary documents when following coverage of national progress, and treat outlet-level labels as starting points rather than final judgments. Over time, comparing program types and sourcing patterns will give a clearer sense of how any network covers complex public issues.
+
+If you want updates from a candidate perspective on topics related to national progress, the campaign maintains a contact page for inquiries and community engagement.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.allsides.com/news-source/cnn-media-bias" target="_blank" rel="noopener">https://www.allsides.com/news-source/cnn-media-bias</a></li><li><a href="https://www.pewresearch.org/journalism/2024/05/15/public-perceptions-of-news-organizations-2024/" target="_blank" rel="noopener">https://www.pewresearch.org/journalism/2024/05/15/public-perceptions-of-news-organizations-2024/</a></li><li><a href="https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2024" target="_blank" rel="noopener">https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2024</a></li><li><a href="https://www.nber.org/papers/w12707" target="_blank" rel="noopener">https://www.nber.org/papers/w12707</a></li><li><a href="https://app.adfontesmedia.com/chart/interactive" target="_blank" rel="noopener">https://app.adfontesmedia.com/chart/interactive</a></li><li><a href="https://mediabiasfactcheck.com/cnn/" target="_blank" rel="noopener">https://mediabiasfactcheck.com/cnn/</a></li><li><a href="https://adfontesmedia.com/" target="_blank" rel="noopener">https://adfontesmedia.com/</a></li><li><a href="https://www.allsides.com/media-bias/media-bias-chart" target="_blank" rel="noopener">https://www.allsides.com/media-bias/media-bias-chart</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">https://michaelcarbonara.com/issues/</a></li><li><a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">https://michaelcarbonara.com/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
