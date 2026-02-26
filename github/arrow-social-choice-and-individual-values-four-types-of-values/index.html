@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What are the 4 types of values? — concise guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736;     /* from --mc-accent */
+      --accent-hover: #8f212d; /* darker shade for hover (derived) */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664;    /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px;         /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.90); margin-bottom: 1.25rem; }
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:0.85rem; margin:1.6rem 0; }
+    .article-body .highlight-card{ background: linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); padding:0.9rem 1rem; border-left:4px solid var(--accent); }
+    .article-body .tool-block{ border-left:4px solid var(--accent); }
+    .article-body .cta-section .cta-button{ background: var(--accent); }
+    .article-body .cta-section .cta-button:hover{ background: var(--accent-hover); }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/arrow-social-choice-and-individual-values-map.jpg" alt="Arrow social choice and individual values map" />
+        </div>
+        <h1 class="title">What are the 4 types of values? — concise guide</h1>
+        <p class="subline">A concise guide to the four common value taxonomies researchers use.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/arrow-social-choice-and-individual-values-four-types-of-values/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">Values are central to how people describe priorities, make choices and discuss public issues. This brief guide explains the four common classifications researchers use to describe and measure values, with clear pointers to foundational sources and to empirical survey modules.
+
+The focus here is practical: identify which taxonomy fits your question, understand basic measurement trade-offs, and learn where to find documented modules for cross-national comparison.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Schwartz&#39;s four higher-order types are widely used in cross-cultural value research.</span></div><div class="highlight-card"><span class="highlight-text">Rokeach&#39;s terminal versus instrumental distinction clarifies goals versus means in measurement.</span></div><div class="highlight-card"><span class="highlight-text">Arrow&#39;s social-choice insights caution against naive aggregation of individual value orderings.</span></div>
+     </div>
+  <h2>Quick answer: the four types of values in one page</h2><h3>arrow social choice and individual values</h3><p>The most widely used four-type classification groups human values as openness to change, conservation, self-enhancement and self-transcendence, a higher-order scheme associated with Shalom H. Schwartz and used widely in cross-cultural work <a href="http://www.schwartzvalues.com/publications/overview-of-the-theory-of-basic-values/" target="_blank" rel="noopener">Schwartz overview</a>.</p><p>A complementary, older two-type distinction labels values as terminal, meaning desired end-states, or instrumental, meaning preferred modes of behavior; that framing comes from Milton Rokeach and helps separate goals from means in measurement <a href="https://www.routledge.com/The-Nature-of-Human-Values/Rokeach/p/book/9780203874796" target="_blank" rel="noopener">Rokeach, The Nature of Human Values</a>.</p><p>Social-choice theory, starting with Kenneth Arrow, shows formal limits on aggregating individual orderings into a single collective ranking, which matters when researchers or policymakers try to convert individual priorities into social choices <a href="https://press.princeton.edu/books/paperback/9780691025947/social-choice-and-individual-values" target="_blank" rel="noopener">Arrow, Social Choice and Individual Values</a>.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Pointer to a public overview resource for Schwartz values</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-dreh6w-0">
+                        <input id="tool-check-dreh6w-0" type="checkbox" />
+                        <span>Openness to change</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-05g830-1">
+                        <input id="tool-check-05g830-1" type="checkbox" />
+                        <span>Conservation</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-avfrm0-2">
+                        <input id="tool-check-avfrm0-2" type="checkbox" />
+                        <span>Self-enhancement</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-meb0rk-3">
+                        <input id="tool-check-meb0rk-3" type="checkbox" />
+                        <span>Self-transcendence</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use as a quick reference</p>
+            </div><p>The short list above captures the classifications most practitioners encounter in applied work. Each has a different role: Schwartz provides a descriptive map of higher-order orientations, Rokeach separates ends from means, and Arrow frames the limits of collective aggregation.</p><p>That immediate summary is meant to orient <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">readers</a> who want a compact, source-backed answer before they read the longer explanations that follow.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Why value classifications matter for individuals and public decisions</h2>
+<p>Researchers distinguish individual, or personal, values from social or cultural values to make clearer what is being measured. Personal values are the priorities reported by a person; social values describe shared norms or prevalent priorities in a group. Definitions and operational choices change what a survey actually records, so the level of analysis matters for interpretation <a href="https://plato.stanford.edu/entries/value-theory/" target="_blank" rel="noopener">Stanford Encyclopedia of Philosophy, Value Theory</a>.</p><p>When a poll measures ‘‘what people value most’’ it may capture either individual priorities or perceived social norms, depending on question wording and reference frame. That difference affects how results are used in reporting and analysis, for example whether a finding is an individual-level predictor or a description of cultural climate.</p><p>Different classifications change survey design. If a researcher uses Schwartz-derived items the resulting data emphasize broad motivational orientations, while Rokeach-style items separate goals from norms; each choice leads to different analytic possibilities and different limits on what the data will say about voter priorities.</p><p>Aggregation concerns from social-choice theory add a further practical layer: even when many individuals report clear orderings of values, combining those orderings into a single, collective preference ranking is not straightforward and can produce paradoxes if done without caution.</p><h2>Schwartz's four higher-order value types, explained</h2><h3>Openness to change</h3><p>Openness to change groups values that prioritize independence of thought, readiness for new experiences, and a desire for novelty and variety. In common survey items this orientation is reflected in statements that emphasize creativity, freedom, and choosing an exciting life. Cross-cultural work treats these items as reflecting a single higher-order motivational goal centered on self-direction and stimulation <a href="http://www.schwartzvalues.com/publications/overview-of-the-theory-of-basic-values/" target="_blank" rel="noopener">Schwartz overview</a>.</p><h3>Conservation</h3><p>Conservation includes values that favor order, tradition, security and stability. Standard items ask about the importance of maintaining traditions, following rules, and feeling safe; scores on these items are interpreted as a higher-order preference for social order and continuity rather than change.</p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Learn more and stay informed about the campaign</h3><div class="cta-intro"><p>For background reading, consult the primary value theory sources or a survey module for orientation; these help clarify item wording and intended interpretation without implying policy judgments.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign</a></div><h3>Self-enhancement</h3><p>Self-enhancement gathers values tied to personal success, dominance, achievement and ambition. Typical survey items focus on attaining wealth, social status, and recognition, and researchers treat higher scores as indicating a motivational emphasis on personal gain relative to others.</p><h3>Self-transcendence</h3><p>Self-transcendence contains values that emphasize concern for others, social justice, and environmental protection. Survey statements in this category often highlight the importance of equality, care for others, and protecting the natural world, and cross-cultural tests find the cluster reliable as a higher-order orientation in many contexts <a href="https://psycnet.apa.org/record/1992-10391-001" target="_blank" rel="noopener">Schwartz, universals in values</a>.</p>
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1XrA9B-Pq21PVkukaPtlpb267vc4Z15TY=s1200" alt="Minimal 2D vector infographic of a stylized survey form pencil and three arrows symbolizing choices and preferences arrow social choice and individual values" /></a>
+      <div class="side-text"><p>Schwartz-based scales are typically operationalized as sets of short value statements where respondents rate personal importance; researchers then aggregate related items to form scores for each higher-order type. Item wording and scale length vary across studies, so scores are comparable only when the same module and scoring rules are used.</p></div>
+    </div><p>Be aware that translations and local adaptations can shift how items map onto the four types; practitioners should check module documentation before combining cross-national data.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Rokeach's terminal and instrumental values: ends versus means</h2><p>Rokeach distinguishes terminal values, which name desired end-states such as a comfortable life or inner harmony, from instrumental values, which name modes of behavior such as honesty or ambition. That distinction helps clarify whether a survey item is naming a goal or a means to achieve a goal <a href="https://www.routledge.com/The-Nature-of-Human-Values/Rokeach/p/book/9780203874796" target="_blank" rel="noopener">Rokeach, The Nature of Human Values</a>.</p><p>For applied work, asking whether a value is terminal or instrumental can reduce ambiguity. If a response names an end-state a researcher should treat it as a goal variable; if it names a behavioral trait the item may better predict how someone says they will act rather than what they ultimately want.</p><p>Practitioners often combine Rokeach-style questioning with higher-order taxonomies to check whether a value statement functions as a goal or as a behavioral preference. This combination improves clarity when results are used to explain choices or to design interventions.</p><h2>Social-choice perspective: Arrow and limits on aggregating values</h2><h3>The aggregation problem in brief</h3><p>Arrow showed that reasonable fairness conditions on a social decision rule can be mutually inconsistent, which implies there are formal limits to producing a single collective ordering from individual preference orderings. This theoretical result matters whenever analysts attempt to derive a single social ranking from many individual value orderings <a href="https://press.princeton.edu/books/paperback/9780691025947/social-choice-and-individual-values" target="_blank" rel="noopener">Arrow, Social Choice and Individual Values</a>.</p><section class="faq-accordion"><input type="checkbox" id="faq-22sl3n" class="faq-toggle" checked /><label for="faq-22sl3n" class="faq-summary" role="button" tabindex="0">What are the four common ways researchers classify values, and why does it matter for surveys and public decisions?</label><div class="faq-content"><p>Researchers commonly use Schwartz&#39;s four higher-order types, Rokeach&#39;s terminal versus instrumental distinction, distinctions between individual and cultural levels, and social-choice cautions from Arrow. The choice of classification affects how surveys are designed, how data are interpreted and how individual priorities are translated into collective judgments.</p></div></section><h3>What the theorem means for policy and voting</h3><p>In plain language, Arrow's result warns that some aggregation methods will force trade-offs or produce outcomes that depend more on the method than on substantive preferences. Analysts should therefore be cautious when using aggregated value rankings as direct inputs for public policy decisions.</p><p>That caution does not mean aggregation is impossible; rather, it means transparency about aggregation methods and sensitivity checks are required when values are used to justify or rank policy options.</p><h2>How large surveys measure values today: scales and cross-national data</h2><h3>Schwartz modules in the European Social Survey</h3>
+    <div class="side-by-side image-2-right">
+      <div class="side-text">Large programs such as the European Social Survey include a human values module that uses Schwartz-derived measures, making it possible to compare higher-order value orientations across countries and rounds <a href="https://www.europeansocialsurvey.org/methodology/rounds/round10/hlth-human-values.html" target="_blank" rel="noopener">European Social Survey human values module</a>.</div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1XDPXpCypUhWoBpjeo4KEwKN_z3EXlyr0=s1200" alt="Minimalist 2D vector infographic with four colored icons in a circle representing four value types on deep blue background arrow social choice and individual values" /></a>
+    </div><p>Including standardized value modules in a repeated cross-national survey allows researchers to track changes and compare distributions of openness to change, conservation, self-enhancement and self-transcendence across societies. The Human Values Scale report is also available as a PDF <a href="https://www.europeansocialsurvey.org/sites/default/files/2023-06/ESS_Findings_HVS.pdf" target="_blank" rel="noopener">ESS Findings HVS</a>.</p><h3>Challenges in cross-cultural measurement</h3><p>Cross-national measurement requires careful attention to translation, cultural equivalence and whether items function similarly in different populations. Even widely used modules must be checked for differential item functioning and comparable scale properties before combining data across contexts. See the GESIS scale page for the ESS Human Values Scale <a href="https://zis.gesis.org/skala/Schwartz-Breyer-Danner-Human-Values-Scale-(ESS)?lang=en" target="_blank" rel="noopener">Human Values Scale (ESS) - GESIS</a>.</p><p>When analysts report cross-national differences they should always cite the exact module version and scoring rules used, since changes in wording or scoring can alter comparisons. A recent assessment reconstructing Schwartz indexes using Rokeach items is available for reference <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12342246/" target="_blank" rel="noopener">PMC article</a>.</p><h2>A practical checklist: how to identify and classify a value</h2><h3>Step 1: Is it a goal or a behavior?</h3><p>Step 1 asks whether the statement names an end-state or a mode of action. If it reads like a desired endpoint, treat it as a terminal value; if it reads like how someone should act, treat it as instrumental. Rokeach's framework is the standard reference for this distinction <a href="https://www.routledge.com/The-Nature-of-Human-Values/Rokeach/p/book/9780203874796" target="_blank" rel="noopener">Rokeach, The Nature of Human Values</a>.</p><h3>Step 2: Individual, social, or cultural level?</h3><p>Step 2 checks the unit of meaning. Ask whether the item refers to a personal preference, an expectation about others, or a shared cultural norm. Different question prompts (for example, asking about personal importance versus perceived social norms) will index different levels.</p><h3>Step 3: Map to Schwartz or Rokeach categories</h3><p>Step 3 maps the item to the higher-order Schwartz orientation if it reflects a motivational goal such as openness or conservation, or keeps it as terminal versus instrumental when the distinction clarifies ends versus means. Examples help: 'freedom to choose' maps to openness to change; 'tradition' maps to conservation; 'ambition' maps to self-enhancement; 'helping others' maps to self-transcendence.</p><p>Use validated scales where possible and keep a short codebook that records item wording, response scale and any local adaptations. That record makes later comparison or replication possible.</p><h2>Common errors and pitfalls when applying value types</h2><p>A frequent mistake is overgeneralizing from single-item measures. Single questions often do not capture the full orientation a validated multi-item scale is designed to measure; when possible use established modules rather than single items to represent a type.</p><p>Another common pitfall is confusing individual-level results with cultural-level claims. A high average score in a sample does not automatically mean the value is a cultural norm; check sampling, question framing, and whether the item asked about personal importance or perceived social expectations <a href="http://www.schwartzvalues.com/publications/overview-of-the-theory-of-basic-values/" target="_blank" rel="noopener">Schwartz overview</a>.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><p>Finally, avoid treating descriptive value measures as normative endorsements. Describe what respondents report and attribute claims to specific instruments or sources rather than presenting them as settled policy prescriptions.</p><h2>Short scenarios: applying the four types to voting and decisions</h2><h3>A voting example: priorities and trade-offs</h3><p>Imagine a voter survey where respondents rank policy goals. If a respondent emphasizes tradition and security the pattern maps to conservation; if they emphasize entrepreneurship and personal success, it maps to self-enhancement. Mapping helps analysts describe priorities without claiming those priorities cause particular votes <a href="http://www.schwartzvalues.com/publications/overview-of-the-theory-of-basic-values/" target="_blank" rel="noopener">Schwartz overview</a>.</p><h3>An organizational decision: values in practice</h3><p>An organization choosing between innovation and risk-avoidance can frame options as openness to change versus conservation and then list instrumental behaviors that support each option. That framing makes trade-offs explicit and helps managers design measures consistent with stated goals. For related content see our <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news section</a>.</p><h3>A personal choice exercise</h3><p>For a quick personal check, list five things you care about, ask whether each is a goal or a behavior, and then place each item under one of Schwartz's four types. The exercise clarifies internal coherence and helps identify where priorities conflict.</p><h2>Conclusion: choosing the right classification for your question</h2><p>Use Schwartz when your question concerns broad motivational orientations like openness, conservation, self-enhancement or self-transcendence; use Rokeach when you need to know whether an item names an end-state or a behavioral mode; and remember Arrow's aggregation concerns when combining individual orderings into a collective ranking.</p><p>For empirical work consult primary sources and documented modules such as the European Social Survey human values module, and record exactly which items and scoring rules you used when reporting results; see our <a href="https://michaelcarbonara.com/survey/" target="_blank" rel="noopener">survey page</a>.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-bzuc6u" class="faq-toggle" /><label for="faq-bzuc6u" class="faq-summary" role="button" tabindex="0">What are the four higher-order value types?</label><div class="faq-content"><p>The four higher-order types are openness to change, conservation, self-enhancement and self-transcendence, a taxonomy associated with Shalom H. Schwartz.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-pp553c" class="faq-toggle" /><label for="faq-pp553c" class="faq-summary" role="button" tabindex="0">How does Rokeach&#39;s distinction differ?</label><div class="faq-content"><p>Rokeach separates terminal values, which name desired end-states, from instrumental values, which name preferred modes of behavior, helping clarify whether a value is a goal or a behavior.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-3gugac" class="faq-toggle" /><label for="faq-3gugac" class="faq-summary" role="button" tabindex="0">Why does Arrow&#39;s social-choice work matter for values?</label><div class="faq-content"><p>Arrow&#39;s theorem shows there are formal limits to aggregating individual orderings into a single collective ranking, so analysts should be cautious when deriving social rankings from individual value reports.</p></div></section>
+</section><section class="article-ending">When using value classifications in reporting or research, attribute observations to the instrument or source, choose the taxonomy that fits your question, and test robustness across measurement choices. For empirical comparisons, consult the documented modules from large surveys such as the European Social Survey.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="http://www.schwartzvalues.com/publications/overview-of-the-theory-of-basic-values/" target="_blank" rel="noopener">http://www.schwartzvalues.com/publications/overview-of-the-theory-of-basic-values/</a></li><li><a href="https://www.routledge.com/The-Nature-of-Human-Values/Rokeach/p/book/9780203874796" target="_blank" rel="noopener">https://www.routledge.com/The-Nature-of-Human-Values/Rokeach/p/book/9780203874796</a></li><li><a href="https://press.princeton.edu/books/paperback/9780691025947/social-choice-and-individual-values" target="_blank" rel="noopener">https://press.princeton.edu/books/paperback/9780691025947/social-choice-and-individual-values</a></li><li><a href="https://plato.stanford.edu/entries/value-theory/" target="_blank" rel="noopener">https://plato.stanford.edu/entries/value-theory/</a></li><li><a href="https://psycnet.apa.org/record/1992-10391-001" target="_blank" rel="noopener">https://psycnet.apa.org/record/1992-10391-001</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li><li><a href="https://www.europeansocialsurvey.org/methodology/rounds/round10/hlth-human-values.html" target="_blank" rel="noopener">https://www.europeansocialsurvey.org/methodology/rounds/round10/hlth-human-values.html</a></li><li><a href="https://www.europeansocialsurvey.org/sites/default/files/2023-06/ESS_Findings_HVS.pdf" target="_blank" rel="noopener">https://www.europeansocialsurvey.org/sites/default/files/2023-06/ESS_Findings_HVS.pdf</a></li><li><a href="https://zis.gesis.org/skala/Schwartz-Breyer-Danner-Human-Values-Scale-(ESS)?lang=en" target="_blank" rel="noopener">https://zis.gesis.org/skala/Schwartz-Breyer-Danner-Human-Values-Scale-(ESS)?lang=en</a></li><li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12342246/" target="_blank" rel="noopener">https://pmc.ncbi.nlm.nih.gov/articles/PMC12342246/</a></li><li><a href="http://www.schwartzvalues.com/publications/overview-of-the-theory-of-basic-values/" target="_blank" rel="noopener">http://www.schwartzvalues.com/publications/overview-of-the-theory-of-basic-values/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://michaelcarbonara.com/survey/" target="_blank" rel="noopener">https://michaelcarbonara.com/survey/</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
