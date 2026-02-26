@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What are individual choice values? A clear guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand tokens derived from provided style input */
+      --text-color: #ffffff;         /* from --mc-ink */
+      --accent: #ae2736;             /* from --mc-accent */
+      --accent-hover: #8a2029;       /* derived darker accent */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664;            /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* from --mc-panel-2 */
+      --radius: 0px;                 /* from --mc-radius */
+
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1dXjrQublV83vsIpTDklRELm0aCTIUu1g" alt="Banner image for 'What are individual choice values? A clear guide'" />
+        </div>
+        <h1 class="title">What are individual choice values? A clear guide</h1>
+        <p class="subline">A concise, research-backed guide to defining, measuring, and applying individual choice values.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/individual-choice-values-definition/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">This guide explains what individual choice values are, how scholars define and measure them, and how you can identify your own priorities. It draws on psychology and social science literature to give clear definitions, a widely used framework, and practical steps you can try today.
+
+The tone is neutral and informational. Where the article summarizes research, it uses primary sources and validated tools as reference points so readers can follow up on original materials.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Individual choice values are mental priorities that guide how people weigh options and make decisions.</span></div><div class="highlight-card"><span class="highlight-text">Schwartz's value framework lists broad types such as self direction, benevolence, and universalism used in cross national research.</span></div><div class="highlight-card"><span class="highlight-text">A practical three step method-reflect, prioritize, apply-turns abstract values into testable actions.</span></div>
+     </div>
+  <h2>What are individual choice values? A clear definition</h2><p>Individual choice values are mental priorities or guiding principles people use when they weigh options and make decisions. According to the American Psychological Association entry for value, these mental constructs orient preferences and priorities in judgment and action, and the phrase helps frame values as cognitive influences rather than simple tastes <a href="https://dictionary.apa.org/value" target="_blank" rel="noopener">APA Dictionary of Psychology</a>.</p><p>Scholars also treat values as influences on behavior and choice, not as guarantees of specific actions. That distinction matters when using values to think about voting, workplace choices, or day to day decisions. The research view frames values as part of a cognitive architecture that helps people sort options by importance.</p><section class="faq-accordion"><input type="checkbox" id="faq-doygax" class="faq-toggle" checked /><label for="faq-doygax" class="faq-summary" role="button" tabindex="0">How do individual choice values affect everyday decisions?</label><div class="faq-content"><p>Individual choice values act as mental priorities that help people weigh options and make judgments, guiding which outcomes they consider acceptable or preferable in a range of personal and civic decisions.</p></div></section><p>Put simply, a value is something you give weight to when choosing. For example, if you list fairness as an important value, you may favor options that treat people equitably, even when a different option is more convenient. This example illustrates influence rather than strict cause.</p><h3>Psychology and the APA definition</h3><p>Psychology defines values as cognitive priorities that shape judgment and preference. That definition emphasizes how values operate inside thought processes and decision making, which is why psychologists often study them with surveys and questionnaires.</p><h3>How values act as guiding priorities in everyday choices</h3><p>Values shape how people compare outcomes and costs. They provide a lens for weighing trade offs, such as balancing efficiency against fairness, or personal achievement against family time. This framing helps people translate abstract priorities into concrete decisions without assuming values force a single outcome.</p><h2>A commonly used framework: Schwartz's value theory and core value types</h2><p><a href="https://scholarworks.gvsu.edu/cgi/viewcontent.cgi?article=1116&context=orpc" target="_blank" rel="noopener">Schwartz's value theory</a> organizes a set of broad value types that researchers commonly use to classify individual values across cultures. The framework lists types such as self-direction, achievement, benevolence, universalism, security, conformity, tradition, power, stimulation, and hedonism, which function as conceptual categories for comparative research <a href="https://psycnet.apa.org/record/1992-26140-001" target="_blank" rel="noopener">Schwartz value framework</a>.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure><p>The main value types identified by Schwartz</p><h3>The main value types identified by Schwartz</h3><p>Schwartz's categories are best read as headings that group related priorities. Self-direction relates to independent thought and creativity. Achievement covers success and competence. Benevolence involves concern for close others. Universalism points to understanding and protecting the wider world. Security, conformity, and tradition concern order and social expectations. Power involves status and control. Stimulation and hedonism relate to novelty and pleasure. These types help researchers compare value patterns without prescribing how people should behave.</p><h3>Why researchers still use this framework</h3><p>Researchers continue to use Schwartz's framework because it provides a coherent conceptual map and has broad empirical support across many national samples. The framework is a tool for describing common value priorities and for linking those priorities to other social or psychological variables in a consistent way <a href="https://psycnet.apa.org/record/1992-26140-001" target="_blank" rel="noopener">Schwartz value framework</a>.</p><h2>How values develop and change across the lifespan</h2><p>Reviews in sociology and developmental studies report that core values often form early through family socialization, schooling, and peer influence. These social contexts shape the priorities children learn and carry into later life stages, a pattern discussed in sociological reviews of values research <a href="https://www.annualreviews.org/doi/10.1146/annurev.soc.30.012703.110640" target="_blank" rel="noopener">Values: Revitalizing a Dormant Concept</a>.</p><p>At the same time, researchers note that values can continue to shift across the lifespan as people encounter new experiences, responsibilities, and social roles. Life events, career changes, and broader social trends can nudge priorities, so values are not fixed once established.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">a short reflection worksheet to map influences on your values</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-zpe0uy-0">
+                        <input id="tool-check-zpe0uy-0" type="checkbox" />
+                        <span>Family influences</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-2xapf3-1">
+                        <input id="tool-check-2xapf3-1" type="checkbox" />
+                        <span>School and peers</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-v9kdpr-2">
+                        <input id="tool-check-v9kdpr-2" type="checkbox" />
+                        <span>Life experiences</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use for guided journaling</p>
+            </div><p>Research emphasizes both early formation and the possibility of gradual change. That dual perspective helps explain why people sometimes adopt new priorities after major events while retaining other long standing values from childhood.</p><p>Open questions remain about the pace and causes of change, especially how modern online environments might accelerate or alter value trajectories. Scholars point to this as an active area of study rather than a resolved finding <a href="https://www.annualreviews.org/doi/10.1146/annurev.soc.30.012703.110640" target="_blank" rel="noopener">Values: Revitalizing a Dormant Concept</a>.</p><h3>Early socialization: family, school, and peers</h3><p>Family practices and parental messages often introduce children to basic priorities, such as honesty, responsibility, or respect. Schools and peer groups reinforce or modify these priorities through social norms and shared activities. Together, these contexts create an early palette of values that people draw on later.</p><h3>Lifelong change: experiences and context</h3><p>Adult experiences, including work, relationships, and public events, can shift relative priorities. For example, new caregiving responsibilities might increase the salience of benevolence or security relative to previous priorities. Reviews find that such shifts occur but vary in magnitude and timing across individuals <a href="https://www.annualreviews.org/doi/10.1146/annurev.soc.30.012703.110640" target="_blank" rel="noopener">Values: Revitalizing a Dormant Concept</a>.</p><h2>Measuring values: surveys and questionnaires researchers use</h2><p>Researchers often measure personal values with standardized instruments derived from Schwartz's work, notably the Schwartz Value Survey and the Portrait Values Questionnaire. These tools ask respondents to indicate the importance of specific value statements, and have been validated in many countries <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9131418/" target="_blank" rel="noopener">(see measurement research)</a> <a href="https://psycnet.apa.org/record/1992-26140-001" target="_blank" rel="noopener">Schwartz Value Survey</a>.</p><p>The Portrait Values Questionnaire is designed for practical use and shows how a value item appears: respondents read a short description of a person who holds a value and then rate how similar that description is to themselves. This format yields relative priorities researchers can compare across groups. Findings from large cross national efforts illustrate typical patterns <a href="https://www.europeansocialsurvey.org/sites/default/files/2023-06/ESS_Findings_HVS.pdf" target="_blank" rel="noopener">cross national research</a>.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><p>Measurement is useful because it standardizes how priorities are recorded and compared, but researchers caution that survey responses reflect self reported priorities at a moment in time and require careful interpretation in context.</p><h3>Schwartz Value Survey and Portrait Values Questionnaire</h3><p>The Schwartz Value Survey asks respondents to rate the importance of items that name values, while the Portrait Values Questionnaire uses short portraits to elicit agreement. Both approaches aim to capture relative importance across a consistent set of categories and have been used in cross national research <a href="https://psycnet.apa.org/record/1992-26140-001" target="_blank" rel="noopener">Schwartz Value Survey</a>.</p><h3>How measurement informs comparisons and research</h3><p>Standardized measurement allows researchers to identify common patterns, compare groups, and link values to outcomes such as political attitudes or job choices. At the same time, such studies caution that survey data are one piece of evidence among qualitative and longitudinal methods.</p><h2>A practical three-step process to identify your individual choice values</h2><p>This three-step method - reflect, prioritize, apply - is a concise, source backed way to move from abstract labels to actionable priorities. Counseling centers and character strengths organizations commonly recommend this sequence to help people develop a usable list of values <a href="https://www.viacharacter.org/" target="_blank" rel="noopener">VIA Institute on Character</a>. Find a short survey on the site: <a href="https://michaelcarbonara.com/survey/" target="_blank" rel="noopener">site survey</a>.</p><p>Step 1, Reflect: list candidate values. Start by writing possible values you care about. Use prompts such as moments you felt proud, decisions you regret, or admired people to generate items. Try to list many candidates without judging them.</p><p>Step 2, Prioritize: narrow to a top list. Rank your candidates and narrow them to a practical top five to ten priorities. One common way to do this is pairwise comparison or simple ranking so you can see which values consistently outrank others. Practical worksheets guide this narrowing process <a href="https://counseling.umn.edu/services/self-help/values-clarification" target="_blank" rel="noopener">values clarification worksheet</a>.</p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Take one small step to test a value</h3><div class="cta-intro"><p>Try the next action from the steps above now by choosing one candidate value and writing a specific behavior you could try this week that reflects it.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign</a></div><p>Step 3, Apply: create concrete actions or tests. Translate each top value into a small, testable action. For example, if reliability is a top value, commit to a measurable check such as arriving early to two meetings this month. Use these small tests to see whether the value matches your lived priorities.</p><h3>Step 1: Reflect - list candidate values</h3><p>Reflection prompts include: recall decisions that felt right, note what you admire in others, and list topics that consistently draw your energy. These prompts help move beyond slogans to specific priorities you recognize in your behavior.</p><h3>Step 2: Prioritize - narrow to a top list</h3><p>When prioritizing, consider using a worksheet that asks you to compare values in pairs or to choose which value you would keep if you had to select a single guiding priority. That exercise reveals relative ordering rather than treating many items as equally important <a href="https://counseling.umn.edu/services/self-help/values-clarification" target="_blank" rel="noopener">values clarification worksheet</a>.</p><h3>Step 3: Apply - create concrete actions or next steps</h3><p>Application turns values into observable behaviors. For civic choices, that might mean checking candidate statements against your priorities or spending time on an issue you named. For personal choices, try a one week test where you apply a chosen value to small decisions and journal the results.</p><h2>How to evaluate and use values when weighing civic and personal choices</h2><p>Use simple decision criteria to compare options against your prioritized values. Common criteria include alignment, feasibility, consistency with other values, and the short term cost of acting on the value. These criteria make it easier to judge competing options without assuming values deterministically predict outcomes.</p><p>When values conflict, practical approaches include ranking priorities, setting context specific rules, or designing trade off heuristics. For example, you might decide that in work settings achievement ranks higher, while at home benevolence has priority. Explicit rules reduce stress when choices are close.</p><h3>Decision criteria and trade offs</h3><p>Checklist criteria help. Ask: Does this option align with my top values? Is it feasible now? Does it contradict another value I prioritized? These questions help structure the judgment and make trade offs explicit rather than implicit.</p><h3>Matching values to actions and priorities</h3><p>Match a value to an observable action and a simple metric. If family care is a value, set a measurable target such as weekly time spent. If public service is a value, set an action like attending a local meeting. Concrete steps show whether a nominated value fits your real priorities.</p><h2>Common mistakes and pitfalls when naming or applying values</h2><p>A frequent mistake is confusing slogans or aspirational phrases with personal values. Vague statements such as I support the community can be a slogan; a clearer value might be volunteer service twice a month or donating a set portion of time.</p><p>Another pitfall is social desirability bias, where people list values they think are admired rather than those they personally prioritize. Counseling resources recommend private reflection and small behavior tests to reduce this bias <a href="https://counseling.umn.edu/services/self-help/values-clarification" target="_blank" rel="noopener">values clarification worksheet</a>.</p><h3>Confusing slogans or aspirations with personal values</h3><p>Test whether a stated value leads to real choices. If the value does not influence small decisions or actions, it may be more aspirational than operative. Try journaling or small experiments to check this.</p><h3>Relying on untested assumptions or social pressure</h3><p>Avoid declaring values under peer pressure. Instead, use private ranking exercises and behavioral tests to confirm that a claimed value matches your ordinary choices. This approach reduces the risk of acting on untested assumptions.</p><p>Practical corrective steps include keeping a brief decision journal and running one week experiments where you commit to testing a value. These low cost checks help verify that your top values reflect your actual choices and not only good intentions <a href="https://www.viacharacter.org/" target="_blank" rel="noopener">VIA Institute on Character</a>.</p><h2>Examples and short scenarios: applying individual choice values in everyday decisions</h2><p>Scenario 1, work task selection: If self direction is a priority, choose tasks that allow autonomy and creative problem solving. A simple alignment check is to ask whether the task offers space to decide how the work is done and whether it fits your ranked priorities.</p><p>Scenario 2, civic evaluation: When evaluating a candidate statement, compare the candidate's stated priorities to your top values using primary sources. Note whether the statement aligns with your value definitions and whether the candidate provides specific actions consistent with those priorities <a href="https://www.viacharacter.org/" target="_blank" rel="noopener">VIA Institute on Character</a>.</p><p>Each scenario ends with a short checklist item: name the value, state the observable action, and decide on a one week test to see if it feels consistent in practice.</p><h2>Conclusion: next steps for making values actionable</h2><p>To recap, individual choice values are cognitive priorities that orient preferences and choices.</p><p>Two immediate actions to try today are completing a short values worksheet and running a one week decision journal test for one nominated value. Remember that scholars also note open questions about how rapid social and digital change may reshape values over time, a topic current research continues to investigate <a href="https://hbr.org/2021/10/how-digital-change-shapes-values" target="_blank" rel="noopener">how digital change shapes values</a>. See related posts in the <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news page</a>. Learn more on the <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">about page</a>.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-89jkmr" class="faq-toggle" /><label for="faq-89jkmr" class="faq-summary" role="button" tabindex="0">How are individual choice values different from beliefs or preferences?</label><div class="faq-content"><p>Values are guiding priorities that orient choices and judgments; beliefs are convictions about facts and preferences are likes or dislikes. Values carry a weighting function that influences how people evaluate options.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-q0n5ht" class="faq-toggle" /><label for="faq-q0n5ht" class="faq-summary" role="button" tabindex="0">Can my values change over time?</label><div class="faq-content"><p>Yes. Research indicates values often form early through family and schooling but can evolve with life experiences and changing social contexts.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-zumsni" class="faq-toggle" /><label for="faq-zumsni" class="faq-summary" role="button" tabindex="0">How can I test whether a stated value really matters to me?</label><div class="faq-content"><p>Use small experiments and a decision journal: pick one value, translate it into a measurable action for a week, and record whether you follow through and how it feels.</p></div></section>
+</section><section class="article-ending">If you want to continue, try a short values worksheet and a one week decision journal to see how a chosen value fits your life. Keep a neutral stance and use primary sources when comparing personal priorities to public statements.</section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
