@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>How does section 230 affect social media</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #8a1f2a; /* derived darker accent */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* from --mc-panel-2 */
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Scoped extras for article classes used below */
+    .summary{ font-style: italic; color: rgba(255,255,255,.90); margin-bottom: 1.4rem; }
+    .article-highlights{ display:flex; flex-direction:column; gap:0.9rem; margin:1.6rem 0; }
+    .highlight-card{ background: linear-gradient(135deg, rgba(255,255,255,.03) 0%, rgba(255,255,255,.06) 100%); border-left:4px solid var(--accent); padding:0.9rem; }
+    .cta-section .cta-button{ text-transform: uppercase; letter-spacing: 0.12em; }
+
+    /* FAQ accordion small adjustments */
+    .faq-accordion{ border-left:4px solid var(--accent); }
+    .faq-summary{ color: var(--text-color); }
+    .faq-content{ color: rgba(255,255,255,.92); }
+
+    /* Tool block adjustments */
+    .tool-block{ border-left:4px solid var(--accent); }
+    .tool-checklist-item input[type="checkbox"]{ accent-color: var(--accent); }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/social-media-and-freedom-of-speech-and-expression-banner.jpg" alt="How does Section 230 affect social media banner" />
+        </div>
+        <h1 class="title">How does section 230 affect social media</h1>
+        <p class="subline">A neutral, sourced overview of Section 230's protections, recent Court guidance, and policy options through 2026.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/social-media-and-freedom-of-speech-and-expression-section-230-explained/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">Section 230 of the Communications Decency Act is the central federal rule shaping how online services handle third-party speech. This article explains the statute's core protections, recent Supreme Court guidance, and the main policy options under discussion through 2026.
+
+The goal is a neutral, sourced overview that helps voters and civic readers understand how the law affects social platforms, content moderation, and public debate. It focuses on primary documents and major policy analyses so readers can follow the underlying sources.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Section 230 shields platforms from publisher liability for most third-party content, while allowing good-faith moderation.</span></div><div class="highlight-card"><span class="highlight-text">Gonzalez v. Google narrowed immunity for some algorithmic recommendation claims, creating doctrinal uncertainty.</span></div><div class="highlight-card"><span class="highlight-text">Policy proposals through 2026 split between targeted reforms and broader reductions of immunity, each with tradeoffs.</span></div>
+     </div>
+  <h2>What Section 230 is and why it matters</h2>
+<h3>Statutory basics in plain language</h3>
+<p>Section 230 is a short federal law that gives so-called interactive computer services certain legal protections for third-party content. The statutory text makes two core points: services are not treated as the publisher or speaker of content posted by others, and services may take action in good-faith to restrict access to certain objectionable material without losing that protection. The statute itself is the primary source for these rules, and readers can consult the law to read the exact language.</p>
+<p>The statutory text of <a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">47 U.S.C. § 230</a> sets the baseline for how courts treat platform liability and moderation, and a plain reading helps explain why platforms operate as they do today. For the exact statutory language see the text of 47 U.S.C. § 230 in the U.S. Code, which states the two core protections for interactive services and for good-faith content restriction.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay informed and get involved with Michael Carbonara</h3><div class="cta-intro"><p>Consult the statutory text of 47 U.S.C. § 230 and the Congressional Research Service overview for the full language and analysis.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the Campaign</a></div>
+<h3>Why the law matters for social media and speech, social media and freedom of speech and expression</h3>
+<p>In practice, the rule means many social sites and other online services do not face publisher liability for what users post, which affects how they design feeds, comment systems, and moderation tools. This functional effect is why the law is central to debates about online speech and platform responsibility, and it is discussed in plain terms in the Congressional Research Service overview.</p>
+<p>Examples help make this concrete: a bulletin board, a social feed, or a hosting provider generally count as interactive computer services when they store or transmit content created by other people. The CRS overview explains how courts use the statute to distinguish those roles when resolving lawsuits about alleged unlawful content.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>How Section 230 works in practice: immunity and moderation protections</h2>
+<h3>Difference between liability for content and protection for moderation actions</h3>
+<p>The statute performs two legal functions. First, it shields platforms from being treated as the speaker or publisher of third-party material. Second, it protects good-faith moderation choices that remove or restrict access to content deemed objectionable. The Congressional Research Service provides an overview of these two functions and how they operate in litigation.</p>
+<p>Put another way, platforms usually cannot be sued for a user's post in the same way a newspaper could be sued for an article it wrote, and they can take down content without automatically losing their immunity if they act in good faith. The CRS notes are a helpful guide to how courts apply these provisions in ordinary cases.</p>
+<h3>How courts evaluate good-faith removal and immunity claims</h3>
+<p>Court decisions often turn on whether the complaint seeks to treat a platform as the publisher or whether the claim instead targets an underlying user's speech. When courts find the claim seeks to hold the platform responsible for content created by others, Section 230 has commonly been applied to bar the suit. The CRS overview summarizes these typical lines of reasoning.</p>
+<p>Common claims that Section 230 has routinely affected include defamation suits, certain state-law content claims, and other cases that would otherwise treat a platform as the publisher of user posts. Courts use legal tests to decide whether a claim is barred, and the CRS materials explain these doctrinal lines in more detail.</p>
+
+<h2>Gonzalez v. Google: what the Supreme Court changed and what remains uncertain</h2>
+<h3>Facts and holding of <a href="https://www.aclu.org/cases/google-v-gonzalez-llc" target="_blank" rel="noopener">Gonzalez v. Google LLC</a></h3>
+<p>In Gonzalez v. Google LLC, the Supreme Court held that certain claims tied to algorithmic recommendations could proceed, narrowing Section 230's immunity in that context. The opinion permitted some lawsuits that alleged recommendations, rather than neutral hosting, played a role in linking users to specific content, to move forward in court.</p>
+<p>The opinion and lower-court history are important for understanding how the Court drew a line between neutral hosting and targeted algorithmic recommendation claims. The Court's published opinion explains the doctrinal basis for allowing those narrow claims to proceed.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-jpk4vz" class="faq-toggle" checked /><label for="faq-jpk4vz" class="faq-summary" role="button" tabindex="0">How will changes to Section 230 affect platforms, moderation, and online speech?</label><div class="faq-content"><p>Changes could alter moderation incentives and platform features; narrow reforms seek to increase transparency and appeal rights while broader changes could raise compliance costs and affect smaller services, and courts applying Gonzalez will shape outcomes case by case.</p></div></section>
+<h3>Why the decision matters for algorithmic recommendations</h3>
+<p>The Gonzalez ruling matters because many social platforms use recommendation systems to select and rank content for users, and the decision signals that some recommendation-based claims may not receive the same broad immunity that applies to neutral hosting. The Supreme Court opinion provides the controlling statement about that doctrinal narrowing.</p>
+<p>At the same time, the opinion left open several questions about how lower courts should apply the new guidance to different kinds of algorithms and to varied factual settings, and legal commentators, including analysis at <a href="https://www.cov.com/en/news-and-insights/insights/2023/05/the-us-supreme-court-punts-on-section-230-in-gonzalez-v-google-llc" target="_blank" rel="noopener">Covington</a>, and the CRS note that ongoing litigation will clarify those boundaries over time.</p>
+
+<h2>How Section 230 affects platform behavior, moderation incentives, and speech</h2>
+<h3>Moderation incentives: how immunity shapes takedowns and policies</h3>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1mO-l24kbNIoZBaBBNY_M5T78-4eI89Xc=s1200" alt="Minimalist vector infographic of a modern data center rack and server equipment on deep navy background using white and red accents illustrating social media and freedom of speech and expression" /></a>
+      <div class="side-text"><p>Policy analyses indicate that Section 230 shapes moderation incentives by reducing the legal risk platforms face for hosting content, while also protecting their ability to remove content in good faith. Brookings and other analysts describe how immunity influences both the technical design and business choices platforms make about content policies.</p></div>
+    </div>
+<p>Because platforms are not treated as the publisher for most third-party speech, they may choose moderation strategies that balance user engagement with legal risk and public pressure. Public polling on attitudes toward social media and content moderation has influenced lawmakers who consider changes to these incentives.</p>
+<h3>Impacts on small platforms, publishers, and speech diversity</h3>
+<p>Analysts have noted that reducing immunity could raise compliance costs and change how smaller platforms operate, potentially leading to fewer niche services if legal exposure increases. Brookings explains these potential economic consequences and the distributional effects between large incumbents and startups.</p>
+<p>Public concern about misinformation, harassment, and perceived platform power has driven interest in reform, but researchers caution that clear causal evidence tying specific legal changes to predicted speech outcomes is limited. The Pew Research Center's public polling documents these persistent concerns.</p>
+
+<h2>Policy options under debate (2024–2026) and their tradeoffs</h2>
+<h3>Targeted reforms: transparency, notice-and-appeal, and recommendation carve-outs</h3>
+<p>Policy literature through 2026 has clustered reforms into two approaches. One set is narrowly targeted measures such as platform transparency rules, standardized notice-and-appeal procedures for removals, and carve-outs that treat algorithmic recommendations differently from passive hosting.</p>
+<p>The Brookings analysis outlines these targeted measures and discusses how they aim to increase accountability while limiting disruption to lawful speech and service design.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<h3>Broader approaches: reducing immunity and potential legal and economic consequences</h3>
+<p>Other proposals would reduce or narrow Section 230 immunity more broadly, which supporters argue would increase platform accountability but which critics warn could produce heavy compliance costs or encourage preemptive removals. Congressional committee materials summarize the range of legislative proposals and their intended effects.</p>
+<p>Scholars caution that the empirical record on how broad immunity changes would alter content levels or free expression is limited, and they emphasize tradeoffs between reducing harms and avoiding unintended chilling effects on lawful speech.</p>
+
+<h2>Practical scenarios: how changes to Section 230 might play out on social media</h2>
+<h3>Recommendation algorithms and legal exposure</h3>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Scenario A: Suppose courts adopt a broad reading of Gonzalez's limitation on recommendations. Platforms that rely on automated recommendation systems might face more lawsuits alleging that their ranking and suggestion features materially contributed to unlawful outcomes. The Supreme Court opinion explains the doctrinal basis for treating some recommendation claims differently from neutral hosting, as discussed in the Washington Law Review.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1RNCZiZVsIf8DjyY6qR28v1X_DBSmND67=s1200" alt="Minimalist 2D vector infographic with statute column gavel and magnifying glass icons on navy background representing social media and freedom of speech and expression" /></a>
+    </div>
+<p>If that occurred, platforms might respond by changing algorithm behavior, offering fewer algorithmic recommendations, labeling algorithmic decisions more clearly, or introducing opt-in choices for personalized feeds. Brookings and related policy analyses describe these possible platform responses as plausible reactions to increased legal exposure.</p>
+<h3>Moderation choices by platforms of different sizes</h3>
+<p>Scenario B: Facing higher liability risk, large firms with legal teams might expand preemptive takedowns and invest in compliance tools, while smaller services could limit features or exit certain markets due to increased costs. Brookings and committee summaries have raised this distributional concern about how reforms could affect competition and innovation.</p>
+<p>Smaller platforms that cannot absorb higher legal or moderation costs might adopt conservative content rules or require human review for borderline content, which could change the diversity of online speech available in niche communities. Policymakers often cite these tradeoffs when considering the form and scope of reforms.</p>
+
+<h2>Decision criteria for judges and lawmakers weighing reforms</h2>
+<h3>Legal tests and doctrinal questions after Gonzalez</h3>
+<p>Courts deciding future cases will weigh whether a claim treats a platform as the speaker or instead targets a user's content, and they will parse whether the platform's role was neutral hosting or an active recommendation causing harm. The Gonzalez opinion and subsequent case law will guide those doctrinal assessments.</p>
+<p>Because the Court left certain lines of application open, judges will decide many issues case by case, evaluating the factual record about how algorithms operate and how recommendations are generated.</p>
+<h3>Policy criteria: accountability, speech protection, competition, and feasibility</h3>
+<p>Legislators and analysts commonly use a set of <a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">policy criteria</a> when assessing reforms: how effectively a measure reduces real harms, the risk it poses to lawful expression, the administrative and technical feasibility of implementation, and its competitive impacts on small and large firms. Brookings and committee materials summarize these criteria and their use in policy debates.</p>
+<p>Good evaluation draws on empirical studies, transparent platform records, and careful legislative drafting; committee hearings and peer-reviewed research are examples of the evidence lawmakers may request when assessing tradeoffs.</p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Guide to primary sources to consult before judging reform proposals</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-csf4c0-0">
+                        <input id="tool-check-csf4c0-0" type="checkbox" />
+                        <span>Read Gonzalez opinion</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-4wqmtc-1">
+                        <input id="tool-check-4wqmtc-1" type="checkbox" />
+                        <span>Read 47 U.S.C. § 230</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-5uheqe-2">
+                        <input id="tool-check-5uheqe-2" type="checkbox" />
+                        <span>Read CRS overview</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use these primary sources for factual grounding</p>
+            </div>
+
+<h2>Common misunderstandings and mistakes when reading about Section 230</h2>
+<h3>What Section 230 does not do</h3>
+<p>Section 230 does not give absolute immunity in every legal context, and it does not prevent all lawsuits; courts have long read limits into the statutory scheme. The CRS overview explains how exceptions and doctrinal nuances shape real-world outcomes.</p>
+<p>Readers should avoid claims that a single court decision or proposed bill will instantly rewrite moderation practice; case law evolves and legislation requires careful drafting and debate, as committee summaries make clear.</p>
+<h3>How to read court decisions and policy proposals without overgeneralizing</h3>
+<p>When reading a court opinion, focus on the facts the court considered and the legal questions it resolved. The Supreme Court opinion in Gonzalez is narrow in some respects, and that narrowness matters when extrapolating to other algorithmic systems.</p>
+<p>Likewise, when assessing legislative proposals, look for implementation details, enforcement mechanisms, and whether the proposal applies broadly or to specific practices like algorithmic recommendations; Congressional materials collected by committees are a primary starting point for that analysis.</p>
+
+<h2>Conclusion and where to read more</h2>
+<h3>Key takeaways</h3>
+<p>Section 230 provides foundational protections for interactive computer services, shielding them from publisher liability for third-party content and protecting good-faith moderation steps, and readers should consult the statute for the exact terms. The statutory text itself is the basic reference for these rules.</p>
+<p>The Supreme Court's decision in Gonzalez v. Google narrowed immunity for some algorithmic recommendation claims, and that doctrinal development has left open important questions that courts and legislatures will answer over time. Policy debates through 2026 show a spectrum of targeted and broader reform options with different tradeoffs.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h3>Primary sources and recommended reading list</h3>
+<p>For further reading, start with the statutory text of 47 U.S.C. § 230, the Supreme Court opinion in Gonzalez v. Google LLC, the Congressional Research Service overview, policy analysis such as the Brookings Institution report, and committee materials summarizing bills and hearings through 2026.</p>
+<p>Following court decisions and congressional activity will be important because the law's application to algorithmic systems is still developing, and primary documents will show how the legal and policy picture changes over time.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-ha110e" class="faq-toggle" /><label for="faq-ha110e" class="faq-summary" role="button" tabindex="0">Does Section 230 let platforms publish anything without consequence?</label><div class="faq-content"><p>No. Section 230 protects platforms from being treated as the publisher of third-party content in many contexts, but it does not provide absolute immunity and courts have recognized limits in specific cases.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-d7h95l" class="faq-toggle" /><label for="faq-d7h95l" class="faq-summary" role="button" tabindex="0">Did Gonzalez v. Google end Section 230 protections?</label><div class="faq-content"><p>No. Gonzalez narrowed Section 230 for certain algorithmic recommendation claims and allowed some lawsuits to proceed, but the decision left many questions for lower courts and Congress to resolve.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-tmpdmh" class="faq-toggle" /><label for="faq-tmpdmh" class="faq-summary" role="button" tabindex="0">Would changing Section 230 stop misinformation?</label><div class="faq-content"><p>Not necessarily. Scholars warn that broad reductions in immunity could change moderation incentives and raise costs, and rigorous causal evidence about effects on misinformation is limited.</p></div></section>
+</section><section class="article-ending">Changes to Section 230 will unfold through cases and congressional action, and the effects on platform design and speech will depend on how courts and lawmakers balance accountability with protection for lawful expression. Readers who want to track developments should consult the statute, court opinions, and committee reports as they become available.
+
+For district voters seeking campaign information, check candidate pages and public filings for how candidates describe their priorities on technology and speech.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">https://michaelcarbonara.com/constitutional-rights/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">https://michaelcarbonara.com/issues/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.aclu.org/cases/google-v-gonzalez-llc" target="_blank" rel="noopener">https://www.aclu.org/cases/google-v-gonzalez-llc</a></li><li><a href="https://www.cov.com/en/news-and-insights/insights/2023/05/the-us-supreme-court-punts-on-section-230-in-gonzalez-v-google-llc" target="_blank" rel="noopener">https://www.cov.com/en/news-and-insights/insights/2023/05/the-us-supreme-court-punts-on-section-230-in-gonzalez-v-google-llc</a></li><li><a href="https://washingtonlawreview.org/breaking-algorithmic-immunity-why-section-230-immunity-may-not-extend-to-recommendation-algorithms/" target="_blank" rel="noopener">https://washingtonlawreview.org/breaking-algorithmic-immunity-why-section-230-immunity-may-not-extend-to-recommendation-algorithms/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
