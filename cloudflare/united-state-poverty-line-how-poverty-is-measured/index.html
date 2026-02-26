@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>How Poverty Is Measured in the U.S.: A Practical Guide to the Metrics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Derived brand tokens (from provided style) */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #8e1e2b; /* derived darker accent for hover */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* panel tone */
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease, background .12s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: none;
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; color: color-mix(in srgb, var(--text-color) 92%, #fff 8%); }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/united-state-poverty-line-map.jpg" alt="Map showing how poverty is measured in the U.S." />
+        </div>
+        <h1 class="title">How Poverty Is Measured in the U.S.: A Practical Guide to the Metrics</h1>
+        <p class="subline">A plain-language guide to the official poverty measures and where to find the source tables.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/united-state-poverty-line-how-poverty-is-measured/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">This guide explains the term united state poverty line in plain language and points readers to the authoritative Census and ASPE pages for the data and methods behind commonly cited poverty figures. It is written for voters, local reporters and students who need to know which measure to use and how to cite it correctly.
+
+The article clarifies the difference between the Official Poverty Measure and the Supplemental Poverty Measure, explains the role of HHS Poverty Guidelines in program eligibility, and offers a short checklist for choosing and labeling a poverty figure in reporting.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">The united state poverty line refers to multiple official measures, not a single program rule.</span></div><div class="highlight-card"><span class="highlight-text">OPM offers a long historical series; SPM adjusts for benefits, expenses and local costs.</span></div><div class="highlight-card"><span class="highlight-text">Always name the measure and link to Census or ASPE source tables when reporting poverty rates.</span></div>
+     </div>
+  <h2>What the united state poverty line means: a clear definition and context</h2><p>The phrase united state poverty line is commonly used to refer to the set of statistical poverty thresholds and related administrative guidelines that identify low-income households for reporting and comparison, not to a single program eligibility rule. According to the Census Bureau, these statistical thresholds and related measures are the foundation for official poverty statistics and guidance for analysts and reporters <a href="https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html" target="_blank" rel="noopener">Census poverty measures guidance</a>.</p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Find primary data and methodology</h3><div class="cta-intro"><p>For readers who want the authoritative documentation, check the Census and ASPE pages listed below to see the current thresholds, SPM methodology and HHS guidelines.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Visit the campaign join page</a></div><p>In practice, two related concepts appear in reporting: the Census Bureau's statistical poverty thresholds, which underpin the Official Poverty Measure, and the Department of Health and Human Services Poverty Guidelines used for program eligibility and administrative rules. The HHS guidelines are a simplified administrative adaptation of the Census statistical thresholds, and they are published annually for use by programs and practitioners <a href="https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines" target="_blank" rel="noopener">ASPE HHS Poverty Guidelines</a>.</p><p>Journalists and analysts often convert income and thresholds into an income-to-poverty ratio to classify households into readable categories such as below poverty or a percentage band of poverty. The ratio helps compare households of different sizes and compare trends over time using the appropriate thresholds <a href="https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-poverty-thresholds.html" target="_blank" rel="noopener">Census historical poverty thresholds</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>Why measurement matters for reporting and policy</p><h3>Why measurement matters for reporting and policy</h3><p>Clear measurement matters because different definitions affect who is counted as poor, which influences headline rates, eligibility discussions and policy analysis. Using the right label and source prevents misleading comparisons and supports transparent reporting.</p><h3>Key terms you will see: thresholds, guidelines, OPM, SPM</h3><p>Thresholds are the detailed statistical cutoffs by family size and composition that the Census Bureau uses for the Official Poverty Measure. Guidelines are the annual HHS figures used for many program rules. OPM refers to the Official Poverty Measure and SPM to the Supplemental Poverty Measure.</p><h2>Big picture: the two official frameworks that underlie the united state poverty line</h2><p>Two complementary frameworks underlie common references to the united state poverty line: the Official Poverty Measure, which uses pre-tax cash income compared to fixed thresholds, and the Supplemental Poverty Measure, which adjusts resources and needs to reflect noncash benefits and certain necessary expenses. For a clear overview of the SPM design and how it differs from the OPM see the Census SPM overview <a href="https://www.census.gov/topics/income-poverty/supplemental-poverty-measure.html" target="_blank" rel="noopener">Census SPM overview</a> and the SPM methodology page <a href="https://www.census.gov/topics/income-poverty/supplemental-poverty-measure/guidance/methodology.html" target="_blank" rel="noopener">SPM methodology</a>.</p><h3>Overview of the Official Poverty Measure (OPM)</h3><p>The OPM compares pre-tax cash income to thresholds that vary by family size and composition and are adjusted annually for inflation. That simplicity supports long historical series and headline poverty rates.</p><h3>Overview of the Supplemental Poverty Measure (SPM)</h3><p>The SPM adjusts the resource concept by adding noncash benefits and subtracting necessary out-of-pocket expenses, and it applies geographic cost adjustments to reflect local housing cost differences. Because the SPM changes both resources and needs, it often produces a different poverty count than the OPM.</p><h3>When each framework is typically used</h3><p>Analysts typically use the OPM for long-term trend analysis and for standard headline poverty rates, while the SPM is preferred when assessing the role of specific programs and current resource availability. The Census SPM documentation explains these use cases in more detail <a href="https://www.census.gov/topics/income-poverty/supplemental-poverty-measure.html" target="_blank" rel="noopener">Census SPM overview</a>.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Use authoritative Census and HHS tables to verify calculations</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-u6vcpu-0">
+                        <input id="tool-check-u6vcpu-0" type="checkbox" />
+                        <span>Census SPM overview</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-svndnq-1">
+                        <input id="tool-check-svndnq-1" type="checkbox" />
+                        <span>Poverty thresholds table</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-gbq1dn-2">
+                        <input id="tool-check-gbq1dn-2" type="checkbox" />
+                        <span>HHS Poverty Guidelines</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Confirm the source date before using the table</p>
+            </div><h2>How the Official Poverty Measure (OPM) is calculated</h2><p>The Official Poverty Measure is calculated by comparing a household's pre-tax cash income to the Census Bureau poverty thresholds that vary by family size and composition and are updated for inflation. The Census guidance explains the threshold tables and the conceptual basis for the OPM <a href="https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html" target="_blank" rel="noopener">Census poverty measures guidance</a>.</p><p>What counts as income in the OPM depends on the Census definitions, which generally include pre-tax cash sources such as wages, self-employment income and cash transfers, while excluding most noncash benefits. For a concise explanation of included and excluded items see the Census guidance <a href="https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html" target="_blank" rel="noopener">Census poverty measures guidance</a>.</p><section class="faq-accordion"><input type="checkbox" id="faq-o0ety8" class="faq-toggle" checked /><label for="faq-o0ety8" class="faq-summary" role="button" tabindex="0">How is the united state poverty line defined and used in reporting?</label><div class="faq-content"><p>The united state poverty line refers to statistical poverty thresholds used in the Official Poverty Measure and related administrative Poverty Guidelines; the SPM provides an alternative that adjusts resources and needs. Reporters should name which measure they use and link to the primary source.</p></div></section><p>Thresholds themselves are detailed tables by family size and number of children; the historical series is maintained for trend analysis and is available from the Census threshold tables <a href="https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-poverty-thresholds.html" target="_blank" rel="noopener">Historical poverty thresholds</a>.</p><p>Because the OPM uses pre-tax cash income and fixed thresholds, it provides a consistent series for long-run comparisons, but it does not reflect the value of most noncash programs or subtract necessary out-of-pocket costs that affect families' resources. That trade-off explains why the OPM and SPM often show different rates.</p><h3>What counts as income in the OPM</h3><p>Included in OPM calculations are cash incomes that respondents report on surveys; excluded are most noncash programs such as SNAP and housing subsidies. The Census guidance outlines these inclusions and exclusions for the Official Poverty Measure <a href="https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html" target="_blank" rel="noopener">Census poverty measures guidance</a>.</p><h3>How thresholds are set and updated</h3><p>Poverty thresholds are set by family size and composition and adjusted annually for inflation. The detailed threshold tables and the historical series are published by the Census Bureau for researchers to use in OPM calculations <a href="https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-poverty-thresholds.html" target="_blank" rel="noopener">Historical poverty thresholds</a>.</p><h3>Practical implications for counting people</h3><p>For journalists and analysts, the OPM's simplicity means it is easy to explain and compare over decades, but it can understate the effect of in-kind programs and not reflect certain contemporary costs faced by families.</p><h2>How the Supplemental Poverty Measure (SPM) changes the resource and need calculation</h2><p>The Supplemental Poverty Measure redefines both resources and needs to provide a different perspective on poverty. It adds certain noncash benefits such as SNAP and housing subsidies to household resources and subtracts necessary out-of-pocket expenses before comparing resources to SPM thresholds. The Census SPM documentation describes the components and rationale for this approach <a href="https://www.census.gov/topics/income-poverty/supplemental-poverty-measure.html" target="_blank" rel="noopener">Census SPM overview</a>.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><p>By including the value of noncash programs, the SPM can show how policy changes affect measured resources, while subtracting medical and work-related expenses can lower measured resources where families bear high costs. The SPM's design is intended to be sensitive to these program and cost effects.</p><p>The SPM also applies geographic cost adjustments so that housing expense differences across areas affect the threshold and the poverty determination. This geographic sensitivity is one reason analysts use the SPM to study local policy impacts and variations in living costs <a href="https://www.census.gov/topics/income-poverty/supplemental-poverty-measure.html" target="_blank" rel="noopener">Census SPM overview</a>.</p><h3>What the SPM adds to household resources</h3><p>The SPM explicitly adds noncash benefits and certain tax credits to the resource side to reflect programs that change family purchasing power. The Census SPM page lists the categories included in SPM resource calculations <a href="https://www.census.gov/topics/income-poverty/supplemental-poverty-measure.html" target="_blank" rel="noopener">Census SPM overview</a>.</p><h3>Expenses and adjustments the SPM subtracts</h3><p>The SPM subtracts necessary out-of-pocket expenses such as medical costs and work-related expenses from resources before comparison to thresholds, acknowledging that these costs reduce families' effective means. The SPM methodology discussion provides detail on these deductions <a href="https://www.census.gov/topics/income-poverty/supplemental-poverty-measure/guidance/methodology.html" target="_blank" rel="noopener">SPM methodology</a>.</p><h3>Geographic adjustments and policy sensitivity</h3><p>Because the SPM includes geographic cost adjustments, it is designed to reflect local housing cost differences and therefore respond differently to the same cash income in different places. Researchers should review the Census SPM notes on geographic adjustments when making local comparisons <a href="https://www.census.gov/topics/income-poverty/supplemental-poverty-measure.html" target="_blank" rel="noopener">Census SPM overview</a>.</p><h2>Poverty Guidelines vs. poverty thresholds: administrative rules and program use</h2><p>The Department of Health and Human Services publishes annual Poverty Guidelines for administrative eligibility decisions; these guidelines are a simplified adaptation of the Census statistical thresholds intended for program use <a href="https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines" target="_blank" rel="noopener">ASPE HHS Poverty Guidelines</a>.</p><p>Guidelines are used directly in many program rules and benefit determinations, while the Census thresholds are primarily for statistical measurement and analysis. Program eligibility rules vary, so the guidelines function differently from the statistical poverty line and should not be treated as identical <a href="https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html" target="_blank" rel="noopener">Census poverty measures guidance</a>.</p><h3>What the HHS Poverty Guidelines are and where they are used</h3><p>The HHS guidelines are published each year and used by federal agencies and many programs to set income eligibility cutoffs. The ASPE page lists the current guidelines and notes common administrative uses <a href="https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines" target="_blank" rel="noopener">ASPE HHS Poverty Guidelines</a>.</p><h3>How guidelines relate to Census thresholds</h3><p>Guidelines are derived from the Census thresholds but simplified so that programs can apply a single table to eligibility decisions. Analysts should state whether a reported figure is based on HHS guidelines or Census thresholds to avoid confusion <a href="https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines" target="_blank" rel="noopener">ASPE HHS Poverty Guidelines</a>.</p><h2>Using the income-to-poverty ratio to classify households</h2><p>The income-to-poverty ratio is calculated as household income divided by the applicable poverty threshold; analysts use it to create readable bands such as below poverty or a percentage range of poverty that allow comparisons across household sizes and years. The Census guidance describes standard ratio calculations and classification bands <a href="https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html" target="_blank" rel="noopener">Census poverty measures guidance</a>. Bookmark the Census SPM overview and the Census guidance on measuring poverty for methodology, the historical poverty thresholds page for OPM tables, and the ASPE HHS page for the annual Poverty Guidelines <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news</a>.</p><p>Because the ratio uses the relevant threshold for family composition, it standardizes comparisons across household sizes and supports reporting that is sensitive to family structure. Writers should always say whether the ratio uses OPM or SPM thresholds, since the choice changes the denominator and the classification <a href="https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-poverty-thresholds.html" target="_blank" rel="noopener">Historical poverty thresholds</a>.</p><h3>How the ratio is calculated</h3><p>To form the ratio, divide reported household income by the chosen threshold for that household's size and composition; the result is often expressed as a percentage band for clarity. This method allows simple categorization without inventing numbers, and the Census guidance shows standard practice <a href="https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html" target="_blank" rel="noopener">Census poverty measures guidance</a>.</p><h3>Common categories and why they matter</h3><p>Common classification bands, such as below poverty or 100-199% of poverty, make it easier to compare the economic position of families. The bands are meaningful only when the underlying measure is identified, and readers should be told whether the measure is OPM or SPM.</p><h2>Why OPM and SPM can produce different counts and what that means for readers</h2><p>The primary reasons OPM and SPM counts diverge are the inclusion of noncash benefits in the SPM, the subtraction of out-of-pocket expenses, and the use of geographic adjustments in the SPM. The Census SPM overview explains these core differences <a href="https://www.census.gov/topics/income-poverty/supplemental-poverty-measure.html" target="_blank" rel="noopener">Census SPM overview</a>.</p><p>When readers see different poverty rates from different sources, the difference reflects alternative concepts of resources and needs rather than an error by one measure. Both measures serve legitimate but distinct purposes in analysis and reporting. See the Census story on recent SPM and OPM comparisons for context <a href="https://www.census.gov/library/stories/2025/09/spm-below-official-poverty-rate.html" target="_blank" rel="noopener">SPM and official rate analysis</a>.</p><h3>Primary reasons counts diverge</h3><p>Inclusion of in-kind benefits in SPM raises measured resources for some households, while deduction of medical or work expenses can lower measured resources; together with geographic adjustments, these choices change who is counted as poor under each measure <a href="https://www.census.gov/topics/income-poverty/supplemental-poverty-measure.html" target="_blank" rel="noopener">Census SPM overview</a>.</p><h3>How to read differences in reporting</h3><p>Reporters should state which measure is used and consider showing both OPM and SPM side-by-side where possible, explaining that different concepts underlie the figures and linking to the source documentation for readers.</p><h2>Strengths and limitations of each measure for different uses</h2><p>The OPM's strengths include a long, consistent time series and conceptual simplicity that supports trend analysis and straightforward headlines. The Census guidance outlines these conceptual trade-offs <a href="https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html" target="_blank" rel="noopener">Census poverty measures guidance</a>.</p><p>The SPM's strength is that it better captures current standards of living and policy impacts by adding noncash benefits and subtracting key expenses, but it requires more assumptions and data processing and is conceptually more complex <a href="https://www.census.gov/topics/income-poverty/supplemental-poverty-measure.html" target="_blank" rel="noopener">Census SPM overview</a>. Methodological reviews are useful for deeper context <a href="https://www.urban.org/urban-wire/what-supplemental-poverty-measure" target="_blank" rel="noopener">Urban Institute discussion of SPM</a>.</p><h3>When OPM is preferable</h3><p>Use OPM for long-term trend comparisons and for simple headline reporting where a consistent historical series is the priority.</p><h3>When SPM adds value</h3><p>Use SPM to assess the effects of specific programs, local housing cost differences, or when measuring current resource availability after accounting for in-kind benefits and necessary expenses.</p><h3>What neither measure captures fully</h3><p>Both measures leave gaps. Methodological literature notes remaining challenges in capturing local cost variation and certain in-kind resources, and readers should consult technical reviews for deeper context <a href="https://www.urban.org/urban-wire/what-supplemental-poverty-measure" target="_blank" rel="noopener">Urban Institute discussion of SPM</a>.</p><h2>Practical checklist: how to choose and report a poverty measure</h2><p>Check which measure is represented: OPM, SPM or HHS guidelines, and cite the original source so readers can verify the methodology. The Census and ASPE pages are the authoritative references for these measures <a href="https://www.census.gov/topics/income-poverty/supplemental-poverty-measure.html" target="_blank" rel="noopener">Census SPM overview</a>.</p><p>Confirm whether the figure includes noncash benefits or expense deductions and whether geographic adjustments are applied, so the reporting accurately reflects the resource concept used <a href="https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html" target="_blank" rel="noopener">Census poverty measures guidance</a>.</p><p>Label the year, the measure and any methodological notes; include a link to the primary documentation and the table used so readers and editors can check the original data <a href="https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines" target="_blank" rel="noopener">ASPE HHS Poverty Guidelines</a>. For background on the author and the site, see the about page <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">about</a>.</p><p>Voters who follow candidate communications may also want to consult primary sources directly rather than relying solely on campaign summaries, and local reporters should provide source links for transparency. See the campaign launch post for context on communications <a href="https://michaelcarbonara.com/michael-carbonara-launches-campaign-for-congress/" target="_blank" rel="noopener">campaign launch</a>.</p><h2>Common errors and pitfalls when interpreting the united state poverty line</h2><p>A frequent error is treating HHS Poverty Guidelines as if they were the same as Census thresholds; they serve different functions and are published by different agencies, so the distinction matters for reporting <a href="https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines" target="_blank" rel="noopener">ASPE HHS Poverty Guidelines</a>.</p><p>Another pitfall is overlooking noncash benefits and necessary expense deductions that the SPM adjusts for; ignoring these elements can misstate changes in measured resources when programs change <a href="https://www.census.gov/topics/income-poverty/supplemental-poverty-measure.html" target="_blank" rel="noopener">Census SPM overview</a>.</p><p>Finally, avoid comparing OPM figures directly to SPM figures without noting methodological differences; such comparisons can mislead readers about trends or program effects <a href="https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html" target="_blank" rel="noopener">Census poverty measures guidance</a>.</p><h2>Examples and scenarios: how different choices change who is counted</h2><p>Consider a household that receives significant housing assistance. Under the OPM, that assistance is generally excluded from cash income and does not raise measured resources, while the SPM adds the value of housing assistance to resources and may therefore classify the household differently; the SPM design explains this mechanism <a href="https://www.census.gov/topics/income-poverty/supplemental-poverty-measure.html" target="_blank" rel="noopener">Census SPM overview</a>.</p><p>Consider a household with high medical expenses. The SPM subtracts necessary out-of-pocket medical costs from resources before comparing to thresholds, which can lower measured resources relative to the OPM and change the poverty classification for that household <a href="https://www.census.gov/topics/income-poverty/supplemental-poverty-measure.html" target="_blank" rel="noopener">Census SPM overview</a>.</p><p>When presenting both measures side-by-side, label each series clearly, explain what each measure includes and excludes, and link to the primary documentation so readers can follow up.</p><h2>Where to find primary sources, data tables and technical notes</h2><p>Bookmark the Census SPM overview and the Census guidance on measuring poverty for methodology, the historical poverty thresholds page for OPM tables, and the ASPE HHS page for the annual Poverty Guidelines <a href="https://www.census.gov/topics/income-poverty/supplemental-poverty-measure.html" target="_blank" rel="noopener">Census SPM overview</a>.</p><p>The Census historical thresholds page contains the detailed tables needed to calculate OPM classifications, while the SPM component tables and methodological notes appear on the Census SPM pages; check those files for the most recent updates <a href="https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-poverty-thresholds.html" target="_blank" rel="noopener">Historical poverty thresholds</a>.</p><p>ASPE's Poverty Guidelines page is the authoritative source for the administrative guidelines used by many programs, and it should be cited when reporting program eligibility or administrative cutoffs <a href="https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines" target="_blank" rel="noopener">ASPE HHS Poverty Guidelines</a>.</p><h2>Policy and reporting notes for 2026: open questions and what to check</h2><p>Before publishing 2026 coverage, check the latest Census and ASPE technical pages for methodological updates since 2024, particularly regarding SPM geographic adjustments and other refinements that could affect local comparisons <a href="https://www.census.gov/topics/income-poverty/supplemental-poverty-measure.html" target="_blank" rel="noopener">Census SPM overview</a>.</p><p>Open questions include how well geographic adjustments capture local cost variation and how to interpret cross-measure differences for program evaluation; methodological work and commentary remain relevant to these issues <a href="https://www.urban.org/urban-wire/what-supplemental-poverty-measure" target="_blank" rel="noopener">Urban Institute discussion of SPM</a>.</p><p>When in doubt, label the measure, cite the exact table or file, and link to the primary technical note so readers can see the assumptions that underlie the numbers.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Wrapping up: clear takeaways about the united state poverty line</h2><p>There are multiple complementary measures: the OPM and the SPM, plus a separate set of HHS Poverty Guidelines used for program administration. Each measure answers a different question and uses different assumptions <a href="https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html" target="_blank" rel="noopener">Census poverty measures guidance</a>.</p><p>Three short takeaways: name the measure used, check whether noncash benefits or expense deductions are included, and link to the primary source before publishing. For up-to-date tables and technical notes, consult the Census and ASPE pages listed earlier <a href="https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines" target="_blank" rel="noopener">ASPE HHS Poverty Guidelines</a>.</p>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>For readers who want the authoritative documentation, check the Census and ASPE pages listed below to see the current thresholds, SPM methodology and HHS guidelines.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1mp9v-aOgWipRSit2Slhb7UF-7DkdBXaY=s1200" alt="Minimalist vector infographic with three icons for thresholds benefits and adjustments using Michael Carbonara palette navy white and red illustrating united state poverty line" /></a>
+    </div>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-fdt01x" class="faq-toggle" /><label for="faq-fdt01x" class="faq-summary" role="button" tabindex="0">What is the difference between the OPM and the SPM?</label><div class="faq-content"><p>The OPM compares pre-tax cash income to fixed Census thresholds, while the SPM adjusts resources by adding noncash benefits and subtracting necessary expenses and applies geographic adjustments.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-bo6rpt" class="faq-toggle" /><label for="faq-bo6rpt" class="faq-summary" role="button" tabindex="0">Are HHS Poverty Guidelines the same as Census poverty thresholds?</label><div class="faq-content"><p>No. HHS Poverty Guidelines are a simplified administrative adaptation used for program eligibility, while Census thresholds are statistical measures used for the Official Poverty Measure.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-c9r80c" class="faq-toggle" /><label for="faq-c9r80c" class="faq-summary" role="button" tabindex="0">Where can I find the official tables and methodology?</label><div class="faq-content"><p>Consult the Census SPM overview and poverty guidance pages for methodology and tables, and the ASPE HHS page for the annual Poverty Guidelines.</p></div></section>
+</section><section class="article-ending">If you use any poverty figure in reporting or analysis, label the measure (OPM, SPM or HHS guidelines), cite the exact table and year, and link to the primary documentation so readers can verify the methods. For local or policy coverage, consider showing both OPM and SPM to give readers a fuller picture.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html" target="_blank" rel="noopener">https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html</a></li><li><a href="https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines" target="_blank" rel="noopener">https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines</a></li><li><a href="https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-poverty-thresholds.html" target="_blank" rel="noopener">https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-poverty-thresholds.html</a></li><li><a href="https://www.census.gov/topics/income-poverty/supplemental-poverty-measure.html" target="_blank" rel="noopener">https://www.census.gov/topics/income-poverty/supplemental-poverty-measure.html</a></li><li><a href="https://www.census.gov/topics/income-poverty/supplemental-poverty-measure/guidance/methodology.html" target="_blank" rel="noopener">https://www.census.gov/topics/income-poverty/supplemental-poverty-measure/guidance/methodology.html</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li><li><a href="https://michaelcarbonara.com/michael-carbonara-launches-campaign-for-congress/" target="_blank" rel="noopener">https://michaelcarbonara.com/michael-carbonara-launches-campaign-for-congress/</a></li><li><a href="https://www.census.gov/library/stories/2025/09/spm-below-official-poverty-rate.html" target="_blank" rel="noopener">https://www.census.gov/library/stories/2025/09/spm-below-official-poverty-rate.html</a></li><li><a href="https://www.urban.org/urban-wire/what-supplemental-poverty-measure" target="_blank" rel="noopener">https://www.urban.org/urban-wire/what-supplemental-poverty-measure</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
