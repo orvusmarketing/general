@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Why do servers make $2.13 an hour? — Explainer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #8f202b; /* derived hover */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* from --mc-panel-2 */
+      --radius: 0px; /* from --mc-radius */
+
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease, background .14s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/waiter-salary-in-america-paystub.jpg" alt="Why do servers make $2.13 an hour? — Banner image" />
+        </div>
+        <h1 class="title">Why do servers make $2.13 an hour? — Explainer</h1>
+        <p class="subline">A clear, sourced explainer of the federal rules that allow a reduced cash wage and practical steps workers can take.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/waiter-salary-in-america-why-2-13/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">Many readers see pay stubs that list a $2.13 hourly cash wage for servers and want a straightforward explanation of what that number means. This article gives a clear, sourced summary of the federal rules that allow a reduced cash wage when an employer takes a tip credit and explains how state laws can change that outcome.
+
+It also offers practical steps workers can take to check pay stubs, document tips and hours, and file complaints if employers fail to make up required shortfalls. The tone is informational and cites primary sources such as federal guidance, the U.S. Code, and state labor pages where relevant.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">The $2.13 figure is a conditional federal cash wage used when employers take a tip credit.</span></div><div class="highlight-card"><span class="highlight-text">States often set higher tipped wages or ban tip credits, so take-home pay varies by state.</span></div><div class="highlight-card"><span class="highlight-text">Workers can document pay stubs, timesheets, and tips and file complaints with DOL or state agencies if pay falls short.</span></div>
+     </div>
+  <h2>Quick answer: why waiter salary in america can show $2.13 per hour</h2>
+<p>The federal Fair Labor Standards Act allows employers to apply a tip credit and pay a cash wage as low as $2.13 per hour to tipped employees when certain conditions are met, according to federal guidance <a href="https://www.dol.gov/agencies/whd/fact-sheets/15-tipped-workers" target="_blank" rel="noopener">DOL Wage and Hour Division fact sheet</a>.</p>
+<p>That $2.13 figure is not a stand-alone minimum. Employers may claim a tip credit only if the employee's tips plus that cash wage reach at least the federal minimum wage, and the employer must make up any shortfall if they do not, as described in the statute and <a href="https://www.dol.gov/agencies/whd/flsa/tips" target="_blank" rel="noopener">agency materials</a> <a href="https://www.law.cornell.edu/uscode/text/29/203" target="_blank" rel="noopener">29 U.S. Code subsection 203(m)</a>.</p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick official references to check federal tipped-wage rules</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-6qaumh-0">
+                        <input id="tool-check-6qaumh-0" type="checkbox" />
+                        <span>DOL Fact Sheet</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-vikx84-1">
+                        <input id="tool-check-vikx84-1" type="checkbox" />
+                        <span>US Code citation</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-g0fej2-2">
+                        <input id="tool-check-g0fej2-2" type="checkbox" />
+                        <span>State tipped-wage table</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use these to confirm rules that apply to a workplace</p>
+            </div>
+<p>One-sentence summary: The $2.13 cash wage exists only when an employer takes a federally permitted tip credit and ensures tips bring the worker up to minimum wage.</p>
+<p>What this article covers and how to use it: a clear explanation of the legal basis for the federal tipped wage, how the tip credit is calculated, how state rules change employer obligations, what counts as tips and pooled amounts, and practical steps workers can take to check pay and file complaints.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>How the federal tip credit works under the FLSA</h2>
+<p>The legal basis for the federal tip credit appears in 29 U.S.C. section 203(m), which allows employers to credit a portion of tipped employees' tips toward the employer's minimum wage obligation when specific conditions are met, according to the U.S. Code text <a href="https://www.law.cornell.edu/uscode/text/29/203" target="_blank" rel="noopener">29 U.S. Code subsection 203(m)</a>.</p>
+<p>In practice an employer that takes the tip credit must pay a cash wage and count employee tips toward meeting the applicable minimum wage. If tips plus the cash wage do not equal the federal minimum wage, the employer must pay the difference, as the Wage and Hour guidance explains <a href="https://www.dol.gov/agencies/whd/fact-sheets/15-tipped-workers" target="_blank" rel="noopener">DOL Wage and Hour Division fact sheet</a>.</p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1-zTWB9Hp7S917_poXpYqDUBnK9vyu9ct=s1200" alt="Top down vector infographic of a minimalist restaurant table with empty plates and a tipped glass in Michael Carbonara colors waiter salary in america" /></a>
+      <div class="side-text"><p>Calculating the credit is a matter of accounting: employers track hours worked, the cash hourly rate paid, total tips reported by the employee, and then apply the tip credit up to the statutory limit. Employers who fail to document and make up shortfalls risk liability under the FLSA, so the guidance emphasizes recordkeeping and employer responsibility.</p></div>
+    </div>
+<p>Because the federal minimum wage remains the floor, employers cannot use tips to push pay below that threshold. The cash wage of $2.13 is therefore conditional and works only within the tip-credit framework laid out by statute and agency guidance. See Tip Regulations under the FLSA for regulatory context <a href="https://www.ecfr.gov/current/title-29/subtitle-B/chapter-V/subchapter-A/part-531/subpart-D" target="_blank" rel="noopener">29 CFR part 531</a>.</p>
+<h2>Why pay differs by state: tipped wages and state rules</h2>
+<p>The federal framework is a baseline, not a uniform rule across the country. Many states set higher cash wages for tipped workers or prohibit the tip credit entirely, which directly changes how much servers take home, as summarized in state-by-state tables <a href="https://www.ncsl.org/research/labor-and-employment/tipped-minimum-wage-by-state.aspx" target="_blank" rel="noopener">NCSL tipped minimum wage table</a>.</p>
+<p>For example, some states require employers to pay the full state minimum wage to tipped workers with no tip credit allowed, while others permit a reduced cash wage but set that wage higher than $2.13. California provides a state-specific explanation of rules that differ from the federal framework <a href="https://www.dir.ca.gov/dlse/FAQ_TippedEmployees.htm" target="_blank" rel="noopener">California Department of Industrial Relations guidance</a>.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay informed and involved with Michael Carbonara's campaign</h3><div class="cta-intro"><p>Check your state labor department page or the NCSL state table to confirm whether your state allows the federal tip credit or has a different rule.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the Campaign</a></div>
+<p>Because of these state variations, two servers doing similar work in different states can end up with different take-home pay even if their tip income is the same. That divergence is a direct result of state choices about whether and how to limit the tip credit.</p>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>To find the rule that applies where you work, start with your state labor department website and the NCSL summary table. Those primary resources point to the specific statutes, regulations, and agency interpretations that determine whether an employer may claim a tip credit in that state.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1yR-WWnnhRJ42_DfoFqsvsXkbtsJ0PYoa=s1200" alt="Minimalist 2D vector infographic with cash wage icon tips icon and balance scale on dark blue background for article about waiter salary in america" /></a>
+    </div>
+<h2>Who owns tips, tip pooling, and employer handling of gratuities</h2>
+<p>Federal Wage and Hour guidance states that tips generally belong to employees and explains limited circumstances in which employers or managers may be involved in tip pooling arrangements <a href="https://www.dol.gov/agencies/whd/fact-sheets/15-tipped-workers" target="_blank" rel="noopener">DOL Wage and Hour Division fact sheet</a>.</p>
+<p>The guidance summarizes permitted pooling when employees share tips and clarifies that employers cannot keep employees' tips for themselves, except in narrowly defined situations covered by statute and regulation. The rules also address whether certain service charges are considered tips or business revenue.</p>
+<p>Common lawful practices include voluntary tip pools among employees who customarily receive tips, managed under rules that prevent owners and managers from taking part when the arrangement would displace employee earnings. For specifics about permissible pooling and employer obligations, see the Wage and Hour guidance on tipped employees <a href="https://www.paychex.com/articles/human-resources/tip-credits" target="_blank" rel="noopener">tip credits overview</a>.</p>
+<h2>How servers can check their pay and document shortfalls</h2>
+<p>What to look for on pay stubs: confirm the cash wage your employer reports, the hours worked for each pay period, and any line items that show tip-credit claimed or tips reported. Accurate pay stubs make it easier to verify whether tips plus cash wage meet the legal minimum.</p>
+<p>Keep a contemporaneous record of tips you receive, including date, shift length, and a running total. These records, together with pay stubs and time records, form the basic evidence someone would use to check whether an employer properly applied a tip credit.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-4q5n9e" class="faq-toggle" checked /><label for="faq-4q5n9e" class="faq-summary" role="button" tabindex="0">Why do some servers' paystubs show $2.13 per hour?</label><div class="faq-content"><p>Under federal law the $2.13 cash wage applies only when an employer takes a tip credit and ensures tips bring total pay to at least the federal minimum; state rules may change that outcome.</p></div></section>
+<p>How to proceed with step-by-step documentation and complaints: first compile pay stubs, timesheets, and your tip records. Then compare total pay for each pay period to the minimum wage that should apply, taking into account any state-specific rules. If you find a shortfall, the Wage and Hour Division describes how to file a complaint and what information to include <a href="https://www.dol.gov/agencies/whd/contact/complaints" target="_blank" rel="noopener">DOL Wage and Hour Division complaint page</a>. For additional context and resources, see our news index <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news</a>.</p>
+<p>When filing a complaint, include copies or photos of pay stubs, a written summary of tips and hours by pay period, and any communications with your employer about wages. You may also contact your state labor agency for parallel assistance if your state enforces its own tipped-wage rules.</p>
+<h2>Typical errors, misunderstandings, and common questions</h2>
+<p>Myth: servers are always paid the federal minimum wage. Fact: the $2.13 cash wage applies only when an employer claims the tip credit; otherwise different rules may apply, especially under many state laws <a href="https://www.ncsl.org/research/labor-and-employment/tipped-minimum-wage-by-state.aspx" target="_blank" rel="noopener">NCSL tipped minimum wage table</a>.</p>
+<p>Mistake: assuming tips automatically cover any shortfall. Employers who take the tip credit must calculate and document that tips plus the cash wage reach the required minimum; if they do not, the employer must pay the difference, per federal guidance <a href="https://www.dol.gov/agencies/whd/fact-sheets/15-tipped-workers" target="_blank" rel="noopener">DOL Wage and Hour Division fact sheet</a>.</p>
+<p>Clarifying service charges: not all additional amounts collected by a business are legally 'tips.' Some service charges may be treated as business revenue and handled differently from gratuities, so it is important to check how a charge is labeled and accounted for on pay records.</p>
+<h2>Evidence and debate: what research says about the tip credit and earnings</h2>
+<p>Policy reviews find that the tip credit affects employer labor costs and can influence earnings volatility and labor-market outcomes, but empirical results vary by study and context, as summarized in policy overviews <a href="https://crsreports.congress.gov/product/pdf/R/R46722" target="_blank" rel="noopener">Congressional Research Service overview</a>.</p>
+<p>Some analyses suggest that allowing a tip credit reduces employer wage costs and shifts more earnings risk to workers through tips, while others find limited effects on employment levels or total pay in certain settings. Because results differ across methods and samples, researchers describe these findings with caution.</p>
+<p>Policymakers focus on questions such as how tip credits change allocation of earnings between employers and workers, whether tipping amplifies pay volatility for low-income workers, and how state-level rules interact with local labor markets. The research base points to complexities rather than a single settled conclusion.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Practical examples and scenarios: interpreting a pay stub and local rules</h2>
+<p>Example 1, federal tip-credit calculation: imagine a server works 40 hours in a week and receives $280 in reported tips. If the federal minimum wage applies at $7.25 per hour, the total required wage for the week is $290. The employer must ensure that the server's cash wages plus reported tips equal at least $290; if the cash wage is $2.13 per hour, the employer would calculate any shortfall and pay the difference <a href="https://www.dol.gov/agencies/whd/fact-sheets/15-tipped-workers" target="_blank" rel="noopener">DOL Wage and Hour Division fact sheet</a>.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>Example 2, state ban on tip credits: in a state that prohibits the tip credit, an employer must pay the full state minimum wage to servers regardless of tips. That means the server's paycheck should reflect the higher base wage without a separate tip-credit accounting, and any tips are additional to that wage <a href="https://www.ncsl.org/research/labor-and-employment/tipped-minimum-wage-by-state.aspx" target="_blank" rel="noopener">NCSL tipped minimum wage table</a>.</p>
+<p>Encourage readers to <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">compare their pay stub numbers</a> with these examples. Match the hours, cash wage, and tips shown on your pay stub to the calculations above and then check your state labor page for any rule that changes the employer obligation.</p>
+<h2>Conclusion: where to go from here and authoritative resources</h2>
+<p>Key takeaways: the federal framework permits a $2.13 cash wage only when an employer takes a tip credit and ensures tips make up the difference to the federal minimum; many states set different rules that raise the base pay or ban the tip credit entirely <a href="https://www.dol.gov/agencies/whd/fact-sheets/15-tipped-workers" target="_blank" rel="noopener">DOL Wage and Hour Division fact sheet</a>.</p>
+<p>Authoritative resources to consult: the DOL Wage and Hour fact sheet on tipped employees, the statutory text at 29 U.S.C. section 203(m), the NCSL state-by-state table on tipped minimum wages, and your state labor department pages for local rules and complaint procedures <a href="https://www.law.cornell.edu/uscode/text/29/203" target="_blank" rel="noopener">29 U.S. Code subsection 203(m)</a>. For additional context, see our news index <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news</a>.</p>
+<p>If you suspect a pay shortfall, document pay stubs, hours, and tips, and consider filing a complaint with the Wage and Hour Division or your state labor agency for an investigation <a href="https://www.dol.gov/agencies/whd/contact/complaints" target="_blank" rel="noopener">DOL Wage and Hour Division complaint page</a>.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-c7cu0w" class="faq-toggle" /><label for="faq-c7cu0w" class="faq-summary" role="button" tabindex="0">Does the federal government require servers to be paid only $2.13 per hour?</label><div class="faq-content"><p>No. The $2.13 cash wage applies only when an employer claims a federally permitted tip credit and ensures tips bring total pay up to at least the federal minimum wage; otherwise different rules apply.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-mqrn6m" class="faq-toggle" /><label for="faq-mqrn6m" class="faq-summary" role="button" tabindex="0">Can my state require a higher base pay for tipped workers?</label><div class="faq-content"><p>Yes. Many states set higher tipped wages or prohibit the tip credit, meaning employers must pay the full state minimum wage regardless of tips.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-ipclqs" class="faq-toggle" /><label for="faq-ipclqs" class="faq-summary" role="button" tabindex="0">What should I do if my tips plus wage do not equal the minimum wage?</label><div class="faq-content"><p>Keep pay stubs, time records, and tip logs, then contact the U.S. Department of Labor Wage and Hour Division or your state labor agency to file a complaint with supporting documentation.</p></div></section>
+</section><section class="article-ending">If you need direct help, the DOL Wage and Hour Division and your state labor agency are the primary channels for complaints and enforcement. Start by gathering pay stubs and tip records so that any report you file is supported by clear documentation.
+
+For questions about how these rules apply in your state, consult your state labor department website or the NCSL tipped minimum wage table to find the exact statutory or regulatory text that governs tipped pay where you work.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.dol.gov/agencies/whd/fact-sheets/15-tipped-workers" target="_blank" rel="noopener">https://www.dol.gov/agencies/whd/fact-sheets/15-tipped-workers</a></li><li><a href="https://www.law.cornell.edu/uscode/text/29/203" target="_blank" rel="noopener">https://www.law.cornell.edu/uscode/text/29/203</a></li><li><a href="https://www.dol.gov/agencies/whd/flsa/tips" target="_blank" rel="noopener">https://www.dol.gov/agencies/whd/flsa/tips</a></li><li><a href="https://www.ncsl.org/research/labor-and-employment/tipped-minimum-wage-by-state.aspx" target="_blank" rel="noopener">https://www.ncsl.org/research/labor-and-employment/tipped-minimum-wage-by-state.aspx</a></li><li><a href="https://www.dir.ca.gov/dlse/FAQ_TippedEmployees.htm" target="_blank" rel="noopener">https://www.dir.ca.gov/dlse/FAQ_TippedEmployees.htm</a></li><li><a href="https://www.dol.gov/agencies/whd/contact/complaints" target="_blank" rel="noopener">https://www.dol.gov/agencies/whd/contact/complaints</a></li><li><a href="https://crsreports.congress.gov/product/pdf/R/R46722" target="_blank" rel="noopener">https://crsreports.congress.gov/product/pdf/R/R46722</a></li><li><a href="https://www.ecfr.gov/current/title-29/subtitle-B/chapter-V/subchapter-A/part-531/subpart-D" target="_blank" rel="noopener">https://www.ecfr.gov/current/title-29/subtitle-B/chapter-V/subchapter-A/part-531/subpart-D</a></li><li><a href="https://www.paychex.com/articles/human-resources/tip-credits" target="_blank" rel="noopener">https://www.paychex.com/articles/human-resources/tip-credits</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
