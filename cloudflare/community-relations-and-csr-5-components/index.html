@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What are the 5 essential components of CSR? A practical breakdown</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #8a1f2b; /* derived hover */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.06); /* from --mc-panel */
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1tpZlG99dAA5gtGzr_xACbu2_xBmjdJOg" alt="What are the 5 essential components of CSR?" />
+        </div>
+        <h1 class="title">What are the 5 essential components of CSR? A practical breakdown</h1>
+        <p class="subline">A practical guide to mapping CSR topics, KPIs and reporting steps.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/community-relations-and-csr-5-components/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">This article explains a five-component framework for corporate social responsibility and why it is useful for organizations preparing or improving CSR practice. It clarifies how major standards organize social responsibility topics and how regulatory changes are shaping disclosure expectations.
+
+Readers will find definitions, common KPIs, practical implementation steps, and a concise checklist to move from assessment to reporting. The guide is framed for sustainability officers, compliance managers, SME leaders, and informed readers seeking practical steps rather than abstract theory.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">The five-component framework links governance, environment, community, employees and engagement to practical KPIs and reporting steps.</span></div><div class="highlight-card"><span class="highlight-text">Regulatory changes like the EU CSRD have increased the emphasis on measurable environmental and governance KPIs.</span></div><div class="highlight-card"><span class="highlight-text">Stakeholder engagement and grievance mechanisms are foundational for setting priorities and credible disclosures.</span></div>
+     </div>
+  <h2>Introduction: why the five components of CSR matter</h2><p>The five-component framework gives a practical way to understand corporate social responsibility and how it translates into measurable steps. For readers focused on community relations and csr, this lens clarifies where local investment and consultation fit among governance, environmental priorities, employee welfare, and stakeholder engagement; the structure aligns with international guidance such as ISO 26000 for social responsibility, which organizes related topic areas and expectations <a href="https://www.iso.org/iso-26000-social-responsibility.html" target="_blank" rel="noopener">ISO 26000</a>.</p><p>Regulatory momentum since 2023 has raised the bar for disclosure and for measurable KPIs, especially on environmental and governance topics; the EU Corporate Sustainability Reporting Directive is a clear example of stronger reporting expectations for organizations that report to EU markets <a href="https://ec.europa.eu/info/business-economy-euro/company-reporting-and-auditing/company-reporting/corporate-sustainability-reporting_en" target="_blank" rel="noopener">EU CSRD rules and implementation</a>. For practical implementation guidance consult a CSRD guide <a href="https://auditboard.com/blog/csrd" target="_blank" rel="noopener">AuditBoard</a>.</p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay informed and get involved</h3><div class="cta-intro"><p>If you are preparing or reviewing a CSR plan, focus first on how the five components map to your current reporting responsibilities, your most material topics, and the data you already collect.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign</a></div><p>Use this <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">article</a> as a practical guide: each component below is defined, linked to common KPIs and data sources, and followed by steps you can apply in a phased implementation. Later sections offer decision criteria and a short checklist to move from assessment to reporting.</p><h2>Definition and context: what CSR covers and how frameworks describe it</h2><p>Corporate social responsibility covers how organizations manage their economic, environmental and social impacts in relation to stakeholders and society. This taxonomy is commonly used in standards and reporting guidance, and can help organizations translate broad goals into reporting topics and KPIs.</p>
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1G1Y_B14O8j2JXp6M5O6OVpNKxa-vtZK8=s1200" alt="Minimalist 2D vector illustration of a community project site with blank signage house tree road and infrastructure icons in Michael Carbonara palette community relations and csr" /></a>
+      <div class="side-text"><p>Major guidance documents and reporting frameworks organize CSR into topic groups that align closely with the five components described here; that alignment helps practitioners select indicators and compare disclosures across organizations, as reflected in widely used reporting guidance <a href="https://www.globalreporting.org/standards/" target="_blank" rel="noopener">GRI Standards and reporting guidance</a>.</p></div>
+    </div><p>Different standards may define topics and indicators in slightly different ways, and harmonization remains a live discussion among standard setters and reviewers. Practitioners should treat standards as organizing tools and use materiality work to tailor the taxonomy to their context.</p><h2>Overview: the five essential components</h2><p>Below are the five components presented as concise capsule definitions, followed by a short mapping note.</p><ol><li><b>Governance and ethics</b>, covering board structures, policies, anti-corruption and internal compliance systems.</li><li><b>Environmental sustainability</b>, covering emissions, energy, waste, water and related environmental impacts.</li><li><b>Community relations</b>, focused on community investment, local hiring and consultation processes.</li><li><b>Employee welfare</b>, including health and safety, training, benefits and diversity metrics.</li><li><b>Stakeholder engagement</b>, including grievance mechanisms and structured consultation processes.</li></ol><p>These five components map directly to the topic-group approach used in major standards and reporting guidance, which helps when aligning KPIs to recognized frameworks.</p><p></p><section class="faq-accordion"><input type="checkbox" id="faq-47gjhd" class="faq-toggle" checked /><label for="faq-47gjhd" class="faq-summary" role="button" tabindex="0">How should organizations structure CSR work so that community relations and CSR activities are credible and measurable?</label><div class="faq-content"><p>Use a five-component structure to map material topics, select measurable KPIs aligned to recognized standards, engage stakeholders through documented consultations and grievance channels, and phase in governance and reporting with transparent methods.</p></div></section><p>The rest of the article deep-dives into each component and then shows a practical phased approach to select KPIs, govern them, and report transparently.</p><h2>Governance and ethics, and environmental sustainability: what to measure</h2><p>Good governance and ethics programs provide the foundation for credible CSR reporting; they typically include clear board responsibilities, written ethics and anti-corruption policies, and accessible compliance and grievance processes so that risks can be identified and remediated early.</p><p>When documenting governance topics for disclosure, organizations commonly track board diversity, the existence and coverage of ethics codes, the operation of grievance mechanisms, and policy adoption dates and training completion rates.</p>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Environmental sustainability is a central disclosure area and the most regulated in recent policy developments; common KPIs include scope 1, scope 2 and scope 3 greenhouse gas emissions, energy consumption, waste generation and water use, which reporting frameworks and guidance recommend tracking as part of core environmental reporting <a href="https://www.globalreporting.org/standards/" target="_blank" rel="noopener">GRI Standards and reporting guidance</a>.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1MUvBRMVsEPaM9gAuURlTEhSxPCEJlJgW=s1200" alt="Minimal vector infographic showing five icons in a circular layout representing governance environment community employees and engagement in Michael Carbonara brand colors background #0b2664 white icons and red accents community relations and csr" /></a>
+    </div><p>Regulatory drivers like the EU CSRD have pushed many organizations to make environmental and governance KPIs more comparable and auditable, which influences which indicators organizations prioritize for external reporting <a href="https://carboncloud.com/blog/csrd/" target="_blank" rel="noopener">Corporate Sustainability Reporting Directive overview</a>.</p><p>Data sources for environmental KPIs vary by metric: emissions may require energy invoices and activity data, supply-chain data for scope 3, and waste and water data often come from site-level monitoring or vendor reports. Measurement challenges commonly include supply-chain data gaps and inconsistent definitions across vendors and partners.</p><h2>Community relations and CSR, and employee welfare: indicators and practice</h2><p>Community relations emphasizes local impact and ongoing dialogue with affected communities; typical indicators include community investment levels, local hiring rates, and the presence of structured consultation processes that record inputs and follow-up actions. Guidance from the UN Global Compact and major reporting standards reference community engagement as part of social responsibility practice <a href="https://www.unglobalcompact.org/what-is-gc" target="_blank" rel="noopener">UN Global Compact overview</a>.</p><p>community relations and csr is often a distinct program area within CSR because it brings together financial contributions, procurement and hiring choices, and consultation practice into locally measurable actions. Tracking local hiring, targeted procurement and the results of consultations helps convert commitments into measurable outcomes.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><p>Employee welfare programs focus on the workforce and typically measure occupational health and safety incidents, training hours per employee, benefits coverage and diversity or inclusion metrics. Literature reviews that synthesize research through 2024 report strong links between employee-focused CSR programs and retention outcomes, which is useful when selecting KPIs tied to workforce stability <a href="https://www.mdpi.com/2071-1050/16/18/xxxx" target="_blank" rel="noopener">Systematic review of employee-focused CSR impacts</a>.</p><p>Practically, organizations translate employee welfare into internal KPIs such as lost-time injury rates, training completion rates, average training hours, and employee turnover by segment. These indicators are often easier to measure internally than external social outcomes and can be directly linked to HR systems and payroll data.</p><h2>Stakeholder engagement and grievance mechanisms: building credibility</h2><p>Standards treat stakeholder engagement and grievance mechanisms as preconditions for credible CSR because they inform materiality decisions and provide channels for concerns to be raised and resolved.</p><p>Design principles for credible engagement include mapping stakeholders by influence and impact, scheduling structured consultations that document inputs, and providing accessible, transparent grievance reporting with clear follow-up and remediation steps. ISO guidance and reporting standards emphasize these elements as foundational to responsible reporting <a href="https://www.iso.org/iso-26000-social-responsibility.html" target="_blank" rel="noopener">ISO 26000</a>.</p><p>Grievance mechanisms should be proportionate to the scale of operations and accessible to affected people, with clear roles for intake, investigation, and remedy. Well-designed engagement processes improve priority-setting and make KPIs more defensible to stakeholders and reviewers.</p><h2>Implementation framework: a phased approach to KPIs, governance and reporting</h2><p>A phased approach helps organizations move from assessment to assured reporting. Phase 1 establishes a baseline assessment and materiality process to identify the most significant topics for the organization and its stakeholders.</p><p>Phase 2 selects measurable KPIs and sets time-bound targets for priority topics, aligning indicator choices to recognized frameworks such as GRI where feasible to aid comparability and external understanding <a href="https://www.globalreporting.org/standards/" target="_blank" rel="noopener">GRI Standards and reporting guidance</a>.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick materiality and KPI selection checklist</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-cd0ggk-0">
+                        <input id="tool-check-cd0ggk-0" type="checkbox" />
+                        <span>Identify stakeholders</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-3rq6ko-1">
+                        <input id="tool-check-3rq6ko-1" type="checkbox" />
+                        <span>Map material topics</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-rkwno1-2">
+                        <input id="tool-check-rkwno1-2" type="checkbox" />
+                        <span>Select KPIs</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-xafs13-3">
+                        <input id="tool-check-xafs13-3" type="checkbox" />
+                        <span>Set targets</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-iim1c8-4">
+                        <input id="tool-check-iim1c8-4" type="checkbox" />
+                        <span>Plan reporting</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use for initial prioritization</p>
+            </div><p>Phase 3 integrates governance changes, assigns accountability, embeds data collection in operational systems, and prepares public reporting with clear methods and boundary definitions. Organizations can phase in assurance activities as data quality improves and as external requirements demand higher confidence in reported numbers.</p><p>Many implementation guides recommend iterative cycles: start with the best available data, set realistic short-term targets, and improve measurement and assurance over successive reporting cycles. Current gaps remain in audit-level assurance for many CSR metrics, so framing staged assurance plans is a practical choice.</p><h2>Decision criteria and evaluating CSR performance</h2><p>When choosing KPIs, apply three practical decision criteria: material relevance to your business and stakeholders, data quality and measurability, and alignment with recognized reporting standards to aid comparability and external review.</p><p>Regulatory drivers such as the CSRD change which KPIs companies prioritize for external disclosure, so monitoring regulatory signals should influence which indicators are included in external reports versus internal scorecards <a href="https://ec.europa.eu/info/business-economy-euro/company-reporting-and-auditing/company-reporting/corporate-sustainability-reporting_en" target="_blank" rel="noopener">Corporate sustainability reporting (CSRD)</a>.</p><p>Use benchmarks where available for external performance review, and choose internal operational targets where external comparators are not meaningful. Seek third-party assurance selectively when data quality and stakeholder expectations make it necessary.</p><h2>Common pitfalls, practical examples, and concluding checklist</h2><p>Common mistakes include weak stakeholder engagement that leaves material topics unaddressed, inconsistent KPI definitions that prevent meaningful comparison, and over-claiming results without transparent methods or verification; avoid these by documenting methods and engagement outputs clearly.</p><p>Scenario 1, community relations: an organization reports a headline community investment number without documenting local hiring or consultation outcomes. The corrective step is to add local hiring metrics and a consultation log tied to specific projects, making the social outcomes and process visible to stakeholders; this approach aligns measurement to the community relations component and improves credibility.</p><p>Scenario 2, environmental KPIs: a company reports scope 1 and 2 emissions but lacks reliable scope 3 data. A practical remedy is to phase scope 3 work: start with supplier questionnaires for the largest categories, use spend-based estimation where necessary, and set phased scope 3 improvement targets while improving data quality over time <a href="https://www.globalreporting.org/standards/" target="_blank" rel="noopener">GRI Standards and reporting guidance</a>.</p><p>Checklist - first actions: conduct a baseline materiality assessment, prioritize the most material topics, select measurable KPIs aligned to standards where possible, engage stakeholders and set governance roles, and prepare a transparent report that documents methods and boundaries.</p><p>Following these steps helps organizations move from aspiration to measurable progress across governance, environmental sustainability, community relations, employee welfare, and stakeholder engagement.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-x0ubge" class="faq-toggle" /><label for="faq-x0ubge" class="faq-summary" role="button" tabindex="0">What are the five essential components of CSR?</label><div class="faq-content"><p>The five components commonly used are governance and ethics, environmental sustainability, community relations, employee welfare, and stakeholder engagement.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-44k953" class="faq-toggle" /><label for="faq-44k953" class="faq-summary" role="button" tabindex="0">How do I choose KPIs for community relations?</label><div class="faq-content"><p>Choose KPIs tied to material topics such as community investment, local hiring rates, and documented consultation outcomes; prioritize measurability and data sources linked to existing operational systems.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-yp37mo" class="faq-toggle" /><label for="faq-yp37mo" class="faq-summary" role="button" tabindex="0">Do small organizations need to follow the same reporting frameworks?</label><div class="faq-content"><p>Smaller organizations can align selectively to major frameworks by focusing on material topics, choosing feasible KPIs, and phasing in more detailed reporting and assurance as resources allow.</p></div></section>
+</section><section class="article-ending">Focus on material topics, document your methods, and plan incremental improvements to data quality and assurance. Doing so helps convert commitments across governance, environmental sustainability, community relations, employee welfare, and stakeholder engagement into credible, verifiable disclosures.
+
+The checklist in this article offers immediate next steps: baseline, prioritize, select KPIs, engage stakeholders, and report transparently.</section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
