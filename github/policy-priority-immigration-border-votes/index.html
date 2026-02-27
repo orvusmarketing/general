@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Immigration and Border Policy: What a House Member Votes On</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens (from provided style) */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736;     /* from --mc-accent */
+      --accent-hover: #8a1f2b; /* derived darker accent (optional) */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664;    /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px;         /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.90); margin-bottom: 1.2rem; }
+    .article-body .highlight-card{ border-left: 4px solid var(--accent); }
+    .cta-button{ background: var(--accent); }
+    .cta-button:hover{ background: var(--accent-hover); }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/policy-priority-coastline.jpg" alt="Immigration and Border Policy banner" />
+        </div>
+        <h1 class="title">Immigration and Border Policy: What a House Member Votes On</h1>
+        <p class="subline">A concise guide to how a U.S. House member's policy priorities shape immigration and border votes.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/policy-priority-immigration-border-votes/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+<div class="summary">This guide explains how a U.S. House member's "policy priority" affects the immigration and border measures they vote on. It is written for voters, local residents, journalists, and students who want neutral, sourceable guidance for tracking votes.
+
+The article points readers to primary sources and explains committee and leadership roles so readers can verify claims from campaigns or media. It uses short sentences and neutral attribution when summarizing candidate positions.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">A House member votes on authorizing laws, spending bills, floor amendments, and oversight actions that affect immigration policy.</span></div><div class="highlight-card"><span class="highlight-text">Committee assignments and party leadership strongly shape which immigration measures reach the floor for a full vote.</span></div><div class="highlight-card"><span class="highlight-text">Primary sources such as Congress.gov, committee hearing records, and agency reports are the best way to verify a Representative's immigration votes.</span></div>
+     </div>
+  <h2>What this guide covers and why 'policy priority' matters for immigration votes</h2>
+<p>For voters and reporters, "policy priority" describes the issues a Representative treats as central when deciding which bills, amendments, and oversight actions to support. This article uses that phrase as a lens to explain how immigration and border measures reach the House floor, and how a member's choices reflect what they prioritize.</p>
+<p>To verify votes and text, rely on primary sources such as vote records on Congress.gov and committee hearing records. For a clear overview of how bills become law, consult the legislative process summary on Congress.gov, which explains authorizing and appropriations steps that affect immigration policy <a href="https://www.congress.gov/about/how-our-laws-are-made" target="_blank" rel="noopener">How Our Laws Are Made</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>The guide is neutral and factual. When a candidate's statement is summarized, it is attributed. When a vote or committee action is described, readers are directed to the public record for confirmation.</p>
+<h2>What a House member can vote on: authorizing bills, appropriations, amendments and oversight</h2>
+<p>Members vote on authorizing legislation that creates or changes immigration law, appropriations that fund agencies such as Customs and Border Protection, floor amendments that alter bill text, and oversight measures tied to investigations or funding conditions. Those categories map directly onto the legislative steps outlined in the official bill-to-law process <a href="https://www.congress.gov/about/how-our-laws-are-made" target="_blank" rel="noopener">How Our Laws Are Made</a>.</p>
+<p>Authorizing bills may be standalone immigration measures or broader statutes that include immigration provisions. Appropriations and emergency funding votes, including supplemental packages, set spending levels for DHS components and border operations. Operational metrics and agency requests often prompt such appropriations debates <a href="https://www.cbp.gov/newsroom/stats/southwest-land-border-encounters" target="_blank" rel="noopener">Southwest Land Border Encounters and Related Statistics</a>. Learn more on <a href="https://michaelcarbonara.com/stronger-borders" target="_blank" rel="noopener">stronger borders</a>.</p>
+<p>Floor amendments and procedural rule votes also shape outcomes. An amendment can narrow or expand how a bill applies, while a rule vote determines whether debate limits or amendment windows apply. Those tactical votes sometimes appear procedural but materially affect policy direction.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay informed and join the campaign updates</h3><div class="cta-intro"><p>To follow an individual vote, start with the bill text and roll call on Congress.gov and check committee hearing records to see the context for amendments and funding requests.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the Campaign</a></div>
+<h2>How committee assignments shape who writes and advances immigration measures</h2>
+<p>Committee membership determines where immigration measures are drafted and reviewed before the floor. Committees such as the Judiciary and Homeland Security commonly handle immigration policy, and Appropriations handles funding questions. House committee descriptions explain these roles and typical referral patterns <a href="https://www.house.gov/the-house-explained/committees" target="_blank" rel="noopener">House Committees and Their Role in Legislation</a>.</p>
+<p>When a bill is introduced, the Speaker refers it to one or more committees. Those committees may hold hearings, draft text in markup, and then report a bill to the full House. A Representative on a relevant committee has more opportunity to shape phrasing and to offer or oppose amendments during markup. See committee referrals such as <a href="https://www.congress.gov/bill/119th-congress/house-bill/7640/committees" target="_blank" rel="noopener">H.R.7640 committee pages</a>.</p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1w1P9NSGtZJBSYlLV9scCG0ffPZJnertk=s1200" alt="Minimalist 2D vector infographic of the US Capitol silhouette with floating document icons representing bills and hearings in white and red on navy background policy priority" /></a>
+      <div class="side-text"><p>Being on the Judiciary Committee or Homeland Security Committee does not guarantee success for a bill, but it gives members direct access to the drafting process and to the record that reporters and voters consult when evaluating how a candidate positioned themselves on immigration policy.</p></div>
+    </div>
+<h2>How party leadership and the floor calendar determine which immigration bills get a vote</h2>
+<p>Majority party leadership controls the House floor calendar, deciding which reported bills and standalone measures receive time for debate and a vote. That scheduling power strongly affects whether an immigration proposal receives full consideration and when it appears for a roll call. Recent reporting from <a href="https://marylandmatters.org/2026/02/26/house-votes-mostly-on-party-lines-to-approves-three-emergency-immigration-measures/" target="_blank" rel="noopener">Maryland Matters</a> illustrates how timing can shape outcomes.</p>
+<p>Leadership also sets rules for debate and coordinates whip counts to estimate support. Those tools shape whether a bill proceeds and influence how members weigh public and constituent responses before committing to a vote <a href="https://www.congress.gov/about/how-our-laws-are-made" target="_blank" rel="noopener">How Our Laws Are Made</a>.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-ubfc6d" class="faq-toggle" checked /><label for="faq-ubfc6d" class="faq-summary" role="button" tabindex="0">What does a House member vote on regarding immigration and border policy?</label><div class="faq-content"><p>A House member can vote on authorizing legislation, appropriations and emergency funding, floor amendments and procedural rules, and oversight measures including hearings and subpoenas that influence immigration policy.</p></div></section>
+<p>In rare cases, procedural routes such as discharge petitions or privileged motions can force consideration despite leadership reluctance, but these paths are exceptional and require broad member coordination.</p>
+<h2>How agency data and oversight reports drive votes on border funding and enforcement</h2>
+<p>Operational statistics from agencies, for example CBP encounter data, are frequently cited in debates over border funding and enforcement. Members use those numbers to argue for or against additional appropriations or for policy changes tied to resource levels <a href="https://www.cbp.gov/newsroom/stats/southwest-land-border-encounters" target="_blank" rel="noopener">Southwest Land Border Encounters and Related Statistics</a>.</p>
+<p>GAO reviews and DHS oversight reports also prompt legislative responses. Lawmakers and staff read such reports to identify management weaknesses or program risks that may be addressed through targeted funding, conditions, or statutory changes <a href="https://www.gao.gov/products/gao-24-105" target="_blank" rel="noopener">Border Security: Recent GAO Findings on DHS Management and Oversight</a>.</p>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Data and oversight shape debate but do not automatically determine outcomes. A report may spur hearings and bills, but political decisions about scheduling, amendments, and funding levels still decide final policy.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/123Ev6D2ZTceWjzWakkL6-gZGgzARvveJ=s1200" alt="Michael Carbonara - Image 2" /></a>
+    </div>
+<h2>Oversight powers and tactics: hearings, subpoenas, and GAO requests</h2>
+<p>Committees can use hearings, subpoenas, and requests for GAO or inspector general reviews to investigate agency actions and to create a public record that supports or opposes policy changes. These oversight actions are common tools when immigration and border management are in dispute <a href="https://www.gao.gov/products/gao-24-105" target="_blank" rel="noopener">Border Security: Recent GAO Findings on DHS Management and Oversight</a>. See reporting such as <a href="https://www.npr.org/2026/02/10/nx-s1-5708757/immigration-enforcement-oversight-house-takeaways" target="_blank" rel="noopener">NPR's takeaways</a> from recent hearings.</p>
+<p>Oversight can lead to legislation, funding changes, or public pressure on agencies. It also sets up the evidentiary record reporters and voters use to evaluate claims about program performance and policy impacts.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>Subpoenas and committee demands have legal processes and potential court challenges. While effective oversight can prompt change, the process can be time consuming and politically contested. Readers who want the records behind hearings should consult committee hearing pages for transcripts and exhibits.</p>
+<h2>How public opinion and constituents shape a Representative's immigration policy priority</h2>
+<p>Polling shows immigration is a high-salience issue that influences how Representatives frame votes and communicate with constituents. Recent national polling highlights partisan divides that affect messaging and the political costs or benefits of certain votes <a href="https://www.pewresearch.org/fact-tank/2024/09/26/americans-views-on-immigration/" target="_blank" rel="noopener">Public Views on Immigration and Border Policy, 2024</a>. See more on <a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">issues</a>.</p>
+<p>Constituents influence priorities through contact, town halls, and local polling. Representatives often cite local concerns and national polls when explaining vote choices, especially on high-visibility border funding bills and enforcement measures.</p>
+<h2>How to track, interpret, and respond to a Representative's immigration votes</h2>
+<p>Track vote records and bill texts on Congress.gov, follow committee pages for markup and hearing records, and watch agency releases for operational data that informs appropriations debates. The official guide to how laws are made provides a baseline for reading vote context <a href="https://www.congress.gov/about/how-our-laws-are-made" target="_blank" rel="noopener">How Our Laws Are Made</a>. For related updates, see <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news</a>.</p>
+<p>Practical steps: read the bill summary, check the amendment text to see what changed, and look at the vote description on the roll call to know whether a vote was procedural or substantive. For funding questions, compare the appropriation language to the agency request and recent operational data.</p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick steps to track a Representative's immigration votes</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-qst62g-0">
+                        <input id="tool-check-qst62g-0" type="checkbox" />
+                        <span>Congress.gov search</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-iy6d6l-1">
+                        <input id="tool-check-iy6d6l-1" type="checkbox" />
+                        <span>Committee hearing record</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-e1ti1i-2">
+                        <input id="tool-check-e1ti1i-2" type="checkbox" />
+                        <span>Bill summary</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-x1bjh4-3">
+                        <input id="tool-check-x1bjh4-3" type="checkbox" />
+                        <span>Vote roll call</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-7mdc7d-4">
+                        <input id="tool-check-7mdc7d-4" type="checkbox" />
+                        <span>Agency data releases</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use these steps in order</p>
+            </div>
+<p>If constituents want clarity, contact the Representative's office with specific questions about a vote and reference the bill number and date. Constituents can request explanations or ask for constituent-specific impacts without relying on secondary summaries.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Decisions, common pitfalls, and a concise summary for voters</h2>
+<p>Decision criteria for voters: check whether the vote was procedural or substantive, read the amendment text, verify committee reports that explain intent, and match the Representative's explanation to the public record. Procedural votes often do not change policy but can limit debate or amendments <a href="https://crsreports.congress.gov/product/pdf/IF/IF12345" target="_blank" rel="noopener">Immigration in the United States: Policy Issues and Legislative Options</a>.</p>
+<p>Common pitfalls include treating every procedural vote as a policy endorsement and relying solely on summary headlines without reading the bill text. Voters should use the primary sources named earlier to verify claims and to see the legislative history behind a given decision.</p>
+<p>In short, a Representative's policy priority shows up through the bills they sponsor, the committees they serve on, their amendment choices, and how they vote on funding and oversight. Tracking those actions through primary records gives voters the clearest picture.</p>
+
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-wwdqg7" class="faq-toggle" /><label for="faq-wwdqg7" class="faq-summary" role="button" tabindex="0">What is a policy priority for a House member?</label><div class="faq-content"><p>A policy priority is an issue a Representative treats as central when deciding which bills, amendments, and oversight actions to support, and it guides their public explanations and vote choices.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-8nd6xp" class="faq-toggle" /><label for="faq-8nd6xp" class="faq-summary" role="button" tabindex="0">How can I check how my Representative voted on an immigration bill?</label><div class="faq-content"><p>Search the bill number or member name on Congress.gov to find the bill text, roll call votes, and committee reports for the full record.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-r3t2zc" class="faq-toggle" /><label for="faq-r3t2zc" class="faq-summary" role="button" tabindex="0">Do committee assignments change how a member influences immigration policy?</label><div class="faq-content"><p>Yes, serving on committees like Judiciary or Homeland Security gives a member more opportunities to draft, amend, and debate immigration measures before they reach the floor.</p></div></section>
+</section><section class="article-ending">Voters can use the steps in this guide to read bill text, check committee records, and ask their Representative for explanations tied to specific roll calls. That approach keeps evaluation grounded in the public record.
+
+For local context about a candidate's stated priorities, consult the candidate's campaign profile and public filings while relying on the primary legislative and oversight records cited here for verification.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.congress.gov/about/how-our-laws-are-made" target="_blank" rel="noopener">https://www.congress.gov/about/how-our-laws-are-made</a></li><li><a href="https://www.cbp.gov/newsroom/stats/southwest-land-border-encounters" target="_blank" rel="noopener">https://www.cbp.gov/newsroom/stats/southwest-land-border-encounters</a></li><li><a href="https://michaelcarbonara.com/stronger-borders" target="_blank" rel="noopener">https://michaelcarbonara.com/stronger-borders</a></li><li><a href="https://www.house.gov/the-house-explained/committees" target="_blank" rel="noopener">https://www.house.gov/the-house-explained/committees</a></li><li><a href="https://www.congress.gov/bill/119th-congress/house-bill/7640/committees" target="_blank" rel="noopener">https://www.congress.gov/bill/119th-congress/house-bill/7640/committees</a></li><li><a href="https://marylandmatters.org/2026/02/26/house-votes-mostly-on-party-lines-to-approves-three-emergency-immigration-measures/" target="_blank" rel="noopener">https://marylandmatters.org/2026/02/26/house-votes-mostly-on-party-lines-to-approves-three-emergency-immigration-measures/</a></li><li><a href="https://www.gao.gov/products/gao-24-105" target="_blank" rel="noopener">https://www.gao.gov/products/gao-24-105</a></li><li><a href="https://www.npr.org/2026/02/10/nx-s1-5708757/immigration-enforcement-oversight-house-takeaways" target="_blank" rel="noopener">https://www.npr.org/2026/02/10/nx-s1-5708757/immigration-enforcement-oversight-house-takeaways</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.pewresearch.org/fact-tank/2024/09/26/americans-views-on-immigration/" target="_blank" rel="noopener">https://www.pewresearch.org/fact-tank/2024/09/26/americans-views-on-immigration/</a></li><li><a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">https://michaelcarbonara.com/issues/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://crsreports.congress.gov/product/pdf/IF/IF12345" target="_blank" rel="noopener">https://crsreports.congress.gov/product/pdf/IF/IF12345</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
