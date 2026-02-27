@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Why Cash-on-Hand Matters in Campaign Finance (Without Predicting Outcomes)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens (from provided style) */
+      --text-color: #ffffff; /* --mc-ink */
+      --accent: #ae2736; /* --mc-accent */
+      --accent-hover: #8c1f2b;
+      --line: rgba(255,255,255,.16); /* --mc-line */
+      --surface: #0b2664; /* --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px; /* --mc-radius */
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Scoped minor styles for article internals so layout matches brand */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.88); margin-bottom: 1.4rem; }
+    .article-body .article-highlights{ margin: 1.2rem 0; }
+    .article-body .highlight-card{ border-left: 4px solid var(--accent); padding: .9rem; background: rgba(255,255,255,.02); font-weight:700; }
+    .article-body .side-by-side{ display:flex; gap:1rem; align-items:flex-start; margin:1.6rem 0; flex-wrap:wrap; }
+    .article-body .side-by-side img{ max-width:320px; box-shadow:0 12px 30px rgba(0,0,0,.4); }
+    .article-body .special-image-standalone{ margin:1.2rem auto; max-width:120px; }
+    .article-body .faq-accordion{ border-left:4px solid var(--accent); padding:0; }
+    .article-body .tool-block{ border-left:4px solid var(--accent); }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/11A75h5Thu3btJ8h4Dg7jS34pVXL8ULtx" alt="Why Cash-on-Hand Matters in Campaign Finance banner" />
+        </div>
+        <h1 class="title">Why Cash-on-Hand Matters in Campaign Finance (Without Predicting Outcomes)</h1>
+        <p class="subline">Clear, sourced guidance on reading FEC cash-on-hand figures for voters and civic readers.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/campaign-finance-cash-on-hand/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">This article explains how to read the Federal Election Commission's cash-on-hand figure and how to use it responsibly. It is aimed at voters, local residents, and civic readers who want clear, sourced guidance on campaign finance data.
+
+It summarizes where the FEC publishes cash-on-hand, shows simple calculations you can do with public filings, and highlights common limits so readers avoid overstating what the number means. The guidance is neutral and based on primary FEC documents and analyst primers.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Cash-on-hand is the committee balance at a reporting-period end and is publicly listed by the FEC.</span></div><div class="highlight-card"><span class="highlight-text">Simple calculations like burn rate and runway make a cash balance more informative for voters and reporters.</span></div><div class="highlight-card"><span class="highlight-text">Reporting lags and outside spending can make the reported cash figure incomplete for real-time assessments.</span></div>
+     </div>
+  <h2>What "cash on hand" means in campaign finance</h2>
+<p>In campaign finance reporting, cash-on-hand is the amount a committee reports as cash and cash equivalents at the end of a reporting period. The Federal Election Commission records this field as cash_on_hand_end_period and shows it on committee summary pages and bulk files, so readers can locate the same figure in multiple public places <a href="https://www.fec.gov/campaign-finance-data/data-dictionary/" target="_blank" rel="noopener">FEC Data Dictionary</a>.</p>
+<p>Cash-on-hand is a point-in-time stock, not a flow. It represents a balance at a specific date and does not directly show how much the committee raised or spent between reports. That distinction matters when using the number to understand a campaign's short-term ability to pay for operations or advertising, and it is explicit in the FEC guidance and form instructions <a href="https://www.fec.gov/resources/cms-content/documents/fecform3xinst.pdf" target="_blank" rel="noopener">Form 3X instructions</a>.</p>
+
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>The phrase cash_on_hand_end_period is the same label used in the FEC's financial summaries dataset, which makes it possible to compare a committee's reported cash across cycles and reporting periods using the bulk files <a href="https://www.fec.gov/campaign-finance-data/" target="_blank" rel="noopener">FEC campaign finance data</a>.</p>
+<h2>Why cash-on-hand matters to voters and reporters</h2>
+<p>Voters and reporters check cash-on-hand because it indicates short-term liquidity, the funds a campaign has available to pay staff, buy ads, and run events. Looking at cash-on-hand together with recent receipts and spending patterns gives a clearer picture than the number alone <a href="https://www.opensecrets.org/resources/create-a-report/how-to-read-a-federal-campaign-finance-report" target="_blank" rel="noopener">OpenSecrets guide</a>.</p>
+<p>For a civic reader, the figure is a transparent data point drawn from public filings. It can be useful when comparing how different campaigns are positioned for the weeks that follow a report, provided the reader also checks the filing date and recent receipts to avoid misreading an old balance <a href="https://ballotpedia.org/Campaign_finance" target="_blank" rel="noopener">Ballotpedia campaign finance</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Where the FEC publishes cash-on-hand and how to access it</h2>
+<p>The FEC publishes cash-on-hand on its campaign finance data landing pages, on each committee's public page, and in bulk datasets labeled financial summaries. Use the campaign finance data page as a starting point to find both single-committee views and full downloads <a href="https://www.fec.gov/campaign-finance-data/" target="_blank" rel="noopener">FEC campaign finance data</a>.</p>
+<p>To find a committee's cash-on-hand on the site, open the committee page or use the FEC browse-data tool and look for the financial summary or the most recent Form 3X filing summary; those displays map directly to the cash_on_hand_end_period entry in bulk files <a href="https://www.fec.gov/campaign-finance-data/data-dictionary/" target="_blank" rel="noopener">FEC Data Dictionary</a>.
+</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-8wo19v" class="faq-toggle" checked /><label for="faq-8wo19v" class="faq-summary" role="button" tabindex="0">How should voters use the FEC cash-on-hand figure when researching a campaign?</label><div class="faq-content"><p>Voters should treat cash-on-hand as a public snapshot of a committee's liquid funds at a filing date, use it to check short-term liquidity, and combine it with recent receipts, spending patterns, and outside expenditure data for context.</p></div></section>
+<p>When you need to confirm a figure, download the financial summaries bulk file (or consult bulk data documentation) and match the committee ID to the cash_on_hand_end_period field; that lets you cross-check the committee page against the dataset and review filing dates for context <a href="https://www.fec.gov/campaign-finance-data/" target="_blank" rel="noopener">FEC campaign finance data</a>.</p>
+<h2>How the FEC defines and records the cash_on_hand_end_period field</h2>
+
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1LtdV6woX7d53nn0UhE7h2UxIKV3W0oBR=s1200" alt="Minimal vector infographic showing a clean public data table mockup representing campaign finance transparency with white table elements and red accents on deep blue background" /></a>
+      <div class="side-text"><p>The data dictionary and Form 3X instructions explain that cash_on_hand_end_period represents the committee's cash and cash equivalents at the end of a reporting period. This is a labeled financial-summaries field in the FEC bulk files and a line-item aggregate on the committee's Form 3X filings <a href="https://www.fec.gov/campaign-finance-data/data-dictionary/" target="_blank" rel="noopener">FEC Data Dictionary</a>.</p></div>
+    </div>
+<p>Form 3X captures receipts and disbursements during the reporting period and requires committees to report ending cash balances; the cash_on_hand_end_period value in bulk exports is produced from those reported totals and the financial summary fields on the form <a href="https://www.fec.gov/resources/cms-content/documents/fecform3xinst.pdf" target="_blank" rel="noopener">Form 3X instructions</a>.</p>
+<h2>Basic calculations you can do: burn rate and runway</h2>
+<p>Two simple, verifiable calculations help interpret cash-on-hand: burn rate, an average net spending per month, and runway, the months a campaign can operate at that burn. Both draw on receipts and disbursements reported on Form 3X and appear in the financial summaries exports <a href="https://www.fec.gov/campaign-finance-data/data-dictionary/" target="_blank" rel="noopener">FEC Data Dictionary</a>.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay informed and get involved with the campaign</h3><div class="cta-intro"><p>If you want to try these calculations, pick a recent filing window, pull receipts and disbursement totals for that period, and follow the steps below to compute average monthly burn and months of runway.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the Campaign</a></div>
+<p>First, burn rate can be computed by taking net spending over a chosen period and dividing by the number of months in that period. Second, runway equals the reported cash-on-hand divided by the monthly burn, which yields an estimate of how many months the current cash balance could cover, given steady spending <a href="https://www.fec.gov/resources/cms-content/documents/fecform3xinst.pdf" target="_blank" rel="noopener">Form 3X instructions</a>.</p>
+<p>These are simple tools. They assume consistent monthly spending, which campaigns do not always have, and they do not capture outside independent expenditures or pledged funds not yet received, so use them as a starting point rather than a complete assessment <a href="https://www.opensecrets.org/resources/create-a-report/how-to-read-a-federal-campaign-finance-report" target="_blank" rel="noopener">OpenSecrets guide</a>.</p>
+<h2>Worked calculation example: step-by-step burn rate and runway</h2>
+<p>Choose a reporting period first. A common approach is to use the last three or six months covered by recent Form 3X filings, because that window smooths out single-event spikes while remaining recent. Note the filing dates and list the receipts and disbursements for that window from the financial summary fields <a href="https://www.fec.gov/resources/cms-content/documents/fecform3xinst.pdf" target="_blank" rel="noopener">Form 3X instructions</a>.</p>
+<p>Compute net spending for the chosen period by subtracting total receipts from total disbursements if you prefer a net approach, or by using total disbursements alone if you want a more conservative burn estimate. Then divide that net figure by the number of months in the period to get the average monthly burn <a href="https://www.fec.gov/campaign-finance-data/data-dictionary/" target="_blank" rel="noopener">FEC Data Dictionary</a>.</p>
+<p>Finally, use the committee's cash_on_hand_end_period value as the numerator and divide it by the monthly burn to calculate runway. If burn is zero or very low, the result needs interpretation; a zero-burn may indicate minimal activity rather than unlimited runway <a href="https://www.fec.gov/campaign-finance-data/" target="_blank" rel="noopener">FEC campaign finance data</a>.</p>
+<h2>How to find cash-on-hand for a specific candidate or committee on the FEC site</h2>
+<p>Start with the FEC committee search to locate a candidate's committee page. On that page, the financial summary and recent filings display the cash-on-hand figure and the filing date; use those elements to anchor any further analysis <a href="https://www.fec.gov/campaign-finance-data/" target="_blank" rel="noopener">FEC campaign finance data</a>.</p>
+<p>Next, cross-check the committee ID shown on the page with the bulk financial summaries dataset and locate the cash_on_hand_end_period entry for the same reporting period. That confirms the committee page value and lets you view historical balances across filings <a href="https://www.fec.gov/campaign-finance-data/data-dictionary/" target="_blank" rel="noopener">FEC Data Dictionary</a>.</p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Use the FEC committee search and bulk financial summaries to verify cash-on-hand figures</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-f228tb-0">
+                        <input id="tool-check-f228tb-0" type="checkbox" />
+                        <span>Committee search</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-h33gm0-1">
+                        <input id="tool-check-h33gm0-1" type="checkbox" />
+                        <span>Bulk financial summaries</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-zwek4o-2">
+                        <input id="tool-check-zwek4o-2" type="checkbox" />
+                        <span>Filing date cross-check</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Match committee ID when checking the dataset</p>
+            </div>
+<p>When verifying a figure, compare the filing date on the committee page to the reporting period in the bulk file to ensure you are reading the same period. If dates differ, prefer the data that matches the period you want to analyze and note the filing date when you report the number <a href="https://www.fec.gov/campaign-finance-data/" target="_blank" rel="noopener">FEC campaign finance data</a>.</p>
+<h2>Practical limits and caveats when using cash-on-hand</h2>
+<p>Reporting lags are a primary limit. A committee's most recent filing may reflect activity that is days or weeks old by the time a reader sees the cash-on-hand figure, so the balance can be out of date relative to current fundraising or spending moves <a href="https://www.fec.gov/help-candidates-and-committees/campaign-finance-basics/" target="_blank" rel="noopener">FEC campaign finance basics</a>.</p>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Cash-on-hand also does not include outside independent expenditures made on behalf of or against a campaign, in-kind donations, or potential lines of credit and pledged funds that are not yet on the bank balance. These exclusions mean the reported cash balance can understate the resources available in practice <a href="https://www.opensecrets.org/resources/create-a-report/how-to-read-a-federal-campaign-finance-report" target="_blank" rel="noopener">OpenSecrets guide</a>.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1bI0wnJgXkdaatU0KwZNo-ZzwLxuhOJko=s1200" alt="Minimal 2D vector infographic of cash calendar and chart icons representing cash on hand burn rate and runway for campaign finance article in Michael Carbonara color palette" /></a>
+    </div>
+<h2>Common mistakes readers make when interpreting cash-on-hand</h2>
+<p>A frequent mistake is treating cash-on-hand as a direct predictor of votes or a guarantee of campaign strength. Analysts caution that cash-on-hand is one signal among many and should not be used by itself to forecast outcomes <a href="https://www.opensecrets.org/resources/create-a-report/how-to-read-a-federal-campaign-finance-report" target="_blank" rel="noopener">OpenSecrets guide</a>.</p>
+<p>Other common errors include comparing figures from unmatched reporting windows, ignoring recent receipts or debts, and overlooking large outside expenditures that change the competitive landscape. Always check filing dates, recent receipts, and independent expenditure trackers when interpreting a balance <a href="https://ballotpedia.org/Campaign_finance" target="_blank" rel="noopener">Ballotpedia campaign finance</a>.</p>
+<h2>How to weigh cash-on-hand alongside other signals</h2>
+<p>Complementary metrics to check are recent receipt totals, fundraising velocity (how quickly a committee is raising new money), large donations or loans listed on filings, and independent expenditures reported by outside groups. Together these items help explain whether a cash balance reflects durable fundraising or a temporary state <a href="https://www.opensecrets.org/resources/create-a-report/how-to-read-a-federal-campaign-finance-report" target="_blank" rel="noopener">OpenSecrets guide</a>.</p>
+<p>A simple decision checklist for readers: locate the cash_on_hand_end_period, note the filing date, compute burn and runway, review recent receipts and disbursements, and search independent expenditure trackers for outside spending. This set of steps reduces the risk of over-interpreting the raw cash figure <a href="https://www.fec.gov/campaign-finance-data/data-dictionary/" target="_blank" rel="noopener">FEC Data Dictionary</a>.</p>
+<h2>Practical scenarios: reading cash-on-hand for different campaign types</h2>
+<p>For a new challenger with limited history, a small cash-on-hand value is common. In that context, trends in recent receipts and signs of fundraising momentum matter more than a single-period balance, because the candidate may be building base support over several reporting windows <a href="https://www.opensecrets.org/resources/create-a-report/how-to-read-a-federal-campaign-finance-report" target="_blank" rel="noopener">OpenSecrets guide</a>.</p>
+<p>An incumbent with steady receipts may show a sizable cash balance that reflects strategic timing of fundraising and spending rather than a simple surplus. In such cases examine recent disbursements and planned expenditures to understand whether the balance is meant for immediate operations, a media buy, or future campaign phases <a href="https://ballotpedia.org/Campaign_finance" target="_blank" rel="noopener">Ballotpedia campaign finance</a>.</p>
+<p>Late-cycle spikes in reported cash can signal last-minute fundraising, but filing lags and outside spending can obscure the true competitive picture. Verify spikes by checking filing dates, recent receipts, and independent expenditures to see whether the ledger reflects real-time changes <a href="https://www.fec.gov/help-candidates-and-committees/campaign-finance-basics/" target="_blank" rel="noopener">FEC campaign finance basics</a>.</p>
+<h2>Reporting lags, outside spending, and other technical caveats</h2>
+<p>Filing schedules create timing mismatches between activity and reported balances. For example, a large donation received after a reporting cutoff will not appear until the next filing, which can make a report look weaker than current reality. Check filing deadlines and dates when interpreting cash-on-hand <a href="https://www.fec.gov/help-candidates-and-committees/campaign-finance-basics/" target="_blank" rel="noopener">FEC campaign finance basics</a>.</p>
+<p>Outside independent expenditures are reported elsewhere and do not change a committee's cash-on-hand. Large outside group ad buys or independent spending can significantly affect the campaign environment without appearing on the candidate committee's balance sheet, so consult outside-spending trackers in parallel <a href="https://www.opensecrets.org/resources/create-a-report/how-to-read-a-federal-campaign-finance-report" target="_blank" rel="noopener">OpenSecrets guide</a>.</p>
+<h2>A quick checklist readers can use now</h2>
+<p>1) Locate the cash_on_hand_end_period on the committee page and note the filing date. 2) Download the financial summaries bulk file and match the committee ID to confirm the value. 3) Compute burn rate using receipts and disbursements for a recent window. 4) Divide cash-on-hand by monthly burn to estimate runway. 5) Check independent expenditure trackers for outside spending. Each step relies on <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">public filings</a> and primary sources <a href="https://www.fec.gov/campaign-finance-data/" target="_blank" rel="noopener">FEC campaign finance data</a>.</p>
+<p>When sharing numbers, <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">attribute them clearly</a>. Use phrasing like according to the FEC or as reported on the committee page and include the filing date to avoid implying the figure is current beyond its reporting period <a href="https://www.fec.gov/campaign-finance-data/data-dictionary/" target="_blank" rel="noopener">FEC Data Dictionary</a>.</p>
+<h2>Conclusion and further reading</h2>
+<p><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">For further reading</a>, consult the FEC campaign finance data landing page, the FEC Data Dictionary entry for cash_on_hand_end_period, the Form 3X instructions, presidential campaign finance summaries, and analyst primers on reading filings. When reporting numbers, attribute them to the FEC or the committee's filings and include filing dates for clarity <a href="https://www.fec.gov/campaign-finance-data/" target="_blank" rel="noopener">FEC campaign finance data</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-kc37kt" class="faq-toggle" /><label for="faq-kc37kt" class="faq-summary" role="button" tabindex="0">What exactly is cash-on-hand on FEC reports?</label><div class="faq-content"><p>Cash-on-hand is the committee's reported cash and cash equivalents at the end of a reporting period, recorded as cash_on_hand_end_period on FEC filings and bulk datasets.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-sayhx4" class="faq-toggle" /><label for="faq-sayhx4" class="faq-summary" role="button" tabindex="0">Can cash-on-hand predict who will win an election?</label><div class="faq-content"><p>No. Cash-on-hand is a useful liquidity measure but not a reliable predictor of electoral outcomes; it works best paired with recent receipts, spending trends, and outside expenditure data.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-9w4561" class="faq-toggle" /><label for="faq-9w4561" class="faq-summary" role="button" tabindex="0">How do I compute a campaign's runway?</label><div class="faq-content"><p>Estimate monthly burn from receipts and disbursements over a recent period, then divide the reported cash-on-hand by that monthly burn to get an approximate number of months of runway.</p></div></section>
+</section>
+
+<section class="article-ending">Use cash-on-hand as one transparent data point, not a prediction. When reporting or sharing figures, attribute the number to the FEC or to the committee filing and note the filing date.
+
+For deeper technical detail, consult the FEC data dictionary and Form 3X instructions, and pair committee balances with recent receipts and outside-spending trackers before drawing conclusions.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.fec.gov/campaign-finance-data/data-dictionary/" target="_blank" rel="noopener">https://www.fec.gov/campaign-finance-data/data-dictionary/</a></li><li><a href="https://www.fec.gov/resources/cms-content/documents/fecform3xinst.pdf" target="_blank" rel="noopener">https://www.fec.gov/resources/cms-content/documents/fecform3xinst.pdf</a></li><li><a href="https://www.fec.gov/campaign-finance-data/" target="_blank" rel="noopener">https://www.fec.gov/campaign-finance-data/</a></li><li><a href="https://www.opensecrets.org/resources/create-a-report/how-to-read-a-federal-campaign-finance-report" target="_blank" rel="noopener">https://www.opensecrets.org/resources/create-a-report/how-to-read-a-federal-campaign-finance-report</a></li><li><a href="https://ballotpedia.org/Campaign_finance" target="_blank" rel="noopener">https://ballotpedia.org/Campaign_finance</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.fec.gov/data/browse-data/" target="_blank" rel="noopener">https://www.fec.gov/data/browse-data/</a></li><li><a href="https://www.opensecrets.org/open-data/bulk-data-documentation" target="_blank" rel="noopener">https://www.opensecrets.org/open-data/bulk-data-documentation</a></li><li><a href="https://www.fec.gov/campaign-finance-data/presidential-campaign-finance-summaries/" target="_blank" rel="noopener">https://www.fec.gov/campaign-finance-data/presidential-campaign-finance-summaries/</a></li><li><a href="https://www.fec.gov/help-candidates-and-committees/campaign-finance-basics/" target="_blank" rel="noopener">https://www.fec.gov/help-candidates-and-committees/campaign-finance-basics/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li><li><a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">https://michaelcarbonara.com/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
