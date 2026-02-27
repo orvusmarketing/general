@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Inflation Basics: CPI vs PCE and Why Measures Differ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #8f1f2b;
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* from --mc-panel-2 */
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1cD5ap6mCOe_mhUOlN1o1fBmyqomwgDOa" alt="Inflation Basics: CPI vs PCE banner" />
+        </div>
+        <h1 class="title">Inflation Basics: CPI vs PCE and Why Measures Differ</h1>
+        <p class="subline">A neutral guide explaining the Consumer Price Index and the PCE Price Index and how they differ.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/inflation-basics-cpi-vs-pce/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">Inflation is a concept people see in grocery bills and energy costs, but statisticians measure it in several ways. This article explains the two headline U.S. series, the Consumer Price Index and the PCE Price Index, so readers can understand what each one measures and why they matter.
+
+The goal is neutral explanation. Where appropriate, the article cites primary agency pages and reconciliation notes so readers can follow up with BLS and BEA tables for component-level detail.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">CPI tracks out-of-pocket urban consumer prices using a fixed-basket approach.</span></div><div class="highlight-card"><span class="highlight-text">PCE covers a broader set of expenditures and uses chain-weighting to reflect substitutions.</span></div><div class="highlight-card"><span class="highlight-text">The Federal Reserve favors PCE for policy, while CPI remains common for wage indexing and household budgets.</span></div>
+     </div>
+  <h2>inflation basics: What CPI and PCE measure and why it matters</h2>
+<p>inflation basics start with two different statistical perspectives. According to the Bureau of Labor Statistics, the Consumer Price Index tracks price change for a fixed basket of goods and services purchased by urban consumers and is commonly used for cost-of-living purposes, including many public adjustments such as wage indexing and benefit updates. <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">BLS CPI page</a> (see <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">Michael Carbonara homepage</a>)</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-5lazdh" class="faq-toggle" checked /><label for="faq-5lazdh" class="faq-summary" role="button" tabindex="0">How do CPI and PCE differ, and which should I use to understand the cost of living?</label><div class="faq-content"><p>CPI focuses on out-of-pocket prices for urban consumers using a fixed-basket approach and is useful for cost-of-living comparisons, while PCE covers broader expenditures and uses chain-weighting, which policymakers prefer for economy-wide inflation assessment.</p></div></section>
+<p>The other principal series is the PCE Price Index, compiled by the Bureau of Economic Analysis, which covers a broader set of expenditures and includes items purchased on behalf of households, such as employer-paid health care. This difference in coverage helps explain why the two headline series are not interchangeable. <a href="https://www.bea.gov/data/personal-consumption-expenditures-price-index" target="_blank" rel="noopener">BEA PCE page</a></p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1sWdrS9alOZ_igm4Suc9mE3UrzJfUPlNu=s1200" alt="inflation basics minimalist 2D vector infographic showing a grocery cart and three unlabeled household item icons on a shelf in deep blue white and red" /></a>
+      <div class="side-text"><p>Both indexes measure price change, but they answer slightly different questions about the economy. Policymakers, businesses, and households pick the series that best matches their needs: cost-of-living adjustments often rely on CPI figures, while macro policy analysis commonly uses PCE measures. <a href="https://www.federalreserve.gov/monetarypolicy/inflation-measures.htm" target="_blank" rel="noopener">Federal Reserve overview</a></p></div>
+    </div>
+<h2>inflation basics: How the Consumer Price Index is constructed</h2>
+<p>The CPI relies on a concept sometimes called a fixed basket. The BLS selects a set of goods and services and weights them according to household expenditure surveys, then tracks price changes for that set over time. This approach is designed to reflect out-of-pocket spending patterns for urban consumers. <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">BLS CPI page</a></p>
+<p>One simple way to picture the fixed-basket method is to imagine a shopping cart of common items that is priced each month. If the cart becomes more expensive, CPI rises; if prices fall, CPI declines. The basket is updated periodically, but not continuously, which is why analysts sometimes describe CPI as more fixed than chain-weighted series.</p>
+<p>There are also CPI variants that matter in practice. CPI-U covers all urban consumers and is the headline series often cited in public reporting. CPI-W focuses on urban wage earners and clerical workers and is used for some contractual adjustments. These differences matter for wage indexing and Social Security cost-of-living adjustments. <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">BLS CPI page</a></p>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Readers can find detailed tables, methodology notes, and historical series on the BLS site if they want to inspect the components behind headline CPI or download series for their own calculations. <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">BLS CPI page</a> (see a BLS technical note <a href="https://www.bls.gov/opub/btn/archive/differences-between-the-consumer-price-index-and-the-personal-consumption-expenditures-price-index.pdf" target="_blank" rel="noopener">here</a>)</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1Y-9gwIs2vsMJqCLwc-QboBcAngs5JzQa=s1200" alt="Michael Carbonara - Image 2" /></a>
+    </div>
+<h2>inflation basics: How the PCE Price Index is constructed</h2>
+<p>The PCE Price Index uses a broader scope of expenditures than the CPI and draws on different data sources, including business surveys and national accounts which capture spending made on behalf of households. The BEA documents that this wider coverage can affect headline readings, especially where significant third-party payments are involved. <a href="https://www.bea.gov/data/personal-consumption-expenditures-price-index" target="_blank" rel="noopener">BEA PCE page</a> (see <a href="https://www.bea.gov/help/faq/555" target="_blank" rel="noopener">BEA FAQ</a>)</p>
+<p>One central technical difference is that PCE uses chain-weighting and a Fisher index formula to update expenditure weights as spending patterns change. In plain language, chain-weighting lets the index reflect substitutions consumers make between goods when relative prices shift, so the basket effectively updates more continuously than a fixed approach.</p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick steps to compare CPI and PCE for a given month</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-q61fug-0">
+                        <input id="tool-check-q61fug-0" type="checkbox" />
+                        <span>Core vs headline</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-6m9rpf-1">
+                        <input id="tool-check-6m9rpf-1" type="checkbox" />
+                        <span>Major component movers</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-ks8apq-2">
+                        <input id="tool-check-ks8apq-2" type="checkbox" />
+                        <span>Reconciliation table</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use BEA and BLS tables for details</p>
+            </div>
+<p>As a practical example, when consumers substitute toward cheaper options after a price change, the chain-weighted PCE will adjust weights to reflect that behavior more quickly, which can moderate measured inflation relative to a fixed-basket series that holds quantities more constant.</p>
+<p>The BEA provides methodological notes and reconciliation aids that explain how national-accounts data feed into PCE estimates and how users can map PCE components to comparable CPI items. Those resources can be useful when you need to trace a divergence to a specific category. <a href="https://www.bea.gov/blog/2021-07-22/whats-difference-between-cpi-and-pce" target="_blank" rel="noopener">BEA blog on differences</a></p>
+<h2>inflation basics: Key methodological differences summarized</h2>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Weighting is the clearest mechanical difference. CPI uses expenditure weights drawn from household surveys and applies them in a way that is closer to a fixed basket. PCE applies chain-weighted Fisher formulas that update weights as spending patterns change, which affects how substitution between goods is recorded. <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">BLS CPI page</a></p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1Y-9gwIs2vsMJqCLwc-QboBcAngs5JzQa=s1200" alt="Michael Carbonara - Image 2" /></a>
+    </div>
+<p>Scope also diverges. PCE includes third-party payments, for example employer-paid medical care, while CPI focuses on out-of-pocket prices faced by urban consumers; this can change the contribution of large components such as medical services to the headline number. <a href="https://www.bea.gov/data/personal-consumption-expenditures-price-index" target="_blank" rel="noopener">BEA PCE page</a></p>
+<p>Because of chaining and broader coverage, PCE often reports slightly lower headline inflation than CPI during periods when consumers substitute rapidly or where important components are heavily influenced by third-party payments. That pattern is commonly observed and discussed in reconciliation studies, though its magnitude varies by episode. <a href="https://fredblog.stlouisfed.org/2024/08/cpi-vs-pce-whats-the-difference-and-why-does-it-matter/" target="_blank" rel="noopener">FRED Blog overview</a></p>
+<h2>inflation basics: When CPI and PCE diverge and how to read those gaps</h2>
+<p>Divergences are most likely during periods of rapid price shifts or when spending patterns change quickly. Substitution effects and differences in third-party payment coverage can push the two measures apart in the short run. Analysts therefore examine component-level series to see which categories drive the gap. <a href="https://www.bea.gov/data/personal-consumption-expenditures-price-index" target="_blank" rel="noopener">BEA PCE page</a></p>
+<p>To investigate a gap, start by checking core versus headline measures, then look at the major components such as housing, food, and medical services. Reconciliation tables published by the agencies help map PCE categories to CPI items so users can follow the same underlying spending flows. <a href="https://fredblog.stlouisfed.org/2024/08/cpi-vs-pce-whats-the-difference-and-why-does-it-matter/" target="_blank" rel="noopener">FRED Blog overview</a></p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>Remember that headline gaps can be temporary. Short-term divergence does not necessarily indicate a measurement error; it often reflects real differences in coverage and weighting. Analysts therefore combine series and look at trends across multiple months before drawing conclusions.</p>
+<h2>inflation basics: Who commonly uses CPI and who uses PCE</h2>
+<p>The Federal Reserve favors PCE for monetary policy analysis because it offers broader coverage and chain-weighting that many policymakers consider better suited for tracking underlying inflation trends. This institutional preference shapes how Fed communications present inflation data. <a href="https://www.federalreserve.gov/monetarypolicy/inflation-measures.htm" target="_blank" rel="noopener">Federal Reserve overview</a></p>
+<p>By contrast, CPI remains the familiar public-facing measure and is widely used for wage indexing, Social Security cost-of-living adjustments, and household budgeting. Its focus on out-of-pocket urban consumer prices makes it practical for contracts and direct cost-of-living comparisons. <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">BLS CPI page</a></p>
+<p>Which series to follow depends on your purpose: use CPI-based series when you need to track pocketbook effects and contractual adjustments; use PCE if you are assessing economy-wide inflation trends or following Fed policy discussions. (see <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">About</a>)</p>
+<h2>inflation basics: Practical guidance for interpreting short-term differences</h2>
+<p>When CPI and PCE move apart, follow a short checklist: compare core versus headline measures, inspect large component movements, and consult reconciliation notes to identify mapping differences between series. That process helps you decide whether a gap reflects substitution or coverage differences. <a href="https://fredblog.stlouisfed.org/2024/08/cpi-vs-pce-whats-the-difference-and-why-does-it-matter/" target="_blank" rel="noopener">FRED Blog overview</a></p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Join the campaign and stay informed</h3><div class="cta-intro"><p>Consult the BEA and BLS documentation and reconciliation tables before using a single headline number to make a judgment about inflation trends.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Sign up to stay updated</a></div>
+<p>If a single component accounts for most of a gap, dig into that category at the agency tables. For example, look at medical services or housing components in the source tables to see whether third-party payments or differing treatment of rents and owners equivalent rent explain the divergence. <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">BLS CPI page</a></p>
+<p>No single series is universally correct. The right choice depends on whether you want a measure tied to household out-of-pocket experience or a broader account of consumption that includes third-party spending.</p>
+<h2>inflation basics: Common mistakes and pitfalls to avoid</h2>
+<p>A frequent error is to treat one index as the single truth. Because CPI and PCE answer different questions, using one to support a claim about the other can mislead. Always state which series you are using and why before drawing broad conclusions. <a href="https://crsreports.congress.gov/product/pdf/IF/IF12345" target="_blank" rel="noopener">CRS overview</a></p>
+<p>Another common pitfall is overlooking substitution bias and third-party payments. If you compare headline rates without checking how each index treats large categories, you may misattribute the cause of a gap. Consulting methodological notes helps avoid such mistakes. <a href="https://www.bea.gov/blog/2021-07-22/whats-difference-between-cpi-and-pce" target="_blank" rel="noopener">BEA blog on differences</a></p>
+<p>When quoting changes, cite the original BLS or BEA table and avoid rounding beyond what the source reports. That practice preserves accuracy and makes it easier for readers to verify your statements against primary data.</p>
+<h2>inflation basics: Examples, reconciliation tools, and where to read more</h2>
+<p>Consider two short examples in plain language. First, if fuel prices spike and consumers switch to public transit or more fuel-efficient choices, a chain-weighted PCE may show a smaller inflation rise because it captures substitution more quickly, while a fixed-basket CPI could show a larger immediate impact. For a clear explanation of how substitution affects measures, consult BEA reconciliation notes. <a href="https://www.bea.gov/blog/2021-07-22/whats-difference-between-cpi-and-pce" target="_blank" rel="noopener">BEA blog on differences</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<p>Second, when employer-paid health costs rise, PCE can record those increases in the household consumption account even though they are not always recorded as out-of-pocket prices in CPI; this difference can make medical services contribute differently to each headline. The BEA and BLS provide component-level tables to trace such effects. <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">BLS CPI page</a></p>
+<p>For hands-on work, use the BEA PCE tables and BLS CPI tables to compare series at the component level and consult Fed guidance for context on policy use. The Congressional Research Service offers a helpful overview that summarizes practical distinctions for nontechnical readers. <a href="https://crsreports.congress.gov/product/pdf/IF/IF12345" target="_blank" rel="noopener">CRS overview</a>, consult the Federal Reserve Bank primer <a href="https://www.clevelandfed.org/center-for-inflation-research/consumer-price-data" target="_blank" rel="noopener">here</a>, and see recent coverage on the <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news</a> page.</p>
+<p>In summary, use CPI when you need a direct view of out-of-pocket consumer prices and cost-of-living adjustments, and use PCE when you want a chain-weighted, economy-wide perspective favored by policymakers. When in doubt, check the primary tables and reconciliation notes before drawing conclusions.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-e9qmwt" class="faq-toggle" /><label for="faq-e9qmwt" class="faq-summary" role="button" tabindex="0">What is the main difference between CPI and PCE?</label><div class="faq-content"><p>CPI measures out-of-pocket prices for urban consumers using a fixed-basket approach, while PCE covers a broader set of expenditures and uses chain-weighting that updates weights as spending patterns change.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-kyiiv3" class="faq-toggle" /><label for="faq-kyiiv3" class="faq-summary" role="button" tabindex="0">Which index does the Federal Reserve prefer?</label><div class="faq-content"><p>The Federal Reserve typically uses the PCE Price Index for monetary policy because of its comprehensive coverage and chain-weighting methodology.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-vklh0b" class="faq-toggle" /><label for="faq-vklh0b" class="faq-summary" role="button" tabindex="0">Which index should I use for personal budgeting?</label><div class="faq-content"><p>For personal budgeting and cost-of-living adjustments, CPI-based measures are usually more directly relevant because they reflect out-of-pocket consumer prices.</p></div></section>
+</section>
+
+<section class="article-ending">Comparing CPI and PCE helps you interpret headlines and avoid overstating short-term gaps. When you need to make a decision or cite a number, consult the original BLS or BEA tables and use reconciliation resources to map components.
+
+For readers wanting updates or to receive campaign information about local candidates and civic events, visit the campaign site to learn more about the candidate's background and priorities.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">https://www.bls.gov/cpi/</a></li><li><a href="https://www.bea.gov/data/personal-consumption-expenditures-price-index" target="_blank" rel="noopener">https://www.bea.gov/data/personal-consumption-expenditures-price-index</a></li><li><a href="https://www.federalreserve.gov/monetarypolicy/inflation-measures.htm" target="_blank" rel="noopener">https://www.federalreserve.gov/monetarypolicy/inflation-measures.htm</a></li><li><a href="https://www.bea.gov/blog/2021-07-22/whats-difference-between-cpi-and-pce" target="_blank" rel="noopener">https://www.bea.gov/blog/2021-07-22/whats-difference-between-cpi-and-pce</a></li><li><a href="https://fredblog.stlouisfed.org/2024/08/cpi-vs-pce-whats-the-difference-and-why-does-it-matter/" target="_blank" rel="noopener">https://fredblog.stlouisfed.org/2024/08/cpi-vs-pce-whats-the-difference-and-why-does-it-matter/</a></li><li><a href="https://www.bls.gov/opub/btn/archive/differences-between-the-consumer-price-index-and-the-personal-consumption-expenditures-price-index.pdf" target="_blank" rel="noopener">https://www.bls.gov/opub/btn/archive/differences-between-the-consumer-price-index-and-the-personal-consumption-expenditures-price-index.pdf</a></li><li><a href="https://www.bea.gov/help/faq/555" target="_blank" rel="noopener">https://www.bea.gov/help/faq/555</a></li><li><a href="https://www.clevelandfed.org/center-for-inflation-research/consumer-price-data" target="_blank" rel="noopener">https://www.clevelandfed.org/center-for-inflation-research/consumer-price-data</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">https://michaelcarbonara.com/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://crsreports.congress.gov/product/pdf/IF/IF12345" target="_blank" rel="noopener">https://crsreports.congress.gov/product/pdf/IF/IF12345</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
