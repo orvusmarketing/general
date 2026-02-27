@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Constituent Priorities vs. Federal Authority: Keeping Expectations Realistic</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand tokens derived from provided style */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #95212e; /* slightly darker accent */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* from --mc-panel-2 */
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1kb-S2h05BnRGsPYrpfdrmjTXcfFBpnet" alt="Constituent Priorities vs. Federal Authority banner" />
+        </div>
+        <h1 class="title">Constituent Priorities vs. Federal Authority: Keeping Expectations Realistic</h1>
+        <p class="subline">A plain-language guide to who handles local issues and when to engage a U.S. Representative.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/district-jurisdiction-priorities-federal-authority/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">Voters and residents often ask what a U.S. Representative can actually do for neighborhood problems. This article explains, in plain terms, the division of authority between federal, state, and local governments and why that matters for realistic constituent expectations.
+
+It also offers a practical jurisdiction checklist and step by step guidance so people in the district can decide whether to pursue local advocacy, seek federal funding, or request casework from a member office.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Many everyday services like zoning and local schools are set by state or local governments, not Congress.</span></div><div class="highlight-card"><span class="highlight-text">A member of the U.S. House can sponsor legislation, support federal funding, conduct oversight, and assist with federal casework.</span></div><div class="highlight-card"><span class="highlight-text">A short jurisdiction checklist helps constituents direct issues to the correct office and improves chances of progress.</span></div>
+     </div>
+  <h2>Why jurisdiction matters for constituents in this district</h2>
+<p>When residents raise concerns in the district, the first useful question is who has the authority to act. Determining jurisdiction helps people choose the right office and the right steps, and it reduces mismatched expectations about what a member of Congress can realistically achieve.</p>
+<p>Many day to day services such as zoning, local public safety, municipal services, and most K 12 education are primarily set by state or local governments, not Congress, which means local officials are usually the starting point for those issues <a href="https://www.usa.gov/branches-of-government" target="_blank" rel="noopener">USA.gov overview of branches of government</a>.</p>
+<p>Federal responsibilities are broader and different. The federal government makes and enforces national law, provides funding through grants, oversees federal agencies, and carries out oversight and accountability functions. Understanding that split helps constituents focus their efforts where they can get results.</p>
+<p>Clear communication about who does what reduces mismatched expectations and increases the chance that a concern will be resolved effectively, especially when constituents pair local advocacy with federal engagement for funding or regulatory changes <a href="https://www.ncsl.org/research/about-state-legislatures/intergovernmental-affairs.aspx" target="_blank" rel="noopener">NCSL intergovernmental affairs guidance</a>.</p>
+<p>For residents, the practical implication is simple: start by asking whether the issue involves a municipal rule or a federal program. If it is local, contact city or county officials first. If it involves a federal benefit, agency action, or a need for federal funding, the <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">member's office</a> can help guide next steps.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Join campaign updates and learn more about local action</h3><div class="cta-intro"><p>See the jurisdiction checklist below to match your issue with the right office and steps to take in the district.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Sign up to stay informed</a></div>
+<h3>Basic federalism in plain language</h3>
+<p>Federalism divides responsibilities across federal, state, and local governments so that different levels handle different tasks. That division is why some services respond to local advocacy while others require federal legislation or agency action <a href="https://www.usa.gov/branches-of-government" target="_blank" rel="noopener">USA.gov overview of branches of government</a>.</p>
+<p>Explaining federalism in plain terms makes it easier for voters to form concrete asks. For example, when public safety or zoning is the concern, the governing authority is usually at the city or county level rather than in Washington.</p>
+<h3>Common local services that are not set by Congress</h3>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1FdxqH94iqsF4glyaYJfi6SyLUYblI1zz=s1200" alt="Minimalist 2D vector of a city hall facade and county office side by side in a civic district on deep blue background with white buildings and red accents" /></a>
+      <div class="side-text"><p>Typical local responsibilities include zoning decisions, permitting, municipal utilities, local road maintenance, police and fire services, and the oversight of most K 12 schools. These matters are routinely handled by city councils, county boards, or state education authorities <a href="https://www.ncsl.org/research/about-state-legislatures/intergovernmental-affairs.aspx" target="_blank" rel="noopener">NCSL intergovernmental affairs guidance</a>.</p></div>
+    </div>
+<p>Knowing these distinctions helps constituents avoid delays caused by contacting the wrong office. It also clarifies when to seek federal support, such as grant funding or federal oversight, versus when to press local leaders directly.</p>
+<h2>What a U.S. Representative can and cannot do for residents of the district</h2>
+<p>A U.S. House member has specific levers they can use for district priorities. Those include sponsoring and voting on legislation, working on appropriations or authorization bills, conducting oversight hearings, and helping constituents with federal agency interactions. These are the main ways a Representative can act on federal matters <a href="https://www.congressionalmanagement.org/resources/constituent-casework-guide" target="_blank" rel="noopener">Congressional Management Foundation constituent casework guide</a>.</p>
+<p>Members cannot unilaterally change state statutes or municipal ordinances. They do not run local police departments, school districts, or zoning boards. Those remain under state or local authority, and a Representative's influence is indirect and often requires cooperation with other governments.</p>
+<p>Committee assignments matter because they shape where a Representative can exercise more direct influence through hearings, legislation drafts, and appropriations language. Committee work can improve leverage on an issue but it does not override state or local control.</p>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>One practical role for a Representative is to assist with federal casework. A congressional office can help constituents navigate agency rules, track federal benefits, and apply for federal programs, although the office cannot change agency rules on its own <a href="https://www.congressionalmanagement.org/resources/constituent-casework-guide" target="_blank" rel="noopener">Congressional Management Foundation constituent casework guide</a>.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1vQX-yqHnutt1db9tgoWP8ckFyrm4FgP6=s1200" alt="Minimal 2D vector infographic with three icons for federal grants local government and checklists on a deep blue district background with white and red accents" /></a>
+    </div>
+<h2>How federal funding and grants reach district priorities</h2>
+<p>Federal intergovernmental transfers and grant programs are a major channel for federal influence on local priorities. Recent federal reporting shows these transfers remain a substantial part of federal support to state and local governments <a href="https://www.census.gov/programs-surveys/cffr.html" target="_blank" rel="noopener">Census Bureau Consolidated Federal Funds Report</a>. See also a Congressional Research Service overview of federal grants <a href="https://www.congress.gov/crs-product/R40638" target="_blank" rel="noopener">Federal Grants to State and Local Governments</a>.</p>
+<p>Common grant pathways include formula grants that allocate funds according to set criteria, competitive grants that require applications and selection, and pass through arrangements where federal funds go to states and then to local recipients. Each pathway has different timelines, reporting rules, and eligibility criteria which affect what a district can secure <a href="https://www.gao.gov/products/gao-24-102" target="_blank" rel="noopener">GAO review of intergovernmental coordination</a>. For details on who can apply to competitive programs see guidance from the Department of Transportation <a href="https://www.transportation.gov/rural/grant-toolkit/eligible-applicants" target="_blank" rel="noopener">Who Is Eligible to Apply for Competitive Grants?</a>.</p>
+<p>Eligibility rules and program details change over time. Constituents and local officials should confirm current program requirements on official federal program pages before assuming funding is available for a specific project, for example by checking <a href="https://www.grants.gov/learn-grants/grant-eligibility" target="_blank" rel="noopener">Grants.gov eligibility pages</a> or the Census report <a href="https://www.census.gov/programs-surveys/cffr.html" target="_blank" rel="noopener">Consolidated Federal Funds Report</a>.</p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick eligibility checks for common federal grant pathways</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-0lw1za-0">
+                        <input id="tool-check-0lw1za-0" type="checkbox" />
+                        <span>Program page</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-ghbgle-1">
+                        <input id="tool-check-ghbgle-1" type="checkbox" />
+                        <span>Eligibility criteria</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-u2mrud-2">
+                        <input id="tool-check-u2mrud-2" type="checkbox" />
+                        <span>Lead contact</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use agency program pages to confirm rules</p>
+            </div>
+<p>Because grants often require state coordination or local matches, federal funding typically enables local solutions rather than directly delivering them. A Representative can help by connecting local officials to federal program staff or by supporting congressional language that clarifies program priorities.</p>
+<h2>What a member's office can do: constituent services and casework</h2>
+<p>Member offices provide a set of consistent services to help constituents navigate federal programs. Typical services include assistance with Social Security and VA benefits, help with federal grant application information, guidance on federal regulatory processes, and referrals to the appropriate federal agency <a href="https://www.congressionalmanagement.org/resources/constituent-casework-guide" target="_blank" rel="noopener">Congressional Management Foundation constituent casework guide</a>.</p>
+<p>Staff can open a case on behalf of a constituent, track status with an agency, request expedited review in certain circumstances, and provide information about grant timelines. They also collect documentation and prepare concise, documented requests for agency officials.</p>
+<p>Best practices recommended in congressional guidance include identifying the correct jurisdiction, documenting the issue clearly, making concise asks, and using the member office for federal casework or grant navigation when appropriate <a href="https://www.congressionalmanagement.org/resources/constituent-casework-guide" target="_blank" rel="noopener">Congressional Management Foundation constituent casework guide</a>.</p>
+<p>To prepare for a federal casework request, constituents should gather identification, relevant correspondence, account or claim numbers, and any documentation that shows attempts to resolve the matter with the agency. A well documented request moves more quickly through office and agency processes.</p>
+<h2>Deciding where to direct your concern: a jurisdiction checklist for the district</h2>
+<p>Start with a short checklist: determine whether your concern is governed by local rules or federal policy, contact local officials for local matters, request federal casework for federal benefits or agency issues, and pursue available federal grants if your project fits a program. This approach reduces mismatched expectations and points you to practical next steps <a href="https://www.congressionalmanagement.org/resources/constituent-casework-guide" target="_blank" rel="noopener">Congressional Management Foundation constituent casework guide</a>.</p>
+<p>Indicators an issue is local include zoning decisions, local permitting, municipal utilities, and most school board matters. If your problem affects licensing, city codes, or local enforcement, start with the city or county office that manages those functions <a href="https://www.ncsl.org/research/about-state-legislatures/intergovernmental-affairs.aspx" target="_blank" rel="noopener">NCSL intergovernmental affairs guidance</a>.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>When an issue involves a federal benefit, like Social Security or VA claims, or when an organization needs programmatic guidance for a federal grant, the member's office can assist with casework and with directing applicants to the correct federal program pages <a href="https://www.congressionalmanagement.org/resources/constituent-casework-guide" target="_blank" rel="noopener">Congressional Management Foundation constituent casework guide</a>.</p>
+<h2>Common mistakes and unrealistic expectations to avoid</h2>
+<p>A frequent misunderstanding is assuming Congress can directly change municipal ordinances or local zoning. That expectation leads to frustration when local decisions do not follow the timing or scope constituents expect; municipal matters are usually decided by local councils or boards.</p>
+<p>Poor documentation and vague asks are common procedural errors that slow casework or grant success. Members' offices and agencies respond better to specific, documented requests that identify the jurisdiction, desired outcome, and relevant dates or account numbers <a href="https://www.congressionalmanagement.org/resources/constituent-casework-guide" target="_blank" rel="noopener">Congressional Management Foundation constituent casework guide</a>.</p>
+<p>Another mistake is treating federal funding as an immediate fix. Many grant programs require planning, matching funds, and compliance with reporting requirements, so timelines can be long and outcomes uncertain <a href="https://www.gao.gov/products/gao-24-102" target="_blank" rel="noopener">GAO review of intergovernmental coordination</a>.</p>
+<p>To reduce disappointment, verify the responsible government level before pursuing action, document your request clearly, and use the member office for federal matters where appropriate. That combination improves the odds of productive results.</p>
+<h2>Practical district scenarios: housing, transportation, and public safety</h2>
+<p>Housing requests often illustrate the shared roles of federal and local governments. Federal programs can provide funding or tax incentives, but local governments typically set zoning rules and manage land use, which determines how funds are used in practice <a href="https://www.hud.gov/program_offices" target="_blank" rel="noopener">HUD guidance on federal housing roles</a>.</p>
+<p>Transportation projects frequently rely on federal formula or competitive grants for large capital investments, while local or state agencies handle planning and construction. A Representative can help by supporting grant applications or facilitating contact with federal program officials.</p>
+<p>Public safety issues such as staffing or local policing policy are most often set at the municipal level, but federal support can come through grants for equipment, training, or specific programs. Oversight and federal funding can enable local initiatives without replacing local decision making <a href="https://www.census.gov/programs-surveys/cffr.html" target="_blank" rel="noopener">Census Bureau Consolidated Federal Funds Report</a>.</p>
+<p>In each scenario, the practical first step is to identify which actor controls the specific decision you care about. If implementation or funding is needed, the member office can assist with applications, with connecting local officials to federal resources, or with oversight inquiries when federal policy or compliance is relevant.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>How to use the district checklist and links to key resources</h2>
+<p>Use the printable checklist to separate local steps from federal steps. The checklist should list local contacts for zoning or school board matters, state contacts for licensing and education policy, and federal program pages for grant eligibility and agency benefits <a href="https://www.census.gov/programs-surveys/cffr.html" target="_blank" rel="noopener">Census Bureau Consolidated Federal Funds Report</a>.</p>
+<p>Confirm grant eligibility on official program pages before investing time in an application because program rules can change between funding cycles. The member office can often help identify the correct federal page and provide contacts for program officers.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-29l7ss" class="faq-toggle" checked /><label for="faq-29l7ss" class="faq-summary" role="button" tabindex="0">What should constituents in the district expect a U.S. Representative to handle directly, and what should they take to local officials?</label><div class="faq-content"><p>A Representative can influence federal law, funding, oversight, and provide casework for federal agencies; most day to day services such as zoning, municipal services, and school board matters fall to state or local governments, so constituents should direct local issues to city or county offices while engaging the member&#39;s office for federal matters.</p></div></section>
+<p>For ongoing issues, keep a short file with dates, correspondence, and any case numbers. That documentation speeds escalation and makes it easier for staff to advocate on your behalf when the matter touches a federal agency.</p>
+<h2>When committee assignments and oversight matter for district priorities</h2>
+<p>A Representative's committee assignments can improve leverage on certain issues through hearings, appropriations language, and authorizing legislation. Serving on a relevant committee can raise visibility for a district priority and help shape policy directions, though it does not change local implementation rules <a href="https://www.gao.gov/products/gao-24-102" target="_blank" rel="noopener">GAO review of intergovernmental coordination</a>.</p>
+<p>Ask whether a Representative serves on committees related to your concern, such as appropriations for funding, transportation committees for infrastructure, or oversight committees for agency accountability. That context helps set realistic expectations for influence.</p>
+<p>Committee work can affect timelines and priorities; constituents should treat committee advantage as a possible lever rather than a guarantee and continue to engage local actors for implementation.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Bottom line and next steps for realistic constituent engagement in the district</h2>
+<p>The core takeaway is straightforward: the federal government handles lawmaking, funding, oversight, and federal casework, while many day to day services are governed by state or local authorities. Identifying jurisdiction and directing your ask to the right level increases the chance of a useful outcome <a href="https://www.usa.gov/branches-of-government" target="_blank" rel="noopener">USA.gov overview of branches of government</a>.</p>
+<p>Immediate next steps are to use the jurisdiction checklist, contact local officials for city or county matters, contact the member's office for federal benefits or agency assistance, and verify grant eligibility on official federal program pages before applying.</p>
+<p>When contacting any office, be concise, document your request, and state a clear desired outcome. These practices reduce delays and help staff escalate the most relevant cases for further action.</p>
+<p>According to his campaign site, Michael Carbonara emphasizes economic opportunity and accountability as priorities; readers should <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">consult primary sources</a> for statements and filings when seeking campaign specific details.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-pgw9qp" class="faq-toggle" /><label for="faq-pgw9qp" class="faq-summary" role="button" tabindex="0">What issues should I take to my city or county rather than my Representative?</label><div class="faq-content"><p>Take zoning, building permits, local road repairs, municipal utilities, and most K 12 school board matters to city or county officials, since these are typically managed locally.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-9b7v6g" class="faq-toggle" /><label for="faq-9b7v6g" class="faq-summary" role="button" tabindex="0">When should I contact my Representative for help?</label><div class="faq-content"><p>Contact your Representative for federal benefits, agency casework, help locating grant programs, or when you need federal oversight or a congressional inquiry on an agency matter.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-836qsq" class="faq-toggle" /><label for="faq-836qsq" class="faq-summary" role="button" tabindex="0">Can a Representative change a local ordinance?</label><div class="faq-content"><p>No, a Representative cannot unilaterally change local ordinances; they can work through federal funding, oversight, or legislation that may affect broader policy contexts.</p></div></section>
+</section><section class="article-ending">Knowing who has authority and using a short checklist makes constituent engagement more productive. Start with local officials for municipal matters, use the member office for federal issues, and verify grant rules on official program pages.
+
+Clear documentation and concise asks help staff and officials respond more effectively, increasing the likelihood of a useful outcome.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.usa.gov/branches-of-government" target="_blank" rel="noopener">https://www.usa.gov/branches-of-government</a></li><li><a href="https://www.ncsl.org/research/about-state-legislatures/intergovernmental-affairs.aspx" target="_blank" rel="noopener">https://www.ncsl.org/research/about-state-legislatures/intergovernmental-affairs.aspx</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.congressionalmanagement.org/resources/constituent-casework-guide" target="_blank" rel="noopener">https://www.congressionalmanagement.org/resources/constituent-casework-guide</a></li><li><a href="https://www.census.gov/programs-surveys/cffr.html" target="_blank" rel="noopener">https://www.census.gov/programs-surveys/cffr.html</a></li><li><a href="https://www.congress.gov/crs-product/R40638" target="_blank" rel="noopener">https://www.congress.gov/crs-product/R40638</a></li><li><a href="https://www.gao.gov/products/gao-24-102" target="_blank" rel="noopener">https://www.gao.gov/products/gao-24-102</a></li><li><a href="https://www.grants.gov/learn-grants/grant-eligibility" target="_blank" rel="noopener">https://www.grants.gov/learn-grants/grant-eligibility</a></li><li><a href="https://www.transportation.gov/rural/grant-toolkit/eligible-applicants" target="_blank" rel="noopener">https://www.transportation.gov/rural/grant-toolkit/eligible-applicants</a></li><li><a href="https://www.hud.gov/program_offices" target="_blank" rel="noopener">https://www.hud.gov/program_offices</a></li><li><a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">https://michaelcarbonara.com/</a></li><li><a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">https://michaelcarbonara.com/issues/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
