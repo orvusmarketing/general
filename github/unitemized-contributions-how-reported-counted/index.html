@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Unitemized Contributions: How Small Donations Are Reported and Counted</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens (from provided style input) */
+      --text-color: #ffffff; /* --mc-ink */
+      --accent: #ae2736;     /* --mc-accent */
+      --accent-hover: #8f222c; /* darker accent for hover */
+      --line: rgba(255,255,255,.16); /* --mc-line */
+      --surface: #0b2664;    /* --mc-bg as surface */
+      --surface-2: rgba(255,255,255,.04); /* panel subtle */
+      --radius: 0px;         /* --mc-radius */
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1Y013arxny2i8r6fTgTPld66Lqrxukyq_" alt="Unitemized Contributions banner" />
+        </div>
+        <h1 class="title">Unitemized Contributions: How Small Donations Are Reported and Counted</h1>
+        <p class="subline">A concise guide to how small-dollar gifts appear and reconcile in FEC filings.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/unitemized-contributions-how-reported-counted/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <p class="summary">This explainer clarifies how unitemized contributions are defined, where they appear in FEC filings, and how committees and researchers reconcile those aggregates with summary totals. It focuses on the per-election itemization rule and the practical steps to verify reported totals, using primary FEC instructions as the basis for recommendations. The goal is to provide a clear, neutral reference for voters, journalists, and anyone checking campaign finance records.</p>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Unitemized contributions are small-dollar donations reported as an aggregate line on Schedule A rather than as individual entries.</span></div><div class="highlight-card"><span class="highlight-text">Committees must record both the dollar total and the number of unitemized contributions each reporting period and reconcile those with Form 3-X.</span></div><div class="highlight-card"><span class="highlight-text">If a donor's cumulative gifts to the same election exceed the threshold, the committee must itemize that donor's contributions.</span></div>
+  </div>
+
+  <h2>What are unitemized contributions? A clear definition</h2>
+  <p>Unitemized contributions are the small-dollar individual donations that a committee reports in aggregate rather than as separate donor entries. Under current FEC guidance, contributions at or below the federal itemization level for a given election are typically reported as unitemized, and committees list both the dollar total and the number of those contributions on Schedule A. <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a.pdf" target="_blank" rel="noopener">Schedule A instructions</a></p>
+  <p>The standard threshold applied in the <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">2024 to 2026 reporting cycle</a> treats individual contributions of $200 or less per election as generally eligible for aggregation as unitemized, with the important caveat that the committee must itemize any contributor whose cumulative giving to the same election exceeds that threshold. This per-election rule is a core part of how committees classify small gifts and prepare their reports. <a href="https://www.fec.gov/resources/cms-content/documents/campaign-guide-congressional.pdf" target="_blank" rel="noopener">FEC campaign guide for congressional candidates and committees</a></p>
+  <p>Where these amounts appear on filings is straightforward to describe. On Schedule A, rather than listing each name for very small gifts, a committee enters one aggregate line that shows the total dollar amount of unitemized contributions during the reporting period and a separate count of how many such contributions that total represents. That aggregate line sits alongside itemized entries for larger or otherwise reportable contributions. <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a.pdf" target="_blank" rel="noopener">Schedule A instructions</a></p>
+
+  <div class="cta-section">
+    <h3 class="cta-headline">Stay informed and get involved with the campaign</h3>
+    <div class="cta-intro"><p>For readers who want the primary instructions, consult the Schedule A instructions or the FEC campaign guide for full filing details before drawing conclusions from a report.</p></div>
+    <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign</a>
+  </div>
+
+  <h3>Federal itemization threshold</h3>
+  <p>The federal itemization rule is applied on a per-election basis. That means a contribution amount is evaluated with respect to a specific primary or general election, and committees track donations accordingly rather than treating all giving as one pooled total across different elections. The itemization threshold itself is described in the FEC materials and functions as the dividing line between itemized and unitemized reporting. (<a href="https://www.ecfr.gov/current/title-11/chapter-I/subchapter-A/part-104" target="_blank" rel="noopener">11 CFR Part 104</a>) <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a.pdf" target="_blank" rel="noopener">Schedule A instructions</a></p>
+  <h3>How unitemized contributions are shown on Schedule A</h3>
+  <p>Schedule A shows itemized lines with donor names and details for contributions that meet itemization rules, and a separate aggregate line for unitemized contributions that reports the combined dollar amount and the number of contributions. Researchers reading Schedule A should expect the aggregate line to reconcile with the committee's overall summary totals when itemized entries are added to that aggregate. <a href="https://www.opensecrets.org/resources/how-to-read-fec-reports" target="_blank" rel="noopener">How to read FEC campaign finance reports</a></p>
+
+  <h2>How the FEC and Schedule A require committees to report unitemized totals</h2>
+  <h3>What Schedule A asks for each reporting period</h3>
+  <p>For every reporting period, Schedule A directs committees to record both the total dollar amount of unitemized contributions and the count of those contributions. The instruction is intentionally simple: show the aggregates for small-dollar gifts alongside itemized lines so that the public record includes a clear numeric account of both money and number of contributors. <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a.pdf" target="_blank" rel="noopener">Schedule A instructions</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+  <p>That aggregated presentation is important because it preserves the visibility of small-donor activity without creating an impractical volume of line-item entries. The Schedule A aggregate should never be treated as an opaque number. Instead, it functions as one piece of the reconciliation equation that connects detailed entries and overall summary totals. <a href="https://www.opensecrets.org/resources/how-to-read-fec-reports" target="_blank" rel="noopener">How to read FEC campaign finance reports</a></p>
+  <h3>How Form 3-X ties into summary reconciliation</h3>
+  <p>Form 3-X holds a committee's summary totals for contributions received in the reporting period and for the election cycle to date. Committees must reconcile the aggregates reported on Schedule A, including the unitemized contribution line, with the Form 3-X summary totals so that the numbers match across filings. This reconciliation is part of standard filing practice described in the FEC campaign guidance. <a href="https://www.fec.gov/resources/cms-content/documents/campaign-guide-congressional.pdf" target="_blank" rel="noopener">FEC campaign guide for congressional candidates and committees</a></p>
+  <p>For anyone checking a report, the key procedural step is to compare the Schedule A itemized lines plus the unitemized aggregate against the Form 3-X totals. When those pieces align, the filing is internally consistent; when they do not, the committee may need to file an amendment or explain the discrepancy. <a href="https://www.opensecrets.org/resources/how-to-read-fec-reports" target="_blank" rel="noopener">How to read FEC campaign finance reports</a></p>
+
+  <h2>Tracking contributions across an election cycle: when to itemize</h2>
+  <h3>Per-election treatment of contributions</h3>
+  <p>Committees must track contributions with the per-election rule in mind. If one person makes several small donations to the same election and the sum of those donations exceeds the itemization threshold for that election, the committee must treat that contributor as an itemized donor and report the individual entries rather than include them in the unitemized aggregate. This per-election test is a standard requirement in FEC materials and compliance guidance. <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a.pdf" target="_blank" rel="noopener">Schedule A instructions</a></p>
+  <p>Practically, that rule requires committees to maintain contributor records that can be totaled across reporting periods. It is not enough to look only at a single reporting period. Committees need a running count of each contributor's giving for the same election so they can update classification when the cumulative amount crosses the threshold. <a href="https://www.fec.gov/resources/cms-content/documents/campaign-guide-congressional.pdf" target="_blank" rel="noopener">FEC campaign guide for congressional candidates and committees</a> (<a href="https://www.fec.gov/resources/cms-content/documents/policy-guidance/candgui.pdf" target="_blank" rel="noopener">FEC campaign guide PDF</a>)</p>
+
+  <div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">A simple contributor-tracking template to determine when to itemize</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-mwlkpi-0">
+                        <input id="tool-check-mwlkpi-0" type="checkbox" />
+                        <span>Contributor name</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-fjoarz-1">
+                        <input id="tool-check-fjoarz-1" type="checkbox" />
+                        <span>Date</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-k1qcfe-2">
+                        <input id="tool-check-k1qcfe-2" type="checkbox" />
+                        <span>Amount</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-j0ep3l-3">
+                        <input id="tool-check-j0ep3l-3" type="checkbox" />
+                        <span>Election</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-v0pjox-4">
+                        <input id="tool-check-v0pjox-4" type="checkbox" />
+                        <span>Cumulative total</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use this to update cumulative totals each reporting period</p>
+            </div>
+
+  <h3>Cumulative contributor tracking</h3>
+  <p>Recordkeeping should link each contribution to the relevant election and maintain a running total for each contributor. When a donor's cumulative giving to that election passes the itemization threshold, the committee should reclassify and itemize the contributor's donations in the next appropriate filing. This approach prevents misclassification and reduces the need for corrective amendments. <a href="https://www.fec.gov/resources/cms-content/documents/campaign-guide-congressional.pdf" target="_blank" rel="noopener">FEC campaign guide for congressional candidates and committees</a></p>
+  <p>Campaign staff and treasurers usually set internal processes to flag contributors approaching the threshold. That might involve spreadsheets, donor management software, or periodic internal reviews tied to reporting schedules. The compliance aim is straightforward: apply the itemization rule consistently and document how each contributor was classified over time. <a href="https://www.perkinscoie.com/en/news-insights/practical-compliance-checklist-reporting-unitemized-contributions.html" target="_blank" rel="noopener">Practical compliance checklist for reporting unitemized contributions</a></p>
+
+  <h2>Attribution, bundling, and related-party rules that affect unitemized reporting</h2>
+  <h3>When attribution changes reporting treatment</h3>
+  <p>Attribution rules affect whether a contribution is treated as private individual giving or as the product of a bundler, intermediary, or related party. When attribution applies, a committee may need to change how it reports a contribution, including whether a contribution counted as unitemized should instead be itemized under the attributed name. FEC instructions explain these attribution rules and their effect on reporting. <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a.pdf" target="_blank" rel="noopener">Schedule A instructions</a></p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1iEsuhEyNtzXOyPx59njiK_agloa2G0Wo=s1200" alt="Minimal vector illustration of a stylized Schedule A form and pen representing unitemized contributions on a Michael Carbonara navy background" /></a>
+      <div class="side-text"><p>Because attribution can change the reported identity and value of contributions, incorrect attribution is a common source of reconciliation mismatches. When a committee discovers an attribution error, it should correct or amend the filing as required by the FEC instructions and note the reason for the change. <a href="https://www.perkinscoie.com/en/news-insights/practical-compliance-checklist-reporting-unitemized-contributions.html" target="_blank" rel="noopener">Practical compliance checklist for reporting unitemized contributions</a></p></div>
+    </div>
+
+  <h3>Bundled and related-party contributions</h3>
+  <p>Bundled contributions, where a person or organization collects gifts from multiple donors and transmits them to a committee, carry specific attribution and reporting rules. The committee must treat those bundled amounts in line with FEC guidance, which may require itemization of otherwise small amounts if the attribution concentrates giving under a single name for reporting purposes. That treatment is context specific and appears in compliance notes and FEC guidance. <a href="https://www.perkinscoie.com/en/news-insights/practical-compliance-checklist-reporting-unitemized-contributions.html" target="_blank" rel="noopener">Practical compliance checklist for reporting unitemized contributions</a></p>
+  <p>For campaigns, the practical takeaway is to have clear policies for accepting and documenting bundled contributions. These policies should record the source of the bundle, the underlying donors if known, and any attribution that changes how the contribution is reported. Doing so reduces the risk of misreporting and later amendments. <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a.pdf" target="_blank" rel="noopener">Schedule A instructions</a></p>
+
+  <h2>Where unitemized contributions show up in public FEC data and how researchers reproduce totals</h2>
+  <h3>Schedule A download lines and bulk data feeds</h3>
+  <p>In the FEC's public files, Schedule A downloads include itemized donor lines and, separately, an aggregate line for unitemized contributions that records both the amount and the number of contributions. The same aggregate appears in the FEC bulk data feeds, which researchers often use when analyzing giving patterns across many committees. To read the data correctly, expect that one aggregate line to represent many small gifts. The FEC's guidance on individual contributions also explains reporting expectations for candidate committees. <a href="https://www.fec.gov/help-candidates-and-committees/filing-reports/individual-contributions/" target="_blank" rel="noopener">FEC individual contributions guidance</a></p>
+
+  <section class="faq-accordion"><input type="checkbox" id="faq-hm80ah" class="faq-toggle" checked /><label for="faq-hm80ah" class="faq-summary" role="button" tabindex="0">How are small donations reported and verified in FEC filings?</label><div class="faq-content"><p>Small donations that do not meet the federal itemization threshold are reported as unitemized aggregates on Schedule A, and researchers or campaign staff reproduce totals by adding itemized entries to the unitemized aggregate and comparing that sum to the Form 3-X summary.</p></div></section>
+
+  <p>Researchers seeking to reproduce a committee's reported contribution totals should add the dollar amounts from all Schedule A itemized lines and then add the unitemized aggregate. That sum should match the committee's Form 3-X summary totals for contributions received, subject to any amendments or special-case entries. <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">Open-source guides</a> walk through this exact summation to help users verify a committee's reported totals. <a href="https://www.opensecrets.org/resources/how-to-read-fec-reports" target="_blank" rel="noopener">How to read FEC campaign finance reports</a></p>
+  <h3>Reproducing a committee's contribution totals</h3>
+  <p>When working from FEC bulk data, it is common to script the following steps: extract all Schedule A itemized contribution lines for the reporting period, isolate the unitemized aggregate line and its count, then sum the itemized amounts and add the aggregate amount to get the reported total. If the numbers do not match the Form 3-X summary, the researcher should look for amended reports or explanatory entries. <a href="https://ballotpedia.org/Campaign_finance#How_contributions_are_reported" target="_blank" rel="noopener">Campaign finance reporting overview</a></p>
+  <p>One practical tip for researchers is to track contributor counts as well as dollar totals. The unitemized line includes a contribution count that, when combined with the number of itemized entries, should equal the committee's reported contributor count for the period, subject to the same caveats about amendments and attribution corrections. <a href="https://www.opensecrets.org/resources/how-to-read-fec-reports" target="_blank" rel="noopener">How to read FEC campaign finance reports</a></p>
+
+  <h2>Common verification steps and typical reporting errors to watch for</h2>
+  <h3>Checklist for matching totals</h3>
+  <p>Use a short verification checklist when reviewing filings. At minimum, sum the Schedule A itemized contribution amounts, add the unitemized aggregate, and compare that total to the Form 3-X contribution summary. Next, compare contributor counts, and finally review the filing history for any amendments that might alter totals or classifications. These steps help reveal simple arithmetic or classification errors. <a href="https://ballotpedia.org/Campaign_finance#How_contributions_are_reported" target="_blank" rel="noopener">Campaign finance reporting overview</a></p>
+  <p>Another practical check is to validate the timing of donations that might cross the itemization threshold. Confirm whether a contributor's cumulative giving was properly classified in each filing, and if not, look for amended reports that restate prior periods. This process helps identify common mistakes before they become compliance problems. <a href="https://www.perkinscoie.com/en/news-insights/practical-compliance-checklist-reporting-unitemized-contributions.html" target="_blank" rel="noopener">Practical compliance checklist for reporting unitemized contributions</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+  <h3>Frequent mistakes campaigns and researchers make</h3>
+
+  <p>Frequent errors include failing to reclassify a donor who crosses the threshold, misapplying attribution rules for bundled gifts, and overlooking refunds or non-monetary items that affect totals. These errors typically show up in reconciliation checks and are often corrected through amended filings. Campaigns should document the rationale for each classification to streamline any future review. <a href="https://www.perkinscoie.com/en/news-insights/practical-compliance-checklist-reporting-unitemized-contributions.html" target="_blank" rel="noopener">Practical compliance checklist for reporting unitemized contributions</a></p>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Researchers also sometimes overlook that the itemization threshold is applied per election. Treating primary and general election giving as a single total can lead to apparent mismatches that are actually the result of misapplied rules. Clear tracking by election avoids this pitfall. <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a.pdf" target="_blank" rel="noopener">Schedule A instructions</a></p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1F1LR3IxzSoGIDMWGvhl5yJ5I5zkMNusS=s1200" alt="Minimal 2D vector infographic showing itemized lines icon with coins flowing into a grouped container and a large aggregate box on navy background unitemized contributions" /></a>
+    </div>
+
+  <h2>Practical examples and calculation walkthroughs</h2>
+  <h3>Simple reproduction of totals with itemized and unitemized lines</h3>
+  <p>Example, step by step. Start with the Schedule A export for a reporting period. Step 1, extract all itemized contribution lines and sum their amounts. Step 2, locate the unitemized aggregate line and note its dollar amount and its contribution count. Step 3, add the unitemized dollar amount to the sum of itemized entries. Step 4, compare this total to the Form 3-X contribution summary. If the numbers match, the filing reconciles for that period. <a href="https://www.opensecrets.org/resources/how-to-read-fec-reports" target="_blank" rel="noopener">How to read FEC campaign finance reports</a></p>
+  <p>To illustrate in plain numbers, imagine the itemized lines sum to 25,000 and the unitemized aggregate shows 4,200 from 84 contributions. Adding those yields a total of 29,200 for contributions in that period. That total should correspond to the Form 3-X summary for contributions received. If it does not, investigate amended filings, attribution changes, or other line items such as loans or transfers that may affect totals. <a href="https://ballotpedia.org/Campaign_finance#How_contributions_are_reported" target="_blank" rel="noopener">Campaign finance reporting overview</a></p>
+  <p>When a discrepancy appears, the most common causes are a late amendment that reclassifies gifts, bundled contributions that were attributed differently, or a donor crossing the itemization threshold after the initial filing. In each case, the committee should document the correction and, if required, file an amendment that explains the change. <a href="https://www.fec.gov/resources/cms-content/documents/campaign-guide-congressional.pdf" target="_blank" rel="noopener">FEC campaign guide for congressional candidates and committees</a></p>
+  <h3>Scenario: a donor crosses the threshold mid-cycle</h3>
+  <p>Consider a donor who gives 75, 50, and 100 dollars in three separate transactions to the same election across different reporting periods. Each gift is at or below the 200 dollar threshold, so early filings may show those gifts as part of the unitemized aggregate. Once the cumulative total reaches 225 dollars, the committee must itemize that donor's contributions, reporting the donor's name and each relevant contribution in the next filing. This per-election cumulative treatment is part of the FEC's instructions. <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a.pdf" target="_blank" rel="noopener">Schedule A instructions</a></p>
+  <p>In a practical amendment, the committee would adjust prior period classifications as needed to ensure the public record accurately reflects that the donor became reportable once cumulative giving exceeded the itemization threshold. The amendment should show the newly itemized entries and reconcile the prior unitemized aggregate accordingly. This documentation helps auditors and researchers follow the change. <a href="https://www.perkinscoie.com/en/news-insights/practical-compliance-checklist-reporting-unitemized-contributions.html" target="_blank" rel="noopener">Practical compliance checklist for reporting unitemized contributions</a></p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+  <p>Committees that anticipate many small-dollar contributions often plan their bookkeeping to detect donors close to the threshold. That planning can reduce the administrative burden of filing amendments and help maintain a transparent record for public review. Consistent documentation also assists any <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">outside scrutiny</a> from journalists or watchdogs. <a href="https://www.fec.gov/resources/cms-content/documents/campaign-guide-congressional.pdf" target="_blank" rel="noopener">FEC campaign guide for congressional candidates and committees</a></p>
+  <h2>Summary and next steps for campaigns and researchers</h2>
+  <h3>Key takeaways</h3>
+  <p>Unitemized contributions are small individual donations that a committee reports in aggregate on Schedule A, and the federal per-election itemization threshold determines whether a donor must be itemized or can be aggregated. Committees must report both the dollar total and the count of unitemized contributions and reconcile those aggregates with Form 3-X summary totals. <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a.pdf" target="_blank" rel="noopener">Schedule A instructions</a></p>
+  <p>For campaigns and researchers, the recommended next steps are simple: use the verification checklist to match itemized sums plus the unitemized aggregate to Form 3-X, track contributors by election so the committee can reclassify donors who cross the threshold, and consult the FEC instructions or campaign counsel for complex attribution cases. <a href="https://www.fec.gov/resources/cms-content/documents/campaign-guide-congressional.pdf" target="_blank" rel="noopener">FEC campaign guide for congressional candidates and committees</a></p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-7sgxhl" class="faq-toggle" /><label for="faq-7sgxhl" class="faq-summary" role="button" tabindex="0">What counts as an unitemized contribution?</label><div class="faq-content"><p>An unitemized contribution is a small individual donation that a committee reports in aggregate on Schedule A when it does not meet the per-election itemization threshold.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-1jhn5u" class="faq-toggle" /><label for="faq-1jhn5u" class="faq-summary" role="button" tabindex="0">When must a donor be itemized instead of grouped as unitemized?</label><div class="faq-content"><p>A donor must be itemized when their cumulative contributions to the same election exceed the federal itemization threshold, prompting the committee to report the donor's name and individual entries.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-e5resv" class="faq-toggle" /><label for="faq-e5resv" class="faq-summary" role="button" tabindex="0">Where can I find official guidance on reporting unitemized contributions?</label><div class="faq-content"><p>Official guidance is available in the FEC Schedule A instructions and the FEC campaign guide for congressional committees.</p></div></section>
+</section>
+
+<section class="article-ending">If you are reviewing filings, start with Schedule A and Form 3-X, follow the verification checklist, and consult the FEC instructions for any ambiguous cases. For complex questions about attribution or amended filings, consider reaching out to committee counsel or the FEC for clarification.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.fec.gov/resources/cms-content/documents/schedule_a.pdf" target="_blank" rel="noopener">https://www.fec.gov/resources/cms-content/documents/schedule_a.pdf</a></li><li><a href="https://www.fec.gov/resources/cms-content/documents/campaign-guide-congressional.pdf" target="_blank" rel="noopener">https://www.fec.gov/resources/cms-content/documents/campaign-guide-congressional.pdf</a></li><li><a href="https://www.opensecrets.org/resources/how-to-read-fec-reports" target="_blank" rel="noopener">https://www.opensecrets.org/resources/how-to-read-fec-reports</a></li><li><a href="https://www.perkinscoie.com/en/news-insights/practical-compliance-checklist-reporting-unitemized-contributions.html" target="_blank" rel="noopener">https://www.perkinscoie.com/en/news-insights/practical-compliance-checklist-reporting-unitemized-contributions.html</a></li><li><a href="https://ballotpedia.org/Campaign_finance#How_contributions_are_reported" target="_blank" rel="noopener">https://ballotpedia.org/Campaign_finance#How_contributions_are_reported</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">https://michaelcarbonara.com/</a></li><li><a href="https://www.ecfr.gov/current/title-11/chapter-I/subchapter-A/part-104" target="_blank" rel="noopener">https://www.ecfr.gov/current/title-11/chapter-I/subchapter-A/part-104</a></li><li><a href="https://www.fec.gov/help-candidates-and-committees/filing-reports/individual-contributions/" target="_blank" rel="noopener">https://www.fec.gov/help-candidates-and-committees/filing-reports/individual-contributions/</a></li><li><a href="https://www.fec.gov/resources/cms-content/documents/policy-guidance/candgui.pdf" target="_blank" rel="noopener">https://www.fec.gov/resources/cms-content/documents/policy-guidance/candgui.pdf</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
