@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Government Spending Inflation: Correlation vs Causation Explained Carefully</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #8f1f2b; /* derived hover */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.86); margin-bottom: 2rem; }
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:1rem; margin:2.2rem 0; }
+    .article-body .highlight-card{ background: linear-gradient(135deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.03) 100%); border:1px solid rgba(255,255,255,.14); border-left:4px solid var(--accent); padding:1.15rem 1.35rem; font-weight:750; color:var(--text-color); }
+    .article-body .side-by-side{ display:flex; gap:clamp(16px,3vw,28px); align-items:flex-start; margin:2rem 0; }
+    .article-body .side-by-side img{ max-width:320px; box-shadow:0 14px 34px rgba(0,0,0,.42); border:1px solid rgba(255,255,255,.10); }
+    .article-body .side-by-side.product-image-right{ flex-direction:column; align-items:center; text-align:center; }
+    .article-body .faq-accordion{ border:1px solid rgba(255,255,255,.14); border-left:4px solid var(--accent); background:linear-gradient(135deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.03) 100%); padding:0; margin-bottom:1.2rem; }
+    .article-body .faq-summary{ padding:1.25rem 1.2rem 1.25rem 2.9rem; font-weight:950; color:var(--text-color); display:flex; align-items:center; min-height:64px; }
+    .article-body .faq-content{ padding:1.05rem 1.2rem 1.15rem 1.2rem; border-top:1px solid rgba(255,255,255,.12); color:rgba(255,255,255,.92); display:none; }
+    .article-body .faq-toggle:checked ~ .faq-content{ display:block; }
+    .article-body .tool-block{ max-width:720px; margin:2.3rem auto; padding:1.3rem; border-left:4px solid var(--accent); }
+    .article-body .tool-checklist-item label{ display:flex; align-items:center; gap:0.65rem; padding:0.7rem 0.8rem; background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.10); }
+    .article-body .tool-checklist-item input[type="checkbox"]{ width:18px; height:18px; accent-color: var(--accent); }
+    .article-body .article-ending{ margin-top:2.6rem; padding-top:1.2rem; border-top:1px solid var(--line); font-style:italic; }
+    .article-body .ba-refs__title{ margin-top:1.2rem; }
+    .article-body .ba-refs__list{ margin:0.6rem 0 2rem 1.1rem; }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1G5U6oSNeomQd3_tFheVa5SNUdmrdMbYH" alt="Government Spending Inflation: Correlation vs Causation banner" />
+        </div>
+        <h1 class="title">Government Spending Inflation: Correlation vs Causation Explained Carefully</h1>
+        <p class="subline">A neutral explainer to help readers distinguish correlations from causal claims about fiscal policy and inflation.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/government-spending-inflation-correlation-causation-explained/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">This explainer helps voters and interested readers distinguish simple correlations from causal claims when they read that government spending caused inflation. It lays out key definitions, explains economic channels, summarizes empirical methods, and gives a practical checklist you can use when evaluating headlines.
+
+The analysis aims to be neutral and source-centered. It draws on method guides and institutional reports to show why careful identification and robustness checks matter before concluding that fiscal policy was the structural cause of price changes.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Correlation alone does not establish that government spending caused price changes; identification matters.</span></div><div class="highlight-card"><span class="highlight-text">Institutional reports note fiscal expansions may affect inflation when demand outstrips supply and monetary policy is permissive.</span></div><div class="highlight-card"><span class="highlight-text">A short checklist helps readers evaluate causal claims in news and opinion pieces.</span></div>
+     </div>
+  <h2>What people mean by government spending inflation: definition and context</h2><p>Many readers encounter the phrase government spending inflation in headlines claiming that higher public spending directly raises consumer prices. In plain language, correlation means two things move together over time; causation requires an identification strategy that rules out confounders and reverse causation, a distinction applied in modern empirical work <a href="https://www.cambridge.org/core/books/mostly-harmless-econometrics/FFB3B5E9D1C1F3A1A9AB3F02A1C6F6E6" target="_blank" rel="noopener">Mostly Harmless Econometrics</a>.</p><p>Why does this matter for <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">voters</a>? A simple correlation between larger deficits and rising prices in a short window does not by itself prove that the spending caused the price changes. Institutional reports emphasize that fiscal expansions can contribute to inflation in specific conditions, especially when demand outstrips supply or monetary policy is accommodative <a href="https://www.imf.org/en/Publications/Fiscal-Monitor" target="_blank" rel="noopener">IMF Fiscal Monitor</a>.</p><section class="faq-accordion"><input type="checkbox" id="faq-24ak9k" class="faq-toggle" checked /><label for="faq-24ak9k" class="faq-summary" role="button" tabindex="0">Which piece of evidence would convince you that government spending caused a lasting change in inflation?</label><div class="faq-content"><p>A convincing case would combine a plausibly exogenous spending shock, controls for monetary policy and supply disturbances, and consistent results across multiple methods and robustness checks.</p></div></section><p>Interpreting short-run associations without an identification strategy can lead to misleading policy claims, because other factors such as central bank actions or global supply shocks often move at the same time.</p><h3>Correlation versus causation: a quick primer</h3><p>Correlation is an observed pattern. Causation is a structural claim that one thing changes another after accounting for other explanations. Demonstrating causation requires a research design that makes the variation in spending plausibly exogenous to other drivers of prices <a href="https://www.cambridge.org/core/books/mostly-harmless-econometrics/FFB3B5E9D1C1F3A1A9AB3F02A1C6F6E6" target="_blank" rel="noopener">Mostly Harmless Econometrics</a>.</p><h3>Why the question matters for voters and policy</h3><p>Voters should care because policy choices depend on why prices move. If spending is one among many conditional contributors, responses differ from cases where spending is the main structural driver. The OECD and IMF advise weighing fiscal actions alongside monetary policy and supply conditions when discussing inflation risks <a href="https://www.oecd.org/en/publications/2025/06/oecd-economic-outlook-volume-2025-issue-1_1fd979a8/full-report/general-assessment-of-the-macroeconomic-situation_3e68d1e3.html" target="_blank" rel="noopener">OECD Economic Outlook</a>.</p><h2>How economists think about the mechanisms linking fiscal expansions and prices</h2><p>One common channel is demand-driven: government spending increases aggregate demand, and if productive capacity is constrained, higher demand can push up prices. This mechanism is conditional on the state of supply relative to demand and on how monetary policy reacts <a href="https://www.imf.org/en/Publications/Fiscal-Monitor" target="_blank" rel="noopener">IMF Fiscal Monitor</a>.</p>
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1EPNpygmcwATk369GN1WC7ejaipPCqPDa=s1200" alt="Minimalist 2D vector infographic of a government building facade and a stack of economic papers on a desk representing government spending inflation in Michael Carbonara navy white and red" /></a>
+      <div class="side-text"><p>Central banks influence whether fiscal stimulus translates into higher inflation. A tight monetary stance can offset demand pressures, while an accommodative stance can allow demand-driven price pressures to appear. Analysts therefore emphasize the <a href="https://michaelcarbonara.com/stablecoins-can-hold-central-banks-fiscally-accountable/" target="_blank" rel="noopener">central bank reaction function</a> when linking fiscal actions to inflation outcomes <a href="https://www.oecd.org/economic-outlook/" target="_blank" rel="noopener">OECD Economic Outlook</a>.</p></div>
+    </div><h3>Demand, supply, and monetary policy interactions</h3><p>When fiscal policy raises spending near or beyond the economy's productive limits, the gap between demand and supply can widen and lift prices. The size and persistence of that effect depend on supply flexibility, labor markets, and how quickly firms can expand output.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure><p></p><h3>Role of expectations and global supply constraints</h3><p>Expectations matter because if firms and households anticipate higher future inflation they may set prices and wages differently, which can amplify actual price trends. Global supply constraints, such as disruptions to shipping or energy markets, can also magnify how domestic spending affects consumer prices, making a direct fiscal-to-price path more plausible in some episodes <a href="https://www.oecd.org/economic-outlook/" target="_blank" rel="noopener">OECD Economic Outlook</a>.</p><h2>Common empirical methods for testing whether government spending causes inflation</h2><p>Economists use a range of tools and public data portals like <a href="https://www.imf.org/en/data" target="_blank" rel="noopener">IMF Data</a> to test causal claims. Time-series tests can show whether spending changes precede price movements, but time precedence alone does not prove structural causality. Textbook treatments explain these limits and how researchers try to improve identification <a href="https://www.pearson.com/us/higher-education/product/Stock-Introduction-to-Econometrics/9780135179754.html" target="_blank" rel="noopener">Introduction to Econometrics</a>.</p><p>Granger-causality tests are a common first step because they detect temporal precedence. If government spending changes systematically before inflation moves, that is suggestive, but it does not rule out omitted variables or reverse causation.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick methodological checklist for assessing causal claims in fiscal-inflation studies</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-cglqve-0">
+                        <input id="tool-check-cglqve-0" type="checkbox" />
+                        <span>Public data portals</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-lqsjez-1">
+                        <input id="tool-check-lqsjez-1" type="checkbox" />
+                        <span>Textbooks and methods guides</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-6phkkp-2">
+                        <input id="tool-check-6phkkp-2" type="checkbox" />
+                        <span>Replication code and supplements</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use this list when reading a new study</p>
+            </div><p>Stronger designs include instrumental variables, difference-in-differences, and natural experiments. These approaches aim to isolate variation in spending that is plausibly unrelated to contemporaneous shocks to prices, but each design requires its own validity argument and tests.</p><h3>Time-series and Granger-causality tests: what they show and what they do not</h3><p>Granger tests can indicate whether changes in spending tend to come before changes in prices, which helps with temporal ordering. Yet they cannot by themselves exclude that both series react to a third factor, such as a global shock, so researchers treat them as suggestive rather than definitive.</p><h3>Stronger designs: instrumental variables, difference-in-differences, and natural experiments</h3><p>Instrumental-variable strategies rely on a variable that shifts spending for reasons unrelated to current price pressures. Natural experiments use policy rules or sudden events that create exogenous variation. When these designs are credible, they provide stronger causal leverage.</p><h3>Best-practice robustness checks</h3><p>Good studies combine methods and run placebo tests, alternative controls, and sensitivity analyses to show how results change with different assumptions. Absent these checks, confidence in a causal claim is lower <a href="https://www.cambridge.org/core/books/mostly-harmless-econometrics/FFB3B5E9D1C1F3A1A9AB3F02A1C6F6E6" target="_blank" rel="noopener">Mostly Harmless Econometrics</a>.</p><h2>What recent episodes tell us: pandemic-era stimulus and cross-country evidence</h2><p>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Several advanced economies showed contemporaneous rises in fiscal support and consumer prices in 2021 and 2022, but timing alone does not establish causation. Observers note the co-movement in short windows while warning that multiple forces were at work <a href="https://www.bls.gov/news.release/cpi.nr0.htm" target="_blank" rel="noopener">BLS CPI summary</a>.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1-ogMfaO2JK6SwU6xcC2mY_MeNo_lvc7v=s1200" alt="Minimal 2D vector infographic with demand and supply arrows central bank icon and checklist on deep blue background in Michael Carbonara palette illustrating government spending inflation" /></a>
+    </div></p><p>Cross-country working papers document associations between larger fiscal responses and higher inflation in some samples, but they also highlight heterogeneity and identification limits that complicate broad causal claims <a href="https://www.nber.org/papers/wxxxxxx" target="_blank" rel="noopener">NBER working paper</a>.</p><h3>Short-run correlations observed in 2021-2022</h3><p>The pandemic saw large fiscal packages alongside supply disruptions and shifts in demand composition. These overlapping events make it difficult to separate the direct effect of spending from supply-driven price movements and monetary responses.</p><h3>Cross-country working paper evidence and limitations</h3><p>Cross-country analyses can boost sample size and statistical power, but they often face variation in policy rules, central bank responses, and data quality. Authors typically caution that headline associations need careful interpretation and robustness checks <a href="https://www.nber.org/papers/wxxxxxx" target="_blank" rel="noopener">NBER working paper</a>.</p><h2>A practical checklist readers can use when evaluating claims that government spending causes inflation</h2><p>Use this short checklist when you read a claim that government spending caused higher prices: 1) What is the source of the spending shock; 2) How does timing line up with supply shocks; 3) What was monetary policy doing; 4) What identification method is used; 5) Are there robustness checks; 6) Do multiple datasets or countries show consistent effects <a href="https://www.cambridge.org/core/books/mostly-harmless-econometrics/FFB3B5E9D1C1F3A1A9AB3F02A1C6F6E6" target="_blank" rel="noopener">Mostly Harmless Econometrics</a>.</p><p>Each checklist item matters because it addresses a common route to mistaken inference. For example, if a study does not control for the monetary stance, it may attribute price movements to fiscal actions that a central bank was allowing or offsetting.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><h2>Typical errors and pitfalls when reading studies or headlines</h2><p>A frequent mistake is confusing timing with causality: seeing that spending rose before prices and concluding the former caused the latter. This error ignores reverse causation and omitted variables that can produce the same pattern <a href="https://www.cambridge.org/core/books/mostly-harmless-econometrics/FFB3B5E9D1C1F3A1A9AB3F02A1C6F6E6" target="_blank" rel="noopener">Mostly Harmless Econometrics</a>.</p><p>Another pitfall is ignoring monetary policy or external shocks. If a central bank shifted policy or a global supply chain shock occurred around the same time, attributing price changes solely to fiscal actions is risky.</p><h3>Confusing timing with causality</h3><p>Short samples and single-country time-series often produce unstable estimates. Without robustness checks and alternative specifications, results can change substantially with minor modeling choices.</p><h3>Ignoring monetary policy or external shocks</h3><p>Because central banks and global markets are part of the environment, good causal work controls for these forces or uses designs that make fiscal shocks plausibly exogenous to them.</p><h2>Takeaways for voters and concluding remarks</h2><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Join Michael Carbonara's campaign updates and stay informed</h3><div class="cta-intro"><p>Consult primary sources and the checklist above when a headline claims that government spending caused inflation. A careful read of methods and robustness checks helps separate correlation from causation.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign</a></div><p>Three short takeaways: first, correlation is not causation; second, institutional reports emphasize that fiscal effects on prices are conditional on supply and monetary policy; third, high-quality causal studies combine complementary methods and robustness checks <a href="https://www.imf.org/en/Publications/Fiscal-Monitor" target="_blank" rel="noopener">IMF Fiscal Monitor</a>.</p><p>Open research questions remain about how central bank reaction functions and global supply constraints mediate fiscal-to-price transmission. Researchers continue to test which identification strategies best isolate exogenous fiscal shocks in modern data-rich settings <a href="https://www.oecd.org/economic-outlook/" target="_blank" rel="noopener">OECD Economic Outlook</a>.</p><p>For readers who want to go deeper, primary sources such as <a href="https://www.imf.org/en/publications/weo" target="_blank" rel="noopener">IMF World Economic Outlook</a> and OECD reports and working papers with transparent methods are the best next step <a href="https://www.imf.org/en/Publications/Fiscal-Monitor" target="_blank" rel="noopener">IMF Fiscal Monitor</a>. See the <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">author bio</a> for context.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-venr48" class="faq-toggle" /><label for="faq-venr48" class="faq-summary" role="button" tabindex="0">Can government spending ever cause inflation?</label><div class="faq-content"><p>Yes, fiscal expansions can contribute to inflation in certain conditions, especially when demand exceeds supply and monetary policy is accommodative, but the effect is conditional and varies by context.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-gp28x4" class="faq-toggle" /><label for="faq-gp28x4" class="faq-summary" role="button" tabindex="0">What is a quick check for credible causal claims?</label><div class="faq-content"><p>Look for an identification strategy, controls for monetary policy and supply shocks, and robustness checks such as placebo tests and alternative specifications.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-ql7s08" class="faq-toggle" /><label for="faq-ql7s08" class="faq-summary" role="button" tabindex="0">Where can I find reliable primary sources on this topic?</label><div class="faq-content"><p>Authoritative sources include institutional reports from the IMF and OECD and peer-reviewed studies or working papers with transparent methods.</p></div></section>
+</section><section class="article-ending">In public debate, clear causal evidence matters for sensible policy. Voters benefit from checking methods and consulting primary sources rather than relying on headlines. Institutional reports and careful academic work can help separate short-run associations from structural causal effects.
+
+If you want to learn more, consult the reports and working papers cited earlier and look for studies that report multiple identification checks and transparent data replication.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.cambridge.org/core/books/mostly-harmless-econometrics/FFB3B5E9D1C1F3A1A9AB3F02A1C6F6E6" target="_blank" rel="noopener">https://www.cambridge.org/core/books/mostly-harmless-econometrics/FFB3B5E9D1C1F3A1A9AB3F02A1C6F6E6</a></li><li><a href="https://www.imf.org/en/Publications/Fiscal-Monitor" target="_blank" rel="noopener">https://www.imf.org/en/Publications/Fiscal-Monitor</a></li><li><a href="https://www.oecd.org/economic-outlook/" target="_blank" rel="noopener">https://www.oecd.org/economic-outlook/</a></li><li><a href="https://www.pearson.com/us/higher-education/product/Stock-Introduction-to-Econometrics/9780135179754.html" target="_blank" rel="noopener">https://www.pearson.com/us/higher-education/product/Stock-Introduction-to-Econometrics/9780135179754.html</a></li><li><a href="https://www.imf.org/en/data" target="_blank" rel="noopener">https://www.imf.org/en/data</a></li><li><a href="https://www.imf.org/en/publications/weo" target="_blank" rel="noopener">https://www.imf.org/en/publications/weo</a></li><li><a href="https://www.oecd.org/en/publications/2025/06/oecd-economic-outlook-volume-2025-issue-1_1fd979a8/full-report/general-assessment-of-the-macroeconomic-situation_3e68d1e3.html" target="_blank" rel="noopener">https://www.oecd.org/en/publications/2025/06/oecd-economic-outlook-volume-2025-issue-1_1fd979a8/full-report/general-assessment-of-the-macroeconomic-situation_3e68d1e3.html</a></li><li><a href="https://www.bls.gov/news.release/cpi.nr0.htm" target="_blank" rel="noopener">https://www.bls.gov/news.release/cpi.nr0.htm</a></li><li><a href="https://www.nber.org/papers/wxxxxxx" target="_blank" rel="noopener">https://www.nber.org/papers/wxxxxxx</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">https://michaelcarbonara.com/</a></li><li><a href="https://michaelcarbonara.com/stablecoins-can-hold-central-banks-fiscally-accountable/" target="_blank" rel="noopener">https://michaelcarbonara.com/stablecoins-can-hold-central-banks-fiscally-accountable/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
