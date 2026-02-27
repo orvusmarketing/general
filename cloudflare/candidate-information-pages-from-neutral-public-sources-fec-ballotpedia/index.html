@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>How Ballotpedia Profiles Candidates and What It Sources</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens (from provided style) */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #8a232e; /* derived darker accent */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.06); /* from --mc-panel */
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.90); margin-bottom: 1.6rem; }
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:1rem; margin:1.6rem 0; }
+    .article-body .highlight-card{ background: linear-gradient(135deg, rgba(255,255,255,.03) 0%, rgba(255,255,255,.02) 100%); border:1px solid rgba(255,255,255,.12); padding:1rem; border-left:4px solid var(--accent); }
+    .article-body .tool-block{ background: linear-gradient(135deg, rgba(255,255,255,.03) 0%, rgba(255,255,255,.02) 100%); border:1px solid rgba(255,255,255,.12); }
+    .article-body .faq-accordion{ border-left:4px solid var(--accent); }
+    .cta-button{ background: var(--accent); }
+    .cta-button:hover{ background: var(--accent-hover); filter: brightness(1.01); }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/11MB2CkeYnBGQVwtHE0SBucVqJWaxtuQ8" alt="How Ballotpedia Profiles Candidates - banner image" />
+        </div>
+        <h1 class="title">How Ballotpedia Profiles Candidates and What It Sources</h1>
+        <p class="subline">A practical guide to tracing candidate claims back to primary public records for verification.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/candidate-information-pages-from-neutral-public-sources-fec-ballotpedia/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">This guide explains how candidate information pages from neutral public sources such as FEC and Ballotpedia are built and how readers can verify the underlying primary records. It is written for voters, local residents and civic readers who want to check biographical claims, fundraising totals and qualification status.
+
+You will find practical steps to trace a claim back to its primary document, a short verification checklist, and scenarios that show how to reconcile differences between compiled summaries and official filings.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Ballotpedia prioritizes primary records such as campaign sites, FEC reports and state election office records when compiling candidate pages.</span></div><div class="highlight-card"><span class="highlight-text">Always open linked FEC or state filings to confirm reporting periods and exact figures before using compiled totals.</span></div><div class="highlight-card"><span class="highlight-text">Use a short checklist: check the source list, click the FEC link, verify reporting dates, and confirm state qualifying status.</span></div>
+     </div>
+  <h2>What candidate information pages from neutral public sources such as FEC and Ballotpedia include</h2><p>Candidate information pages from neutral public sources such as FEC and Ballotpedia typically compile a core set of facts so readers have a single place to start research. These pages normally present a basic biography, the office sought, party if applicable, filing and fundraising summaries, election results, and a list of cited sources that link to primary documents and official records.</p><p>Ballotpedia's public documentation says editors prioritize primary records such as campaign websites, FEC reports, state election office records and official results when compiling candidate pages, and that practice guides how entries are built and documented on the site <a href="https://ballotpedia.org/About_Ballotpedia" target="_blank" rel="noopener">Ballotpedia About page</a></p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick verification steps to scan a candidate page</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-iko07p-0">
+                        <input id="tool-check-iko07p-0" type="checkbox" />
+                        <span>Open source list</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-j80g2u-1">
+                        <input id="tool-check-j80g2u-1" type="checkbox" />
+                        <span>Click FEC link</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-fiztz5-2">
+                        <input id="tool-check-fiztz5-2" type="checkbox" />
+                        <span>Check state qualifying list</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-xjbrsh-3">
+                        <input id="tool-check-xjbrsh-3" type="checkbox" />
+                        <span>Note last-updated date</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-hwj5bv-4">
+                        <input id="tool-check-hwj5bv-4" type="checkbox" />
+                        <span>Open campaign site</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use this before trusting numeric facts</p>
+            </div><p>Readers should expect that compiled pages are summaries, not original filings. Ballotpedia and FEC-linked pages point to the primary documents that contain exact filing dates, report IDs and raw totals, so users who need precise numbers should open the linked reports rather than rely solely on the summary.</p><h3>Definition of a candidate information page</h3><p>A candidate information page is a compiled reference that brings together public records and contemporary reporting about a person running for office. It is designed to show who the candidate is, what office they seek, and which public sources support those facts.</p><p>In practice a candidate page links outward, letting readers move from the summary to the primary records that provide legal and numeric detail.</p><h3>Types of facts typically listed</h3><p>Typical entries include the candidate's stated residence and biography, party affiliation, list of offices sought in the current cycle, filing and fund-raising summaries for committees, recent election results where relevant, and a citation list of the documents used to verify each claim.</p><p>Because these pages aggregate material, reading the citation list and following the links is the safest way to confirm dates and amounts shown in the summary.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>How Ballotpedia and the FEC source and verify candidate records</h2>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1AsFEzLdnEQaTfM22oE0MMyRU3Y2nW6dP=s1200" alt="Minimalist vector infographic showing candidate information pages from neutral public sources such as FEC and Ballotpedia with icons for FEC report calendar and charts" /></a>
+      <div class="side-text"><p>Ballotpedia editors follow a clear hierarchy of primary sources when verifying candidate facts, favoring campaign websites, FEC reports, state election office records and official results as the foundation for a page's claims <a href="https://ballotpedia.org/Ballotpedia:How_we_research_for_proof_of_official_candidacy" target="_blank" rel="noopener">Ballotpedia research page</a></p></div>
+    </div>
+<p>For federal candidates the Federal Election Commission's public filings are a primary verification channel. Ballotpedia links to those FEC reports on candidate pages so readers can trace fundraising and committee activity back to the original filings <a href="https://www.fec.gov/help-candidates-and-committees/" target="_blank" rel="noopener">FEC help pages for candidates and committees</a> and see the FEC guide on researching candidates <a href="https://www.fec.gov/introduction-campaign-finance/how-to-research-public-records/candidates/" target="_blank" rel="noopener">how to research candidates</a></p><h3>Primary source hierarchy Ballotpedia uses</h3><p>The editorial approach places primary records at the top level. Campaign statements and the candidate's official website are used for biographical details or declared priorities, while official filings supply legal and numeric assertions.</p><p>When Ballotpedia compiles a page, editors document which primary sources were used so that each factual claim can be traced to a specific record or document.</p><h3>Role of the FEC data and public filings</h3><p>FEC reports provide the filing IDs, reporting periods and numerical totals that define federal campaign finance activity. Ballotpedia points to those reports so readers can confirm numbers and understand which period a total covers <a href="https://www.fec.gov/help-candidates-and-committees/" target="_blank" rel="noopener">FEC help pages for candidates and committees</a></p><p>Because FEC filings are the legal record for federal campaign finance, matched links from a compiled page are the best immediate route to verify committee activity and totals.</p><h2>A step-by-step framework to check a candidate page and its primary sources</h2><p>Open the candidate page and scan the source list first. That source list shows which filings and documents the page used and is the quickest way to find the primary records you should open.</p><p>Next, click the linked FEC report or state filing to confirm the reporting period and totals in the summary. Note the filing dates and any report ID so you can compare like for like when reconciling numbers.</p><div class="cta-section"><h3 class="cta-headline">Check the sources before you rely on a candidate summary</h3><div class="cta-intro"><p>Take a moment to open the page's citation list and click the most recent FEC or state filing linked there to check the date and totals yourself.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Open linked filings</a></div><p>Once you have the primary documents open, compare the exact figures and the reporting period to the compiled summary. If the compiled page shows rounded or summarized numbers, the primary document will have the precise totals and the dates that matter for verification.</p><p>Also check the candidate's campaign website or published statements for biographical claims or stated priorities; these are primary sources for what the campaign itself says. For state-level status, open the state qualifying list to confirm a candidate's official filing or qualifying date.</p><h3>Initial page scan</h3><p>Start by looking for a clear source list and a visible last-updated date. If those are present, you can often find the primary documents with one or two clicks.</p><p>If the page lacks sources or a date, treat the summary as incomplete and move directly to the campaign site and the FEC or state election site to confirm the core facts.</p><h3>Tracing claims to primary documents</h3><p>When you find a claim you want to verify, note which document the candidate page cites for that claim and open it. For fundraising numbers, find the specific FEC report and check the reporting period and the totals on that report to confirm the summary value shown on the compiled page <a href="https://www.fec.gov/help-candidates-and-committees/" target="_blank" rel="noopener">FEC help pages for candidates and committees</a></p><p>For biographical details that could affect eligibility or residency, check the campaign site and state qualifying filings, which often list filing dates and confirmations from the state election office.</p><h3>Verifying currency and update dates</h3><p>Note the candidate page's last-updated date and compare it to the dates on the primary documents you open. If a primary filing is more recent than the last-updated date, the compiled page may not reflect the newest records and should be treated cautiously.</p><p>If you find a more recent filing, consider saving the primary document's URL or filing ID so you can return to it or <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">report the discrepancy to the page maintainers</a> for correction <a href="https://ballotpedia.org/Editorial_policy" target="_blank" rel="noopener">Ballotpedia editorial policy</a></p><h2>How to verify fundraising and filings on FEC-linked candidate information pages</h2>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>FEC reports are the authoritative source for federal campaign finance and include the reporting period, committee name, filing ID and numerical totals for receipts and disbursements. Always open the linked report to confirm the period and figures shown in a compiled summary <a href="https://www.fec.gov/help-candidates-and-committees/" target="_blank" rel="noopener">FEC help pages for candidates and committees</a>.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1xGAkla-yDv6ZGs9l3YLmmHYe7tiOkfGg=s1200" alt="2D vector infographic with four icons in Michael Carbonara colors Candidate information pages from neutral public sources such as FEC and Ballotpedia" /></a>
+    </div>
+<p>Match the totals on the Ballotpedia summary to the specific FEC filing. If the compiled page shows a rounded figure or aggregates several reports, the FEC filing will show the exact amounts and the dates that define each reporting period.</p><h3>Reading FEC report summaries</h3><p>FEC report summaries list the committee name, reporting period and totals. Use those fields to verify the scope of a number on a compiled page and to find the original filing by ID when you need to be exact about a date or figure.</p><p>If you see a discrepancy, check whether the compiled page used a different reporting period or combined several committee reports into a single summary; the underlying FEC filings will reveal the correct reporting window and figures.</p><h3>Cross-checking totals and reporting periods</h3><p>When comparing totals, always confirm the reporting period on the FEC form. Numbers that appear different often reflect different end dates or interim reports rather than an error in the original filing.</p><p>For precise work, note the FEC filing ID and the filing date before drawing conclusions. That allows you to trace back to the exact document if you or a reader needs to verify the claim further.</p><h2>State-level checks: what to look for in Florida candidate qualifying lists</h2><p>Ballotpedia cross-checks state qualifying lists to confirm whether a person has officially filed or qualified in a given jurisdiction; the Florida Division of Elections publishes qualifying guidance and lists that show filing dates and related details <a href="https://dos.myflorida.com/elections/candidates/qualifying/" target="_blank" rel="noopener">Florida Division of Elections candidate qualifying information</a></p><p>When a candidate is newly filed or when a page shows ambiguous status, open the state qualifying list to confirm the filing date, whether a fee was paid or a qualifying petition was accepted, and any official notation about district or office.</p><h3>Where Florida qualifying lists appear</h3><p>The Florida Division of Elections maintains candidate qualifying information on its site, including forms and public lists that indicate when a candidate filed and whether they met filing requirements.</p><p>Those state records are primary for confirming whether a candidate is officially qualified to appear on a primary or general election ballot.</p><h3>How Ballotpedia uses state records</h3><p>Ballotpedia uses state election office records to verify candidate status and to document qualifying dates. When state lists are cited, they provide a reliable point of comparison to the compiled entry.</p><p>If Ballotpedia and the state list differ, the state filing is the authoritative source for qualification status and dates.</p><h2>Ballotpedia editorial practices and sourcing criteria explained</h2><p>Ballotpedia's editorial guidance requires citations for factual claims and emphasizes primary records over secondary reporting, stating that contemporaneous news should supplement but not replace primary documents in verifying facts <a href="https://ballotpedia.org/Editorial_policy" target="_blank" rel="noopener">Ballotpedia editorial policy</a></p><p>The policy means that when editors document a claim, they should show the public record or an official statement that supports it, with news coverage used for context or additional reporting when needed.</p><h3>Editorial policy on citations</h3><p>The editorial policy calls for clear citations tied to each factual claim. That lets readers follow the trail from a compiled summary to the underlying records used to verify it.</p><p>When you see a citation on a candidate page, follow it to the original document to check the dates, scope and exact language cited by the editor.</p><h3>Use of news reports versus primary records</h3><p>Ballotpedia uses news reports to provide context or to document contemporaneous events but treats them as secondary to filings and official records. News reporting can be helpful for timing or quotes, but the primary record should be the basis for numeric and legal facts.</p><p>For that reason, readers verifying important details should open the primary documents linked on the page rather than rely solely on summarized news excerpts.</p><h2>Decision criteria: when to trust a Ballotpedia candidate page and when to verify</h2><p>Confidence signals include a clear source list, direct links to FEC filings, and a recent last-updated date; these elements suggest the compiled page traces claims to primary documents and is a reliable starting point <a href="https://ballotpedia.org/How_Ballotpedia_determines_whether_a_candidate_has_registered_with_their_respective_campaign_finance_agency" target="_blank" rel="noopener">How Ballotpedia determines whether a candidate has registered</a></p><p>Red flags include a missing source list, an outdated last-updated date, or reliance only on secondary reporting. Those signs mean you should verify key figures and dates against primary filings before using the information in reporting or analysis.</p><h3>Confidence signals on a page</h3><p>Look for explicit links to FEC reports or state qualifying lists and for the last-updated date. Those links let you confirm the source records directly and see the filing or reporting period used for the summary.</p><p>If the page cites multiple primary sources and provides clear dates, it usually offers a trustworthy compilation for quick reference.</p><h3>Red flags that require verification</h3><p>If a page lacks citations, lists only secondary reporting, or shows a last-updated date that is older than the most recent filings, treat it as incomplete and open the primary records yourself to confirm.</p><p>When critical numeric facts are at issue, verify them against the FEC or state filings rather than trusting the compiled totals alone.</p><h2>Common errors and pitfalls when using candidate information pages</h2><p>One common error is assuming a compiled summary is up to date; entries may lag behind the most recent filings, so check the filing dates on the primary documents to ensure currency <a href="https://www.poynter.org/reporting-editing/2024/ballotpedia-election-information-methods/" target="_blank" rel="noopener">Poynter analysis of Ballotpedia</a></p><p>Another pitfall is misreading rounded summaries. Compiled pages sometimes present rounded or aggregated numbers; open the FEC form to see exact figures and to identify the reporting window of those totals.</p><h3>Out-of-date entries and recycled content</h3><p>Some pages can carry forward older summaries that are not updated after a new filing. Always check the last-updated date and compare it to the filing date on the primary document.</p><p>If you suspect an entry is out of date, pull the primary filings and note their dates before citing or using the compiled numbers.</p><h3>Misreading summaries and rounding issues</h3><p>When a compiled page shows simplified totals, the original filing will show line-by-line figures and exact numbers. Use the primary report for precise figures rather than a rounded summary.</p><p>Reporting differences often reflect different cutoffs or aggregated committee reports; the primary documents explain those differences.</p><h2>Practical examples and scenarios: checking a hypothetical Florida congressional candidate</h2><p>Example 1: If a Ballotpedia page lists a fundraising total for a federal committee, open the linked FEC report to check which reporting period the total covers and whether the figure is rounded or combined from multiple filings <a href="https://www.fec.gov/help-candidates-and-committees/" target="_blank" rel="noopener">FEC help pages for candidates and committees</a></p><p>Walk through the report to find the committee name, reporting period and filing ID, and compare those fields to the summary on the candidate page to reconcile any differences.</p><section class="faq-accordion"><input type="checkbox" id="faq-j8yrjp" class="faq-toggle" checked /><label for="faq-j8yrjp" class="faq-summary" role="button" tabindex="0">How does Ballotpedia source and verify candidate information?</label><div class="faq-content"><p>Ballotpedia compiles candidate pages by prioritizing primary sources such as campaign websites, FEC reports and state election office records, and it documents the specific sources used so readers can trace claims back to the primary documents.</p></div></section><p>Example 2: If a candidate's status appears unclear on a compiled page, open the Florida Division of Elections qualifying list to confirm the filing date and whether the candidate met the state's qualifying requirements <a href="https://dos.myflorida.com/elections/candidates/qualifying/" target="_blank" rel="noopener">Florida Division of Elections candidate qualifying information</a></p><p>Record the primary sources you used and their dates so you can refer back to the exact filings if questions arise later.</p><h3>Example 1: verifying fundraising totals</h3><p>In the fundraising scenario, note the FEC filing ID and the report end date. That information is the anchor for comparing a compiled total to the primary record and for explaining any apparent discrepancy.</p><p>Keeping a short note with the filing ID and date saves time if you need to show the original evidence in reporting or review.</p><h3>Example 2: confirming qualifying status</h3><p>For qualifying, the state list will show whether a candidate completed the official steps required by the election office. Compare that record to the candidate page's entry and prefer the state filing for official status questions.</p><p>If the Ballotpedia entry predates the qualifying confirmation, rely on the state list as authoritative and note the dates used.</p><h2>How journalists and civic readers should cite Ballotpedia and primary sources</h2><p>Cite Ballotpedia as a compiled secondary source when you use it to orient readers, but link to the primary FEC or state document when you state numeric or legal facts so readers can verify the claim directly <a href="https://ballotpedia.org/Editorial_policy" target="_blank" rel="noopener">Ballotpedia editorial policy</a></p><p>For critical numbers, quote the filing date and the FEC report ID from the primary document rather than the rounded summary on a compiled page.</p><h3>Best practice for attribution</h3><p>When possible, attribute a numeric or legal fact by naming the primary source, the filing ID and the date. That approach gives readers the exact record they can check.</p><p>If you rely on Ballotpedia for background, make clear that it is a compilation and provide links to the underlying filings you used for any primary facts.</p><h3>When to link to the primary document instead</h3><p>If you cite a fundraising total, a legal filing or a qualification date, link to the FEC report or the state qualifying list rather than only to the compiled page. That keeps the authoritative record available to readers.</p><p>Note the Ballotpedia last-updated date when you cite a compiled entry so readers know how recent the compilation was relative to the filings you used.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>Open the candidate page and find the source list. Click the most relevant FEC or state link and confirm the report ID and reporting period. Check the campaign site for biographical claims and the state qualifying list for official status <a href="https://ballotpedia.org/How_Ballotpedia_determines_whether_a_candidate_has_registered_with_their_respective_campaign_finance_agency" target="_blank" rel="noopener">How Ballotpedia determines whether a candidate has registered</a></p><p>Save or note the primary-source URLs and filing IDs so you can return to the exact records if you need to verify or report an error.</p><h3>Essential quick checks</h3><p>Quick checks: source list present, FEC link works, state qualifying list confirms status, last-updated date is recent, campaign site supports biographical claims.</p><p>These steps can be done in a few minutes and are enough to confirm basic currency and accuracy for most uses.</p><h3>Where to go for confirmation</h3><p>Primary confirmation sources include the FEC help pages for federal filings, and the Florida Division of Elections for state qualifying information. Those official pages provide the forms and public lists you need for authoritative verification <a href="https://www.fec.gov/help-candidates-and-committees/" target="_blank" rel="noopener">FEC help pages for candidates and committees</a></p><p>If you have detailed questions about a qualifying entry, contact the state election office directly for clarification or for records not posted online.</p><h2>Comparing Ballotpedia entries with the underlying primary sources</h2><p>Compiled entries can differ from primary documents for reasons such as timing differences, editorial summarization or differing reporting cutoffs; note the filing IDs and dates on the primary documents to reconcile such mismatches <a href="https://ballotpedia.org/Editorial_policy" target="_blank" rel="noopener">Ballotpedia editorial policy</a></p><h3>Common areas of mismatch</h3><p>Common mismatches include differences caused by reporting periods, aggregated committee reporting, or editor summarization that rounds figures. Checking the original report explains these differences.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><p>To resolve a mismatch, record the filing ID, the report date and the exact figure from the primary document, and then compare those details to the compiled page entry; if the discrepancy remains, report it with citation details to the page maintainers.</p><h3>How to resolve discrepancies</h3><p>Start by matching the filing ID and the end date of the reporting period. If a compiled total is older, the latest primary filing is the authoritative source. If it is unclear, ask the page maintainers or consult the state office for confirmation.</p><p>Providing clear citations and dates when reporting an error speeds correction and helps maintain the reliability of compiled candidate pages.</p><h2>Closing: how to use candidate pages responsibly and next steps for deeper verification</h2><p>Ballotpedia is a well-documented starting point for candidate research, but readers who require authoritative confirmation should open the linked FEC and state filings to verify critical numbers and legal dates <a href="https://ballotpedia.org/About_Ballotpedia" target="_blank" rel="noopener">Ballotpedia About page</a></p><p>Next steps for deeper verification include saving primary-source URLs, noting filing IDs and dates, contacting state election offices for qualifying questions, and using FEC help documents to interpret committee reports. For additional context on candidate research, see this candidate profile on the site <a href="https://michaelcarbonara.com/republican-candidate-for-congress-michael-car/" target="_blank" rel="noopener">candidate research</a> and review the site <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">about page</a> for more information.</p><p>Using a disciplined checklist and preferring primary documents for numeric and legal facts ensures accurate, verifiable reporting and research.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-49ertr" class="faq-toggle" /><label for="faq-49ertr" class="faq-summary" role="button" tabindex="0">How reliable is Ballotpedia for basic candidate facts?</label><div class="faq-content"><p>Ballotpedia is a widely used compiled reference that links to primary records; verify critical numeric or legal facts against the original FEC or state filings for authoritative confirmation.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-l3r25f" class="faq-toggle" /><label for="faq-l3r25f" class="faq-summary" role="button" tabindex="0">Where can I find the original filing for a fundraising total?</label><div class="faq-content"><p>Open the FEC report linked on the candidate page and note the filing ID and reporting period; the FEC form shows the exact totals and dates.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-048sid" class="faq-toggle" /><label for="faq-048sid" class="faq-summary" role="button" tabindex="0">What should I do if I find a discrepancy between Ballotpedia and a primary filing?</label><div class="faq-content"><p>Record the filing ID and date from the primary document, then report the discrepancy to the page maintainers with citation details and the source link.</p></div></section>
+</section><section class="article-ending">Treat Ballotpedia and similar compiled pages as a well-documented starting point and prefer the primary filings for numeric or legal certainty. Save primary-source URLs, note filing IDs and dates, and when in doubt consult the FEC or your state election office for authoritative records.
+
+Using these steps helps readers and journalists maintain accuracy and allows voters to check candidate information independently.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://ballotpedia.org/About_Ballotpedia" target="_blank" rel="noopener">https://ballotpedia.org/About_Ballotpedia</a></li><li><a href="https://ballotpedia.org/How_Ballotpedia_determines_whether_a_candidate_has_registered_with_their_respective_campaign_finance_agency" target="_blank" rel="noopener">https://ballotpedia.org/How_Ballotpedia_determines_whether_a_candidate_has_registered_with_their_respective_campaign_finance_agency</a></li><li><a href="https://www.fec.gov/help-candidates-and-committees/" target="_blank" rel="noopener">https://www.fec.gov/help-candidates-and-committees/</a></li><li><a href="https://dos.myflorida.com/elections/candidates/qualifying/" target="_blank" rel="noopener">https://dos.myflorida.com/elections/candidates/qualifying/</a></li><li><a href="https://ballotpedia.org/Editorial_policy" target="_blank" rel="noopener">https://ballotpedia.org/Editorial_policy</a></li><li><a href="https://www.poynter.org/reporting-editing/2024/ballotpedia-election-information-methods/" target="_blank" rel="noopener">https://www.poynter.org/reporting-editing/2024/ballotpedia-election-information-methods/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.fec.gov/introduction-campaign-finance/how-to-research-public-records/candidates/" target="_blank" rel="noopener">https://www.fec.gov/introduction-campaign-finance/how-to-research-public-records/candidates/</a></li><li><a href="https://www.fec.gov/data/browse-data/" target="_blank" rel="noopener">https://www.fec.gov/data/browse-data/</a></li><li><a href="https://ballotpedia.org/Ballotpedia:How_we_research_for_proof_of_official_candidacy" target="_blank" rel="noopener">https://ballotpedia.org/Ballotpedia:How_we_research_for_proof_of_official_candidacy</a></li><li><a href="https://michaelcarbonara.com/republican-candidate-for-congress-michael-car/" target="_blank" rel="noopener">https://michaelcarbonara.com/republican-candidate-for-congress-michael-car/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
