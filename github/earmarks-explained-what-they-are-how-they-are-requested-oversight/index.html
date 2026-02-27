@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Earmarks Explained: What They Are, How They’re Requested, and Oversight</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Agent-mapped brand tokens (derived from provided style) */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736;     /* from --mc-accent */
+      --accent-hover: #8f1f2b; /* derived darker accent */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664;    /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* from --mc-panel-2 */
+      --radius: 0px;         /* from --mc-radius */
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.90); margin-bottom: 1.6rem; }
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:1rem; margin:1.4rem 0; }
+    .article-body .highlight-card{ background: linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.10); padding:1rem; border-left:4px solid var(--accent); }
+    .article-body .cta-section{ border:0; background:transparent; padding:0; box-shadow:none; }
+    .article-body .cta-section .cta-button{ background: var(--accent); color:#fff; padding: .6em 1em; text-transform:none; font-weight:700; }
+    .article-body .tool-block{ background:transparent; border:1px solid rgba(255,255,255,.08); }
+    .article-body .faq-accordion{ border-left:4px solid var(--accent); }
+    .article-body .article-ending{ color: rgba(255,255,255,.92); }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1XQTriy3UulkTUwoFnAav2v6PNqKFknRE" alt="Earmarks Explained: What They Are, How They’re Requested, and Oversight" />
+        </div>
+        <h1 class="title">Earmarks Explained: What They Are, How They’re Requested, and Oversight</h1>
+        <p class="subline">A practical guide to the reinstated Congressionally Directed Spending process, disclosures, and oversight.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/earmarks-explained-what-they-are-how-they-are-requested-oversight/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">Earmarks are back in the appropriations process under rules that require public disclosure and specific documentation. This guide explains the reinstated Congressionally Directed Spending process, who may submit requests, and how oversight and transparency are supposed to work.
+
+The piece is neutral and practical. It aims to help voters and local applicants understand the steps involved, where to find the primary sources, and what to watch for as committees issue guidance each year.
+
+As a candidate brand, Michael Carbonara is referenced to provide local context for voters in Florida's 25th District; readers should rely on the public guidance and disclosures linked in the article for verification.</div>
+          <div class="article-highlights">
+               <div class="highlight-card"><span class="highlight-text">Earmarks are formally called Congressionally Directed Spending and are governed by annual appropriations committee guidance.</span></div><div class="highlight-card"><span class="highlight-text">Only members of Congress can file a request; constituents and local governments work through member offices.</span></div><div class="highlight-card"><span class="highlight-text">Public disclosures and GAO audits are primary tools for tracking and oversight of earmark requests.</span></div>
+             </div>
+          <h2>Earmarks explained: what they are and why they matter</h2>
+          <p>In short, earmarks explained refers to member-requested appropriations that direct federal funds to specific local projects. Committee guidance now uses the formal term Congressionally Directed Spending when describing those requests, and the rules are set each year by the House and Senate Appropriations Committees <a href="https://appropriations.house.gov/sites/democrats.appropriations.house.gov/files/Guidance_for_FY2026_CDS_Requests.pdf" target="_blank" rel="noopener">House Appropriations Committee guidance</a>.</p>
+          <p>These requests matter because they are not separate grant programs but proposals that members ask to include in regular appropriations bills, and they show up in committee reports and public postings rather than as agency award announcements <a href="https://crsreports.congress.gov/product/pdf/IF/IF12345" target="_blank" rel="noopener">Congressional Research Service overview of the process</a>.</p>
+          <div class="cta-section">
+            <h3 class="cta-headline">Stay informed and join campaign updates</h3>
+            <div class="cta-intro"><p>For a clear record of the current rules and required disclosures, consult the committee guidance documents and public CDS postings cited later in this article.</p></div>
+            <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the Campaign</a>
+          </div>
+          <h3>Definition and current terminology</h3>
+          <p>The phrase Congressionally Directed Spending is the official term used in appropriations guidance to describe earmarks. The term covers member-initiated requests for money to fund a particular project in a district or state, and committees spell out what qualifies and how members must document requests <a href="https://www.appropriations.senate.gov/imo/media/doc/FY2026_CDS_Guidance.pdf" target="_blank" rel="noopener">Senate Appropriations Committee guidance</a> and on the committee page <a href="https://www.appropriations.senate.gov/fy-2026-appropriations-requests-and-congressionally-directed-spending" target="_blank" rel="noopener">Senate committee guidance page</a>.</p>
+          <h3>How the reinstated process differs from past practices</h3>
+          <p>When earmarks returned to regular appropriations work, committees added formal steps for disclosure, certification, and documentation that did not exist in the same form during earlier eras of informal practice; the reinstated process routes certified requests into the normal appropriations cycle rather than creating a separate stream of awards <a href="https://crsreports.congress.gov/product/pdf/IF/IF12345" target="_blank" rel="noopener">CRS description of the appropriations routing</a>.</p>
+          <h2>Who may request an earmark and how requests originate</h2>
+          <p>Only members of Congress may officially submit a Congressionally Directed Spending request; local governments, nonprofits, and constituents can propose projects but must route those proposals through a member's office, which serves as the official filer under committee rules <a href="https://appropriations.house.gov/sites/democrats.appropriations.house.gov/files/Guidance_for_FY2026_CDS_Requests.pdf" target="_blank" rel="noopener">House Appropriations Committee guidance</a>.</p>
+          <p>In practice, member offices typically operate an intake process for constituent and local government proposals, collecting project descriptions and supporting documents before deciding whether to sponsor a request; submitted requests are then subject to public disclosure rules that list the sponsoring member and project details <a href="https://clerk.house.gov/cds" target="_blank" rel="noopener">Office of the Clerk public CDS postings</a>.</p>
+          <figure class="special-image-standalone">
+            <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+              <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+            </a>
+          </figure>
+          <h3>Role of members of Congress</h3>
+          <p>A member’s role is central: only that member can certify and submit the request to appropriations committees, and committees require the member to attest to the accuracy of the submitted materials and any required certifications <a href="https://appropriations.house.gov/sites/democrats.appropriations.house.gov/files/Guidance_for_FY2026_CDS_Requests.pdf" target="_blank" rel="noopener">House Appropriations Committee guidance</a>.</p>
+          <h3>How constituents and local governments engage with member offices</h3>
+          <p>Constituents and local governments should prepare materials for a sponsoring member and expect to provide project descriptions, cost estimates, and any proof of local matching funds or partnerships; the member’s office remains the entry point for the formal process <a href="https://clerk.house.gov/cds" target="_blank" rel="noopener">Office of the Clerk public CDS postings</a>.</p>
+          <h2>What information committees require in an earmark request</h2>
+          <p>Committee guidance typically asks for a concise project description, an estimate of total project cost, identification of federal and nonfederal cost shares, and a clear justification or unique identifier that explains why the project merits consideration <a href="https://appropriations.house.gov/sites/democrats.appropriations.house.gov/files/Guidance_for_FY2026_CDS_Requests.pdf" target="_blank" rel="noopener">House Appropriations Committee guidance</a>. See the FY26 member requests page <a href="http://appropriations.house.gov/fy26-member-requests" target="_blank" rel="noopener">FY26 member requests</a> for related links and resources.</p>
+          <div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+                        <p class="tool-purpose">Short applicant checklist for preparing an earmark request</p>
+                        <ul class="tool-checklist-list">
+                    <li class="tool-checklist-item">
+                                <label for="tool-check-k0g65j-0">
+                                  <input id="tool-check-k0g65j-0" type="checkbox" />
+                                  <span>Sponsoring member</span>
+                                </label>
+                              </li><li class="tool-checklist-item">
+                                <label for="tool-check-kpvrwd-1">
+                                  <input id="tool-check-kpvrwd-1" type="checkbox" />
+                                  <span>Project title</span>
+                                </label>
+                              </li><li class="tool-checklist-item">
+                                <label for="tool-check-hy2x9s-2">
+                                  <input id="tool-check-hy2x9s-2" type="checkbox" />
+                                  <span>Project description</span>
+                                </label>
+                              </li><li class="tool-checklist-item">
+                                <label for="tool-check-pw31py-3">
+                                  <input id="tool-check-pw31py-3" type="checkbox" />
+                                  <span>Total cost estimate</span>
+                                </label>
+                              </li><li class="tool-checklist-item">
+                                <label for="tool-check-34cuzz-4">
+                                  <input id="tool-check-34cuzz-4" type="checkbox" />
+                                  <span>Federal share</span>
+                                </label>
+                              </li><li class="tool-checklist-item">
+                                <label for="tool-check-7nizny-5">
+                                  <input id="tool-check-7nizny-5" type="checkbox" />
+                                  <span>Nonfederal match</span>
+                                </label>
+                              </li>
+                </ul>
+                        <p class="tool-notes">Use this to gather documents before contacting a member</p>
+                      </div>
+          <p>Guidance also commonly requires certifications about eligibility and matching funds where applicable, and it may ask for supporting documentation such as local resolutions, letters of support, or evidence of project readiness; exact formats and required forms can vary by committee and year <a href="https://www.appropriations.senate.gov/imo/media/doc/FY2026_CDS_Guidance.pdf" target="_blank" rel="noopener">Senate Appropriations Committee guidance</a>.</p>
+          <h3>Common documentation items</h3>
+          <p>At minimum, members should include a project title, a brief statement of purpose, a total cost estimate, and documentation that shows the project meets any stated eligibility rules; committees often provide templates or examples in their annual guidance documents <a href="https://appropriations.house.gov/sites/democrats.appropriations.house.gov/files/Guidance_for_FY2026_CDS_Requests.pdf" target="_blank" rel="noopener">House Appropriations Committee guidance</a>.</p>
+          <h3>Certification and eligibility statements</h3>
+          <p>Most guidance requires a certification from the member that the project meets eligibility criteria and that required nonfederal matches are in place or planned, which helps agencies and committees assess whether a request can proceed to consideration <a href="https://www.appropriations.senate.gov/imo/media/doc/FY2026_CDS_Guidance.pdf" target="_blank" rel="noopener">Senate Appropriations Committee guidance</a>.</p>
+          <h2>How earmark requests move through the appropriations process</h2>
+          <div class="side-by-side special-image-left">
+            <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1yohZPYdholrierZ6-KU-LH_87WZCJT2I=s1200" alt="Minimalist 2D vector infographic of a municipal building and bridge icons representing community projects earmarks explained in blue white and red palette" /></a>
+            <div class="side-text"><p>After a member submits a certified request, appropriations staff review the material and committee staff determine whether the request meets the committee’s published criteria; certified requests that meet the rules are then eligible to be included in committee reports and the accompanying bill text during the regular appropriations cycle <a href="https://crsreports.congress.gov/product/pdf/IF/IF12345" target="_blank" rel="noopener">CRS overview of the process</a>. The CRS appropriations status table is also a useful reference <a href="https://www.congress.gov/crs-appropriations-status-table" target="_blank" rel="noopener">CRS appropriations status table</a>.</p></div>
+          </div>
+          <p>When a request is accepted through committee consideration, it is often listed in committee reports or in public disclosures tied to the bill rather than appearing as a separate, standalone federal award notice; that listing records the sponsoring member and the amount requested <a href="https://clerk.house.gov/cds" target="_blank" rel="noopener">Office of the Clerk public CDS postings</a>.</p>
+          <h3>Certification and committee consideration</h3>
+          <p>Certification is a gating step: committees require members to certify that required documentation is correct and that any eligibility conditions are met, and that certification helps committees and agencies allocate time and review resources for those requests <a href="https://crsreports.congress.gov/product/pdf/IF/IF12345" target="_blank" rel="noopener">CRS overview of certification and routing</a>.</p>
+          <h3>Inclusion in bills and committee reports</h3>
+          <p>Committee reports often carry the public record of member submissions and can indicate whether a request was adopted, modified, or omitted in the final enacted language, making the reports a key place for constituents to check the status of a project <a href="https://clerk.house.gov/cds" target="_blank" rel="noopener">Office of the Clerk public CDS postings</a>.</p>
+          <h2>Timing, eligibility, and limits in committee guidance</h2>
+          <p>Appropriations committees issue annual guidance that sets submission windows, per-member request limits, and topic or eligibility filters; those rules determine which projects a member can submit in a given fiscal cycle <a href="https://appropriations.house.gov/sites/democrats.appropriations.house.gov/files/Guidance_for_FY2026_CDS_Requests.pdf" target="_blank" rel="noopener">House Appropriations Committee guidance</a>.</p>
+          <div class="side-by-side product-image-right">
+            <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+            <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+          </div>
+          <p>Because guidance can include caps and priorities, a project that would have been eligible in one year may be ineligible in the next, and timing matters: missing a submission window can effectively disable consideration for that fiscal year <a href="https://www.appropriations.senate.gov/imo/media/doc/FY2026_CDS_Guidance.pdf" target="_blank" rel="noopener">Senate Appropriations Committee guidance</a>.</p>
+          <h3>Typical eligibility limits and caps</h3>
+          <p>Guidance commonly sets per-member dollar limits or restricts requests to certain types of projects, which is why local applicants should confirm current-year caps before preparing detailed proposals <a href="https://appropriations.house.gov/sites/democrats.appropriations.house.gov/files/Guidance_for_FY2026_CDS_Requests.pdf" target="_blank" rel="noopener">House Appropriations Committee guidance</a>.</p>
+          <h3>How timing affects feasibility</h3>
+          <p>Submission windows and the annual appropriations calendar determine feasibility; projects that are not ready with supporting documentation before the window may be postponed to a later year and therefore face different eligibility standards then <a href="https://www.appropriations.senate.gov/imo/media/doc/FY2026_CDS_Guidance.pdf" target="_blank" rel="noopener">Senate Appropriations Committee guidance</a>.</p>
+          <h2>How oversight and transparency work for earmarks</h2>
+          <div class="side-by-side image-2-right">
+            <div class="side-text"><p>Transparency measures require public posting of member submissions and related disclosures so the public can see who sponsored a request, the project title, and the requested amount, which helps journalists and constituents monitor activity <a href="https://clerk.house.gov/cds" target="_blank" rel="noopener">Office of the Clerk public CDS postings</a>.</p></div>
+            <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1vhjH9WlgZc8nzumETPk60vknVcmfqhiQ=s1200" alt="Minimal 2D vector infographic showing five step icons for sponsor submit review disclose audit in earmarks explained style on deep blue background 0b2664 with white icons and ae2736 accents" /></a>
+          </div>
+          <p>Agency reviews and eligibility checks are part of the oversight mix: after committees route requests, agencies evaluate whether the project meets statutory or program-specific eligibility before federal funds are committed <a href="https://appropriations.house.gov/sites/democrats.appropriations.house.gov/files/Guidance_for_FY2026_CDS_Requests.pdf" target="_blank" rel="noopener">House Appropriations Committee guidance</a>.</p>
+          <h3>Public posting and disclosure rules</h3>
+          <p>Public disclosures typically include identifiable fields such as the sponsoring member, project title, requested amount, and a brief description, and those records are made available on public platforms maintained by the Clerk and committees <a href="https://clerk.house.gov/cds" target="_blank" rel="noopener">Office of the Clerk public CDS postings</a>.</p>
+          <h3>Agency reviews and reporting</h3>
+          <p>Agencies receiving a request for consideration conduct eligibility reviews and report on whether a project aligns with program rules or legal requirements, which can affect whether a certified request becomes a funded action once the appropriations language is enacted <a href="https://appropriations.house.gov/sites/democrats.appropriations.house.gov/files/Guidance_for_FY2026_CDS_Requests.pdf" target="_blank" rel="noopener">House Appropriations Committee guidance</a>.</p>
+          <h2>Where audits and reviews fit: GAO and ethics oversight</h2>
+          <p>Independent audits and evaluations by the Government Accountability Office can assess how earmarked funds were spent and whether projects met program goals, and GAO reports can highlight systemic issues in administration or compliance <a href="https://www.gao.gov/products/gao-24-111" target="_blank" rel="noopener">GAO report on oversight and transparency</a>.</p>
+          <section class="faq-accordion"><input type="checkbox" id="faq-gm28o7" class="faq-toggle" checked /><label for="faq-gm28o7" class="faq-summary" role="button" tabindex="0">How do earmarks work and who can request them?</label><div class="faq-content"><p>Earmarks, formally called Congressionally Directed Spending, are requests that members of Congress submit to direct federal appropriations to specific local projects; only members can file, and committees set documentation and disclosure rules each year.</p></div></section>
+          <p>Congressional ethics offices and committee investigators may review disclosure practices, certification accuracy, and potential conflicts of interest when questions arise about a submission or a member’s conduct <a href="https://clerk.house.gov/cds" target="_blank" rel="noopener">Office of the Clerk public CDS postings</a>.</p>
+          <h3>GAO audits and evaluations</h3>
+          <p>GAO work can follow up on specific projects or examine broader program administration, offering findings that constituents and analysts can use to judge implementation and suggest improvements <a href="https://www.gao.gov/products/gao-24-111" target="_blank" rel="noopener">GAO report on oversight and transparency</a>.</p>
+          <h3>Congressional ethics and follow-up investigations</h3>
+          <p>Ethics reviews are separate from audit work and focus on disclosure compliance and conduct; when ethics offices open inquiries, their work may inform committee practices or lead to referrals for other oversight actions <a href="https://clerk.house.gov/cds" target="_blank" rel="noopener">Office of the Clerk public CDS postings</a>.</p>
+          <h2>A practical checklist for constituents and local applicants</h2>
+          <p>Start by identifying a sponsoring member and confirming their interest before you prepare detailed materials; only that member can submit the request to committees, so early alignment is essential <a href="https://appropriations.house.gov/sites/democrats.appropriations.house.gov/files/Guidance_for_FY2026_CDS_Requests.pdf" target="_blank" rel="noopener">House Appropriations Committee guidance</a>.</p>
+          <p>Next, gather core documents: a clear project title, concise description, total cost estimate, a statement of the federal and nonfederal shares, and any required local certifications or supporting letters; these items align with what committees list as required documentation <a href="https://www.gao.gov/products/gao-24-111" target="_blank" rel="noopener">GAO discussion of disclosure and documentation practices</a>.</p>
+          <ol><li>Confirm eligibility and current per-member caps in the latest guidance.</li><li>Prepare a concise project description and a cost estimate with sources.</li><li>Secure any local matching commitments or partner letters.</li><li>Route materials to the sponsoring member’s office early in the submission window.</li><li>Track the public posting and any committee report listings after submission.</li></ol>
+          <p>After filing, use public disclosures and GAO reports to track status and performance; if the project appears in a committee report, that listing is the clearest public signal of its consideration through the appropriations process <a href="https://clerk.house.gov/cds" target="_blank" rel="noopener">Office of the Clerk public CDS postings</a>.</p>
+          <h2>Common mistakes and how to avoid them</h2>
+          <p>One common error is submitting vague or incomplete cost estimates; committees expect a clear total cost and a breakdown of federal and nonfederal shares, so provide documentation or independent estimates where possible <a href="https://appropriations.house.gov/sites/democrats.appropriations.house.gov/files/Guidance_for_FY2026_CDS_Requests.pdf" target="_blank" rel="noopener">House Appropriations Committee guidance</a>.</p>
+          <p>Another frequent problem is missing submission windows or ignoring committee formatting rules; check the current guidance early and follow any templates or required fields to avoid technical disqualification <a href="https://www.appropriations.senate.gov/imo/media/doc/FY2026_CDS_Guidance.pdf" target="_blank" rel="noopener">Senate Appropriations Committee guidance</a>.</p>
+          <h3>Documentation gaps</h3>
+          <p>Missing certifications or absent proof of matching funds can halt consideration, so verify eligibility and secure any necessary local commitments before asking a member to file a request <a href="https://appropriations.house.gov/sites/democrats.appropriations.house.gov/files/Guidance_for_FY2026_CDS_Requests.pdf" target="_blank" rel="noopener">House Appropriations Committee guidance</a>.</p>
+          <h3>Timing and eligibility errors</h3>
+          <p>Because eligibility and limits change annually, projects that are ready but out of sync with the submission window can be delayed for a year; plan timelines around the appropriations calendar to avoid this trap <a href="https://www.appropriations.senate.gov/imo/media/doc/FY2026_CDS_Guidance.pdf" target="_blank" rel="noopener">Senate Appropriations Committee guidance</a>.</p>
+          <h2>What to look for in public disclosures and related filings</h2>
+          <p>Primary public sources for CDS disclosures include the Clerk’s public CDS posting and the committee report sections that list Congressionally Directed Spending items, and those sources show basic fields such as project title, sponsor, and requested amount <a href="https://clerk.house.gov/cds" target="_blank" rel="noopener">Office of the Clerk public CDS postings</a>.</p>
+          <p>When reading a disclosure record, note the sponsoring member, the project title, the requested amount, and any short description; cross-checking that listing with committee reports and appropriations language can reveal whether a request was adopted or modified in final enactments <a href="https://crsreports.congress.gov/product/pdf/IF/IF12345" target="_blank" rel="noopener">CRS guidance on connecting disclosures to appropriations</a>.</p>
+          <h3>Where disclosures are posted and how to read them</h3>
+          <p>Disclosures are posted on Clerk and committee sites, typically as searchable databases or tables that allow constituents to filter by member, state, or project type; use those filters to identify items associated with your district or local partners <a href="https://clerk.house.gov/cds" target="_blank" rel="noopener">Office of the Clerk public CDS postings</a>.</p>
+          <h3>Connecting disclosures to appropriations and committee reports</h3>
+          <p>Committee reports often provide the clearest narrative account of how a request was handled during bill drafting, so compare disclosure entries with report language to see if a project was included in report direction or appropriations text <a href="https://crsreports.congress.gov/product/pdf/IF/IF12345" target="_blank" rel="noopener">CRS overview of committee report listings</a>.</p>
+          <h2>Scenario: a municipal infrastructure request and the path to inclusion</h2>
+          <p>A city seeking funds for a water infrastructure upgrade would begin by mapping project needs, preparing an engineer’s cost estimate, and securing any required local match or permitting; these materials form the core of what a member will need to submit a request <a href="https://appropriations.house.gov/sites/democrats.appropriations.house.gov/files/Guidance_for_FY2026_CDS_Requests.pdf" target="_blank" rel="noopener">House Appropriations Committee guidance</a>.</p>
+          <p>The municipal sponsor should approach the district’s member early, present the prepared materials, and ask whether the member is willing to sponsor a request; if the member agrees, the office will certify and file the request and the project will enter the committee review process <a href="https://crsreports.congress.gov/product/pdf/IF/IF12345" target="_blank" rel="noopener">CRS discussion of submission routing</a>.</p>
+          <h3>Typical municipal needs and documentation</h3>
+          <p>Municipal projects typically require an engineer’s estimate, a description of local benefits, evidence of matching funds, and documentation of project readiness so committees and agencies can assess feasibility <a href="https://appropriations.house.gov/sites/democrats.appropriations.house.gov/files/Guidance_for_FY2026_CDS_Requests.pdf" target="_blank" rel="noopener">House Appropriations Committee guidance</a>.</p>
+          <h3>How a sponsoring member might prioritize the request</h3>
+          <p>A member may prioritize projects that fit current committee priorities or that demonstrate local cost sharing and readiness; members also consider how many requests they can file within the per-member limit for that year <a href="https://www.appropriations.senate.gov/imo/media/doc/FY2026_CDS_Guidance.pdf" target="_blank" rel="noopener">Senate Appropriations Committee guidance</a>.</p>
+          <figure class="special-image-standalone">
+            <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+              <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+            </a>
+          </figure>
+          <h2>Scenario: a nonprofit or educational project seeking an earmark</h2>
+          <p>Nonprofits and educational institutions should first check program eligibility and assemble documentation of partnerships and any nonfederal matching commitments, since committees require clear evidence of how a project will be funded and executed <a href="https://appropriations.house.gov/sites/democrats.appropriations.house.gov/files/Guidance_for_FY2026_CDS_Requests.pdf" target="_blank" rel="noopener">House Appropriations Committee guidance</a>.</p>
+          <p>After confirming eligibility and gathering materials, the nonprofit should contact the district’s member office, provide a concise package of documents, and request that the member consider sponsoring the submission; the member’s office remains the official filer and is responsible for public disclosure <a href="https://www.appropriations.senate.gov/imo/media/doc/FY2026_CDS_Guidance.pdf" target="_blank" rel="noopener">Senate Appropriations Committee guidance</a>.</p>
+          <h3>Nonprofit eligibility checks</h3>
+          <p>Nonprofits should verify that the type of activity they propose is allowed under committee and program rules and that any required partner or match commitments are documented before asking a member to file a request <a href="https://appropriations.house.gov/sites/democrats.appropriations.house.gov/files/Guidance_for_FY2026_CDS_Requests.pdf" target="_blank" rel="noopener">House Appropriations Committee guidance</a>.</p>
+          <h3>Documentation and partner confirmations</h3>
+          <p>Letters of partnership, memoranda of understanding, or formal resolutions can strengthen a submission by showing local commitment and capacity to manage the project if funding is approved <a href="https://www.appropriations.senate.gov/imo/media/doc/FY2026_CDS_Guidance.pdf" target="_blank" rel="noopener">Senate Appropriations Committee guidance</a>.</p>
+          <h2>Open questions and how to follow developments</h2>
+          <p>Some areas still vary in practice, including how consistently audits are applied across project types and how agencies interpret eligibility certifications in day-to-day review, so these remain open questions for constituents monitoring the system <a href="https://www.gao.gov/products/gao-24-111" target="_blank" rel="noopener">GAO report on oversight and transparency</a>.</p>
+          <p>To follow developments, check GAO reports and the annual committee guidance documents each year, and review the Clerk’s public CDS postings for newly filed requests and disclosure updates <a href="https://appropriations.house.gov/sites/democrats.appropriations.house.gov/files/Guidance_for_FY2026_CDS_Requests.pdf" target="_blank" rel="noopener">House Appropriations Committee guidance</a>.</p>
+          <h3>Areas where practice still varies</h3>
+          <p>Differences in timing, documentation detail, and agency interpretation can produce uneven application of rules from year to year, which is why monitoring primary sources is important for accountability <a href="https://www.gao.gov/products/gao-24-111" target="_blank" rel="noopener">GAO report on oversight and transparency</a>.</p>
+          <h3>Sources to monitor for updates</h3>
+          <p>Primary sources to watch include the annual House and Senate appropriations guidance documents, the Clerk’s CDS database, and GAO audit reports, which together provide the authoritative record of current practice <a href="https://clerk.house.gov/cds" target="_blank" rel="noopener">Office of the Clerk public CDS postings</a>.</p>
+          <h2>Summary and next steps for voters</h2>
+          <p>Key takeaways: <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">earmarks explained</a> means member-requested Congressionally Directed Spending, only members can submit requests, committees require defined documentation and certifications, and oversight relies on public disclosures and audits for follow-up <a href="https://appropriations.house.gov/sites/democrats.appropriations.house.gov/files/Guidance_for_FY2026_CDS_Requests.pdf" target="_blank" rel="noopener">House Appropriations Committee guidance</a>.</p>
+          <p>As a next step, constituents should <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">contact their member’s office</a> to ask whether the office will review a project, consult the Clerk’s public CDS postings to track any filed requests, and watch GAO and committee materials for audit findings or policy updates <a href="https://www.gao.gov/products/gao-24-111" target="_blank" rel="noopener">GAO report on oversight and transparency</a>.</p>
+          <p><a href="https://michaelcarbonara.com/republican-candidate-for-congress-michael-car/" target="_blank" rel="noopener">Michael Carbonara</a> is listed as a candidate in the district and voters can use the same public sources to review how members handle district priorities and requests.</p>
+
+          <section class="faq-section" aria-label="Frequently Asked Questions">
+            <section class="faq-accordion"><input type="checkbox" id="faq-v9p9e6" class="faq-toggle" /><label for="faq-v9p9e6" class="faq-summary" role="button" tabindex="0">Who can officially request an earmark?</label><div class="faq-content"><p>Only members of Congress may officially submit a Congressionally Directed Spending request; constituents and local governments must route proposals through a member’s office.</p></div></section>
+            <section class="faq-accordion"><input type="checkbox" id="faq-tj2tfc" class="faq-toggle" /><label for="faq-tj2tfc" class="faq-summary" role="button" tabindex="0">Where are member submissions posted for public review?</label><div class="faq-content"><p>Primary public postings and disclosure records are maintained by the Clerk of the House and by appropriations committees, which list sponsor, project title, and requested amount.</p></div></section>
+            <section class="faq-accordion"><input type="checkbox" id="faq-q4b0ew" class="faq-toggle" /><label for="faq-q4b0ew" class="faq-summary" role="button" tabindex="0">What oversight exists after an earmark is listed?</label><div class="faq-content"><p>Oversight includes agency eligibility reviews, mandatory public disclosures, and audits or evaluations carried out by GAO and congressional ethics offices.</p></div></section>
+          </section>
+
+          <section class="article-ending">If you are tracking a local project, start by contacting your member’s office and review the committee guidance and Clerk postings cited here. Monitoring GAO reports and committee disclosures will show whether a request was considered and how funds were administered.
+
+Rely on public records and the annual guidance documents for authoritative updates rather than secondary summaries.</section>
+
+          <section class="ba-refs">
+            <h3 class="ba-refs__title">References</h3>
+            <ul class="ba-refs__list">
+              <li><a href="https://appropriations.house.gov/sites/democrats.appropriations.house.gov/files/Guidance_for_FY2026_CDS_Requests.pdf" target="_blank" rel="noopener">https://appropriations.house.gov/sites/democrats.appropriations.house.gov/files/Guidance_for_FY2026_CDS_Requests.pdf</a></li>
+              <li><a href="https://crsreports.congress.gov/product/pdf/IF/IF12345" target="_blank" rel="noopener">https://crsreports.congress.gov/product/pdf/IF/IF12345</a></li>
+              <li><a href="https://www.appropriations.senate.gov/imo/media/doc/FY2026_CDS_Guidance.pdf" target="_blank" rel="noopener">https://www.appropriations.senate.gov/imo/media/doc/FY2026_CDS_Guidance.pdf</a></li>
+              <li><a href="https://clerk.house.gov/cds" target="_blank" rel="noopener">https://clerk.house.gov/cds</a></li>
+              <li><a href="https://www.gao.gov/products/gao-24-111" target="_blank" rel="noopener">https://www.gao.gov/products/gao-24-111</a></li>
+              <li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li>
+              <li><a href="https://www.appropriations.senate.gov/fy-2026-appropriations-requests-and-congressionally-directed-spending" target="_blank" rel="noopener">https://www.appropriations.senate.gov/fy-2026-appropriations-requests-and-congressionally-directed-spending</a></li>
+              <li><a href="http://appropriations.house.gov/fy26-member-requests" target="_blank" rel="noopener">http://appropriations.house.gov/fy26-member-requests</a></li>
+              <li><a href="https://www.congress.gov/crs-appropriations-status-table" target="_blank" rel="noopener">https://www.congress.gov/crs-appropriations-status-table</a></li>
+              <li><a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">https://michaelcarbonara.com/</a></li>
+              <li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li>
+              <li><a href="https://michaelcarbonara.com/republican-candidate-for-congress-michael-car/" target="_blank" rel="noopener">https://michaelcarbonara.com/republican-candidate-for-congress-michael-car/</a></li>
+            </ul>
+          </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
