@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Speech at School vs. Speech in Public: Why Standards Differ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens (from provided style) */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #8f232f; /* derived darker variant */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* from --mc-panel-2 */
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+      background: transparent;
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent scoped minor adjustments for matching brand look */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.90); margin-bottom: 1.6rem; }
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:0.9rem; margin:1.4rem 0 1.6rem 0; }
+    .article-body .highlight-card{ background: transparent; border-left:4px solid var(--accent); padding:0.9rem 1rem; }
+    .article-body .tool-block{ background: transparent; border: 1px solid rgba(255,255,255,.08); }
+    .article-body .faq-accordion{ border-left:4px solid var(--accent); }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/constitution-freedom-of-speech-and-expression-school-facade.jpg" alt="Speech at School vs. Speech in Public banner" />
+        </div>
+        <h1 class="title">Speech at School vs. Speech in Public: Why Standards Differ</h1>
+        <p class="subline">Explains why First Amendment standards differ between K–12 schools and public spaces.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/constitution-freedom-of-speech-and-expression-school-public/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">The relationship between the First Amendment and school discipline is often misunderstood. This article explains why constitution freedom of speech and expression is applied differently in K-12 schools than in public spaces. It focuses on the leading Supreme Court precedents and practical steps students and families can take.
+
+According to the major opinions, courts balance student rights against schools' educational mission and need for order. The discussion below summarizes the relevant tests and offers a checklist for documenting incidents and seeking advice when discipline implicates constitutional claims.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Supreme Court precedent creates different tests for student speech depending on context and content.</span></div><div class="highlight-card"><span class="highlight-text">Tinker protects non-disruptive student expression but Bethel, Hazelwood, and Morse create important exceptions.</span></div><div class="highlight-card"><span class="highlight-text">Off-campus and online student speech is evolving and often depends on state law and specific facts.</span></div>
+     </div>
+  <h2>What constitution freedom of speech and expression means for students and the public</h2>
+<p>The phrase constitution freedom of speech and expression refers to the First Amendment protection for speaking, writing, and other forms of expression. Courts have long said the right is fundamental, but context matters. In K-12 settings, judges weigh the school environment, educational mission, and the need to maintain order when deciding whether a restriction is lawful. For an early statement of that principle, see the Supreme Court's opinion in Tinker v. Des Moines as explained by the Legal Information Institute <a href="https://www.law.cornell.edu/supremecourt/text/393/503" target="_blank" rel="noopener">Tinker v. Des Moines, Legal Information Institute</a></p>
+<p>When schools regulate expression they do so with different goals than public authorities in parks or streets. School officials must balance student rights against responsibilities such as safety, supervision, and teaching. Courts recognize that balance and apply standards built for schools rather than the usual public-forum rules.</p>
+<p>Outcomes can be fact specific. State laws, local policies, and the details of time, place, and audience shape results. Recent reports by advocacy groups also document variation across states and ongoing litigation about off-campus and online student speech <a href="https://www.aclu.org/issues/free-speech/student-speech" target="_blank" rel="noopener">ACLU student speech page</a>, <a href="https://www.aclu.org/press-releases/federal-appeals-courts-affirms-students-free-speech-rights-outside-school" target="_blank" rel="noopener">ACLU press release</a></p>
+<p>Readers should treat <a href="https://www.supremecourt.gov/opinions/20pdf/20-255_g3bi.pdf" target="_blank" rel="noopener">Supreme Court precedent</a> as the primary federal guide, and then check <a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">local written school policy</a> and state law for additional constraints. Where discipline implicates constitutional claims, further advice from counsel may be appropriate.</p>
+
+<h2>Major Supreme Court decisions that set the school speech framework</h2>
+<p>Tinker v. Des Moines established that students do not shed their constitutional rights at school, but schools may restrict speech that would materially and substantially disrupt operations. That substantial-disruption standard remains the anchor for many school speech disputes and explains why some campus protests are protected while others can be limited <a href="https://www.law.cornell.edu/supremecourt/text/393/503" target="_blank" rel="noopener">Tinker v. Des Moines, Legal Information Institute</a></p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Read the primary opinions and civil liberties resources</h3><div class="cta-intro"><p>Consult the primary Supreme Court opinions listed at the end of this article and the resources there for exact case language and holdings.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Review court opinions and guidance</a></div>
+<p>Bethel School District v. Fraser created a narrower rule for lewd or vulgar student speech. Under that decision a school may discipline students for sexually explicit or vulgar speech in a school setting even if the speech does not meet the substantial-disruption test. This ruling clarifies that not all protected school expression survives a separate lewdness inquiry <a href="https://www.law.cornell.edu/supremecourt/text/478/675" target="_blank" rel="noopener">Bethel v. Fraser, Legal Information Institute</a></p>
+<p>Hazelwood School District v. Kuhlmeier allowed greater school control over school-sponsored or curricular speech. When the speech is part of a student newspaper produced for class, or otherwise school supervised and curricular, schools may regulate content if the restriction is reasonably related to legitimate pedagogical concerns <a href="https://www.law.cornell.edu/supremecourt/text/484/260" target="_blank" rel="noopener">Hazelwood v. Kuhlmeier, Legal Information Institute</a></p>
+<p>Morse v. Frederick carved out a limited exception allowing schools to restrict student speech that can be read as promoting illegal drug use when tied to a school event or context. That decision is narrow but important for incidents that involve pro-drug messaging during supervised activities <a href="https://www.law.cornell.edu/supremecourt/text/551/393" target="_blank" rel="noopener">Morse v. Frederick, Legal Information Institute</a></p>
+
+<h2>How courts apply different tests in practice</h2>
+<p>Under the substantial-disruption analysis courts look for evidence that speech materially and substantially interfered with school operations. Factors include whether classes were interrupted, whether administrators anticipated disorder based on past incidents, and whether school officials can point to concrete consequences of the speech rather than mere displeasure.</p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1JkpBKwBcCLYmNLvO6hvkQJwBHOaGJzQR=s1200" alt="Vector infographic of a closed classroom door and bulletin board icons in Michael Carbonara palette highlighting constitution freedom of speech and expression concept" /></a>
+      <div class="side-text"><p>In practice the school bears the burden of showing the disruption. Courts examine evidence such as absenteeism, physical disturbances, or a clear risk of disorder. Courts also ask whether officials acted on reasonable prediction of disruption or on speculation.</p></div>
+    </div>
+<p>The Bethel lewdness rule changes the analysis when speech is sexually explicit or vulgar. In those cases schools may impose discipline to preserve the school's character and to teach standards of civility, even if no substantial disruption occurred. That separate pathway explains why assemblies and speeches are frequent contexts for Bethel claims <a href="https://www.law.cornell.edu/supremecourt/text/478/675" target="_blank" rel="noopener">Bethel v. Fraser, Legal Information Institute</a></p>
+<p>When speech is school sponsored, Hazelwood replaces the Tinker test. Courts ask whether the speech was part of a curriculum or a school-endorsed forum and then whether the restriction relates reasonably to pedagogical concerns. The focus is on academic judgment rather than on balancing student speech rights against a generalized notion of offense <a href="https://www.law.cornell.edu/supremecourt/text/484/260" target="_blank" rel="noopener">Hazelwood v. Kuhlmeier, Legal Information Institute</a></p>
+<p>Morse is limited. It applies where student expression can be read as advocating illegal drug use in a school-linked context. Outside that narrow frame Morse rarely displaces Tinker or Hazelwood. Courts therefore look closely at whether a given message was tied to a school event or supervision before invoking Morse <a href="https://www.law.cornell.edu/supremecourt/text/551/393" target="_blank" rel="noopener">Morse v. Frederick, Legal Information Institute</a></p>
+
+<h2>Off campus and online student speech: an evolving area</h2>
+<p>Off-campus and online expression are among the fastest changing parts of the law. In the 2020s courts and legislatures have grappled with how to treat social media posts, private messaging, and other off-campus activity that reaches the school community. Advocacy groups report increased litigation and divergent state responses to these scenarios <a href="https://www.aclu.org/issues/free-speech/student-speech" target="_blank" rel="noopener">ACLU student speech page</a></p>
+<p>Common fact patterns include social media posts made at home, group chats with classmates, and online videos that circulate at school. Courts often focus on whether the post has a sufficient nexus to school activities or predictably causes substantial disruption in the school context.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-q3ddw2" class="faq-toggle" checked /><label for="faq-q3ddw2" class="faq-summary" role="button" tabindex="0">How do courts and schools treat student speech differently from public speech?</label><div class="faq-content"><p>Courts apply school-specific tests that account for the educational mission and need for order; Tinker is the general protection, and Bethel, Hazelwood, and Morse create narrower exceptions for lewdness, school-sponsored speech, and pro-drug messages respectively.</p></div></section>
+<p>State laws differ. Some states have enacted statutes expanding student protections for off-campus speech, while others allow schools broader discretion to address online conduct. The variety means that identical fact patterns can produce different outcomes depending on the jurisdiction and the precise statutory language in place <a href="https://www.thefire.org/spotlight-on-speech-codes-2025/" target="_blank" rel="noopener">FIRE spotlight on speech codes</a></p>
+<p>Because the area is evolving, <a href="https://edsource.org/2021/supreme-court-decision-frees-schools-from-monitoring-off-campus-speech/657030" target="_blank" rel="noopener">practical guidance</a> emphasizes checking written policies, keeping records, and seeking legal advice when discipline involves off-campus or online speech. Courts will examine the facts closely, and precedents continue to develop as new incidents reach the courts.</p>
+
+<h2>Practical checklist for students, parents, and educators</h2>
+<p>When an incident occurs follow clear, documented steps. Begin by reviewing the <a href="https://michaelcarbonara.com/educational-freedom/" target="_blank" rel="noopener">student handbook</a> and any posted policies about acceptable technology and off-campus conduct. Note the time, place, and audience for the speech and preserve any digital record such as screenshots or archived posts.</p>
+<p>Notify relevant adults and request written reasons for any discipline. Ask for the specific policy cited and for a description of the facts the school relied on. If the school contends the speech was school sponsored or caused disruption, request clarity on how those conclusions were reached.</p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">A printable steps checklist for documenting a student speech incident</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-o8hbwu-0">
+                        <input id="tool-check-o8hbwu-0" type="checkbox" />
+                        <span>Review policy</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-9ta94i-1">
+                        <input id="tool-check-9ta94i-1" type="checkbox" />
+                        <span>Preserve record</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-739i3j-2">
+                        <input id="tool-check-739i3j-2" type="checkbox" />
+                        <span>Request written reason</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-mgw9rn-3">
+                        <input id="tool-check-mgw9rn-3" type="checkbox" />
+                        <span>Note witnesses</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-536q2r-4">
+                        <input id="tool-check-536q2r-4" type="checkbox" />
+                        <span>Consider counsel</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-gm4jgi-5">
+                        <input id="tool-check-gm4jgi-5" type="checkbox" />
+                        <span>Avoid escalation</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use for initial response</p>
+            </div>
+<p>Avoid public escalation before you gather basic facts. Public posts and heated statements can worsen a dispute and may be used in disciplinary proceedings. If constitutional rights appear implicated, consider consulting with counsel who can assess whether a claim is viable given the specific facts and applicable case law.</p>
+
+<h2>Decision criteria: weighing when regulation is lawful</h2>
+<p>Judges look at several criteria when assessing a restriction. Key triggers include location of the speech, the audience reached, whether the activity was school sponsored, the content type, demonstrable disruption, and any controlling state law. No single factor is determinative.</p>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Location matters. Speech made in class, on school grounds, or at a school event is more likely to fall under school authority. Off-campus posts that are remote in time and place are less likely to be treated as school speech, unless they are closely tied to school activities.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1zTPpmfUwhZOVeAkuJLSOu-72AEe1vU_n=s1200" alt="Minimalist 2D vector infographic with law scales laptop school and checklist icons on dark blue background representing constitution freedom of speech and expression" /></a>
+    </div>
+<p><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></p>
+<p>Audience and supervision are significant. Speech directed at classmates or delivered during supervised activities can increase the likelihood that the school may regulate it. Similarly, curricular contexts and school-sponsored fora point courts toward the Hazelwood analysis rather than Tinker.</p>
+<p>Because the analysis depends on multiple interacting factors, reading the primary Supreme Court opinions and local policies is the best way to understand likely outcomes for a specific incident.</p>
+
+<h2>Common mistakes and legal pitfalls to avoid</h2>
+<p>One common error is relying on overbroad speech codes. Vague policies that do not define terms like "offensive" or "disruptive" invite legal challenge and confusion. Clear, narrowly tailored rules fare better in court.</p>
+<p>Another frequent problem is misclassifying speech. Treating all online activity as school speech without showing nexus to school operations can lead to reversible decisions. Documentation is essential: record what was said, where, and who saw it.</p>
+<p>Failing to request written reasons for discipline is a practical pitfall. Schools that provide concrete grounds for discipline create a record that helps courts assess whether the action fit a recognized test like Tinker, Bethel, Hazelwood, or Morse <a href="https://www.aclu.org/issues/free-speech/student-speech" target="_blank" rel="noopener">ACLU student speech page</a></p>
+
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<h2>Practical scenarios and how courts would likely analyze them</h2>
+<p>Armband protest: A student wears a symbolic armband to class to protest a policy. Courts would first consider whether the armband caused a material and substantial disruption under Tinker. If the school cannot show concrete interference, the armband is likely protected <a href="https://www.law.cornell.edu/supremecourt/text/393/503" target="_blank" rel="noopener">Tinker v. Des Moines, Legal Information Institute</a></p>
+<p>Lewd speech at assembly: A student delivers sexually explicit remarks during a school assembly. That context fits the Bethel lewdness framework and schools may discipline even if the speech did not disrupt classes. The focus is on the explicit nature of the content rather than on measurable disorder <a href="https://www.law.cornell.edu/supremecourt/text/478/675" target="_blank" rel="noopener">Bethel v. Fraser, Legal Information Institute</a></p>
+<p>Student newspaper article: A teacher-supervised class produces an article that the administration removes. If the paper is a curricular, school-supervised forum, Hazelwood allows schools to remove or edit content for legitimate pedagogical reasons. Courts will ask whether the journalistic activity was school endorsed and whether the restriction was related to academic concerns <a href="https://www.law.cornell.edu/supremecourt/text/484/260" target="_blank" rel="noopener">Hazelwood v. Kuhlmeier, Legal Information Institute</a></p>
+<p>Social media post off campus: A student posts critical remarks about a teacher from home. Outcomes vary. Courts will look for nexus to school activities and whether the post predictably caused or was likely to cause substantial disruption. State law and recent litigation make results fact specific <a href="https://www.thefire.org/spotlight-on-speech-codes-2025/" target="_blank" rel="noopener">FIRE spotlight on speech codes</a></p>
+<p>Pro-drug banner at a supervised event: A student displays a sign advocating illegal drug use at a school rally. This scenario is most likely analyzed under Morse because the speech can be read as promoting illegal drug use in a school context, and schools have a distinct interest in preventing that message during supervised activities <a href="https://www.law.cornell.edu/supremecourt/text/551/393" target="_blank" rel="noopener">Morse v. Frederick, Legal Information Institute</a></p>
+
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<h2>Conclusion and where to find primary sources</h2>
+<p>In short, constitution freedom of speech and expression remains robust, but schools operate under a tailored set of rules that reflect their educational mission and need for order. The major Supreme Court decisions provide the framework: Tinker for disruption, Bethel for lewdness, Hazelwood for school-sponsored speech, and Morse for pro-drug messages <a href="https://www.law.cornell.edu/supremecourt/text/393/503" target="_blank" rel="noopener">Tinker v. Des Moines, Legal Information Institute</a></p>
+<p>Off-campus and online student speech is an evolving area with state-by-state variation and active litigation. Readers should consult the primary opinions and current guidance from civil liberties organizations when assessing a specific matter <a href="https://www.aclu.org/issues/free-speech/student-speech" target="_blank" rel="noopener">ACLU student speech page</a></p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-hwo0gs" class="faq-toggle" /><label for="faq-hwo0gs" class="faq-summary" role="button" tabindex="0">Can schools ever limit student speech under the First Amendment?</label><div class="faq-content"><p>Yes. Courts allow limits in schools when speech materially disrupts operations, is lewd, is school sponsored and fails pedagogical review, or promotes illegal drug use in a school context.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-k8k2t6" class="faq-toggle" /><label for="faq-k8k2t6" class="faq-summary" role="button" tabindex="0">Does off-campus social media fall under school authority?</label><div class="faq-content"><p>It depends. Courts assess nexus to school activities and whether the speech predictably caused disruption; state law also affects the analysis.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-7wcw7l" class="faq-toggle" /><label for="faq-7wcw7l" class="faq-summary" role="button" tabindex="0">What should parents do if a student is disciplined for speech?</label><div class="faq-content"><p>Review the school's written policy, preserve evidence, request written reasons for discipline, and consult legal counsel if constitutional claims are suspected.</p></div></section>
+</section><section class="article-ending">Outcomes in student speech disputes turn on specific facts. Consult the primary Supreme Court opinions and local school policies for precise guidance. If discipline raises constitutional concerns, consider getting counsel to review the record and advise on next steps.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.law.cornell.edu/supremecourt/text/393/503" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/393/503</a></li><li><a href="https://www.aclu.org/issues/free-speech/student-speech" target="_blank" rel="noopener">https://www.aclu.org/issues/free-speech/student-speech</a></li><li><a href="https://www.aclu.org/press-releases/federal-appeals-courts-affirms-students-free-speech-rights-outside-school" target="_blank" rel="noopener">https://www.aclu.org/press-releases/federal-appeals-courts-affirms-students-free-speech-rights-outside-school</a></li><li><a href="https://www.supremecourt.gov/opinions/20pdf/20-255_g3bi.pdf" target="_blank" rel="noopener">https://www.supremecourt.gov/opinions/20pdf/20-255_g3bi.pdf</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/478/675" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/478/675</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/484/260" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/484/260</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/551/393" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/551/393</a></li><li><a href="https://www.thefire.org/spotlight-on-speech-codes-2025/" target="_blank" rel="noopener">https://www.thefire.org/spotlight-on-speech-codes-2025/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://michaelcarbonara.com/educational-freedom/" target="_blank" rel="noopener">https://michaelcarbonara.com/educational-freedom/</a></li><li><a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">https://michaelcarbonara.com/constitutional-rights/</a></li><li><a href="https://edsource.org/2021/supreme-court-decision-frees-schools-from-monitoring-off-campus-speech/657030" target="_blank" rel="noopener">https://edsource.org/2021/supreme-court-decision-frees-schools-from-monitoring-off-campus-speech/657030</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
