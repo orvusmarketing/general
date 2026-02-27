@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Housing Affordability: Federal Levers and Local Constraints</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #8f1f2d; /* derived darker accent */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent scoped rules (only .article-body and .cta-button allowed) */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.85); margin-bottom: 1.2rem; }
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:0.9rem; margin:1.6rem 0; }
+    .article-body .highlight-card{ background: linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); padding:0.9rem 1rem; border-left:4px solid var(--accent); border:1px solid rgba(255,255,255,.10); }
+    .article-body .tool-block{ background: linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); padding:1rem; border-left:4px solid var(--accent); }
+    .article-body .faq-accordion{ border-left:4px solid var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/12ARvBFyiOZr8XqkYMwoFuy1hKGcsMa0M" alt="Housing Affordability: Federal Levers and Local Constraints banner" />
+        </div>
+        <h1 class="title">Housing Affordability: Federal Levers and Local Constraints</h1>
+        <p class="subline">Explains why federal housing priorities require local zoning, permitting, and measurable metrics to produce more affordable homes.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/policy-priority-housing-affordability-federal-local-constraints/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">This article explains how a federal statement that housing is a policy priority becomes meaningful only when linked to local action. It describes the main federal tools, the common local constraints that limit outcomes, and the metrics readers can use to judge progress.
+
+The aim is to offer neutral, sourced context for voters, local residents, and journalists who want to understand why federal intent alone does not always translate into more affordable homes. The piece draws on national assessments and policy analyses to show where alignment helps and where delivery challenges remain.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">A federal policy priority must align with local zoning and permitting to reliably increase affordable housing supply.</span></div><div class="highlight-card"><span class="highlight-text">Permitting delays and infrastructure costs often raise delivery costs and slow the pace of production.</span></div><div class="highlight-card"><span class="highlight-text">Pairing federal incentives with measurable local reforms and clear metrics improves the chances of producing more affordable units.</span></div>
+     </div>
+  <h2>What 'policy priority' means for housing affordability</h2>
+<p>When policymakers call housing a policy priority, they signal a focus of resources, incentives, and regulatory attention toward producing and preserving affordable homes. This phrase, policy priority, covers both public statements and the allocation of federal funding or program design to favor affordability, and it matters because federal intent does not automatically change what <a href="https://www.nlc.org/article/2026/02/13/what-the-housing-for-the-21st-century-and-road-to-housing-acts-mean-for-local-governments/" target="_blank" rel="noopener">local governments</a> permit to be built. National assessments document a persistent affordability gap that motivates federal attention, according to the Harvard Joint Center for Housing Studies <a href="https://www.jchs.harvard.edu/state-nations-housing-2024" target="_blank" rel="noopener">Harvard Joint Center for Housing Studies</a>.</p>
+<p>A useful short definition: a policy priority combines an explicit federal focus with budget authority or program rules designed to produce certain outcomes, such as more units that are affordable to low-income renters. Federal levers can include grants, tax credits, and regulatory incentives. But the results depend on local actors who control zoning, permitting, and public infrastructure. That division between federal levers and local implementation responsibilities is central to why a federal policy priority can fall short without local change.</p>
+<p>National reporting and nonprofit surveys show that the shortage of homes affordable to the lowest-income renters is a persistent national problem and a central reason federal programs aim to prioritize housing affordability. The National Low Income Housing Coalition finds gaps between supply and affordability that national policymakers cite when shaping program priorities <a href="https://nlihc.org/oor-2024" target="_blank" rel="noopener">National Low Income Housing Coalition</a>.</p>
+<p>In local terms, a stated policy priority can take many forms: an administration rule that favors certain grant winners, guidance that encourages state partnerships, or budget lines that increase direct funding for affordable production. But without clear metrics to link dollars to local outcomes, a priority may remain a label rather than a change in how many homes become available at low rents.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+
+<h2>Federal levers that make housing a policy priority</h2>
+<p>Federal funding, tax credits, and targeted grant programs remain primary federal levers to support affordable housing production, and these tools typically define a measurable policy priority. Direct funding channels from federal agencies and specific grant programs direct financial resources to developers and state or local agencies to build or preserve affordable units, as described in federal program summaries and research analyses <a href="https://www.huduser.gov/portal/pdredge/pdr-edge-featd-article-042224.html" target="_blank" rel="noopener">HUD research and summaries</a>.</p>
+<p>Direct funding includes block grants, formula programs, and competitive awards. Competitive grant scoring can prioritize projects that meet affordability goals or that propose local regulatory reforms as part of the application package. These scoring mechanisms are intended to make a policy priority enforceable at the point of award by favoring proposals aligned with federal goals.</p>
+<p>Tax policy is another major channel. Tools like the Low Income Housing Tax Credit support both production and long-term affordability by reducing capital costs for eligible projects. Tax credits change the financial math for developers and can make deeper affordability financially feasible when paired with grants or other subsidies.</p>
+<p>Regulatory incentives and program design also operate as levers. Federal agencies can craft rules that reward localities for streamlining permitting or reducing barriers to multifamily construction. Where incentive design ties funding to explicit local steps, the federal policy priority is more likely to affect local outcomes, because grantees must meet criteria to receive funds.</p>
+<p>All these levers aim to change the incentives facing developers and local governments. But their effectiveness depends on whether local rules allow the volume and type of housing that program dollars are intended to support. Detailed program descriptions and analysis of federal tools are available in federal research summaries and policy reviews <a href="https://www.huduser.gov/portal/pdredge/pdr-edge-featd-article-042224.html" target="_blank" rel="noopener">HUD research and summaries</a>.</p>
+
+<h2>How local zoning and land-use rules limit federal policy priority</h2>
+<p>Local zoning and land-use regulations are often the practical bottleneck that prevents federal priorities from producing more housing. Exclusionary zoning and <a href="https://eig.org/the-era-of-federal-zoning-reform-has-arrived/" target="_blank" rel="noopener">restrictive single-family-only designations</a> make it difficult to add multifamily or missing middle housing that would expand affordable supply, as shown in policy research on zoning effects <a href="https://www.brookings.edu/articles/how-zoning-restrictions-drive-up-housing-costs/" target="_blank" rel="noopener">Brookings Institution analysis</a>.</p>
+<p>Even when federal programs provide money for construction, the gap between funding and local permission can stop projects before they begin. Local approvals, conditional use processes, and minimum lot sizes can remove sites from the pool of feasible development, so federal dollars cannot translate into units where land-use rules block the needed housing types.</p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">public dashboard to compare local zoning maps and permit counts</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-it15xe-0">
+                        <input id="tool-check-it15xe-0" type="checkbox" />
+                        <span>jurisdiction</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-bokc4v-1">
+                        <input id="tool-check-bokc4v-1" type="checkbox" />
+                        <span>zoning category</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-tpq6nl-2">
+                        <input id="tool-check-tpq6nl-2" type="checkbox" />
+                        <span>permitted uses</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-3a5k87-3">
+                        <input id="tool-check-3a5k87-3" type="checkbox" />
+                        <span>permit backlog</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-lm8qup-4">
+                        <input id="tool-check-lm8qup-4" type="checkbox" />
+                        <span>last updated</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">use for orientation not legal advice</p>
+            </div>
+<p>Research across metro regions links tighter zoning to higher housing costs and lower rates of new construction. Where zoning prevents missing middle housing, adding federal funds alone may not change the permitted form of development, and the supply response will be limited. Planning literature and professional analyses have documented this connection between regulation and production <a href="https://www.planning.org/research/housing/" target="_blank" rel="noopener">American Planning Association research</a>.</p>
+<p>Readers should note that the constraint is not universal in every neighborhood. Local capacity, political choices, and market conditions vary. But the central point is consistent: aligning federal incentives with local reform is often required to expand multifamily and missing middle housing in constrained metro areas.</p>
+
+<h2>Permitting, infrastructure, and delivery constraints on turning priorities into homes</h2>
+<p>Permitting delays and processing time are recurring operational barriers that lengthen project timelines and raise costs. Slow or understaffed permitting offices create backlogs that push completion dates out and increase carrying costs for developers, which can make affordable projects less viable unless additional subsidies are available to bridge those costs. Policy research and municipal reports have documented permit processing as a key bottleneck <a href="https://www.urban.org/research/publication/local-land-use-controls-housing-production" target="_blank" rel="noopener">Urban Institute analysis</a>.</p>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Infrastructure funding shortfalls also affect delivery. When new units require upgrades to water, sewer, roads, or other systems, the absence of public capital or the imposition of high local fees can add materially to project budgets. These costs are often passed back into rents or require more subsidy, which complicates the federal goal of producing affordable homes.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1EZdgxqlfimuKkt8dCRHo9EO3pggjOPdb=s1200" alt="Vertical vector infographic with house permit stamp and ascending chart arrow icons on deep blue background representing policy priority" /></a>
+    </div>
+<p>Local fees, required improvements, and offsite infrastructure obligations vary by jurisdiction but share the effect of raising the per-unit cost and the timeline for delivery. In practice this means a federal grant that appears sufficient on paper may not cover additional local costs that emerge during permitting and site development.</p>
+<p>Documented impacts vary by region and project type, and the evidence base includes case studies showing both severe delays and more efficient local systems. That variation supports a cautious view: federal commitments matter, but so do the practical steps local governments take to process, fund, and enable housing projects.</p>
+
+<h2>Designing federal incentives to reward local reforms</h2>
+<p>One clear approach is to design federal incentives that explicitly reward local regulatory changes, such as streamlined permitting or upzoning for missing middle housing. Analyses through 2025 find that <a href="https://upforgrowth.org/wp-content/uploads/2022/08/policy-brief-january-2021.pdf" target="_blank" rel="noopener">aligning federal incentives with explicit local reforms</a> has been associated with increased construction starts in some pilot examples, though results vary by context <a href="https://www.brookings.edu/articles/how-zoning-restrictions-drive-up-housing-costs/" target="_blank" rel="noopener">Brookings Institution analysis</a>.</p>
+<p>Program designs can include scoring criteria that give applicants extra points for demonstrable reforms, conditional funding that phases payments as reforms are implemented, or technical assistance tied to measurable local changes. These mechanisms make a federal policy priority conditional on concrete local action rather than a simple allocation of dollars.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay informed about local progress on housing affordability</h3><div class="cta-intro"><p>Review the checklist in the closing section to compare local permit trends and affordability metrics when evaluating whether a stated priority is producing homes.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join campaign updates</a></div>
+<p><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">Pilot programs and competitive grants</a> have shown that when federal awards shift scoring to favor jurisdictions that adopt reforms, some places move quickly to change rules and approve projects. However, the degree of change depends on local political will, staff capacity, and market incentives, so federal incentive design alone cannot guarantee uniform results.</p>
+<p>Designers of federal programs should pair incentives with clear metrics and <a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">monitoring</a> so that funding decisions reward jurisdictions that both adopt reforms and demonstrate measurable progress in production and affordability.</p>
+
+<h2>Measuring progress: metrics for a policy priority on affordability</h2>
+<p>Tracking whether a policy priority is working requires both output and outcome metrics. Core measures include permitted units and permit processing time as near-term outputs, and net new units by affordability tier and renter cost-burden rates as outcome measures that show whether affordability is improving. These metrics are standard in housing research and recommended for program monitoring <a href="https://www.jchs.harvard.edu/state-nations-housing-2024" target="_blank" rel="noopener">Harvard Joint Center for Housing Studies</a>.</p>
+<p>Other useful measures are trends in Fair Market Rent and median rents, which indicate pressure on local rental markets, and the count of new subsidized or deed-restricted units by affordability tier. Together, these indicators help separate construction activity from actual affordability outcomes.</p>
+<p>Data timing and standardization are a challenge. Many local datasets lag or use different definitions, so comparing jurisdictions requires caution. When possible, pair permit-level reports with household-level measures like cost-burden rates to get a fuller picture.</p>
+<p>Short checklist for readers: watch permitted units and permit processing times for near-term change; track net new units by affordability tier and cost-burden rates for medium-term outcomes; and monitor FMR or median rent trends for market pressure signals. These combined metrics help assess whether a federal policy priority is producing measurable local results.</p>
+
+<h2>Common pitfalls when treating housing as a policy priority</h2>
+<p>An overreliance on funding without addressing local rules is a common mistake. When federal money is available but local zoning and permitting remain restrictive, few new homes may reach the finish line. Research cautions that funding alone cannot substitute for local permission to build, and that mismatch can limit the supply response to federal priorities <a href="https://www.urban.org/research/publication/local-land-use-controls-housing-production" target="_blank" rel="noopener">Urban Institute analysis</a>.</p>
+<p>Another frequent error is expecting immediate results. Permitting, infrastructure upgrades, and project financing take time. Assuming rapid production without accounting for these delivery constraints can lead to unrealistic assessments of program performance.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-7udtpo" class="faq-toggle" checked /><label for="faq-7udtpo" class="faq-summary" role="button" tabindex="0">How does declaring housing a policy priority at the federal level lead to actual affordable homes locally?</label><div class="faq-content"><p>A federal policy priority can direct funding and incentives, but it produces affordable homes only when paired with local zoning changes, timely permitting, and metrics that track permitted units and affordability outcomes.</p></div></section>
+<p>Finally, ignoring gaps in local data can mislead observers. National trends do not always reflect local realities because local permit and affordability data vary in timing and definition. Careful interpretation and use of multiple metrics are essential to avoid premature conclusions about effectiveness.</p>
+
+<h2>Practical scenarios and a neutral wrap up</h2>
+<p>Scenario one, constrained zoning and weak permitting: a federal grant arrives for affordable housing, but local zoning prohibits multifamily and the permitting office has a long backlog. In this scenario the policy priority may remain unrealized because the local system cannot or will not approve the needed building types.</p>
+<p>Scenario two, permissive zoning but capacity gaps: a locality has recent zoning changes that allow missing middle housing, but the permitting office lacks staff and infrastructure funding is limited. Here the policy priority may produce some starts, but delays and added costs could reduce the number of completed affordable units.</p>
+<p>Scenario three, aligned incentives and capacity: a jurisdiction pairs upzoning and streamlined permitting with targeted grants and technical assistance. Where these elements align, pilots have shown faster starts and higher completion rates, though outcomes still depend on market and political context.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>Checklist for voters and local officials: 1) Verify whether local zoning allows the housing types needed, 2) track permit processing times and permitted unit counts, 3) compare net new units by affordability tier and cost-burden trends, and 4) check whether federal awards include conditions or scoring tied to local reforms. These steps help determine if a policy priority is translating into more affordable homes.</p>
+<p>In summary, declaring housing a policy priority at the federal level is an important signal and an initial step. Converting that priority into new affordable units requires alignment with local zoning reform, timely permitting, and measures that hold programs to outcome-based metrics. Careful measurement and conditional incentives increase the chance that federal levers will produce local results.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-l1yxzs" class="faq-toggle" /><label for="faq-l1yxzs" class="faq-summary" role="button" tabindex="0">How can federal policy priorities increase the supply of affordable housing?</label><div class="faq-content"><p>Federal priorities can increase supply through direct funding, tax credits, and incentive-based grants, but they are most effective when paired with local zoning and permitting reforms.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-2ko3sm" class="faq-toggle" /><label for="faq-2ko3sm" class="faq-summary" role="button" tabindex="0">What local rules most often block affordable housing production?</label><div class="faq-content"><p>Exclusionary zoning, single-family-only districts, and slow permitting processes are common constraints that limit multifamily and missing middle housing.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-q4achr" class="faq-toggle" /><label for="faq-q4achr" class="faq-summary" role="button" tabindex="0">Which metrics are most useful to track whether a policy priority is working?</label><div class="faq-content"><p>Key metrics include permitted units, permit processing time, net new units by affordability tier, rent trends, and renter cost-burden rates.</p></div></section>
+</section><section class="article-ending">Declaring housing a policy priority is a necessary first step, but it is not sufficient on its own. When federal funding and incentives are matched to local zoning reform, permitting capacity, and clear outcome metrics, the path from policy to homes becomes clearer. Readers and local officials can use the checklist and metrics in this article to assess progress in their communities.
+
+The discussion here is descriptive and neutral, intended to clarify roles, tradeoffs, and practical steps rather than to endorse specific political choices or guarantee outcomes.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.jchs.harvard.edu/state-nations-housing-2024" target="_blank" rel="noopener">https://www.jchs.harvard.edu/state-nations-housing-2024</a></li><li><a href="https://nlihc.org/oor-2024" target="_blank" rel="noopener">https://nlihc.org/oor-2024</a></li><li><a href="https://www.huduser.gov/portal/pdredge/pdr-edge-featd-article-042224.html" target="_blank" rel="noopener">https://www.huduser.gov/portal/pdredge/pdr-edge-featd-article-042224.html</a></li><li><a href="https://www.brookings.edu/articles/how-zoning-restrictions-drive-up-housing-costs/" target="_blank" rel="noopener">https://www.brookings.edu/articles/how-zoning-restrictions-drive-up-housing-costs/</a></li><li><a href="https://www.planning.org/research/housing/" target="_blank" rel="noopener">https://www.planning.org/research/housing/</a></li><li><a href="https://www.urban.org/research/publication/local-land-use-controls-housing-production" target="_blank" rel="noopener">https://www.urban.org/research/publication/local-land-use-controls-housing-production</a></li><li><a href="https://www.nlc.org/article/2026/02/13/what-the-housing-for-the-21st-century-and-road-to-housing-acts-mean-for-local-governments/" target="_blank" rel="noopener">https://www.nlc.org/article/2026/02/13/what-the-housing-for-the-21st-century-and-road-to-housing-acts-mean-for-local-governments/</a></li><li><a href="https://eig.org/the-era-of-federal-zoning-reform-has-arrived/" target="_blank" rel="noopener">https://eig.org/the-era-of-federal-zoning-reform-has-arrived/</a></li><li><a href="https://upforgrowth.org/wp-content/uploads/2022/08/policy-brief-january-2021.pdf" target="_blank" rel="noopener">https://upforgrowth.org/wp-content/uploads/2022/08/policy-brief-january-2021.pdf</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">https://michaelcarbonara.com/issues/</a></li><li><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener">https://michaelcarbonara.com/join/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
