@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tracking Florida 25th District Issues: How to Follow Bills, Hearings, and Votes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand tokens derived from provided style */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736;    /* from --mc-accent */
+      --accent-hover: #8f1f2b; /* derived darker accent */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* from --mc-panel-2 */
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1jsp2CxXaMdCT9eD52hJb11RRrWevVgwt" alt="Tracking Florida 25th District Issues banner" />
+        </div>
+        <h1 class="title">Tracking Florida 25th District Issues: How to Follow Bills, Hearings, and Votes</h1>
+        <p class="subline">A practical guide to tracking bills, hearings and roll-call votes affecting Florida's 25th Congressional District.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/congress-gov-alerts-florida-25th-district-bills/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">Tracking legislation and votes that matter to a congressional district requires both discovery tools and primary-source verification. This guide focuses on how to monitor Florida 25th District issues using official federal and state pages plus trusted aggregators.
+
+It offers step-by-step instructions for saved searches, alert settings and practical workflows so residents and reporters can find, verify and organize bills, hearings and roll-call votes relevant to FL-25.</div>
+          <div class="article-highlights">
+               <div class="highlight-card"><span class="highlight-text">Use Congress.gov saved searches and alerts to catch federal measures that may affect the district.</span></div><div class="highlight-card"><span class="highlight-text">Confirm recorded votes on the Clerk's roll-call pages before citing a representative's vote.</span></div><div class="highlight-card"><span class="highlight-text">Combine aggregators for discovery with official sites for verification to maintain accuracy.</span></div>
+             </div>
+          <h2>What Florida 25th District issues means: definition and context</h2><h3>Who represents FL-25 and why district context matters</h3><p>Florida 25th District issues refers to the set of federal and state bills, committee hearings and roll-call votes that could affect people, businesses and public institutions inside Florida's 25th Congressional District. These records include bill text, status updates, committee calendars, hearing notices and roll-call vote entries.</p><p>District boundaries and basic candidate information are tracked on neutral reference pages that collect official filings and district maps, so readers who need a starting point can consult those profiles for representative names and basic context <a href="https://ballotpedia.org/Florida%27s_25th_Congressional_District" target="_blank" rel="noopener">Ballotpedia's page for Florida's 25th Congressional District</a> and <a href="https://www.govtrack.us/congress/members/FL/25" target="_blank" rel="noopener">GovTrack's Florida 25th Congressional District page</a>.</p>
+            <div class="side-by-side product-image-right">
+              <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+              <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+            </div><h3>Types of 'issues' to track: federal bills, state bills, hearings, votes</h3><p>When people talk about Florida 25th District issues they typically mean a mix of federal and state activity: proposed statutes and amendments at the U.S. level, committee hearings and calendars at the state level, and the official roll-call votes that record how a representative voted.</p><p>Common record types you will encounter include bill text and status histories, committee calendars and hearing agendas, roll-call vote lists and sponsor or cosponsor details. These records help you move from headline summaries to the primary documents that show what was proposed and when it moved through the process.</p>
+            <div class="side-by-side special-image-left">
+              <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1pnN3GrvxKWKfrfFD8wMSFHeQXb2xpE0L=s1200" alt="Minimal 2D vector infographic screenshot showing an annotated bill page and a calendar entry indicating Florida 25th District issues in dark blue white and red palette" /></a>
+              <div class="side-text"><p>Following bills and votes lets residents spot proposals that might influence local funding streams, regulatory changes, or constituent services that touch schools, roads, grants and local programs. Tracking these items early can help residents and local organizations prepare responses or seek clarification from their representative.</p></div>
+            </div><p>Because roll-call summaries and vote reports are official records, verifying a member's vote on the primary roll-call dataset is important before drawing conclusions about a representative's position or statements about an item <a href="https://clerk.house.gov/Votes" target="_blank" rel="noopener">Clerk roll-call votes</a>.</p><p>A single roll-call does not always show the full effect of a measure, since amendments, appropriations language and legislative text can change between committee action and final passage. That is why looking at committee calendars and bill status in tandem is necessary to understand whether a vote created an immediate local effect.</p><p>Practical verification begins at the primary sources: consult the official bill page for summaries and text and the Clerk for the final recorded vote when confirming how a member acted on a specific roll call <a href="https://www.congress.gov/help/alerts" target="_blank" rel="noopener">Congress.gov help on tracking and alerts</a>.</p><h2>How to track federal bills that affect Florida 25th District issues using Congress.gov</h2><h3>Set up saved searches and email alerts on Congress.gov</h3><p><a href="https://www.congress.gov/" target="_blank" rel="noopener">Congress.gov</a> supports saved searches, email alerts and RSS feeds you can configure for keywords, bill numbers or sponsor names to follow proposed federal measures that may matter to the district. To start, choose a small set of focused keywords such as the district name, relevant program names, or the representative's name to reduce noise <a href="https://www.congress.gov/help/alerts" target="_blank" rel="noopener">Congress.gov help on tracking and alerts</a>.</p><p>Step 1: Create a saved search on Congress.gov, using a short keyword list plus a date range and chamber filter.</p><p>Step 2: Enable email or RSS notifications for that saved search so you receive updates on bill introductions, actions and committee references.</p>
+          <div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay informed and connected with the campaign's updates and volunteer options</h3><div class="cta-intro"><p>Set up one saved search on Congress.gov for your top keyword, then enable email alerts in the saved-search settings. Try a one-line keyword such as the district name plus a program keyword.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign updates</a></div>
+          <h3>Use bill pages to read text, sponsors, actions and latest status</h3>
+          <p>Open a bill's page to read the full text, the official summary, the list of cosponsors and the complete action history. Bill pages show when an item was introduced, which committee it went to and later actions that affect its status.</p>
+          <p>To narrow results, combine sponsor-name filters with topic keywords; this focuses alerts on measures most likely to be relevant to the district or to the representative who serves FL-25 <a href="https://www.govtrack.us/about/howto" target="_blank" rel="noopener">GovTrack's how-to guide</a>.</p>
+          <h2>Verifying how FL-25 members voted: using the Clerk of the U.S. House roll-call records</h2>
+          <h3>Where to find official roll-call vote records</h3>
+          <p>The Office of the Clerk of the U.S. House publishes official roll-call records and downloadable vote datasets for the current Congress, which serve as the authoritative record when verifying how a representative voted on a specific measure <a href="https://clerk.house.gov/Votes" target="_blank" rel="noopener">Clerk roll-call votes</a>.</p>
+          <p>Use the Clerk site to look up a roll-call number, the date, or search by member name to confirm the recorded vote entry before citing or sharing a claim about how a member acted.</p>
+          <h3>Downloading vote datasets and confirming individual member votes</h3>
+          <p>The Clerk offers downloadable datasets that can be saved for offline review or used to build a local archive. When reporting a vote, save the official Clerk page or dataset entry so you can cite it precisely and reproduce the record later.</p>
+          <p>If you do not know the representative's name for a past Congress, use neutral district profiles to find the member, then search the Clerk dataset for that member's roll-call entries to confirm voting behavior <a href="https://ballotpedia.org/Florida%27s_25th_Congressional_District" target="_blank" rel="noopener">Ballotpedia's page for Florida's 25th Congressional District</a>.</p>
+          <h2>Aggregator tools that simplify monitoring Florida 25th District issues</h2>
+          <h3>How GovTrack and similar services can save time</h3>
+          <p>Aggregator services such as GovTrack provide user-friendly bill tracking, legislator pages and alerting or RSS features that help voters monitor legislation across sessions. These tools are often easier to navigate for discovery and for watching multiple bills at once <a href="https://www.govtrack.us/about/howto" target="_blank" rel="noopener">GovTrack's how-to guide</a>.</p>
+          <section class="faq-accordion"><input type="checkbox" id="faq-870pa8" class="faq-toggle" checked /><label for="faq-870pa8" class="faq-summary" role="button" tabindex="0">How can residents reliably track bills, hearings and votes that affect Florida's 25th Congressional District?</label><div class="faq-content"><p>Use a source-first workflow: create saved searches and alerts on Congress.gov, verify votes with the Clerk of the U.S. House, use aggregators like GovTrack and OpenStates for discovery, and monitor Florida Senate and House pages for state-level actions.</p></div></section>
+          <p>When an aggregator highlights a bill or committee action, follow the link to the original bill page on Congress.gov or the state legislative site to confirm text, status and the official action history. That step reduces the risk of relying on incomplete summaries or headlines.</p>
+          <p>Use aggregators for alerts and discovery, and keep Congress.gov, the Clerk, and state pages as your citation sources when you need an authoritative record <a href="https://openstates.org/documentation/" target="_blank" rel="noopener">OpenStates documentation and bill tracking</a>.</p>
+          <h2>How to follow Florida state bills and hearings that affect FL-25</h2>
+          <h3>Using Florida Senate and Florida House bill pages and calendars</h3>
+          <p>Florida's official legislative websites publish bill text, status notes, committee calendars and session schedules so residents can track state measures that might affect the district. The state sites list when a bill is scheduled for committee review and provide the official text for each version <a href="https://www.flsenate.gov/Session/Bills" target="_blank" rel="noopener">Florida Senate legislation pages</a>.</p>
+          <p>To follow a state bill, open its official page, note the committee assignments and check the committee calendar for hearing dates and agenda items. These calendars show when testimony or debate is expected and whether an item moved out of committee.</p>
+          <h3>Combining OpenStates API or alerts for automated updates</h3>
+          <p>OpenStates consolidates state bill metadata and sponsor or committee data across chambers and can support automated monitoring through its documentation and API. It is useful when you want a single feed covering multiple state sources for programmatic or email alerts <a href="https://openstates.org/documentation/" target="_blank" rel="noopener">OpenStates documentation and bill tracking</a>.</p>
+          <p>When setting up automated updates, narrow queries by county, sponsor or topic keywords so alerts are relevant to the district. Combining OpenStates with the official Florida pages gives both convenience and authoritative text to verify against.</p>
+          <h2>A combined workflow to monitor Florida 25th District issues across federal and state sources</h2>
+          <h3>Building saved searches and parallel alerts</h3>
+          <p>A recommended routine is to create saved searches on Congress.gov for federal topics, subscribe to Clerk vote feeds for roll-call updates, enable GovTrack alerts for discovery, and add OpenStates queries for state activity. This multi-source approach blends official records with convenient discovery feeds <a href="https://www.congress.gov/help/alerts" target="_blank" rel="noopener">Congress.gov help on tracking and alerts</a>.</p>
+          <div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+                      <p class="tool-purpose">quick monitoring checklist for consolidating feeds</p>
+                      <ul class="tool-checklist-list">
+                  <li class="tool-checklist-item">
+                              <label for="tool-check-crlhlo-0">
+                                <input id="tool-check-crlhlo-0" type="checkbox" />
+                                <span>Congress.gov saved search</span>
+                              </label>
+                            </li><li class="tool-checklist-item">
+                              <label for="tool-check-o07xln-1">
+                                <input id="tool-check-o07xln-1" type="checkbox" />
+                                <span>Clerk roll-call feed</span>
+                              </label>
+                            </li><li class="tool-checklist-item">
+                              <label for="tool-check-kw4nac-2">
+                                <input id="tool-check-kw4nac-2" type="checkbox" />
+                                <span>GovTrack alerts</span>
+                              </label>
+                            </li><li class="tool-checklist-item">
+                              <label for="tool-check-a55q97-3">
+                                <input id="tool-check-a55q97-3" type="checkbox" />
+                                <span>OpenStates query</span>
+                              </label>
+                            </li><li class="tool-checklist-item">
+                              <label for="tool-check-a79zz5-4">
+                                <input id="tool-check-a79zz5-4" type="checkbox" />
+                                <span>Florida Senate calendar</span>
+                              </label>
+                            </li>
+                </ul>
+                      <p class="tool-notes">keep queries narrow and topic focused</p>
+                    </div>
+          <h3>Using RSS, APIs and calendar integrations for consolidated feeds</h3>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>RSS feeds, API pulls and calendar exports are the technical options most users will combine. RSS is straightforward for email or reader apps; APIs are preferred when building automated dashboards or integrating alerts into a local tool; calendar exports work well for team scheduling.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1mQ8HRbqRvUqOQLkook1QhpV3XXptHTX3=s1200" alt="Minimalist 2D vector infographic with four white icons representing congressional and state legislative sources designed for Florida 25th District issues article on deep blue background" /></a>
+    </div><p>Organize incoming items by topic, urgency and source reliability. Label items as 'Verify' when they come from an aggregator and 'Primary' when they originate on Congress.gov or the state site, and act on 'Primary' items first for reporting or civic action.</p>
+    <h2>How to map a federal vote to a local FL-25 impact: decision criteria and caveats</h2>
+    <h3>Assessing bill scope, enacted vs proposed measures and appropriations language</h3>
+    <p>To judge whether a federal bill meaningfully affects the district, review the bill's subject matter, appropriations detail, and any geographic qualifiers or grant language that name states, counties or similar units. These elements indicate where direct impacts are most likely to appear.</p>
+    <p>Because proposed bills and final enacted law can differ, treat a vote on a proposed measure as one step, not a final outcome. Confirm enacted text and appropriations language before asserting a concrete local effect <a href="https://clerk.house.gov/Votes" target="_blank" rel="noopener">Clerk roll-call votes</a>.</p>
+    <h3>When to treat a vote as directly relevant to constituents</h3>
+    <p>Treat a federal vote as directly relevant when the bill contains explicit funding lines, named programs, or authorizing language that points to grants or services used in the district. Otherwise, expect many votes to have indirect or symbolic effects rather than immediate local consequences.</p>
+    <p>Use the official bill text and the committee or conference report language to find the specifics that determine whether a vote is likely to change funding or services in FL-25 <a href="https://www.congress.gov/help/alerts" target="_blank" rel="noopener">Congress.gov help on tracking and alerts</a>.</p>
+    <h2>Typical errors and pitfalls when following Florida 25th District issues</h2>
+    <h3>Relying solely on headlines or social posts</h3>
+    <p>One common mistake is trusting summaries or headlines without checking the primary documents. Headlines can omit amendments or committee actions, and social posts may not link to the bill text that clarifies scope and intent.</p>
+    <p>To avoid this error, open the official bill page and check the action history and text before accepting a summary as complete.</p>
+    <h3>Misattributing senator or statewide actions to the district representative</h3>
+    <p>Another pitfall is confusing statewide bills or a senator's action with the conduct of the district's representative. State or statewide federal measures may not be specifically tied to a single congressional district, so confirm the geography and sponsorship before attributing an outcome to FL-25's member.</p>
+    <p>Quick remedies include checking the sponsor list, the bill text for geographic qualifiers, and the Clerk's recorded vote to confirm who voted and what the official outcome was.</p>
+    <h2>Practical examples: two scenarios for tracking FL-25 issues from discovery to verification</h2>
+    <h3>Scenario A: A federal funding bill discovered via GovTrack and verified on Congress.gov and the Clerk</h3>
+    <p>Step 1: You see a GovTrack alert about a federal funding bill that mentions coastal resilience programs. Use GovTrack's summary to note the bill number and click through to the original Congress.gov entry to read the text and official summary <a href="https://www.govtrack.us/about/howto" target="_blank" rel="noopener">GovTrack's how-to guide</a>.</p>
+    <p>Step 2: Save the Congress.gov bill page as a saved search or bookmark, and enable alerts for status changes. Step 3: After a committee vote, check the Clerk for the roll-call number and download the official vote record to confirm how the member for FL-25 voted.</p>
+    <h3>Scenario B: A Florida state education bill tracked via Florida Senate site and OpenStates</h3>
+    <p>Step 1: Find the bill on the Florida Senate website and review the official text and committee assignment <a href="https://www.flsenate.gov/Session/Bills" target="_blank" rel="noopener">Florida Senate legislation pages</a>.</p>
+    <p>Step 2: Add an OpenStates query to monitor committee movement and use the OpenStates entry to receive change notifications. Step 3: When the bill is scheduled for a hearing, save the committee calendar entry and, if needed, capture screenshots of the official page for your records <a href="https://openstates.org/documentation/" target="_blank" rel="noopener">OpenStates documentation and bill tracking</a>.</p>
+    <h2>Sourcing and attribution: how to cite bills, votes and candidate context reliably</h2>
+    <h3>Primary sources to prefer: Congress.gov, Clerk, Florida Senate/House</h3>
+    <p>When citing federal bills and votes, prefer Congress.gov for bill text and the Office of the Clerk for official roll-call records. These are primary sources that allow precise citations and reproducible references <a href="https://clerk.house.gov/Votes" target="_blank" rel="noopener">Clerk roll-call votes</a>.</p>
+    <p>For state measures, cite the Florida Senate or Florida House pages for the official text and committee calendar entries rather than relying only on third-party summaries.</p>
+    <h3>Neutral candidate context: Ballotpedia and public filings</h3>
+    <p>For candidate context use neutral profiles and public filings. Ballotpedia provides district and candidate pages that collect filings and basic biographical information; for campaign statements or platform details, link to the <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">candidate's campaign site</a> and attribute positions using phrases such as according to or states that <a href="https://ballotpedia.org/Florida%27s_25th_Congressional_District" target="_blank" rel="noopener">Ballotpedia's page for Florida's 25th Congressional District</a>.</p>
+    <p>When summarizing a candidate's positions, avoid promising outcomes and cite the campaign statement or filing as the source of the claim.</p>
+    <h2>Quick checklist and decision table for what to monitor and when</h2>
+    <h3>Priority triggers: appropriations, constituent services, local grant language</h3>
+    <p>Immediate items to monitor: appropriations and earmark language, named grants or local program authorizations, and committee calendar entries that list district-related hearings. These warrant real-time alerts.</p>
+    <p>Weekly items to review: general bill status updates, cosponsor changes and committee referrals. Occasional review items include long-term policy proposals or background legislation that only indirectly touches district interests <a href="https://www.congress.gov/help/alerts" target="_blank" rel="noopener">Congress.gov help on tracking and alerts</a>.</p>
+    <h3>Frequency and alert settings for different topics</h3>
+    <p>Suggested alert cadence: real-time for committee calendars and hearing notices, daily digest for bill-status changes, and weekly roll-call summaries. Tune alerts to balance timeliness with signal quality.</p>
+    <p>Organize alerts by source reliability. Mark primary documents as highest priority and aggregator warnings as items that require verification on an official page.</p>
+    <h2>Conclusion and next steps for staying informed about Florida 25th District issues</h2>
+    <h3>Recap of the recommended workflow</h3>
+    <p>In short, combine saved searches on Congress.gov, Clerk roll-call checks for vote verification, aggregators like GovTrack for discovery, and OpenStates plus Florida's legislative pages for state-level activity. This multi-source routine balances convenience with authoritative records <a href="https://www.congress.gov/help/alerts" target="_blank" rel="noopener">Congress.gov help on tracking and alerts</a>.</p>
+    <h3>Where to find reliable follow-up resources</h3>
+    <p>Bookmark the <a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">official sites</a> for federal and state legislative records, set narrow saved searches and maintain a verification habit: when you see a claim, open the primary bill page and the Clerk entry before sharing or citing the information.</p>
+    <p>Consistent use of primary sources and cautious interpretation will help you <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">stay informed</a> about Florida 25th District issues and the votes and hearings that matter to the district.</p>
+        <figure class="special-image-standalone">
+          <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+            <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+          </a>
+        </figure>
+
+    <section class="faq-section" aria-label="Frequently Asked Questions">
+      <section class="faq-accordion"><input type="checkbox" id="faq-qicwz2" class="faq-toggle" /><label for="faq-qicwz2" class="faq-summary" role="button" tabindex="0">How can I get alerts for bills affecting FL-25?</label><div class="faq-content"><p>Create saved searches and enable email or RSS alerts on Congress.gov for keywords, bill numbers or the representative's name, and add aggregator alerts for broader discovery.</p></div></section>
+      <section class="faq-accordion"><input type="checkbox" id="faq-v2gsd4" class="faq-toggle" /><label for="faq-v2gsd4" class="faq-summary" role="button" tabindex="0">Where do I confirm how the FL-25 representative voted?</label><div class="faq-content"><p>Check the Office of the Clerk's official roll-call records to confirm how an individual member voted and save the Clerk entry as your citation.</p></div></section>
+      <section class="faq-accordion"><input type="checkbox" id="faq-wihj8m" class="faq-toggle" /><label for="faq-wihj8m" class="faq-summary" role="button" tabindex="0">Can I rely on GovTrack or OpenStates alone?</label><div class="faq-content"><p>Use GovTrack and OpenStates for discovery and convenience, but always verify summaries against primary sources like Congress.gov and state legislative pages.</p></div></section>
+    </section>
+
+    <section class="article-ending">Stay consistent with a small set of saved searches and a verification habit: when you see a report or social post about a bill, open the official bill page and the Clerk record before drawing conclusions. Over time this routine reduces errors and makes your tracking reliable.</section>
+      <section class="ba-refs">
+        <h3 class="ba-refs__title">References</h3>
+        <ul class="ba-refs__list">
+          <li><a href="https://ballotpedia.org/Florida%27s_25th_Congressional_District" target="_blank" rel="noopener">https://ballotpedia.org/Florida%27s_25th_Congressional_District</a></li><li><a href="https://www.govtrack.us/congress/members/FL/25" target="_blank" rel="noopener">https://www.govtrack.us/congress/members/FL/25</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.congress.gov/" target="_blank" rel="noopener">https://www.congress.gov/</a></li><li><a href="https://clerk.house.gov/Votes" target="_blank" rel="noopener">https://clerk.house.gov/Votes</a></li><li><a href="https://www.congress.gov/help/alerts" target="_blank" rel="noopener">https://www.congress.gov/help/alerts</a></li><li><a href="https://www.govtrack.us/about/howto" target="_blank" rel="noopener">https://www.govtrack.us/about/howto</a></li><li><a href="https://openstates.org/documentation/" target="_blank" rel="noopener">https://openstates.org/documentation/</a></li><li><a href="https://www.flsenate.gov/Session/Bills" target="_blank" rel="noopener">https://www.flsenate.gov/Session/Bills</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li><li><a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">https://michaelcarbonara.com/issues/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li>
+        </ul>
+      </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
