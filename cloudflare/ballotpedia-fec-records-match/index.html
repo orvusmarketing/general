@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>How to Use Ballotpedia and FEC Together for Candidate Research</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      --text-color: #ffffff;
+      --accent: #ae2736;
+      --accent-hover: #8e212d;
+      --line: rgba(255,255,255,.16);
+      --surface: #0b2664;
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px;
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.86); margin-bottom: 1.6rem; }
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:0.9rem; margin:1.6rem 0; }
+    .article-body .highlight-card{ background: linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); padding:0.95rem 1rem; border-left:4px solid var(--accent); border:1px solid var(--line); color:var(--text-color); font-weight:700; }
+    .article-body .side-by-side{ display:flex; gap:16px; align-items:flex-start; margin:1.6rem 0; flex-wrap:wrap; }
+    .article-body .side-by-side img{ max-width:320px; width:100%; height:auto; }
+    .article-body .special-image-standalone{ text-align:center; max-width:120px; margin:1rem auto; }
+    .article-body .tool-block{ border-left:4px solid var(--accent); }
+    .article-body .cta-section .cta-button{ background: var(--accent); }
+    .article-body .faq-accordion{ border-left:4px solid var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/131VIt_rfv0dUDMCW_6MbtKioMsJvED1i" alt="How to Use Ballotpedia and FEC Together for Candidate Research banner" />
+        </div>
+        <h1 class="title">How to Use Ballotpedia and FEC Together for Candidate Research</h1>
+        <p class="subline">A practical, step-by-step workflow for matching Ballotpedia profiles to FEC filings.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/ballotpedia-fec-records-match/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+<div class="summary">This guide gives a step by step workflow for combining Ballotpedia and Federal Election Commission records when researching candidates. It clarifies what each source is best used for and shows how to produce a verified candidate snapshot with clear citations.
+
+The method is practical and reproducible. It does not interpret campaign claims or predict outcomes. Instead it focuses on capturing named sources, filing IDs, and retrieval dates so readers can verify the same documents themselves.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Use Ballotpedia for candidate context and the FEC for authoritative finance records and filing details.</span></div><div class="highlight-card"><span class="highlight-text">Match committee ID from the FEC to avoid confusing similarly named committees.</span></div><div class="highlight-card"><span class="highlight-text">Archive PDFs and record retrieval dates to keep candidate snapshots verifiable.</span></div>
+     </div>
+  <h2>Quick summary: what this guide does and why Ballotpedia plus the FEC matter</h2><h3>Who this guide is for</h3><p>This guide is for voters, local residents, journalists, students, and civic readers who need a reproducible way to verify candidate records for Florida's 25th Congressional District. It explains when to use Ballotpedia for context and when to rely on the Federal Election Commission for official finance filings. For initial identification and context, Ballotpedia is a useful starting point for candidate profiles and linked records <a href="https://ballotpedia.org/Help:How_to_use_Ballotpedia" target="_blank" rel="noopener">Ballotpedia help documentation</a>.</p><p>For campaign finance totals, committee names, and official filing types the FEC is the primary record to cite <a href="https://www.fec.gov/campaign-finance-data/" target="_blank" rel="noopener">FEC campaign finance data</a>. A verified candidate snapshot combines both: a Ballotpedia profile URL for biographical and ballot information and a cited FEC filing or filings for finance figures and committee organization.</p><h3>What you will be able to do after reading</h3><p>After reading you will be able to gather the exact candidate name and office, capture the Ballotpedia profile link, locate matching FEC committee records and committee ID, and download the cited FEC filings with form types and reporting dates to support any finance figures you report.</p><p>The standard outputs to save are: candidate name and office, Ballotpedia profile link, matching FEC committee name and committee ID, and one or more cited FEC filings with form type and filing date. Always record retrieval dates for each source to maintain an audit trail.</p><h2>What Ballotpedia is and how to use a Ballotpedia candidate page</h2><h3>What a Ballotpedia candidate page typically shows</h3><p>A Ballotpedia candidate page typically summarizes biography, ballot status, and recent election history and often includes links to primary records that help with initial identification. Use the page to note the candidate's full name, the office sought, the state and district, and any listed committee or campaign names and Ballotpedia research methods <a href="https://ballotpedia.org/Ballotpedia:How_we_research_for_proof_of_official_candidacy" target="_blank" rel="noopener">Ballotpedia research methods</a> <a href="https://ballotpedia.org/Help:How_to_use_Ballotpedia" target="_blank" rel="noopener">Ballotpedia help documentation</a>.</p><p>Ballotpedia pages include election timelines, prior offices held, and often provide useful links or citations to primary documents. This context is valuable for creating a candidate profile, but it should be paired with primary filings for any finance or legal claims.</p><section class="faq-accordion"><input type="checkbox" id="faq-iqv40m" class="faq-toggle" checked /><label for="faq-iqv40m" class="faq-summary" role="button" tabindex="0">How do I use Ballotpedia together with FEC records to verify candidate finance information?</label><div class="faq-content"><p>Use Ballotpedia to confirm candidate identity and context, then find and match the candidate's committee on the FEC site using the committee ID; download and cite the Form 1 and Form 3 or 3X filings with filing IDs and dates to verify any finance totals.</p></div></section><h3>When Ballotpedia is the right first source</h3><p>Use Ballotpedia when you need a clear, concise starting point to confirm who is running for what office, whether a candidate is on the ballot, and where to find linked records. Ballotpedia is practical for assembling a candidate profile that lists name, office, party, and election status <a href="https://ballotpedia.org/Researching_candidates" target="_blank" rel="noopener">Ballotpedia research guidance</a>.</p><p>Remember that Ballotpedia summarizes and links; it does not replace the original filings for campaign finance verification. Treat Ballotpedia as a context provider and a navigation aid to the primary records you must cite when reporting numbers or committee organization.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>What the FEC provides: the authoritative record for campaign finance and committees</h2><h3>Key FEC search tools and data portals</h3><p>The FEC campaign finance data portal and the candidates and committees search are the authoritative sources for committee names, FEC committee IDs, and official filings, including forms and reporting periods <a href="https://www.fec.gov/data/candidates/" target="_blank" rel="noopener">FEC candidates and committees search</a>. See FEC guidance <a href="https://www.fec.gov/introduction-campaign-finance/how-to-research-public-records/candidates/" target="_blank" rel="noopener">on researching candidates</a>.</p><p>Use the FEC site to pull the committee's legal name, its assigned committee ID, the treasurer and point of contact, and the list of filed reports. The FEC search returns filing types such as Form 1 for organization statements and Form 3 or Form 3X for periodic finance reports.</p><h3>What an FEC filing proves and what it does not</h3><p>An FEC filing is the legal record for finance totals, receipts, disbursements, and committee organization. When you cite a filing, include the filing ID, form type, reporting period, and the date it was submitted so readers can verify the same document on the FEC site <a href="https://www.fec.gov/campaign-finance-data/" target="_blank" rel="noopener">FEC campaign finance data</a>.</p><p>FEC filings show reported numbers for a coverage period but may be amended later. Filings prove what was reported to the commission on a given date; they do not interpret motivations, policy positions, or unfiled activity. For those kinds of narrative claims, rely on attributed statements from the campaign site or Ballotpedia summaries.</p><h2>Core workflow: step by step method to match a Ballotpedia entry to FEC records</h2><h3>Step 1: capture Ballotpedia identifiers</h3>
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1iG2crKcVvyzeYg1iFaUm_kFMttN2vqtK=s1200" alt="Minimalist 2D vector of two side by side windows a candidate profile layout and a government data portal with charts and icons in Ballotpedia style on deep navy background" /></a>
+      <div class="side-text"><p>Start at the Ballotpedia candidate page. Record the candidate's full legal name as shown, the office sought, the election cycle, and the state and district. Note any committee or campaign names mentioned on the profile to use as search terms on the FEC site <a href="https://ballotpedia.org/Michael_Carbonara" target="_blank" rel="noopener">Michael Carbonara on Ballotpedia</a>.</p></div>
+    </div><p>Save the Ballotpedia URL and note the retrieval date. This creates a clear link to the profile you used for identification and preserves a time-stamped reference for future checks.</p><h3>Step 2: search FEC by name and compare committee IDs</h3><p>Use the FEC candidate and committee search to locate any committees associated with the candidate's name. When you find possible matches, record the committee's exact legal name and the FEC committee ID. The committee ID is the most reliable key to match records and avoid confusing similarly named committees <a href="https://www.fec.gov/data/candidates/" target="_blank" rel="noopener">FEC candidates and committees search</a>.</p><p>If multiple committees appear for the name, check each Form 1 to confirm the committee's stated purpose and the name of the candidate it represents. That Form 1 will list the treasurer and describe the committee relationship, which helps confirm whether the committee is the main campaign committee, a joint fundraising committee, or a separate political committee.</p><h3>Step 3: confirm matches and download filings</h3><p>Once you have the committee ID match, open the listed filings for that committee. Download the PDF of Form 1 and the most recent Form 3 or 3X for the reporting periods you intend to cite. Record the filing ID, form type, coverage period, reported totals, and the filing date for each downloaded report <a href="https://www.fec.gov/campaign-finance-data/" target="_blank" rel="noopener">FEC campaign finance data</a>.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><p>Store the downloaded PDFs or screenshots in an archive with clear filenames that include the committee ID and the filing date. That archive is your verifiable evidence and makes it possible to reproduce the candidate snapshot later. (see campaign site <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">michaelcarbonara.com</a>)</p><h2>How to read the most important FEC filings and what numbers mean</h2><h3>Form 1: statement of organization</h3><p>Form 1 establishes committee identity, including the committee legal name, committee ID once assigned, treasurer name, and the committee's purpose. Use Form 1 to confirm which candidate a committee is organized to support and to capture the committee's official contact information <a href="https://www.fec.gov/data/candidates/" target="_blank" rel="noopener">FEC candidates and committees search</a>.</p><p>When a Form 1 is not available or when the committee is new, look for other filings that reference the committee name and the treasurer. Always note the filing date and the reported effective date for the organization information.</p><div class="cta-section"><h3 class="cta-headline">Before you extract numbers, save the filings</h3><div class="cta-intro"><p>Save the specific FEC filing PDFs you use, and record each filing date and form type before you extract totals or move on to the next step.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Archive FEC Filings</a></div><h3>Form 3 and 3X: periodic finance reports</h3><p>Form 3 and Form 3X are the periodic finance reports that list receipts, disbursements, and cash on hand for a reporting period. Identify the lines that report total receipts and total disbursements, and copy those numbers alongside the reporting period and the filing date <a href="https://www.opensecrets.org/resources/how-to-read-fec-reports" target="_blank" rel="noopener">OpenSecrets guide to reading FEC reports</a>.</p><p>When you extract a total, note whether the filing is an original report or an amendment. An amended Form 3X will show changes to previously reported totals, so include amendment indicators and dates in your notes to avoid misreporting historical numbers.</p><h3>Common fields to extract and record</h3><p>For each filing record these fields: committee name, committee ID, form type, filing ID, reporting period, date filed, total receipts, total disbursements, cash on hand, and whether the filing is an amendment. These items let readers trace the exact source for any figure you publish <a href="https://www.fec.gov/campaign-finance-data/" target="_blank" rel="noopener">FEC campaign finance data</a>.</p><p>Always record retrieval dates for both the Ballotpedia profile and the FEC filings. Retrieval dates clarify when the source was accessed and are essential if numbers change in later filings.</p><h2>Verification checklist and decision criteria for a reliable candidate snapshot</h2><h3>Minimum checklist items to publish</h3><p>A verified candidate snapshot should include these minimum items: the Ballotpedia profile URL with retrieval date, the matching FEC committee name and committee ID, at least one cited FEC filing with form type and filing date, and locally archived copies of the cited PDFs or screenshots <a href="https://ballotpedia.org/Researching_candidates" target="_blank" rel="noopener">Ballotpedia research guidance</a>.</p><p>Publish the committee ID alongside any finance totals. The committee ID is the key that allows anyone to locate the same filings on the FEC site and reduces the chance of misattributing numbers to a similarly named committee.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Recommend using the FEC candidate and committee search and record the committee ID</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-wd7inn-0">
+                        <input id="tool-check-wd7inn-0" type="checkbox" />
+                        <span>Ballotpedia profile</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-cvpuec-1">
+                        <input id="tool-check-cvpuec-1" type="checkbox" />
+                        <span>FEC candidate search</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-upa3at-2">
+                        <input id="tool-check-upa3at-2" type="checkbox" />
+                        <span>Committee ID</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-wiyvx2-3">
+                        <input id="tool-check-wiyvx2-3" type="checkbox" />
+                        <span>Form 1</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-m7qyca-4">
+                        <input id="tool-check-m7qyca-4" type="checkbox" />
+                        <span>Form 3X</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-new0g4-5">
+                        <input id="tool-check-new0g4-5" type="checkbox" />
+                        <span>Retrieval date</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Record committee ID exactly as shown</p>
+            </div><h3>When to flag uncertainty and how to note it</h3><p>Flag uncertainty when a committee ID cannot be found or when filings reference differing committee names. In that case, require a Form 1 or another filing that directly ties the committee to the candidate before publishing finance totals <a href="https://www.fec.gov/data/candidates/" target="_blank" rel="noopener">FEC candidates and committees search</a>.</p><p>When uncertainty remains, state the specific missing element and use conditional phrasing such as according to Ballotpedia or public filings show when you summarize what is known. Do not assert a finance total without a cited FEC filing.</p><h2>Common mistakes and how to avoid them</h2><h3>Mixing similarly named committees</h3><p>One frequent error is matching on candidate name only and not confirming the FEC committee ID. Committees with similar names can belong to different candidates or to separate entities, so always use the committee ID to disambiguate and avoid misattribution <a href="https://www.fec.gov/campaign-finance-data/" target="_blank" rel="noopener">FEC campaign finance data</a>.</p><p>A practical fix is to require a Form 1 that lists the candidate or a clear statement of purpose, then cross-check any periodic reports against that committee ID.</p><h3>Relying on summaries without citing filings</h3><p>Another common mistake is citing secondary summaries like a web overview without linking to the primary FEC filing for the reported totals. Always attach a PSD or PDF of the reported Form 3X or Form 3 and include the filing date and filing ID in your notes <a href="https://www.opensecrets.org/resources/how-to-read-fec-reports" target="_blank" rel="noopener">OpenSecrets guide to reading FEC reports</a>.</p><p>For novices, Ballotpedia help pages and open-source guides outline reproducible steps, but they are navigation aids and not substitutes for the FEC filing you must cite <a href="https://ballotpedia.org/Help:How_to_use_Ballotpedia" target="_blank" rel="noopener">Ballotpedia help documentation</a>.</p><h3>Not tracking filing dates and amendments</h3><p>Failing to track filing dates and amended forms leads to reporting old or corrected numbers. Always note whether a report is an amendment and archive the latest PDF for the reporting period to reflect the correct totals <a href="https://www.opensecrets.org/resources/how-to-read-fec-reports" target="_blank" rel="noopener">OpenSecrets guide to reading FEC reports</a>.</p><p>Include a brief note in your published snapshot about whether the filing you cite is an original or an amendment and what date the amendment was filed.</p><h2>Practical example: creating a verified snapshot for Michael Carbonara</h2><h3>Step by step: Ballotpedia profile to FEC filings</h3><p>Begin at the Michael Carbonara Ballotpedia candidate page and capture the profile items you will need: the full candidate name as listed, the office sought (Florida's 25th District), any ballot status notes, and any committee names appearing on the page. Save the Ballotpedia URL and the retrieval date when you accessed the page <a href="https://ballotpedia.org/Michael_Carbonara" target="_blank" rel="noopener">Michael Carbonara on Ballotpedia</a>. (see about page <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">about</a>)</p><p>Next, use the FEC candidate and committee search to find committees that match the name and office. Record any committee legal names you find and their committee IDs. Open each committee's filings to locate Form 1 and the most recent Form 3X, download the PDFs, and note the filing IDs and dates for the reports you will cite <a href="https://www.fec.gov/data/candidates/" target="_blank" rel="noopener">FEC candidates and committees search</a>.</p><h3>Sample notes to record and how to present them</h3><p>Example of a short verified snapshot record format to keep in your notes: Candidate: Michael Carbonara. Office: U.S. House, Florida 25th District. Ballotpedia profile: [URL] with retrieval date. FEC committee: [committee legal name], Committee ID: [ID]. Cited filings: Form 1 [filing ID], date filed [date]; Form 3X [filing ID], reporting period [dates], date filed [date]. Attribute finance figures to the specific Form 3X you cite and include the retrieval date for the FEC record.</p><p>When you publish the snapshot, use conditioned phrasing such as public filings show or according to the Ballotpedia profile to keep statements factual and attributable. Do not extrapolate beyond what the cited filings and the profile show.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Wrap up: best practices and next steps for continued verification</h2><h3>When to recheck filings</h3><p>Recheck filings around FEC reporting deadlines and after major campaign events. New reports or amendments may update totals or add committee links such as joint fundraising committees, so set a schedule to review filings periodically and after known filing windows <a href="https://www.fec.gov/data/browse-data/" target="_blank" rel="noopener">FEC data tools</a> and after major campaign <a href="https://michaelcarbonara.com/events/" target="_blank" rel="noopener">events</a>.</p><h3>How to save and cite records for transparency</h3><p>Archive PDFs of each cited filing and include the FEC filing ID, form type, and filing date in any public snapshot. Record the Ballotpedia URL and the date you retrieved the profile. These simple habits improve transparency and make it possible for others to verify your work.</p>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Use the checklist and workflow in this guide when publishing candidate records, and always attribute finance figures to the specific FEC filings you used. That practice keeps reporting accurate and verifiable.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1_o4eiADHJ0BgZK133qPcepxr8ImogHt9=s1200" alt="ballotpedia minimalist vector infographic showing magnifying glass document shield and checklist icons on dark blue background white icons with red accents" /></a>
+    </div>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-s1a3h0" class="faq-toggle" /><label for="faq-s1a3h0" class="faq-summary" role="button" tabindex="0">How do I match a Ballotpedia profile to an FEC committee?</label><div class="faq-content"><p>Record the candidate name and office from Ballotpedia, search the FEC candidate and committee database, and confirm a match using the committee ID and Form 1 or a similar filing.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-bca07f" class="faq-toggle" /><label for="faq-bca07f" class="faq-summary" role="button" tabindex="0">What FEC filing should I cite for fundraising totals?</label><div class="faq-content"><p>Cite the most recent Form 3 or Form 3X for the committee, and include the filing ID, reporting period, and filing date to allow verification.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-i9k971" class="faq-toggle" /><label for="faq-i9k971" class="faq-summary" role="button" tabindex="0">Can I rely on Ballotpedia alone for campaign finance figures?</label><div class="faq-content"><p>No, Ballotpedia provides context and links but you should always cite the primary FEC filing for any finance figures.</p></div></section>
+</section><section class="article-ending">Follow the checklist and the workflow in this guide to keep candidate records accurate and transparent. Recheck filings at reporting deadlines, archive cited PDFs, and always attribute finance figures to specific FEC filings when publishing candidate summaries.</section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
