@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Florida General Election 2026: How Results Reporting Works on Election Night (and After)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff;          /* from --mc-ink */
+      --accent: #ae2736;              /* from --mc-accent */
+      --accent-hover: #8f222e;        /* derived darker accent */
+      --line: rgba(255,255,255,.16);  /* from --mc-line */
+      --surface: #0b2664;             /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px;                  /* from --mc-radius */
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/florida-general-election-2026-courthouse.jpg" alt="Florida General Election 2026: Results reporting overview" />
+        </div>
+        <h1 class="title">Florida General Election 2026: How Results Reporting Works on Election Night (and After)</h1>
+        <p class="subline">A concise guide to how Florida’s 2026 general election returns are reported on election night and finalized afterward.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/florida-general-election-2026-results-reporting-works/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+<div class="summary">This article explains how the Florida general election 2026 results are reported on election night and finalized afterward. It focuses on the roles of county election offices and the Florida Division of Elections, common sources of post-election changes, and where to find authoritative updates.
+
+The goal is to help voters, journalists, and civic readers understand why early returns can shift, what the canvass and certification processes do, and which official pages to trust for the final certified totals.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Election night numbers in Florida are unofficial and can change as counties complete their canvass.</span></div><div class="highlight-card"><span class="highlight-text">The Florida Division of Elections aggregates county certifications into a single statewide certified record.</span></div><div class="highlight-card"><span class="highlight-text">Absentee and provisional ballots processed after election night are common causes of post-election changes.</span></div>
+     </div>
+  <h2>Florida general election 2026 results, quick overview for election night and after</h2><p>The first numbers you see on election night are typically unofficial, interim totals published by county election offices. These numbers can change as counties process additional ballots and complete their official canvass, so initial leads are not certified results, according to the Florida Division of Elections canvassing and recounts page <a href="https://dos.myflorida.com/elections/for-voters/canvassing-recounts/" target="_blank" rel="noopener">Florida Division of Elections canvassing and recounts page</a>.</p><p>Counties send certified results to the state after their canvassing boards complete reviews, and the state aggregates county certifications into the official statewide record; the statewide aggregation and final certification happen after every county canvass is complete, as the Division explains on its certification pages <a href="https://dos.myflorida.com/elections/for-voters/canvassing-recounts/" target="_blank" rel="noopener">Florida Division of Elections canvassing and recounts page</a>.</p><p>Absentee ballots received by the close of polls but processed later and provisional ballots verified during canvass can change interim totals in the days after election night; county processing schedules and reporting practices affect how quickly those changes appear in public feeds, as described in state guidance on absentee voting <a href="https://dos.myflorida.com/elections/for-voters/voting/absentee-voting/" target="_blank" rel="noopener">Florida Division of Elections absentee voting guidance</a>.</p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Follow official county and state election pages for live updates</h3><div class="cta-intro"><p>Check the relevant county Supervisor of Elections page and the Florida Division of Elections site for live official updates rather than relying on early third-party tallies.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Find official election updates</a></div><h2>Why Florida has a two-tier reporting system  counties first, state consolidation next</h2><p>Florida uses a two-tier reporting system so local officials can manage ballot processing and verification while the state maintains a single certified record. Counties publish precinct-level returns and interim totals on election night, which gives voters early visibility of counts at the local level <a href="https://www.miamidade.gov/global/elections/results.page" target="_blank" rel="noopener">Miami-Dade County results page</a>.</p><p>After counties finish their canvasses, county canvassing boards certify local results and send certifications to the Division of Elections, which aggregates them into the statewide official record. The Division posts schedules and notices about the statewide canvass and certification process on its site <a href="https://dos.myflorida.com/elections/for-voters/canvassing-recounts/" target="_blank" rel="noopener">Florida Division of Elections canvassing and recounts page</a>.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure><h2>Step-by-step: what happens on election night and in the days after</h2><p>1) Polls close and precinct scanners produce ballot counts that counties include in interim feeds; those scanner totals form the backbone of early, unofficial results <a href="https://www.miamidade.gov/global/elections/results.page" target="_blank" rel="noopener">Miami-Dade County results page</a>.</p><p>2) Counties continue to process absentee ballots, scan batches, and reconcile counts overnight and in the days after; when jurisdictions defer scanning or reporting of some mail ballots, totals may change as those batches are posted <a href="https://dos.myflorida.com/elections/for-voters/voting/absentee-voting/" target="_blank" rel="noopener">Florida Division of Elections absentee voting guidance</a>.</p><p>3) County canvassing boards meet in the days following the election to verify provisional ballots, reconcile batches, correct reporting errors, and ultimately certify county totals; certified county returns are then forwarded to the Division of Elections for statewide aggregation <a href="https://dos.myflorida.com/elections/for-voters/canvassing-recounts/" target="_blank" rel="noopener">Florida Division of Elections canvassing and recounts page</a>.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Use county Supervisor of Elections live feed and Division certification schedule to track results</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-19rkeb-0">
+                        <input id="tool-check-19rkeb-0" type="checkbox" />
+                        <span>County results dashboard</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-4akh3p-1">
+                        <input id="tool-check-4akh3p-1" type="checkbox" />
+                        <span>Division certification schedule</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-h4k64o-2">
+                        <input id="tool-check-h4k64o-2" type="checkbox" />
+                        <span>Canvass meeting calendar</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Primary official sources to check</p>
+            </div><h2>Unofficial numbers versus certification  why the totals change</h2><p>Interim numbers on election night reflect what has been reported so far, not the final certified total. Counties may still have absentee batches to post or provisional ballots to verify, so reported leads can narrow or expand as those items are added during the canvass <a href="https://dos.myflorida.com/elections/for-voters/canvassing-recounts/" target="_blank" rel="noopener">Florida Division of Elections canvassing and recounts page</a>.</p><p>Errors in nightly reporting can also occur: unscanned batches, mislabeled files, or reconciliation differences may be corrected before certification, and county notices typically document any post-election adjustments that affect totals <a href="https://www.miamidade.gov/global/elections/results.page" target="_blank" rel="noopener">Miami-Dade County results page</a>.</p><h2>Provisional ballots in Florida: verification and when they are counted</h2><p>A provisional ballot is issued at the polling place when there is a question about a voter's eligibility or registration status; common reasons include a mismatch in registration details or a voter who requested a vote-by-mail ballot but appears at a polling location <a href="https://www.eac.gov/election-officials/guidance-provisional-ballots" target="_blank" rel="noopener">EAC guidance on provisional ballots</a>.</p><section class="faq-accordion"><input type="checkbox" id="faq-0c8ws4" class="faq-toggle" checked /><label for="faq-0c8ws4" class="faq-summary" role="button" tabindex="0">How do election night results become final certified results in Florida?</label><div class="faq-content"><p>Counties publish interim results on election night, then county canvassing boards verify ballots and certify county totals, after which the Division of Elections aggregates those certifications into the statewide certified record.</p></div></section><p>County canvassing boards review provisional ballots after the election, verifying eligibility through available records and procedures; only provisional ballots confirmed as valid are included in the official totals during the canvass period, as the Division and federal guidance explain <a href="https://dos.myflorida.com/elections/for-voters/canvassing-recounts/" target="_blank" rel="noopener">Florida Division of Elections canvassing and recounts page</a>.</p><p>For a voter who cast a provisional ballot, county election offices typically publish guidance on how to check whether that ballot was counted and the timeline for verification, which can extend several days after election night <a href="https://www.eac.gov/election-officials/guidance-provisional-ballots" target="_blank" rel="noopener">EAC guidance on provisional ballots</a>.</p><h2>Absentee (mail) ballots: deadlines, processing, and reporting implications</h2>
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1woFtOxQaDRs2-dbfktnSRV9wjjAZiUtx=s1200" alt="Minimalist vector computer screen showing a county election results dashboard with charts icons and a highlighted county map in Michael Carbonara color palette for Florida general election 2026" /></a>
+      <div class="side-text"><p>State guidance sets the deadline by which absentee ballots must be received to be counted, and counties follow established procedures for chain of custody, signature review, and ballot scanning; these steps can require days to complete at scale <a href="https://dos.myflorida.com/elections/for-voters/voting/absentee-voting/" target="_blank" rel="noopener">Florida Division of Elections absentee voting guidance</a>.</p></div>
+    </div><p>Counties vary in when they open and scan absentee ballots; some scan batches before election night while others defer processing until after polls close, and that local schedule affects how quickly those ballots appear in interim totals <a href="https://www.miamidade.gov/global/elections/results.page" target="_blank" rel="noopener">Miami-Dade County results page</a>.</p><p>Because mail ballots received by the close of polls may still be processed and included in the official totals during the canvass, expect changes to some contests in the days after election night, particularly in jurisdictions with high mail ballot volume <a href="https://dos.myflorida.com/elections/for-voters/voting/absentee-voting/" target="_blank" rel="noopener">Florida Division of Elections absentee voting guidance</a> (see the state election dates and activities calendar <a href="https://files.floridados.gov/media/708841/2025-2026-election-dates-activities-calendar-binder1-20250204-pm.pdf" target="_blank" rel="noopener">PDF</a>).</p><h2>Recounts and thresholds in Florida general election 2026: when automatic action happens</h2><p>Florida law sets fixed margins that trigger automatic machine recounts and, for narrower margins, manual recounts; when a contest falls within those statutory margins, recount procedures begin according to state statute and Division guidance <a href="https://www.leg.state.fl.us/Statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0102/0102.html" target="_blank" rel="noopener">Florida Statutes, Chapter 102</a> (see also national timeframes on certification and recounts <a href="https://www.ncsl.org/elections-and-campaigns/election-certification-deadlines" target="_blank" rel="noopener">NCSL</a>).</p><p>After a recount is triggered, the recount process can delay final certification while ballots are retabulated or manually inspected under the procedures specified by state law, and the Division of Elections provides timelines and notices for how those results are handled in the statewide certification process <a href="https://dos.myflorida.com/elections/for-voters/canvassing-recounts/" target="_blank" rel="noopener">Florida Division of Elections canvassing and recounts page</a>.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><h2>How to follow live returns and official updates on election night</h2><p>The most reliable live feeds come from county Supervisor of Elections websites, which publish interim results dashboards and canvass meeting calendars; for statewide status and certification schedules, use the Division of Elections site <a href="https://www.miamidade.gov/global/elections/results.page" target="_blank" rel="noopener">Miami-Dade County results page</a> and the state's certification and test schedule <a href="https://dos.fl.gov/elections/voting-systems/certificationapproval-status-and-test-schedule/" target="_blank" rel="noopener">Certification/Approval Status and Test Schedule</a>.</p><p>When reading an interim feed, check the timestamp on the data, look for notes about unprocessed absentee batches or provisional ballot counts, and consult the county's canvass meeting agenda for expected certification dates and adjustments <a href="https://dos.myflorida.com/elections/for-voters/canvassing-recounts/" target="_blank" rel="noopener">Florida Division of Elections canvassing and recounts page</a>.</p><p>Prefer official county notices and Division postings over third-party aggregations, and expect that some contests may remain in flux for several days while counties complete the canvass and the state aggregates certifications <a href="https://dos.myflorida.com/elections/for-voters/canvassing-recounts/" target="_blank" rel="noopener">Florida Division of Elections canvassing and recounts page</a>.</p><h2>County-by-county differences: what to expect depending on local procedures</h2><p>Within the framework of state law, counties set their own reporting cadence and ballot-processing schedules, so the pace of updates can look different from one county to another; check your county's Supervisor of Elections page for exact timelines and dashboards <a href="https://www.miamidade.gov/global/elections/results.page" target="_blank" rel="noopener">Miami-Dade County results page</a>.</p><p>Common differences include whether a county scans absentee batches early, how quickly provisional verifications are completed, and how detailed interim feeds are about outstanding ballots; those local choices affect how quickly totals stabilize <a href="https://dos.myflorida.com/elections/for-voters/canvassing-recounts/" target="_blank" rel="noopener">Florida Division of Elections canvassing and recounts page</a>.</p><h2>Common reporting pitfalls and misconceptions to avoid</h2><p>Do not treat an interim lead on election night as final; interim numbers are preliminary and can change during the canvass when absentee and provisional ballots are added or reporting corrections are made <a href="https://dos.myflorida.com/elections/for-voters/canvassing-recounts/" target="_blank" rel="noopener">Florida Division of Elections canvassing and recounts page</a>.</p><p>Provisional ballots require verification and are not automatically rejected or accepted at the polling place; county canvassing boards determine their eligibility during the canvass period, and that review can take several days <a href="https://www.eac.gov/election-officials/guidance-provisional-ballots" target="_blank" rel="noopener">EAC guidance on provisional ballots</a>.</p><p>Finally, mail ballots processed after polls close are a routine cause of post-election changes; that timing is a normal part of absentee ballot protocols and should not be interpreted as irregularity when county procedures are followed <a href="https://dos.myflorida.com/elections/for-voters/voting/absentee-voting/" target="_blank" rel="noopener">Florida Division of Elections absentee voting guidance</a>.</p><h2>Practical scenarios: three common post-election situations explained</h2><p>Scenario 1: A close race inside recount margin. If a contest finishes within the statutory margin that triggers an automatic recount, state law guides machine retabulation and possible manual review, which delays certification until the recount process is complete <a href="https://www.leg.state.fl.us/Statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0102/0102.html" target="_blank" rel="noopener">Florida Statutes, Chapter 102</a>.</p><p>Scenario 2: A large absentee backlog in a populous county. When a county receives many mail ballots, scanning and signature verification can take days; the county's interim totals may change as batches are posted, so watch the county dashboard and canvass notices for updates <a href="https://dos.myflorida.com/elections/for-voters/voting/absentee-voting/" target="_blank" rel="noopener">Florida Division of Elections absentee voting guidance</a>.</p><p>Scenario 3: High provisional ballot volume. If many provisional ballots require verification, the county canvassing board schedules additional review and the results of that verification can alter totals on close contests once eligibility is confirmed <a href="https://dos.myflorida.com/elections/for-voters/canvassing-recounts/" target="_blank" rel="noopener">Florida Division of Elections canvassing and recounts page</a>.</p><h2>After certification: when are results final and where records live</h2>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Formal certification begins with county canvasses and ends when the Division of Elections posts the aggregated statewide certified record; at that point the totals are the official vote record for each contest, as the Division describes on its certification pages <a href="https://dos.myflorida.com/elections/for-voters/canvassing-recounts/" target="_blank" rel="noopener">Florida Division of Elections canvassing and recounts page</a>.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1wMqpsuvwc_un2kCc5gWRgWse5RXi46xS=s1200" alt="Minimal 2D vector infographic with ballot box magnifying glass and calendar icons in Michael Carbonara color palette for Florida general election 2026" /></a>
+    </div><p>Certified results and county-certified documentation are the authoritative references for contest outcomes and are typically archived on the Division of Elections site and on county Supervisor of Elections pages for public access <a href="https://dos.myflorida.com/elections/for-voters/canvassing-recounts/" target="_blank" rel="noopener">Florida Division of Elections canvassing and recounts page</a>.</p><h2>Glossary: terms readers will see in live reporting and official notices</h2><p>Canvass: the post-election review and verification of ballots, reconciliation of batches, and formal certification by county boards and the state <a href="https://dos.myflorida.com/elections/for-voters/canvassing-recounts/" target="_blank" rel="noopener">Florida Division of Elections canvassing and recounts page</a>.</p><p>Provisional ballot: a ballot cast when there is a question about a voter's eligibility; it is reviewed by the county canvassing board before being included in official totals <a href="https://www.eac.gov/election-officials/guidance-provisional-ballots" target="_blank" rel="noopener">EAC guidance on provisional ballots</a>.</p><p>Machine recount and manual recount: recount types triggered by margin thresholds under state law; machine recounts retabulate using equipment and manual recounts involve human inspection according to statutory procedures <a href="https://www.leg.state.fl.us/Statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0102/0102.html" target="_blank" rel="noopener">Florida Statutes, Chapter 102</a>.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure><h2>Where to find official sources and what to trust</h2><p>Bookmark your county Supervisor of Elections website for live returns and the Division of Elections site for statewide certification schedules and official notices; these are the primary official sources to trust for updates <a href="https://www.miamidade.gov/global/elections/results.page" target="_blank" rel="noopener">Miami-Dade County results page</a>.</p><p>When verifying a county notice or Division posting, check the date and time of the document, look for the county canvass agenda or meeting minutes, and confirm that certified totals are reflected in the Division's statewide record once the county has completed its canvass <a href="https://dos.myflorida.com/elections/for-voters/canvassing-recounts/" target="_blank" rel="noopener">Florida Division of Elections canvassing and recounts page</a>.</p><h2>Recap: what voters should expect from election night through final certification</h2><p>Expect early, unofficial results on election night, followed by several days of county processing and canvass activity that can change interim totals; the Division of Elections compiles county certifications into the official statewide record at the conclusion of all county canvasses <a href="https://dos.myflorida.com/elections/for-voters/canvassing-recounts/" target="_blank" rel="noopener">Florida Division of Elections canvassing and recounts page</a>.</p><p>Remember that provisional ballots and absentee ballots received by the close of polls are normal reasons totals shift after election night, and recounts are triggered according to statutory margins and can delay final certification when they occur <a href="https://dos.myflorida.com/elections/for-voters/voting/absentee-voting/" target="_blank" rel="noopener">Florida Division of Elections absentee voting guidance</a>.</p><p>For readers in Florida's 25th District seeking candidate context, <a href="https://michaelcarbonara.com/republican-candidate-for-congress-michael-car/" target="_blank" rel="noopener">Michael Carbonara</a> is running as a Republican candidate in the 2026 cycle; consult <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">campaign materials</a> and <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">public filings</a> for biographical and platform details while relying on official election sources for vote totals and certification timelines.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-tnct47" class="faq-toggle" /><label for="faq-tnct47" class="faq-summary" role="button" tabindex="0">When are Florida election results final?</label><div class="faq-content"><p>Results are final after county canvassing boards certify local totals and the Division of Elections aggregates those certifications into the statewide certified record.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-40w7r8" class="faq-toggle" /><label for="faq-40w7r8" class="faq-summary" role="button" tabindex="0">Will provisional ballots be included in the totals immediately?</label><div class="faq-content"><p>No. Provisional ballots are reviewed by county canvassing boards and are included only after eligibility is confirmed during the canvass period.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-54yo5d" class="faq-toggle" /><label for="faq-54yo5d" class="faq-summary" role="button" tabindex="0">How do I track updates for my county on election night?</label><div class="faq-content"><p>Follow your county Supervisor of Elections website for live returns and the Division of Elections for statewide notices and certification schedules.</p></div></section>
+</section><section class="article-ending">If you want timely official updates on vote counts and certification schedules, check your county Supervisor of Elections page and the Division of Elections site. These primary sources provide the official documentation used for certification and public records.
+
+For candidate information in Florida’s 25th District, consult campaign pages and public filings for background and platform details, and rely on county or Division postings for verified vote totals.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://dos.myflorida.com/elections/for-voters/canvassing-recounts/" target="_blank" rel="noopener">https://dos.myflorida.com/elections/for-voters/canvassing-recounts/</a></li><li><a href="https://dos.myflorida.com/elections/for-voters/voting/absentee-voting/" target="_blank" rel="noopener">https://dos.myflorida.com/elections/for-voters/voting/absentee-voting/</a></li><li><a href="https://www.miamidade.gov/global/elections/results.page" target="_blank" rel="noopener">https://www.miamidade.gov/global/elections/results.page</a></li><li><a href="https://www.eac.gov/election-officials/guidance-provisional-ballots" target="_blank" rel="noopener">https://www.eac.gov/election-officials/guidance-provisional-ballots</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://files.floridados.gov/media/708841/2025-2026-election-dates-activities-calendar-binder1-20250204-pm.pdf" target="_blank" rel="noopener">https://files.floridados.gov/media/708841/2025-2026-election-dates-activities-calendar-binder1-20250204-pm.pdf</a></li><li><a href="https://www.leg.state.fl.us/Statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0102/0102.html" target="_blank" rel="noopener">https://www.leg.state.fl.us/Statutes/index.cfm?App_mode=Display_Statute&amp;URL=0100-0199/0102/0102.html</a></li><li><a href="https://www.ncsl.org/elections-and-campaigns/election-certification-deadlines" target="_blank" rel="noopener">https://www.ncsl.org/elections-and-campaigns/election-certification-deadlines</a></li><li><a href="https://dos.fl.gov/elections/voting-systems/certificationapproval-status-and-test-schedule/" target="_blank" rel="noopener">https://dos.fl.gov/elections/voting-systems/certificationapproval-status-and-test-schedule/</a></li><li><a href="https://michaelcarbonara.com/republican-candidate-for-congress-michael-car/" target="_blank" rel="noopener">https://michaelcarbonara.com/republican-candidate-for-congress-michael-car/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
