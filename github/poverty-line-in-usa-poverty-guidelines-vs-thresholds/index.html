@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Poverty Line vs. Poverty Guidelines: What the Numbers Mean</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #8f202a; /* derived darker accent */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(11,38,100,0.88);
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+
+    .article-body .summary{
+      font-style: italic;
+      color: rgba(255,255,255,.90);
+      margin-bottom: 1.6rem;
+    }
+    .article-body .article-highlights{ display:block; }
+    .article-body .highlight-card{ background: rgba(255,255,255,.03); border-left: 4px solid var(--accent); padding: 12px; margin-bottom:8px; }
+    .article-body .tool-block{ border-left:4px solid var(--accent); }
+    .article-body .faq-accordion{ border-left:4px solid var(--accent); }
+    .article-body .cta-section .cta-button{ background: var(--accent); }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1ibtTpmRHsMPWkvqveAQ2vKUZW2kGMprI" alt="Poverty Line vs. Poverty Guidelines illustration" />
+        </div>
+        <h1 class="title">Poverty Line vs. Poverty Guidelines: What the Numbers Mean</h1>
+        <p class="subline">Two official series formalize poverty in the U.S.: one for measurement and one used for program eligibility.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/poverty-line-in-usa-poverty-guidelines-vs-thresholds/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">Poverty numbers in the United States are formalized by two distinct systems that often get conflated in conversation. One system is designed for statistical measurement and trend analysis, the other is shaped for administrative use in eligibility rules.
+
+This article explains the practical difference between the Census Bureau poverty thresholds and the HHS poverty guidelines, shows where to find the official numbers, and provides a short checklist so you can decide which figure to use for analysis or benefits questions.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Two official series exist: Census thresholds for measurement and HHS guidelines for administrative use.</span></div><div class="highlight-card"><span class="highlight-text">Use Census thresholds for trend analysis and HHS guidelines or program rules for eligibility checks.</span></div><div class="highlight-card"><span class="highlight-text">Always cite the year and source when using poverty numbers to avoid misleading comparisons.</span></div>
+     </div>
+  <h2>Quick answer: what the poverty line in usa refers to</h2>
+<p>The phrase poverty line in usa commonly refers to <a href="https://www.prb.org/articles/u-s-poverty-thresholds-and-poverty-guidelines-whats-the-difference/" target="_blank" rel="noopener">two related but distinct series of official numbers</a>: the Census Bureau poverty thresholds, which are a technical set of values used to calculate the official poverty rate, and the HHS poverty guidelines, a simplified set of dollar levels that many agencies use for program eligibility. For measurement and trend work use the Census thresholds; for practical eligibility checks use the HHS guideline or a program-specific percentage of it.</p>
+<p>The Census thresholds and the HHS guidelines are updated each year, so always note the year when you quote a number and check the agency page for the current release.</p>
+<div class="tool-block tool-calculator tool-centered" data-tool-type="calculator" data-formula="Annual income&lt;=HHS guideline for Household size" data-output="Eligible?" data-unit="USD">
+              <p class="tool-purpose">Quick eligibility check using guideline year and household size</p>
+              <div class="tool-calc-grid"><div class="tool-calc-field">
+                <label class="tool-calc-label">Household size</label>
+                <input class="tool-calc-input" type="number" value="1" data-field="Household size" />
+              </div><div class="tool-calc-field">
+                <label class="tool-calc-label">Annual income</label>
+                <input class="tool-calc-input" type="number" value="10000" data-field="Annual income" />
+              </div><div class="tool-calc-field">
+                <label class="tool-calc-label">State</label>
+                <input class="tool-calc-input" type="number" value="" data-field="State" />
+              </div></div>
+              <div class="tool-calc-output">
+                <span class="tool-calc-output-label">Eligible?:</span>
+                <span class="tool-calc-output-value">-</span>
+                <span class="tool-calc-output-unit">USD</span>
+              </div>
+              <p class="tool-notes">Check official agency guidance for final determination</p>
+            </div>
+<p>Below we explain <a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">the difference</a>, show how agencies typically use the HHS guideline often called the Federal Poverty Level, and give a short checklist to decide which number you need.</p>
+<p><a href="https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html" target="_blank" rel="noopener">How the Census Bureau Measures Poverty</a></p>
+
+<h2>How the Census Bureau defines and uses poverty thresholds</h2>
+<p>The Census Bureau produces a technical set of <a href="https://www.irp.wisc.edu/resources/what-are-poverty-thresholds-and-poverty-guidelines/" target="_blank" rel="noopener">poverty thresholds</a> that vary by family size and composition; those thresholds are the basis for the official U.S. poverty rate and for time-series analysis of poverty trends. The thresholds are not a single round-number line but a table of values that reflect different household makeups, and the Census uses that series to calculate the percent of people living below those thresholds each year.</p>
+<p>Because these values are intended for statistical measurement and trend analysis, the Census materials explain that thresholds should not be treated as administrative eligibility rules for benefits programs; eligibility rules generally rely on other administrative measures. <a href="https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-poverty-thresholds.html" target="_blank" rel="noopener">Historical Poverty Tables: Poverty Thresholds</a></p>
+
+<h2>What the HHS poverty guidelines are and how agencies use the FPL</h2>
+<p>HHS publishes annual poverty guidelines that present simplified, round-number dollar levels by household size; these guidelines are commonly referred to as the Federal Poverty Level and are intended for administrative use by federal and state agencies. HHS issues the guideline numbers each year and the Federal Register notice contains the official annual text. <a href="https://www.cdc.gov/nchs/hus/sources-definitions/poverty.htm" target="_blank" rel="noopener">CDC: Poverty definitions</a></p>
+<p>The HHS guideline is not the same technical series the Census uses for measurement, but it is the one most programs reference directly or as a baseline for percent-of-FPL rules. <a href="https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines" target="_blank" rel="noopener">Poverty Guidelines (ASPE)</a></p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay informed on campaign updates and events</h3><div class="cta-intro"><p>Please check the current HHS guideline page or the specific program page you are using to confirm the most recent annual numbers before making eligibility decisions.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign</a></div>
+<p>Agencies sometimes reference the guideline itself, and sometimes apply a percentage of the guideline, so confirming the program rule is essential.</p>
+
+<h2>Why thresholds and guidelines differ and why that matters</h2>
+<p>The Census thresholds and the HHS guidelines are produced differently and serve separate purposes: thresholds are a detailed statistical series for measuring poverty rates over time, while HHS guidelines are simplified administrative levels used in program rules. Using one in place of the other can produce misleading conclusions.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-at7lvm" class="faq-toggle" checked /><label for="faq-at7lvm" class="faq-summary" role="button" tabindex="0">Which number should I use when someone asks about the poverty line in the USA?</label><div class="faq-content"><p>Use the Census poverty thresholds for measurement and trend analysis, and use the HHS poverty guideline or program-specific percent-of-FPL for eligibility questions; always confirm the year and program rule.</p></div></section>
+<p>Analysts and practitioners therefore advise using Census thresholds for trend work and HHS guidelines for program eligibility questions; both series are updated annually and the year matters when applying the numbers. <a href="https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html" target="_blank" rel="noopener">How the Census Bureau Measures Poverty</a></p>
+
+<h2>How federal programs commonly use the HHS guidelines</h2>
+<p>Many <a href="https://michaelcarbonara.com/affordable-healthcare/" target="_blank" rel="noopener">federal benefit programs</a> set income eligibility by referencing the HHS poverty guideline or a percentage of it, though exact rules vary by program and sometimes by state. Programs that use percent-of-FPL tests typically identify the relevant percentage in statute or agency regulation, so the guideline functions as a common yardstick rather than a universal cutoff. <a href="https://www.medicaid.gov/medicaid/eligibility/index.html" target="_blank" rel="noopener">Medicaid Eligibility</a></p>
+<p>For example, some Medicaid and CHIP eligibility rules use stated percent-of-FPL thresholds, while SNAP applies its own income-counting rules and limits that interact with FPL-based methods; always read the program guidance for the test that applies. <a href="https://www.fns.usda.gov/snap/eligibility" target="_blank" rel="noopener">SNAP: Eligibility</a></p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>Because programs may layer means tests, asset tests, and state options on top of FPL-based thresholds, the same income and household size can yield different eligibility outcomes across programs or states.</p>
+
+<h2>State options, adjustments, and why eligibility can vary</h2>
+<p>States have statutory options and administrative tools that can change how federal rules are applied, which is one reason the practical effect of an FPL percentage can differ geographically. State agencies may expand eligibility under federal options or apply state supplements, and these choices change who qualifies in a given state.</p>
+<p>Program guidance pages and state agency sites list the specific rules and any state supplements or adjustments that affect eligibility; for final determinations rely on the program office rather than a general guideline. <a href="https://www.medicaid.gov/medicaid/eligibility/index.html" target="_blank" rel="noopener">Medicaid Eligibility</a></p>
+
+<h2>Decision checklist: which number to use for your question</h2>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1QmisuDqjFnVLN1ldm59fWIDChzq2fct2=s1200" alt="Minimal 2D vector infographic of a household budget notebook calculator and bills on a kitchen table illustrating poverty line in usa using deep navy white and red accents" /></a>
+      <div class="side-text"><p>If you need a measurement for reporting or trend analysis, use the Census poverty thresholds and the official poverty rate published by the Census Bureau. For benefit eligibility questions, start with the HHS poverty guideline or the specific program regulation that cites a percent-of-FPL threshold.</p></div>
+    </div>
+<p>Practical steps: 1) Decide whether the question is measurement or eligibility. 2) If measurement, cite the Census thresholds and include the series year. 3) If eligibility, find the program statute or agency rule for the exact percent-of-FPL and check state options. <a href="https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines" target="_blank" rel="noopener">Poverty Guidelines (ASPE)</a></p>
+
+<h2>Common mistakes and pitfalls to avoid</h2>
+<p>A frequent error is substituting the HHS guideline for the Census measurement thresholds when analyzing poverty trends; the two series are not directly interchangeable because they are calculated for different purposes. For clear communication, name which series you are using and why.</p>
+<p>Another common pitfall is failing to note the year of the guideline or threshold; both the Census and HHS update their series annually, so numbers from different years are not directly comparable. <a href="https://www.federalregister.gov/documents/2024/01/22/2024-01337/annual-update-of-the-hhs-poverty-guidelines" target="_blank" rel="noopener">Annual Update of the HHS Poverty Guidelines</a></p>
+
+<h2>Practical examples: reading eligibility in practice</h2>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Example 1: To check Medicaid income eligibility for a household, locate the Medicaid program page for your state, confirm whether the program uses a percent-of-FPL test, then compare the household income and composition to the HHS guideline for the correct year. Program pages and CMS materials explain the percent-of-FPL that applies to different eligibility categories. <a href="https://www.medicaid.gov/medicaid/eligibility/index.html" target="_blank" rel="noopener">Medicaid Eligibility</a></p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1zL2D_6qthqbK8Swn-zfolIxJ2TgUCjW0=s1200" alt="Minimalist 2D vector infographic with government building household and stacked coins icons illustrating the poverty line in usa in Michael Carbonara color palette" /></a>
+    </div>
+<p>Example 2: For SNAP, consult the USDA Food and Nutrition Service eligibility guidance to see how income limits and deductions are applied; SNAP uses a set of income-counting rules that interact with but do not simply mirror HHS guidelines. For both examples, always verify which guideline year the program references. <a href="https://www.fns.usda.gov/snap/eligibility" target="_blank" rel="noopener">SNAP: Eligibility</a></p>
+<p>In practice, the step of finding the program citation that specifies either the guideline or percent-of-FPL is the key action that leads to an accurate eligibility check. <a href="https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines" target="_blank" rel="noopener">Poverty Guidelines (ASPE)</a></p>
+
+<h2>How analysts and journalists should cite these numbers</h2>
+<p>When writing about poverty rates or trends, cite the Census poverty thresholds and the Census poverty estimates, and include the series year in the citation to make comparisons transparent. Use the Census guidance and tables as your primary sources for measurement claims. <a href="https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html" target="_blank" rel="noopener">How the Census Bureau Measures Poverty</a></p>
+<p>When reporting eligibility thresholds or rules, cite the HHS Federal Register notice for the guideline year or the specific program regulation or agency page that states the percent-of-FPL rule. Including the year and the agency link is best practice for clarity. <a href="https://www.federalregister.gov/documents/2024/01/22/2024-01337/annual-update-of-the-hhs-poverty-guidelines" target="_blank" rel="noopener">Annual Update of the HHS Poverty Guidelines</a></p>
+
+<h2>Quick reference: where to find the official numbers</h2>
+<p>For the HHS guideline, start at the ASPE poverty guidelines page and consult the most recent Federal Register notice for the formal text. Those pages host the current annual numbers used for many program rules. <a href="https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines" target="_blank" rel="noopener">Poverty Guidelines (ASPE)</a></p>
+<p>For the Census thresholds and the official poverty rate, use the Census guidance and the historical poverty thresholds tables when you need measurement series and year-by-year figures. For program specifics, consult the Medicaid/CMS and USDA program pages. <a href="https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-poverty-thresholds.html" target="_blank" rel="noopener">Historical Poverty Tables: Poverty Thresholds</a></p>
+
+<h2>Wrap-up: key takeaways and next steps</h2>
+<p>Top takeaways: 1) Two official series exist for what people often call the poverty line: detailed Census poverty thresholds for measurement and simplified HHS poverty guidelines for administrative use. 2) For eligibility, consult the program rule or the HHS guideline year. 3) Always record the year of the series when you cite numbers.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>If you need eligibility certainty, go to the program page or state agency that administers the benefit and confirm the percent-of-FPL and any state options that apply. If you are doing trend analysis, use the Census thresholds and note the measurement method you used. <a href="https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html" target="_blank" rel="noopener">How the Census Bureau Measures Poverty</a></p>
+
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-8cegl8" class="faq-toggle" /><label for="faq-8cegl8" class="faq-summary" role="button" tabindex="0">Is the Federal Poverty Level the same as the poverty rate?</label><div class="faq-content"><p>No. The Federal Poverty Level is an administrative guideline published by HHS, while the poverty rate is calculated from the Census Bureau thresholds; they serve different purposes and are produced differently.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-qr0vmy" class="faq-toggle" /><label for="faq-qr0vmy" class="faq-summary" role="button" tabindex="0">Which number should I use when checking benefits eligibility?</label><div class="faq-content"><p>For benefits checks, start with the HHS poverty guideline or the program regulation that cites a percent-of-FPL; verify the specific percent and year on the program or state agency page.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-28gcws" class="faq-toggle" /><label for="faq-28gcws" class="faq-summary" role="button" tabindex="0">Do states use different poverty guidelines?</label><div class="faq-content"><p>States can apply federal options or supplements that affect eligibility, so outcomes can vary by state; check the relevant state agency guidance for details.</p></div></section>
+</section><section class="article-ending">Numbers used for measurement and numbers used for eligibility are not interchangeable; citing the correct series and year is central to clear communication. For benefit determinations, consult the program or state agency page that administers the rule.
+
+If you need further context, use the agency pages linked above to find the current guideline and threshold series and verify the year before applying any number in reporting or eligibility checks.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.prb.org/articles/u-s-poverty-thresholds-and-poverty-guidelines-whats-the-difference/" target="_blank" rel="noopener">https://www.prb.org/articles/u-s-poverty-thresholds-and-poverty-guidelines-whats-the-difference/</a></li><li><a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">https://michaelcarbonara.com/issues/</a></li><li><a href="https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html" target="_blank" rel="noopener">https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html</a></li><li><a href="https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-poverty-thresholds.html" target="_blank" rel="noopener">https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-poverty-thresholds.html</a></li><li><a href="https://www.irp.wisc.edu/resources/what-are-poverty-thresholds-and-poverty-guidelines/" target="_blank" rel="noopener">https://www.irp.wisc.edu/resources/what-are-poverty-thresholds-and-poverty-guidelines/</a></li><li><a href="https://www.cdc.gov/nchs/hus/sources-definitions/poverty.htm" target="_blank" rel="noopener">https://www.cdc.gov/nchs/hus/sources-definitions/poverty.htm</a></li><li><a href="https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines" target="_blank" rel="noopener">https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines</a></li><li><a href="https://www.medicaid.gov/medicaid/eligibility/index.html" target="_blank" rel="noopener">https://www.medicaid.gov/medicaid/eligibility/index.html</a></li><li><a href="https://www.fns.usda.gov/snap/eligibility" target="_blank" rel="noopener">https://www.fns.usda.gov/snap/eligibility</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.federalregister.gov/documents/2024/01/22/2024-01337/annual-update-of-the-hhs-poverty-guidelines" target="_blank" rel="noopener">https://www.federalregister.gov/documents/2024/01/22/2024-01337/annual-update-of-the-hhs-poverty-guidelines</a></li><li><a href="https://michaelcarbonara.com/affordable-healthcare/" target="_blank" rel="noopener">https://michaelcarbonara.com/affordable-healthcare/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
