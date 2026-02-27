@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Wages and Productivity Explained: How Data Is Collected and Interpreted</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736;     /* from --mc-accent */
+      --accent-hover: #8d202b; /* derived darker accent */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Scoped adjustments */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.88); margin-bottom: 1.25rem; }
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:1rem; margin:1.6rem 0; }
+    .article-body .highlight-card{ background:linear-gradient(135deg, rgba(255,255,255,.04) 0%, rgba(255,255,255,.02) 100%); border-left:4px solid var(--accent); padding:0.9rem; border:1px solid var(--line); }
+    .article-body .faq-accordion{ border:1px solid var(--line); border-left:4px solid var(--accent); padding:0; background:transparent; }
+    .article-body .tool-block{ border-left:4px solid var(--accent); }
+    .cta-button{ background: var(--accent); }
+    .cta-button:hover{ background: var(--accent-hover); filter:brightness(1.02); }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/wages-and-productivity-explained.jpg" alt="Wages and Productivity Explained banner" />
+        </div>
+        <h1 class="title">Wages and Productivity Explained: How Data Is Collected and Interpreted</h1>
+        <p class="subline">Clear, sourced guidance on how U.S. wage and productivity statistics are measured and compared.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/wages-and-productivity-explained-data-collection/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">This article explains how official U.S. wage and productivity statistics are measured, what the main data sources provide, and why those choices matter for interpretation. It is intended for voters, journalists, students, and civic readers who want clear, sourced guidance on comparing series.
+
+We rely on official agency methods and international guidance to describe common adjustments, typical errors, and practical checks readers can use when they encounter headlines about wages or productivity. The goal is to help readers find and evaluate primary sources before drawing conclusions.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Official productivity measures use output per hour and rely on national accounts to define output.</span></div><div class="highlight-card"><span class="highlight-text">Wage measures come from household surveys, payroll records, and employer cost statistics with different coverage and biases.</span></div><div class="highlight-card"><span class="highlight-text">Compare like with like: check deflators, hours definitions, and whether measures are nominal or real.</span></div>
+     </div>
+  <h2>Wages and productivity explained: clear definitions and why terms matter</h2><p>When experts talk about wages and productivity they mean related but distinct concepts that use different data and methods. Wages commonly refers to measures such as hourly earnings from household surveys, payroll-based average hourly earnings from employer surveys, and total compensation that adds benefits to pay. Productivity usually refers to output per hour, a concept used in official labor productivity series to relate the goods and services produced to the hours of labor used.</p><p>These distinctions matter because the choice of wage measure and the definition of output change the comparison. For example, comparing nominal hourly pay from a household survey to real output per worker can give a misleading picture unless both series are adjusted to the same price basis and coverage. According to the BLS, output per hour is the standard concept used in official labor productivity statistics and the bureau documents its methods and revisions online <a href="https://www.bls.gov/lpc/" target="_blank" rel="noopener">BLS Labor Productivity and Costs program</a> and on the <a href="https://www.bls.gov/productivity/" target="_blank" rel="noopener">BLS productivity home</a>.</p><section class="faq-accordion"><input type="checkbox" id="faq-rahz8z" class="faq-toggle" checked /><label for="faq-rahz8z" class="faq-summary" role="button" tabindex="0">Which series should I compare for living standards?</label><div class="faq-content"><p>Compare total compensation in real terms for consistent coverage, and ensure the output series and hours definition used for productivity match that coverage before forming conclusions.</p></div></section><p>Another common issue is nominal versus real series. Nominal values are measured in current dollars and reflect price changes, while real values are adjusted with a price index so they capture purchasing power. The BEA supplies the GDP and value-added measures that analysts use to build consistent output series and to deflate nominal aggregates into real terms <a href="https://www.bea.gov/resources/methodologies/nipa-handbook" target="_blank" rel="noopener">BEA NIPA handbook</a>. Readers should also note coverage differences: some series cover private nonfarm employees only, while others cover the whole economy or specific industries, and those choices affect comparability.</p><h2>Why wage and productivity measures matter for public discussion</h2><p>Wage and productivity statistics are used to assess living standards, monitor broad economic performance, and compare sectoral outcomes. Policymakers, journalists, and analysts use these measures to discuss whether pay is keeping up with output growth and to identify sectors where gains are concentrated. These uses depend on selecting the right series and understanding their limits.</p><p>Headlines that report gaps between wages and productivity are common, but short run divergences can arise from timing, coverage, and measurement choices rather than from an underlying economic contradiction. International reviews and policy papers highlight that careful interpretation is required and often call for crosschecks across multiple series before drawing conclusions <a href="https://www.ilo.org/global/research/global-reports/global-wage-report/lang--en/index.htm" target="_blank" rel="noopener">ILO global wage reports and reviews</a>.</p><h2>Who produces official US measures and what each agency provides</h2><p>Two main U.S. agencies produce the primary statistics readers should consult. The Bureau of Labor Statistics is the primary producer of official labor productivity series, publishing output-per-hour estimates and methodological notes that explain source data and index construction <a href="https://www.bls.gov/lpc/" target="_blank" rel="noopener">BLS Labor Productivity and Costs program</a>.</p><p>The Bureau of Economic Analysis supplies GDP and industry value-added series that are essential inputs to productivity measures. The BEA publishes guidance on concepts and methods used in the national accounts, which are used to construct consistent output series for productivity analysis <a href="https://www.bea.gov/resources/methodologies/nipa-handbook" target="_blank" rel="noopener">BEA NIPA handbook</a>.</p><p>Both agencies are commonly used together in productivity work: the BEA provides the national accounts that define output and value added, and the BLS combines those output measures with hours data to produce official labor productivity estimates. International guidance such as the OECD Productivity Manual offers additional conventions and methods that researchers use when they want to make cross-country comparisons <a href="https://www.oecd.org/sdd/productivity-stats/productivity-manual.htm" target="_blank" rel="noopener">OECD Productivity Manual</a>.</p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Find the primary methodology pages</h3><div class="cta-intro"><p>For primary documentation, consult the agency methodology pages, where method notes and revision histories explain how series are constructed and when they change.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Visit the campaign join page</a></div><h2>How wages are measured: surveys and employer records</h2><p>Wage measurement uses several distinct instruments, each with particular coverage and strengths. Household surveys like the Current Population Survey collect self-reported hourly earnings and are useful for distributional analysis and median pay statistics, but they are limited by sample design and reporting error. The CPS documentation outlines what the survey captures and its reliability considerations <a href="https://www.census.gov/programs-surveys/cps/technical-documentation.html" target="_blank" rel="noopener">CPS technical documentation</a>.</p><p>Establishment surveys provide employer-reported data. The Current Employment Statistics program reports payroll employment and average hourly earnings for many industries and is based on employer payrolls, while Employer Costs for Employee Compensation captures measures of total compensation that include wages and benefits. The BLS hosts methodology pages for these employer-based series to explain coverage and uses <a href="https://www.bls.gov/ncs/ebs/" target="_blank" rel="noopener">BLS employer compensation and payroll documentation</a>.</p><h2>How productivity is measured: output, hours and index construction</h2>
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1kSwtKrxAhzdD5gyGSe2RyPwudAaVtnfx=s1200" alt="Minimalist vector infographic with stylized table calculator and pen icons on deep blue background representing wages and productivity explained" /></a>
+      <div class="side-text"><p>At its core, productivity is a ratio that compares an output measure to a labor input. The BLS uses output per hour as its standard labor productivity concept, combining measures of output with hours worked or hours paid to produce index series. Those output measures often rely on BEA value-added and GDP concepts to ensure the numerator matches the national accounts framework <a href="https://www.bls.gov/lpc/" target="_blank" rel="noopener">BLS Labor Productivity and Costs program</a>. Data users can also consult series such as the FRED labor productivity graph for historical series <a href="https://fred.stlouisfed.org/graph/?g=d8eH" target="_blank" rel="noopener">FRED labor productivity</a>.</p></div>
+    </div><p>Hours definitions matter in practice. Analysts may use hours paid, which include paid leave and paid overtime, or hours worked, which exclude paid leave; the choice affects short-run productivity rates because hours definitions change the denominator. Chain-weighted index construction and the choice of deflators also affect growth comparisons across time. For readers looking for related candidate materials, campaign website content such as <a href="https://michaelcarbonara.com/republican-candidate-for-congress-michael-car/" target="_blank" rel="noopener">candidate profiles</a> or <a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">issue pages</a> can provide contextual background on why measurement matters for policy discussion, and the campaign maintains standard contact channels for inquiries 
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div></p><h2>Common adjustments: deflators, hours normalization and quality change</h2><p>Analysts commonly compare real series rather than nominal ones so that price changes do not distort trends. Price deflation uses the appropriate price index for the output or wage series being compared; choosing the wrong deflator can make pay appear to lag or lead output incorrectly. OECD guidance and national methodologies discuss which deflators suit different comparisons <a href="https://www.oecd.org/sdd/productivity-stats/productivity-manual.htm" target="_blank" rel="noopener">OECD Productivity Manual</a>.</p><p>Another standard adjustment is normalizing by hours. Output per hour differs from output per worker because changes in average hours can move the measured productivity even if output per worker is unchanged. Quality adjustments are more complex and remain an active methodological challenge: researchers try to account for shifts in skill composition, experience, and nonwage benefits when interpreting wage series, but methods vary and results can affect conclusions about the wage-productivity relationship <a href="https://www.ilo.org/global/research/global-reports/global-wage-report/lang--en/index.htm" target="_blank" rel="noopener">ILO reviews and selected summaries</a>.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick checks to compare deflators and series</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-jscvtc-0">
+                        <input id="tool-check-jscvtc-0" type="checkbox" />
+                        <span>Deflator used</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-fu8akn-1">
+                        <input id="tool-check-fu8akn-1" type="checkbox" />
+                        <span>Series coverage</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-6t2nl9-2">
+                        <input id="tool-check-6t2nl9-2" type="checkbox" />
+                        <span>Hours definition</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use official agency tables when possible</p>
+            </div><h2>Typical measurement errors and sources of bias</h2><p>Official agencies and academic reviewers note common error sources such as sampling error and nonresponse in surveys. These routine survey limitations can affect wage estimates and median earnings calculations, especially for disaggregated groups or small industries <a href="https://www.census.gov/programs-surveys/cps/technical-documentation.html" target="_blank" rel="noopener">CPS technical documentation</a>.</p><p>Other problems include timing and definitional mismatches between when output is recorded and when labor inputs are measured at the firm level. Firms report output and payrolls on different schedules and with different concepts, which can bias short-term wage-productivity comparisons. Undercoverage of nonstandard employment and fringe benefits also matters because employer-based and household-based series capture different parts of total compensation <a href="https://www.bls.gov/ncs/ebs/" target="_blank" rel="noopener">BLS employer compensation and payroll documentation</a>.</p><h2>How to interpret reports: a short checklist for readers</h2><p>1. Check whether the series are nominal or real and which deflator was used. Comparing nominal wages to real output or vice versa will mislead. Where possible, prefer series reported in real terms and note the price index applied <a href="https://www.bea.gov/resources/methodologies/nipa-handbook" target="_blank" rel="noopener">BEA NIPA handbook</a>.</p><p>2. Verify coverage and hours definition. Ask whether the series covers private nonfarm only or the whole economy, and whether hours are paid or worked. These details change the denominator and the interpretation of productivity or wage growth. 3. When evaluating living standards, prioritize total compensation measures that include benefits and employer costs rather than hourly pay alone, and crosscheck results across BLS, BEA, and international guidance sources before drawing strong conclusions.</p><h2>Examples and scenarios: reading real cases</h2>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Sector comparison: manufacturing versus services. Productivity comparisons can differ depending on output definitions. Manufacturing output often has clear value-added measures tied to goods shipped, while many services involve output that is harder to price. Using BEA value-added measures and the BLS productivity framework can help make an apples-to-apples comparison, but the chosen deflator and hours concept will still shape the result <a href="https://www.bea.gov/resources/methodologies/nipa-handbook" target="_blank" rel="noopener">BEA NIPA handbook</a>. Quarterly industry-level labor productivity data offer another perspective on sector patterns <a href="https://www.chicagofed.org/publications/economic-perspectives/2025/1" target="_blank" rel="noopener">Chicago Fed quarterly industry-level data</a>.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1VWf9tmzblytjesRuEmHZXPui1paHMfDA=s1200" alt="Minimalist 2D vector infographic on deep navy background showing magnifying glass bar chart and clock icons in Michael Carbonara palette emphasizing wages and productivity explained" /></a>
+    </div><p>Nominal wage jump versus real wage stagnation. A nominal pay rise reported in payroll statistics may not translate into higher purchasing power if consumer prices rise faster. For that reason, comparing nominal wage growth to real output growth can produce contradictory headlines. Always verify whether pay series are inflation-adjusted and which consumer or GDP deflator was used <a href="https://www.oecd.org/sdd/productivity-stats/productivity-manual.htm" target="_blank" rel="noopener">OECD Productivity Manual</a>.</p><p>Benefits and total compensation. An instance where employer-paid benefits rise faster than base pay will show limited movement in average hourly earnings yet larger gains in total compensation measures. Employer cost statistics capture those shifts and can change the interpretation of whether workers are sharing productivity gains <a href="https://www.bls.gov/ncs/ebs/" target="_blank" rel="noopener">BLS employer compensation and payroll documentation</a>.</p><p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure></p><h2>Open questions and ongoing methodological debates</h2><p>Adjusting for quality change is an open research area. Analysts continue to refine methods to account for changes in the skill mix, experience, and product quality, because these compositional shifts can make raw wage and productivity comparisons misleading. OECD and academic reviews discuss competing approaches and their implications for measured trends <a href="https://www.oecd.org/sdd/productivity-stats/productivity-manual.htm" target="_blank" rel="noopener">OECD Productivity Manual</a>.</p><p>Treatment of nonwage benefits and gig work also remains unsettled. Capturing nonstandard employment, contractor arrangements, and platform-based work poses measurement challenges for both wage and hours statistics, and different data instruments will capture these segments with varying success <a href="https://www.ilo.org/global/research/global-reports/global-wage-report/lang--en/index.htm" target="_blank" rel="noopener">ILO reviews and summaries</a>.</p><h2>Where to find primary sources and method notes</h2><p>Bookmark the BLS Labor Productivity and Costs program page for official productivity series and its methodology overview, which explains output, hours, and index construction. The BLS site is the primary reference for labor productivity methods and revisions <a href="https://www.bls.gov/lpc/" target="_blank" rel="noopener">BLS Labor Productivity and Costs program</a>. See the campaign news page <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">campaign news</a>.</p><p>For output concepts and value-added measures, consult the BEA NIPA handbook sections on output and value added. The BEA documentation explains how national accounts concepts feed into productivity and GDP-based comparisons <a href="https://www.bea.gov/resources/methodologies/nipa-handbook" target="_blank" rel="noopener">BEA NIPA handbook</a>. The OECD Productivity Manual and selected academic reviews provide additional methodological context for international comparisons and quality adjustments <a href="https://www.oecd.org/sdd/productivity-stats/productivity-manual.htm" target="_blank" rel="noopener">OECD Productivity Manual</a>.</p><h2>Key takeaways and cautious next steps for readers</h2><p>Wages and productivity are related but measured with different tools. Wage measures come from household surveys, employer payrolls, and compensation cost series, while productivity relies on output measures and hours definitions. Each source has strengths and limits, so comparing like with like is essential <a href="https://www.bls.gov/lpc/" target="_blank" rel="noopener">BLS Labor Productivity and Costs program</a>.</p><p>Before drawing conclusions from a headline, check whether the series are real or nominal, which deflator was used, the coverage and hours definition, and whether total compensation is available. When possible, crosscheck BLS, BEA, and OECD sources to build a more robust view of wage and productivity trends <a href="https://www.bea.gov/resources/methodologies/nipa-handbook" target="_blank" rel="noopener">BEA NIPA handbook</a>.</p><p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure></p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-vdembj" class="faq-toggle" /><label for="faq-vdembj" class="faq-summary" role="button" tabindex="0">How do wages and productivity differ in measurements?</label><div class="faq-content"><p>Wages are measured by household and employer surveys and by employer cost statistics; productivity is usually output per hour calculated from output series and hours inputs. Each uses different sources and has different coverage.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-bdujqx" class="faq-toggle" /><label for="faq-bdujqx" class="faq-summary" role="button" tabindex="0">Which data source should I check first?</label><div class="faq-content"><p>For productivity, start with the BLS Labor Productivity and Costs program and the BEA NIPA handbook for output concepts. For wages, consult CPS for household earnings and BLS employer series for payroll and compensation.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-575vik" class="faq-toggle" /><label for="faq-575vik" class="faq-summary" role="button" tabindex="0">Should I compare nominal numbers or real numbers?</label><div class="faq-content"><p>Compare real series adjusted with an appropriate deflator to avoid misleading conclusions from price changes.</p></div></section>
+</section><section class="article-ending">Use the checklist in this article when you read reports linking wages and productivity. For deeper reading, consult the BLS and BEA method pages and the OECD manual linked in the text, and treat short-term divergences with caution until multiple series are checked.
+
+If you need specific agency pages or want help locating methodology notes, the article points to the key pages to start with.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.bls.gov/lpc/" target="_blank" rel="noopener">https://www.bls.gov/lpc/</a></li><li><a href="https://www.bls.gov/productivity/" target="_blank" rel="noopener">https://www.bls.gov/productivity/</a></li><li><a href="https://www.bea.gov/resources/methodologies/nipa-handbook" target="_blank" rel="noopener">https://www.bea.gov/resources/methodologies/nipa-handbook</a></li><li><a href="https://www.ilo.org/global/research/global-reports/global-wage-report/lang--en/index.htm" target="_blank" rel="noopener">https://www.ilo.org/global/research/global-reports/global-wage-report/lang--en/index.htm</a></li><li><a href="https://www.oecd.org/sdd/productivity-stats/productivity-manual.htm" target="_blank" rel="noopener">https://www.oecd.org/sdd/productivity-stats/productivity-manual.htm</a></li><li><a href="https://www.census.gov/programs-surveys/cps/technical-documentation.html" target="_blank" rel="noopener">https://www.census.gov/programs-surveys/cps/technical-documentation.html</a></li><li><a href="https://www.bls.gov/ncs/ebs/" target="_blank" rel="noopener">https://www.bls.gov/ncs/ebs/</a></li><li><a href="https://www.bls.gov/ces/" target="_blank" rel="noopener">https://www.bls.gov/ces/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://fred.stlouisfed.org/graph/?g=d8eH" target="_blank" rel="noopener">https://fred.stlouisfed.org/graph/?g=d8eH</a></li><li><a href="https://www.chicagofed.org/publications/economic-perspectives/2025/1" target="_blank" rel="noopener">https://www.chicagofed.org/publications/economic-perspectives/2025/1</a></li><li><a href="https://michaelcarbonara.com/republican-candidate-for-congress-michael-car/" target="_blank" rel="noopener">https://michaelcarbonara.com/republican-candidate-for-congress-michael-car/</a></li><li><a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">https://michaelcarbonara.com/issues/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
