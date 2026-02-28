@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Florida’s 25th District Issues: How to Use Data Without Making Claims</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens (from provided style) */
+      --text-color: #ffffff;            /* from --mc-ink */
+      --accent: #ae2736;                /* from --mc-accent */
+      --accent-hover: #8f202c;          /* derived darker accent */
+      --line: rgba(255,255,255,.16);    /* from --mc-line */
+      --surface: #0b2664;               /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px;                    /* from --mc-radius */
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1J7MTsweaOySKux-jfQk9xdXxn20MvAuy" alt="Florida's 25th District — data guide banner" />
+        </div>
+        <h1 class="title">Florida’s 25th District Issues: How to Use Data Without Making Claims</h1>
+        <p class="subline">A practical guide to using ACS and certified state returns when reporting on Florida's 25th Congressional District.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/district-fl-25-data-guide/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+          <div class="summary">This guide helps reporters, students, and civic readers use data to describe Florida&#39;s 25th Congressional District without making unsupported claims. It focuses on primary sources, clear attribution, and reproducible methods.
+The emphasis is on practical steps: how to get ACS figures, where to find certified state returns, how to align geographies for maps, and how to present uncertainty clearly.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Use ACS 5-year estimates for district demographics and always report margins of error.</span></div><div class="highlight-card"><span class="highlight-text">Use certified Florida Division of Elections returns for vote totals and precinct-level reporting.</span></div><div class="highlight-card"><span class="highlight-text">Triangulate at least two primary sources and document table IDs and access dates for reproducibility.</span></div>
+     </div>
+  <h2>What 'district' means for reporting on FL-25: definition and context</h2><p>A congressional district is a legally defined geographic area used to elect a member to the U.S. House of Representatives. In reporting, the district label ties facts to a specific set of boundaries and population estimates.</p><p>For demographic figures at the district level, rely on the American Community Survey 5-year estimates and report margins of error with every point estimate, because those figures are the canonical source for congressional district socioeconomic data <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">U.S. Census Bureau American Community Survey</a> (<a href="https://www.census.gov/data/developers/data-sets/acs-5year.html" target="_blank" rel="noopener">ACS 5-year dataset page</a>).</p><section class="faq-accordion"><input type="checkbox" id="faq-aj5lef" class="faq-toggle" checked /><label for="faq-aj5lef" class="faq-summary" role="button" tabindex="0">How should reporters use ACS and state returns to report on Florida&#39;s 25th District responsibly?</label><div class="faq-content"><p>Use ACS 5-year estimates for demographics with margins of error, use Florida Division of Elections certified returns for vote totals, triangulate at least two primary sources, and document table IDs and access dates for transparency.</p></div></section><p>For certified election returns and precinct-level totals, use the state source rather than secondary summaries. The Florida Division of Elections publishes official certified totals and precinct files that should anchor vote-share and turnout reporting <a href="https://dos.myflorida.com/elections/" target="_blank" rel="noopener">Division of Elections - Florida Department of State</a></p><p>Ballotpedia provides a concise candidate listing and recent election history useful for context, but it is a secondary reference and should be cross-checked with primary filings and official returns <a href="https://ballotpedia.org/Florida%27s_25th_Congressional_District" target="_blank" rel="noopener">Florida's 25th Congressional District on Ballotpedia</a></p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Why accurate district data matters for voter information</h2><p>Accurate district data helps voters understand who lives in the area, how people vote, and what local trends matter for civic decisions. Clear sourcing lets readers judge the strength of any descriptive claim.</p><p>Reporting that mixes sources without methods invites mistakes. Always display ACS margins of error and date your data extract to show currency. This step reduces the risk of overstating precision in demographic statements <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">U.S. Census Bureau American Community Survey</a></p><p>Triangulation is a basic safeguard. Use at least two primary datasets, for example ACS estimates plus certified state returns, before making comparative claims about turnout or demographic change <a href="https://www.pewresearch.org/methods/" target="_blank" rel="noopener">Methods and Use of Government Statistics</a></p><h2>Primary sources to use for FL-25: ACS, state returns, and trusted datasets</h2><p>Prioritize primary sources in this order: ACS 5-year estimates for demographics, Florida Division of Elections certified returns for vote totals, and standardized datasets or shapefiles for historical comparisons. That ordering reflects each source's role in building a defensible story.</p><p>The ACS 5-year tables are the canonical place to get district-level socioeconomic estimates and include margins of error that reporters must report alongside point estimates <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">American Community Survey (ACS) - U.S. Census Bureau</a></p><p>The Florida Division of Elections publishes certified vote totals and precinct-level returns that should be used for election-result reporting instead of relying on third-party summaries <a href="https://dos.myflorida.com/elections/" target="_blank" rel="noopener">Division of Elections - Florida Department of State</a></p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Join campaign updates and involvement opportunities</h3><div class="cta-intro"><p>Consult the primary datasets listed above when preparing a district story, and record the table IDs, certified file names, and access dates for readers.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the Campaign</a></div><p>For historical comparisons and mapping, standardized election datasets and shapefiles from research groups such as the MIT Election Data and Science Lab help keep geography and time series consistent <a href="https://electionlab.mit.edu/" target="_blank" rel="noopener">Election Data and Science Lab - Datasets and Resources</a> (<a href="https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html" target="_blank" rel="noopener">Census TIGER/Line shapefiles</a>).</p><p>When working with ACS microdata or custom tabulations, consult IPUMS documentation for correct weighting and replication methods to avoid biased estimates <a href="https://usa.ipums.org/usa/" target="_blank" rel="noopener">IPUMS USA</a></p><h2>How to extract and cite ACS estimates for the district</h2><p>Start with the ACS 5-year table that matches your need. Note the table ID, the year range, and the exact estimate you cite. Documenting table IDs lets readers and editors verify numbers later <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">American Community Survey (ACS) - U.S. Census Bureau</a>. For a quick district profile, see the Census Reporter entry for FL-25 <a href="http://censusreporter.org/profiles/50000US1225-congressional-district-25-fl/" target="_blank" rel="noopener">Congressional District 25, FL - Profile data</a>.</p><p>Report each point estimate with its margin of error and the ACS year range. A clear sentence might read: "Median household income was $X (ACS 5-year estimate, margin of error +/- $Y, 2019 to 2023)." This phrasing shows both the value and its uncertainty.</p><p>If you create a custom tabulation from microdata, follow IPUMS guidance on weighting and replication. That documentation explains how to prepare microdata so results are reproducible and appropriately weighted <a href="https://usa.ipums.org/usa/" target="_blank" rel="noopener">IPUMS USA - Documentation and Microdata</a></p><p>Always record access dates and the exact table or file name in a methodological note or inline citation. That practice helps readers understand when the data snapshot was taken and which version you used.</p><h2>Using Florida Division of Elections returns for turnout and vote-share reporting</h2><p>Obtain certified totals and precinct-level files directly from the Florida Division of Elections portal. Use the certified file name and date when you cite totals in a story <a href="https://dos.myflorida.com/elections/" target="_blank" rel="noopener">Division of Elections - Florida Department of State</a></p><p>When reporting vote share, present both raw vote counts and percentage shares, and include the source file name and certification date. For turnout figures, name the denominator you used, such as registered voters or voting age population.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><p>Avoid relying only on a single aggregate from a secondary compilation. Cross-check aggregates against the official certified totals and precinct-level returns to ensure there is no discrepancy.</p><p>When a result is unusually close at the precinct level, note whether totals are certified or provisional and document any later adjustments that affect final certification.</p><h2>Combining datasets: shapefiles, standardized election data, and matching geography</h2><p>Before merging demographic and election data, confirm that both datasets use the same boundary definitions. Geographic mismatch is a common source of error in district-level analyses.</p>
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1SooYIxbVJQJ01dnnIckBat8BPGUZKbhp=s1200" alt="Minimal 2D vector data workspace showing map spreadsheet and laptop icons in Michael Carbonara colors background deep navy district focused layout" /></a>
+      <div class="side-text"><p>Use standardized shapefiles from research groups to ensure consistent historical comparisons and to simplify mapping across years <a href="https://electionlab.mit.edu/" target="_blank" rel="noopener">Election Data and Science Lab - Datasets and Resources</a></p></div>
+    </div><p>Aligning ACS geographies with election returns requires careful joins. If you reproject or clip shapefiles, record the steps and include a short methodological note explaining how polygons were matched.</p><p>Consult IPUMS documentation and ACS guidance for instructions on correct weighting and replication when your analysis uses microdata for subdistrict tabulations <a href="https://usa.ipums.org/usa/" target="_blank" rel="noopener">IPUMS USA - Documentation and Microdata</a></p><h2>A publishing checklist before you print district figures</h2><p>Verify ACS margins of error for every point estimate you plan to publish. If a margin is large, add a short qualifier explaining the uncertainty.</p><p>Confirm certified state returns and the exact file name on the Florida Division of Elections site, and note the certification date next to vote totals <a href="https://dos.myflorida.com/elections/" target="_blank" rel="noopener">Division of Elections - Florida Department of State</a></p><p>Triangulate key claims with at least two primary sources. For example, use ACS estimates for demographic context and state returns for vote totals, and explain the choice in a methodological note <a href="https://www.pewresearch.org/methods/" target="_blank" rel="noopener">Methods and Use of Government Statistics</a></p><p>Include a brief methodological note in the story describing any geographic joins, weighting decisions, and the access dates for each dataset cited.</p><h2>Tools and scripts that help reproduce district analyses</h2><p>Open-source tools such as GIS libraries and statistical packages let reporters reproduce tables and maps. Cite tool versions and dataset versions to make replication possible.</p><p>Store code in a public repository or internal archive and include a short appendix that lists key scripts, file names, and the commands to regenerate main tables.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick pre-publication verification checklist for district data</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-xumnfo-0">
+                        <input id="tool-check-xumnfo-0" type="checkbox" />
+                        <span>Check ACS table ID</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-jvl9we-1">
+                        <input id="tool-check-jvl9we-1" type="checkbox" />
+                        <span>Confirm state certified returns</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-4zwn1q-2">
+                        <input id="tool-check-4zwn1q-2" type="checkbox" />
+                        <span>Record access dates</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Include brief note on reporting margins of error</p>
+            </div><p>When sharing code, remove or obfuscate any sensitive data such as private contact lists. Keep the parts that reproduce numbers and maps so readers can verify results.</p><p>For technical mapping work, use standardized election datasets and shapefiles from trusted research groups to reduce the risk of mismatched boundaries and to document the steps you took to align geographies <a href="https://electionlab.mit.edu/" target="_blank" rel="noopener">Election Data and Science Lab - Datasets and Resources</a></p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Common analytical pitfalls when writing about the district</h2><p>Do not treat correlations between demographic variables and outcomes as causal statements without further analysis. Avoid language that implies causation unless the methods support it.</p><p>Omitting ACS margins of error when reporting point estimates is a frequent error. Always include the margin or explain why a particular estimate is presented without one <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">American Community Survey (ACS) - U.S. Census Bureau</a></p><p>Over-relying on a single secondary source can introduce bias. Cross-check important figures with primary datasets such as state returns or ACS tables before publishing <a href="https://ballotpedia.org/Florida%27s_25th_Congressional_District" target="_blank" rel="noopener">Florida's 25th Congressional District on Ballotpedia</a></p><h2>Practical templates: neutral phrasing for demographics, turnout, and results</h2><p>Demographic template: "According to the ACS 5-year estimate (table ID), [measure] was [value], with a margin of error of +/- [MOE], for [year range]." This phrasing gives readers the numbers and the uncertainty.</p><p>Turnout template: "Certified returns from the Florida Division of Elections show [number] votes cast in FL-25 in [election date], representing [percentage] of registered voters, according to the certified file [file name]."</p><p>Context template: "Ballotpedia lists current candidates and recent results for FL-25; reporters should cross-check those listings with FEC filings and state returns for verification."</p><h2>Scenario walkthroughs: three short FL-25 reporting examples</h2><p>1) Describing a demographic change: Pull the ACS 5-year estimate for the measure you need, note the prior estimate and its margin of error, and write a sentence that shows the difference with uncertainty. Cite the ACS table used and include the access date <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">American Community Survey (ACS) - U.S. Census Bureau</a></p><p>2) Reporting a close precinct-level result: Download the precinct-level returns from the Florida Division of Elections, note whether counts are certified, and report the raw tallies and percentage margin. If totals are within a narrow threshold, note any provisional status <a href="https://dos.myflorida.com/elections/" target="_blank" rel="noopener">Division of Elections - Florida Department of State</a></p><p>3) Placing a candidate statement in context: If a candidate or campaign site makes a numerical claim about the district, quote the claim and attribute it, then compare the claim to ACS or certified returns with neutral language and source citations. Use Ballotpedia for basic candidate background only after cross-checking primary filings <a href="https://ballotpedia.org/Florida%27s_25th_Congressional_District" target="_blank" rel="noopener">Florida's 25th Congressional District on Ballotpedia</a></p><h2>Decision criteria: when to use ACS, state returns, or standardized datasets</h2><p>Use ACS for demographic and socioeconomic estimates. Use Florida Division of Elections certified totals for vote counts. Use standardized datasets and shapefiles for historical comparisons and complex mapping tasks <a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">American Community Survey (ACS) - U.S. Census Bureau</a></p><p>Consult IPUMS documentation when working with ACS microdata or custom weighting so replication and proper variance estimation are correct <a href="https://usa.ipums.org/usa/" target="_blank" rel="noopener">IPUMS USA - Documentation and Microdata</a></p><p>Record your decision criteria in a methodological note so readers know why a given source was chosen for each type of claim.</p><h2>Common errors, debugging tips, and corrections language</h2><p>To check joins and weights, re-run your merges on a small subset and verify counts at each step. Confirm that variable IDs match the documentation if using ACS tables.</p><p>If you find an error after publication, issue a concise correction that states what changed, why, and which files or table IDs were affected. Include the access dates for the corrected sources in the correction note <a href="https://usa.ipums.org/usa/" target="_blank" rel="noopener">IPUMS USA - Documentation and Microdata</a></p><p>Keep internal replication notes and filenames. These records make it easier to respond to reader questions and to demonstrate the steps you took to generate published numbers.</p><h2>Conclusion: quick best-practice checklist and next steps for FL-25 stories</h2><p>Top checklist items: verify ACS margins of error, confirm certified state returns, triangulate at least two primary sources, record table IDs and access dates, and include a brief methodological note in the story.</p><p>For further documentation consult ACS guidance, the Florida Division of Elections portal, MIT Election Data and Science Lab resources, IPUMS documentation, and Pew methods pages for statistical best practices <a href="https://www.pewresearch.org/methods/" target="_blank" rel="noopener">Methods and Use of Government Statistics</a> and see <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">Michael Carbonara</a>.</p><p>Keep language neutral and attributed. For candidate context, cite campaign statements or FEC filings directly and avoid presenting campaign claims as facts without cross-checking. More background is available on the <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">about page</a> and in related <a href="https://michaelcarbonara.com/events/" target="_blank" rel="noopener">events</a>.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-fd3128" class="faq-toggle" /><label for="faq-fd3128" class="faq-summary" role="button" tabindex="0">What is the best source for demographic estimates at the congressional district level?</label><div class="faq-content"><p>Use the ACS 5-year estimates as the primary source and always report the associated margins of error alongside point estimates.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-m5zis9" class="faq-toggle" /><label for="faq-m5zis9" class="faq-summary" role="button" tabindex="0">Where do I get certified vote totals for Florida&#39;s 25th District?</label><div class="faq-content"><p>Obtain certified returns and precinct-level files from the Florida Division of Elections and cite the exact file name and certification date.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-fb8mvu" class="faq-toggle" /><label for="faq-fb8mvu" class="faq-summary" role="button" tabindex="0">When should I consult technical resources like IPUMS or MIT Election Lab?</label><div class="faq-content"><p>Consult IPUMS for microdata weighting and replication guidance and MIT Election Lab for standardized datasets and shapefiles used in historical comparisons.</p></div></section>
+</section><section class="article-ending">Accurate district reporting depends on sourcing, transparency, and simple methodological notes. Use the checklist in this guide to reduce errors and make your work verifiable.
+If you need a starting point, record the ACS table IDs and the certified file names you used, then include a brief note for readers explaining your choices.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.census.gov/programs-surveys/acs" target="_blank" rel="noopener">https://www.census.gov/programs-surveys/acs</a></li><li><a href="https://dos.myflorida.com/elections/" target="_blank" rel="noopener">https://dos.myflorida.com/elections/</a></li><li><a href="https://ballotpedia.org/Florida%27s_25th_Congressional_District" target="_blank" rel="noopener">https://ballotpedia.org/Florida%27s_25th_Congressional_District</a></li><li><a href="https://www.pewresearch.org/methods/" target="_blank" rel="noopener">https://www.pewresearch.org/methods/</a></li><li><a href="https://electionlab.mit.edu/" target="_blank" rel="noopener">https://electionlab.mit.edu/</a></li><li><a href="https://usa.ipums.org/usa/" target="_blank" rel="noopener">https://usa.ipums.org/usa/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.census.gov/data/developers/data-sets/acs-5year.html" target="_blank" rel="noopener">https://www.census.gov/data/developers/data-sets/acs-5year.html</a></li><li><a href="https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html" target="_blank" rel="noopener">https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html</a></li><li><a href="http://censusreporter.org/profiles/50000US1225-congressional-district-25-fl/" target="_blank" rel="noopener">http://censusreporter.org/profiles/50000US1225-congressional-district-25-fl/</a></li><li><a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">https://michaelcarbonara.com/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li><li><a href="https://michaelcarbonara.com/events/" target="_blank" rel="noopener">https://michaelcarbonara.com/events/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
