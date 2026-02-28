@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Public Records Requests Basics: How to Write a Request That Gets Results</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand tokens (mapped from provided style) */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736;     /* from --mc-accent */
+      --accent-hover: #8e1f2b; /* derived darker */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+      background: transparent;
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+    .cta-button:hover{ background: var(--accent-hover); }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1CfJ061bGeOiHgLEOL8DCUcwbkevDEuSY" alt="Public Records Requests Basics banner" />
+        </div>
+        <h1 class="title">Public Records Requests Basics: How to Write a Request That Gets Results</h1>
+        <p class="subline">A practical guide to drafting narrow, effective public records requests and what to expect.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/public-records-requests-basics-how-to-write-a-request/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">Public records requests are a practical tool for obtaining government-held documents that are not otherwise publicly posted. This guide explains how to draft a clear, narrowly focused request and what to expect from agencies in different jurisdictions.
+
+It is written for voters, local residents, journalists, and civic-minded readers who want step-by-step wording, templates, and follow-up strategies grounded in federal and state guidance. Where the law differs by jurisdiction, the guide points readers to official FOIA and state open-government pages for authoritative rules.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Start by directing your request to the office that holds the records to avoid delays.</span></div><div class="highlight-card"><span class="highlight-text">Name document types, exact date ranges, and preferred file formats to reduce scope disputes.</span></div><div class="highlight-card"><span class="highlight-text">Set a cost cap or state fee-waiver grounds to limit unexpected charges.</span></div>
+     </div>
+  <h2>What are public records requests and why they matter</h2><h3>Definition of a public records request, public records requests basics</h3><p>A public records request is a formal written request to a government office asking for access to records the office maintains. Federal requests follow FOIA procedures, while state requests are governed by state open-records laws, and those differences affect timelines, fees, and exemptions according to official guidance from federal and state sources <a href="https://www.foia.gov/how-to-make-a-foia-request/" target="_blank" rel="noopener">How to Make a FOIA Request</a>.</p><section class="faq-accordion"><input type="checkbox" id="faq-238cu8" class="faq-toggle" checked /><label for="faq-238cu8" class="faq-summary" role="button" tabindex="0">How can I write a public records request that gets a complete response?</label><div class="faq-content"><p>Identify the records custodian, write a narrow, specific description with exact date ranges and preferred formats, include contact and fee instructions, and document polite follow-up and appeals as needed.</p></div></section><p>People use public records requests for many reasons: to check meeting minutes, review contracts, obtain emails about policy choices, confirm personal records, or support investigative reporting. These requests are the right tool when records are controlled by a public office and other information channels cannot provide the original documents or certified copies.</p><h2>Identify the right custodian or department before you write</h2><h3>Why directing the request to the correct custodian speeds response</h3><p>Directing your request to the office that actually holds the records reduces misrouting and avoidable delays. Model guidance recommends finding the records custodian or public records officer and addressing the request there to speed processing and improve accuracy <a href="https://nfoic.org/resource/model-public-records-request/" target="_blank" rel="noopener">Model Public Records Request Guidance and Resources</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>Start on the agency's website, look for a public records or FOIA page, and note any named public records officer or FOIA contact. If a state attorney general maintains an open-government portal, that page often lists contacts and procedures for local offices in the state.</p><h2>Step-by-step: how to write an effective public records request</h2><h3>Opening sentence and addressing the custodian</h3><p>Begin with a simple opening that names the office and the person or unit you are addressing. For example: "Records custodian, records request under applicable public records law for the following documents." Keep this section short and direct to make clear who should handle the request.</p><h3>Specify records, date ranges, and file formats</h3><p>Use concise, specific language that names document types, exact date ranges, and preferred file formats to reduce scope disputes. Templates and best practices stress naming the document types and the date window rather than asking for broad categories of records <a href="https://www.rcfp.org/records-requests/" target="_blank" rel="noopener">How to Make Public Records Requests</a>.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">A fillable checklist to prepare a clear records request</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-9dumds-0">
+                        <input id="tool-check-9dumds-0" type="checkbox" />
+                        <span>Custodian</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-4soi6t-1">
+                        <input id="tool-check-4soi6t-1" type="checkbox" />
+                        <span>Record types</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-s1oeel-2">
+                        <input id="tool-check-s1oeel-2" type="checkbox" />
+                        <span>Date range</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-3ga9vb-3">
+                        <input id="tool-check-3ga9vb-3" type="checkbox" />
+                        <span>File format</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-asoins-4">
+                        <input id="tool-check-asoins-4" type="checkbox" />
+                        <span>Fee cap</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Fill each field before drafting your request</p>
+            </div><h3>Contact and delivery instructions</h3><p>Include your contact details, a preferred delivery method, and any delivery format such as searchable PDF or CSV. Also state whether you want emailed copies, secure file transfer, or paper copies. Stating these preferences up front reduces back-and-forth and can speed delivery. See our <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">contact page</a>.</p><h2>What to include exactly: wording examples and template snippets</h2><h3>Precise wording for document types</h3><p>Be specific: request "emails sent or received by Jane Doe containing the terms X, Y, and Z" rather than "all emails about project X." This kind of precision helps staff identify responsive records more quickly and narrows the search to what you actually need <a href="https://www.muckrock.com/learn/foia/" target="_blank" rel="noopener">How to File a Public Records Request</a>.</p><h3>How to state date ranges and search parameters</h3>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>State start and end dates in a clear format, for example: "January 1, 2024 through December 31, 2024." If you want records created before or after a date, say so explicitly. When you include keywords, limit them to a short list to avoid broad searches that increase cost and delay.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1S_-d1Z5Ka3KEVbTf2RiP2AQmXBfysfFT=s1200" alt="Minimal 2D vector infographic showing a four step checklist flow for public records requests basics with simple icons for custodian scope fee cap and follow up on navy background" /></a>
+    </div>
+<h3>Preferred formats and delivery options</h3><p>Specify file formats such as "searchable PDF for documents, CSV for spreadsheets, or native format for email exports" and ask the agency to provide an estimate if conversion will increase fees. Good requests name a preferred format to avoid repeated clarifications.</p><h2>Fees, fee waivers, and stating your cost preferences</h2><h3>How fees are handled differently across jurisdictions</h3><p>Fees and fee schedules vary between federal FOIA and state open-records laws, so check the agency or state guidance before making assumptions. Federal FOIA and many states allow charges for search, review, and duplication, but the exact rules differ by jurisdiction <a href="https://www.foia.gov/how-to-make-a-foia-request/" target="_blank" rel="noopener">How to Make a FOIA Request</a>.</p><h3>What to say if you want a fee waiver or a cost cap</h3><p>If you seek a fee waiver, state the public-interest basis for the waiver and cite the applicable standard briefly. Alternatively, set a dollar cap such as "please notify me if costs will exceed $50" so the agency must confirm before proceeding with costly searches.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><p>When you provide clear instructions about fees and a contact for clarifying questions, agencies can respond with an estimate rather than starting costly work without your approval.</p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1hEngjroQM7FJzI1yZ7xLJkJRRBnirUYv=s1200" alt="Minimalist 2D vector close up of a printed public records requests basics form and a sample email draft depicted as white document shapes and simple icons on a navy background" /></a>
+      <div class="side-text"><p>Plan for partial releases by asking for segregable information and, where appropriate, requesting a description of withheld material. If the agency provides redactions, you can ask for a justification or an index that explains the grounds for withholding.</p></div>
+    </div>
+<h2>Common exemptions and how they affect realistic expectations</h2><h3>Typical exemptions that cause redaction or withholding</h3><p>Expect exemptions such as privacy, law enforcement, and deliberative process to justify redaction or withholding in some records. State open-government guidance and federal FOIA rules describe these common exemptions and how they may apply <a href="https://www.myfloridalegal.com/pages.nsf/Main/Open_Government_Laws" target="_blank" rel="noopener">Public Records and Open Government - Sunshine Law Guidance</a>.</p><h3>How to plan for partial releases and redactions</h3><p>If you do not receive an acknowledgement within the statutory window, send a brief follow-up that references your original request, the date sent, and asks for an estimated date of response. Keep the tone polite and factual; documented, professional follow-ups are recommended by transparency organizations <a href="https://sunshineweek.org/activities/toolkits/" target="_blank" rel="noopener">Open Government Toolkit</a>.</p><p>Sample follow-up: "I am following up on my request sent on [date]. Please confirm receipt and the estimated completion date. If you need clarification, contact me at [phone or email]."</p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Get the request templates and checklists</h3><div class="cta-intro"><p>Copy the sample templates and use the article checklists to prepare a clear follow-up sequence that you can send or adapt.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Visit the campaign join page to access tools and updates</a></div><p>After a partial denial or if fees are excessive, file the agency's administrative appeal and follow the appeal instructions precisely. Many organizations publish step-by-step appeals templates you can adapt when an administrative review is available <a href="https://www.muckrock.com/learn/foia/" target="_blank" rel="noopener">How to File a Public Records Request</a>.</p><h2>Timing, statutory deadlines, and jurisdiction differences</h2><h3>Federal FOIA timelines vs state law timelines</h3><p>Federal FOIA sets specific timeframes for acknowledgements and responses, while state laws such as Florida's Sunshine Law set different statutory deadlines and exemptions; check the applicable official pages for exact timelines before you file <a href="https://www.foia.gov/how-to-make-a-foia-request/" target="_blank" rel="noopener">How to Make a FOIA Request</a>. See the FOIA how-to guide <a href="https://www.foia.gov/how-to.html" target="_blank" rel="noopener">here</a>.</p><h3>Where to check statutory deadlines for your jurisdiction</h3><p>Visit FOIA.gov for federal deadlines and your state attorney general's open-government pages for state rules. These official pages list response deadlines, appeal windows, and fee schedules that apply to requests in that jurisdiction. See recent updates on our <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news page</a>.</p><h2>Sample requests: short, narrow, and broad templates</h2><h3>Short request for a single document</h3><p>Short template: "Records custodian, please provide the signed contract between Agency X and Company Y dated March 15, 2025. Prefer searchable PDF. If fees exceed $25, please notify me before processing."</p><h3>Narrow request for a defined set of records</h3><p>Narrow template: "Records custodian, please produce emails sent or received by Jane Doe between January 1, 2024 and December 31, 2024 that contain the terms 'project X' or 'contract negotiation'. Provide native email export or searchable PDF. Please notify me if costs will exceed $50."</p><h3>Broader request with staged narrowing suggestions</h3><p>Broad template: "Records custodian, please produce all records related to Project X from January 1, 2023 to present. If the scope is overly broad, first provide an index of responsive record types and estimated costs, then provide a prioritized subset such as contracts and final deliverables."</p><h2>How journalists and watchdog groups structure requests</h2><h3>Typical differences in scope and follow-up</h3><p>Professional requesters often use precise search terms, include multiple custodians, and stage requests to limit upfront costs. They may also ask for exportable formats that speed review and analysis. These practices come from templates and newsroom playbooks that emphasize clarity and staged requests. Academic researchers can find FOIA guidance at Stanford's research guide <a href="https://guides.library.stanford.edu/public-record-requests/foia" target="_blank" rel="noopener">here</a>.</p><h3>How public-interest framing is used in practice</h3><p>Journalists and watchdog groups commonly assert a public-interest basis when seeking fee waivers or expedited processing, but outcomes vary by jurisdiction and must follow the rules that govern each agency's fee waiver standards <a href="https://www.rcfp.org/records-requests/" target="_blank" rel="noopener">How to Make Public Records Requests</a>.</p><h2>Typical mistakes and how to avoid them</h2><h3>Common drafting errors that lead to delays</h3><p>Frequent mistakes include vague descriptions, missing date ranges, failing to name a custodian, and not stating file formats or fee caps. Tightening these elements before sending reduces the chance of follow-up clarifications that slow processing <a href="https://www.muckrock.com/learn/foia/" target="_blank" rel="noopener">How to File a Public Records Request</a>.</p><h3>Administrative missteps such as missing fee rules</h3><p>Administrative errors like not checking the agency fee schedule can lead to unexpected charges. Always review the agency's fees page and include a cost cap or a fee-waiver request if you want to avoid surprises.</p><h2>Decision criteria: when to file, what to ask for, and scope choices</h2><h3>Factors to weigh before filing</h3><p>Use a short checklist before filing: is the record public, who likely holds it, are exemptions likely to apply, what is the expected cost, and is the information time sensitive. This helps decide whether to proceed and how narrowly to draft the request <a href="https://nfoic.org/resource/model-public-records-request/" target="_blank" rel="noopener">Model Public Records Request Guidance and Resources</a>.</p><h3>How to choose target agencies and search scope</h3><p>Start with the agency most likely to hold the records and consider staged requests: ask first for a narrow set of high-value documents, then expand if needed. For complex or sensitive matters, consult official guidance or consider legal counsel.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>Local example: request meeting minutes, procurement records, or contracts from a county or city office. Specify the department, contract identifiers, and date range to reduce staff search time and fees.</p>
+<p>Law enforcement records carry higher exemption risk for privacy and ongoing investigations; narrower phrasing and specific date windows can reduce redactions and help you receive segregable material where permitted <a href="https://www.myfloridalegal.com/pages.nsf/Main/Open_Government_Laws" target="_blank" rel="noopener">Public Records and Open Government - Sunshine Law Guidance</a>.</p>
+<p>When filing a federal FOIA, reference FOIA in the opening, name the agency FOIA office, and request a tracking number. Federal practice also has distinct fee categories and appeal procedures that you should review on the official FOIA site <a href="https://www.foia.gov/how-to-make-a-foia-request/" target="_blank" rel="noopener">How to Make a FOIA Request</a>. See the FOIA reference guide <a href="https://www.archives.gov/foia/foia-guide" target="_blank" rel="noopener">here</a>.</p>
+<p>Checklist: identify custodian, write a narrow description with dates and formats, set a fee cap or request a fee waiver, include contact details, and document all communications. Use staged requests to manage costs and follow the agency appeal process if needed. Learn more on our <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">About page</a>.</p><h3>Where to find authoritative templates and official guidance</h3><p>For federal rules and timelines, see FOIA.gov. For model templates and state guidance, consult national open-government resources and transparency toolkits that offer sample letters and appeals steps <a href="https://nfoic.org/resource/model-public-records-request/" target="_blank" rel="noopener">Model Public Records Request Guidance and Resources</a>.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-x5vcg3" class="faq-toggle" /><label for="faq-x5vcg3" class="faq-summary" role="button" tabindex="0">How long does an agency have to respond to a public records request?</label><div class="faq-content"><p>Response times vary by jurisdiction; federal FOIA and state laws set different statutory deadlines, so check the agency or state open-government page for exact timelines.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-ecmzhj" class="faq-toggle" /><label for="faq-ecmzhj" class="faq-summary" role="button" tabindex="0">What should I include to limit fees on my request?</label><div class="faq-content"><p>Include a clear description with exact dates and formats, set a dollar cap above which the agency must notify you, and state any fee-waiver grounds if applicable.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-b1zowo" class="faq-toggle" /><label for="faq-b1zowo" class="faq-summary" role="button" tabindex="0">What can I do if my request is partially denied or redacted?</label><div class="faq-content"><p>Follow the agency&#39;s administrative appeal process, ask for segregable portions, and request an explanation of the grounds for withholding before considering court review.</p></div></section>
+</section><section class="article-ending">Use the checklists and templates in this article to prepare a focused request before you file. Keep records of each communication, set reasonable cost limits, and use the agency appeal process when necessary.
+
+Laws and procedures differ by jurisdiction, so always consult the official FOIA or state attorney general guidance for exact deadlines and fee rules before you file your request.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.foia.gov/how-to-make-a-foia-request/" target="_blank" rel="noopener">https://www.foia.gov/how-to-make-a-foia-request/</a></li><li><a href="https://nfoic.org/resource/model-public-records-request/" target="_blank" rel="noopener">https://nfoic.org/resource/model-public-records-request/</a></li><li><a href="https://www.rcfp.org/records-requests/" target="_blank" rel="noopener">https://www.rcfp.org/records-requests/</a></li><li><a href="https://www.muckrock.com/learn/foia/" target="_blank" rel="noopener">https://www.muckrock.com/learn/foia/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.myfloridalegal.com/pages.nsf/Main/Open_Government_Laws" target="_blank" rel="noopener">https://www.myfloridalegal.com/pages.nsf/Main/Open_Government_Laws</a></li><li><a href="https://sunshineweek.org/activities/toolkits/" target="_blank" rel="noopener">https://sunshineweek.org/activities/toolkits/</a></li><li><a href="https://www.foia.gov/how-to.html" target="_blank" rel="noopener">https://www.foia.gov/how-to.html</a></li><li><a href="https://guides.library.stanford.edu/public-record-requests/foia" target="_blank" rel="noopener">https://guides.library.stanford.edu/public-record-requests/foia</a></li><li><a href="https://www.archives.gov/foia/foia-guide" target="_blank" rel="noopener">https://www.archives.gov/foia/foia-guide</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
