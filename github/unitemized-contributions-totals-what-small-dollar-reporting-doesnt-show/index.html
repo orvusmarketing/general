@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Unitemized contributions totals: what small-dollar reporting does and doesn’t show</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      --text-color: #ffffff;
+      --accent: #ae2736;
+      --accent-hover: color-mix(in srgb, #ae2736 86%, #000 14%);
+      --line: rgba(255,255,255,.16);
+      --surface: #0b2664;
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px;
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.88); margin-bottom: 1.6rem; }
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:12px; margin: 1.8rem 0; }
+    .article-body .highlight-card{ padding: 12px 14px; background: linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border-left:4px solid var(--accent); border:1px solid var(--line); }
+    .article-body .highlight-card .highlight-text{ font-weight:700; color: var(--text-color); }
+    .article-body .side-by-side{ display:flex; gap:16px; align-items:flex-start; margin:1.6rem 0; }
+    .article-body .side-by-side img{ max-width:320px; width:100%; height:auto; display:block; }
+    .article-body .product-image-right{ flex-direction:column; text-align:center; }
+    .article-body .special-image-standalone{ text-align:center; margin:1.2rem auto; max-width:120px; }
+    .article-body .faq-accordion{ border:1px solid var(--line); border-left:4px solid var(--accent); padding:0; }
+    .article-body .faq-summary{ padding:12px 14px; font-weight:800; cursor:pointer; background:transparent; color:var(--text-color); }
+    .article-body .faq-content{ padding:12px 14px; color: rgba(255,255,255,.92); }
+    .article-body .tool-block{ border-left:4px solid var(--accent); }
+    .article-body .article-ending{ margin-top:1.8rem; padding-top:1rem; border-top:1px solid var(--line); font-style:italic; }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1cV9KGQcV4g2t0YMN0CIDEKg9w6I-L352" alt="Unitemized contributions totals banner" />
+        </div>
+        <h1 class="title">Unitemized contributions totals: what small-dollar reporting does and doesn’t show</h1>
+        <p class="subline">A practical explainer on reading and estimating small-dollar donor activity from FEC unitemized totals.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/unitemized-contributions-totals-what-small-dollar-reporting-doesnt-show/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">This explainer clarifies what unitemized contributions are in federal campaign finance filings, why they matter to voters and reporters, and how to interpret the aggregated numbers. It focuses on practical steps and transparent methods for estimating likely small-dollar donor ranges using public filings and, when available, platform disclosures.
+
+The article uses federal filing instructions and reputable research guidance to show where to find unitemized totals, how to perform simple estimates, common reporting pitfalls to watch for, and how to document assumptions when publishing results.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Unitemized contributions show aggregate small-dollar totals and counts, but not individual donor identities.</span></div><div class="highlight-card"><span class="highlight-text">Simple division by an assumed average gift produces a donor-range estimate, not a precise count.</span></div><div class="highlight-card"><span class="highlight-text">Pairing FEC aggregates with platform disclosures narrows uncertainty but does not remove it entirely.</span></div>
+     </div>
+  <h2>What unitemized contributions are and why they matter</h2><p>Unitemized contributions are the aggregated entries a campaign reports when individual gifts fall below the legal itemization threshold that triggers donor names in federal filings. Under federal guidance, contributions that meet or exceed the itemization threshold, commonly set at 200 dollars per contributor per election, must be reported with donor names and identifying details; smaller gifts are grouped and shown only in total on committee reports <a href="https://www.fec.gov/help-candidates-and-committees/filing-reports/what-to-file/" target="_blank" rel="noopener">Federal Election Commission guidance</a> (see <a href="https://www.fec.gov/campaign-finance-data/about-campaign-finance-data/methodology/" target="_blank" rel="noopener">FEC methodology</a>).</p><p>FEC rules require committees to show both the total dollar amount and the number of unitemized contributions on periodic reports, so readers can see aggregate small-dollar activity even when donor names are not disclosed. The instructions for candidate reports explain where those totals appear on Form 3 and on summary receipt lines <a href="https://www.fec.gov/resources/cms-content/documents/fecform3inst.pdf" target="_blank" rel="noopener">Form 3 instructions for House candidates</a>.</p><p>Reporting unitemized totals gives a snapshot of small-dollar engagement, but the entries do not identify individual contributors. That means the same aggregate can reflect many small gifts, a few larger gifts just below the threshold, or a mixture of both, and the public filing alone cannot resolve the difference <a href="https://www.opensecrets.org/news/2025/07/how-small-dollar-donors-appear-in-reports/" target="_blank" rel="noopener">How small-dollar donors appear in campaign finance reports</a>.</p><p>Journalists and voters watch unitemized totals because they provide a window into grassroots support and fundraising breadth, but those totals require careful interpretation. The way campaigns and platforms reconcile micro-donations with FEC aggregates, plus reporting-period timing, can affect what the numbers look like from one report to the next <a href="https://ballotpedia.org/Campaign_finance_reporting_itemization_aggregation_and_common_pitfalls" target="_blank" rel="noopener">Campaign finance reporting guidance</a>.</p><div class="cta-section"><h3 class="cta-headline">Get the official filing guidance and see where unitemized totals appear</h3><div class="cta-intro"><p>For details on filing requirements and where unitemized totals appear on reports, consult the official FEC filing instructions for candidates and committees.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Read FEC filing instructions</a></div><h2>How the FEC and Form instructions treat itemization and aggregation</h2><p>The technical instructions that govern federal reports explain when a contribution must be itemized on Schedule A and how aggregated receipts are recorded. Schedule A guidance lays out the circumstances that trigger itemization and the fields committees must use when reporting individual receipts <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a_instructions.pdf" target="_blank" rel="noopener">Schedule A instructions</a> (see <a href="https://www.fec.gov/resources/cms-content/documents/policy-guidance/candgui.pdf" target="_blank" rel="noopener">campaign guide for candidates</a>).</p><p>Form 3 instructions show how summary receipt lines on the main filing reflect both itemized and unitemized amounts. Those summary lines aggregate totals from detailed schedules and indicate the number and dollar value of unitemized contributions for the reporting period <a href="https://www.fec.gov/resources/cms-content/documents/fecform3inst.pdf" target="_blank" rel="noopener">Form 3 instructions for House candidates</a>.</p><p>One important detail is how the legal threshold is applied. The rules typically apply the itemization threshold per contributor per election, which means a donor could give multiple small gifts yet remain below itemization for that election unless the combined total reaches the threshold. Readers should note whether a reported total is being presented on a per-report basis or as part of the broader per-election accounting described in the instructions <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a_instructions.pdf" target="_blank" rel="noopener">Schedule A instructions</a>.</p><h2>What unitemized contributions on a report actually reveal</h2><p>On its face, an unitemized line shows two things: the total dollar amount of sub-threshold contributions and the count of those contributions for the reporting period. Those summary figures help indicate small-dollar activity without exposing donor identities <a href="https://www.fec.gov/help-candidates-and-committees/filing-reports/what-to-file/" target="_blank" rel="noopener">Federal Election Commission guidance</a>.</p><section class="faq-accordion"><input type="checkbox" id="faq-wigxen" class="faq-toggle" checked /><label for="faq-wigxen" class="faq-summary" role="button" tabindex="0">What do unitemized contributions tell the public about small-dollar support?</label><div class="faq-content"><p>Unitemized contributions reveal the aggregate dollar volume and the number of sub-threshold contributions reported for a filing period, which indicates small-dollar activity but does not disclose individual donor identities; estimates of unique supporters therefore rely on transparent assumptions or supplementary platform data.</p></div></section><p>Because <a href="https://michaelcarbonara.com/donate/" target="_blank" rel="noopener">donors</a> below the threshold are listed only in aggregate, analysts cannot directly count unique small-dollar supporters from FEC reports alone. The aggregate could include repeat gifts by the same person across a reporting period, and filings do not disclose the per-donor breakdown needed to resolve duplicates or timing overlaps <a href="https://www.opensecrets.org/news/2025/07/how-small-dollar-donors-appear-in-reports/" target="_blank" rel="noopener">OpenSecrets explanation of small-dollar reporting</a>.</p><p>That limitation means the unitemized totals are useful for understanding volume but imprecise for measuring distinct supporter counts. A stable unitemized dollar total might mask a change in the number of donors if average gift size shifted, and consecutive reports can look inconsistent when rounding and reporting-period aggregation are in play <a href="https://ballotpedia.org/Campaign_finance_reporting_itemization_aggregation_and_common_pitfalls" target="_blank" rel="noopener">Ballotpedia on reporting pitfalls</a>.</p><h2>Common methods researchers use to estimate small-dollar donor counts</h2><p>Researchers typically use two pragmatic approaches to estimate likely small-dollar donor counts from unitemized lines. The first and simplest divides the reported unitemized dollar total by an assumed average gift size to produce a low and high range of possible donor counts. This division method is commonly described in research guides and reporting notes <a href="https://www.opensecrets.org/news/2025/07/how-small-dollar-donors-appear-in-reports/" target="_blank" rel="noopener">OpenSecrets overview</a>.</p><p>The second approach combines FEC aggregates with platform-specific disclosures when those platforms publish micro-donation counts, median gift size, or other behavioral data. Where platform data exist, they help refine the assumed average gift and narrow the resulting range, but platform figures are not always public or synchronized with FEC reporting <a href="https://www.cfrl.org/research/estimating-small-donors-2024" target="_blank" rel="noopener">Estimating Small-Donor Support research</a>.</p><p>Both methods produce ranges, not precise counts. Analysts should state the assumed average gift sizes, the report date, and whether totals reflect per-report or per-election accounting so readers can judge the assumptions and uncertainty behind any estimate <a href="https://www.cfrl.org/research/estimating-small-donors-2024" target="_blank" rel="noopener">Campaign Finance Research Lab guidance</a>.</p><h2>Practical calculation walk-through (how to estimate with transparent assumptions)</h2>
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/11PLE_ICa0EPRANf2lAuwcg2FFqdNmYpA=s1200" alt="Minimal 2D vector infographic of two document icons pen calculator and small dollar symbol representing unitemized contributions in navy white and crimson Michael Carbonara palette" /></a>
+      <div class="side-text"><p>Step 1, locate the unitemized totals: open the campaign's Schedule A or the Form 3 it feeds and note the unitemized dollar total and the unitemized contribution count for the reporting period. The filing instructions explain where to find those summary lines on candidate reports <a href="https://www.fec.gov/resources/cms-content/documents/fecform3inst.pdf" target="_blank" rel="noopener">Form 3 instructions for House candidates</a>.</p></div>
+    </div><p>Step 2, choose transparent average-gift assumptions: pick a low plausible average and a high plausible average and show both. For clarity label them, for example, Low average and High average, and explain why you chose each assumption. Documenting the assumption is essential because the division method is sensitive to the selected average <a href="https://www.cfrl.org/research/estimating-small-donors-2024" target="_blank" rel="noopener">Estimating Small-Donor Support research</a>.</p><p>Step 3, divide to produce a range: divide the unitemized dollar total by the high average to get a low estimate of donors, and divide by the low average to get a high estimate. Present both results and emphasize they are ranges that depend on the assumptions. Note rounding rules and whether the totals are per-report or per-election, since those details change short-term comparisons <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a_instructions.pdf" target="_blank" rel="noopener">Schedule A instructions</a>.</p><p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div></p><p>Step 4, cross-check when possible: if platform disclosures or campaign statements provide counts or median gift figures, use those to narrow the assumed averages. If platform data are unavailable, state the limits plainly and provide the arithmetic so readers can test other assumptions themselves <a href="https://www.opensecrets.org/news/2025/07/how-small-dollar-donors-appear-in-reports/" target="_blank" rel="noopener">OpenSecrets guidance</a>.</p><h2>Typical reporting quirks and pitfalls to watch for</h2><p>Rounding of aggregate entries can hide small changes in donor counts, especially when the activity is low-dollar. Schedule A and summary lines sometimes present totals rounded to whole dollars or to a reporting convention, so small shifts may not appear in consecutive filings <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a_instructions.pdf" target="_blank" rel="noopener">Schedule A instructions</a> (see <a href="https://lunar.fppc.ca.gov/content/dam/fppc/NS-Documents/TAD/Campaign%20Manuals/Manual_4/Manual_4_Ch_15_Multipurpose_Organizations.pdf" target="_blank" rel="noopener">state manual</a>).</p><p>Differences between per-report aggregation and per-election application of the itemization threshold can make consecutive reports look inconsistent. A single donor who gives several small gifts over time may not trigger itemization until a later report when the cumulative amount crosses the threshold, which complicates short-term trend reading <a href="https://www.fec.gov/resources/cms-content/documents/fecform3inst.pdf" target="_blank" rel="noopener">Form 3 instructions for House candidates</a>.</p><p>Platform-level micro-donations may be reconciled with FEC aggregates on different schedules, so near-real-time platform figures and the periodic FEC reports can diverge. That timing mismatch is a common source of apparent discrepancy between what a platform dashboard shows and what the public filing reports <a href="https://www.opensecrets.org/news/2025/07/how-small-dollar-donors-appear-in-reports/" target="_blank" rel="noopener">OpenSecrets on reconciliation issues</a>.</p><h2>Deciding when an estimate is useful: criteria and red flags</h2><p>Publish ranges and assumptions, not point estimates, when deriving counts from unitemized aggregates. Research guidance stresses transparency about the assumed average gift values and the report dates behind any calculation <a href="https://www.cfrl.org/research/estimating-small-donors-2024" target="_blank" rel="noopener">Campaign Finance Research Lab guidance</a>.</p><p>Red flags include large swings in unitemized totals without matching platform disclosures, sudden changes that coincide with reporting-period boundaries, unexplained rounding anomalies, or missing summary lines on expected schedules. Any of those should prompt a deeper check before publishing donor-range claims <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a_instructions.pdf" target="_blank" rel="noopener">Schedule A instructions</a>.</p><p>When platform or campaign disclosures are available, <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">seek them</a> to corroborate timing and average-gift assumptions. If a campaign or platform confirms median gift size or micro-donation counts, document that disclosure and use it to narrow the estimate range while noting any proprietary limits on the platform data <a href="https://www.opensecrets.org/news/2025/07/how-small-dollar-donors-appear-in-reports/" target="_blank" rel="noopener">OpenSecrets guidance</a>.</p><h2>How to combine FEC aggregates with platform or campaign data responsibly</h2><p>Platform disclosures that report micro-donation counts, median gift size, or the distribution of gift amounts can meaningfully narrow the range produced from FEC aggregates. Where those platform figures exist, they should be cited and dated in the methods so readers see how the estimate was refined <a href="https://www.opensecrets.org/news/2025/07/how-small-dollar-donors-appear-in-reports/" target="_blank" rel="noopener">OpenSecrets on platform data</a>.</p><p>Reconciliation steps should match timeframes, note platform rounding or withholding policies, and account for transactions that may clear later than their posting date. Documenting each step and any adjustments helps other researchers reproduce or test the estimate <a href="https://www.cfrl.org/research/estimating-small-donors-2024" target="_blank" rel="noopener">Campaign Finance Research Lab guidance</a>.</p><p>Always state the remaining limits: even after reconciliation, estimates rely on assumptions about gift-size distribution and timing that are not visible in public donor-level records. Make that uncertainty explicit in any published range <a href="https://www.opensecrets.org/news/2025/07/how-small-dollar-donors-appear-in-reports/" target="_blank" rel="noopener">OpenSecrets guidance</a>.</p><h2>Tool recommendation for quick, transparent estimates</h2><p>A simple estimate tool should accept the unitemized dollar total and the unitemized contribution count, allow the user to enter low and high assumed averages, and output a labeled low-high donor range with the arithmetic shown and the source report name and date cited <a href="https://www.cfrl.org/research/estimating-small-donors-2024" target="_blank" rel="noopener">Campaign Finance Research Lab guidance</a>.</p><div class="tool-block tool-calculator tool-centered" data-tool-type="calculator"
+              data-formula="Unitemized dollar total/Low average gift" data-output="Donor range" data-unit="donors">
+              <p class="tool-purpose">produce a low and high donor-range estimate from unitemized totals</p>
+              <div class="tool-calc-grid"><div class="tool-calc-field">
+                <label class="tool-calc-label">Unitemized dollar total</label>
+                <input class="tool-calc-input" type="number" value="" data-field="Unitemized dollar total" />
+              </div><div class="tool-calc-field">
+                <label class="tool-calc-label">Unitemized count</label>
+                <input class="tool-calc-input" type="number" value="" data-field="Unitemized count" />
+              </div><div class="tool-calc-field">
+                <label class="tool-calc-label">Low average gift</label>
+                <input class="tool-calc-input" type="number" value="" data-field="Low average gift" />
+              </div><div class="tool-calc-field">
+                <label class="tool-calc-label">High average gift</label>
+                <input class="tool-calc-input" type="number" value="" data-field="High average gift" />
+              </div></div>
+              <div class="tool-calc-output">
+                <span class="tool-calc-output-label">Donor range:</span>
+                <span class="tool-calc-output-value">-</span>
+                <span class="tool-calc-output-unit">donors</span>
+              </div>
+              <p class="tool-notes">show assumptions and report date</p>
+            </div><p>Label outputs clearly: include the report name, filing date, assumed averages, and a plain-language caveat that the results are ranges not counts. Encourage users to compare results to any available platform disclosures before reporting a headline number <a href="https://www.opensecrets.org/news/2025/07/how-small-dollar-donors-appear-in-reports/" target="_blank" rel="noopener">OpenSecrets tool guidance</a>.</p><h2>Open questions researchers still face in 2026</h2><p>The distribution of sub-threshold gift sizes remains uncertain for many committees because platform-level data are often proprietary or incomplete. That lack of public distribution data limits confidence in any single average used for division-based estimates <a href="https://www.cfrl.org/research/estimating-small-donors-2024" target="_blank" rel="noopener">Estimating Small-Donor Support research</a>.</p><p>How on-platform micro-donations are reconciled with FEC aggregates in near real time is not uniformly transparent, creating timing mismatches between platform dashboards and public filings. Researchers should note any potential timing mismatch when presenting comparisons <a href="https://www.opensecrets.org/news/2025/07/how-small-dollar-donors-appear-in-reports/" target="_blank" rel="noopener">OpenSecrets on reconciliation limits</a>.</p><p>Researchers should state these open questions when publishing estimates and avoid implying precision beyond the methods used. Clear caveats and transparent arithmetic are the responsible way to present findings derived from unitemized lines <a href="https://www.cfrl.org/research/estimating-small-donors-2024" target="_blank" rel="noopener">Campaign Finance Research Lab guidance</a>.</p><h2>How journalists and researchers should disclose methods and uncertainty</h2><p>Essential transparency elements include naming the data source and filing date, listing the assumed average gift values, and saying explicitly whether totals are presented per-report or per-election. Those elements let readers evaluate the calculation and its limits <a href="https://www.fec.gov/resources/cms-content/documents/fecform3inst.pdf" target="_blank" rel="noopener">Form 3 instructions for House candidates</a>.</p><p>Publish low-high ranges rather than single-point estimates, and add a plain-language caveat that unitemized aggregates do not reveal individual donor identities. Use conditional attribution language such as according to the filing or the campaign states that when summarizing non-public platform disclosures <a href="https://www.cfrl.org/research/estimating-small-donors-2024" target="_blank" rel="noopener">Campaign Finance Research Lab guidance</a>.</p><p>Sample phrasing: according to the committee's Form 3 filed on [date], the unitemized contributions totalled X dollars; dividing that total by assumed average gifts of A and B yields an estimated range of donors. That template makes assumptions and uncertainty visible to readers <a href="https://www.fec.gov/help-candidates-and-committees/filing-reports/what-to-file/" target="_blank" rel="noopener">Federal Election Commission guidance</a>.</p><h2>Quick checklist: reading an unitemized contributions line</h2><p>Check the report name and filing date.</p><p>Note the unitemized dollar total and the unitemized contribution count.</p><p>Record whether totals are presented per-report or per-election and look for rounding clues.</p><p><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">Seek platform or campaign disclosures</a> and flag sudden swings without platform corroboration before reporting precise counts <a href="https://www.opensecrets.org/news/2025/07/how-small-dollar-donors-appear-in-reports/" target="_blank" rel="noopener">OpenSecrets checklist</a>.</p><h2>Closing summary: what unitemized contributions can and cannot show</h2><p>FEC filings disclose aggregate unitemized volume and the number of sub-threshold contributions, but they do not disclose donor identities, so estimates of unique small-dollar supporters require transparent assumptions and arithmetic <a href="https://www.fec.gov/help-candidates-and-committees/filing-reports/what-to-file/" target="_blank" rel="noopener">Federal Election Commission guidance</a>.</p><p>Where possible, pair FEC aggregates with platform or campaign disclosures to refine assumed averages and present low-high ranges rather than single counts. State limitations clearly and provide the report name and date so readers can <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">verify the source themselves</a> <a href="https://www.cfrl.org/research/estimating-small-donors-2024" target="_blank" rel="noopener">Campaign Finance Research Lab guidance</a>.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-jppadu" class="faq-toggle" /><label for="faq-jppadu" class="faq-summary" role="button" tabindex="0">How does the FEC define unitemized contributions?</label><div class="faq-content"><p>Unitemized contributions are donations below the legal itemization threshold that are reported in aggregate on committee filings; the FEC requires reporting of the total dollar amount and the count of those contributions but not individual donor names.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-n3rmdo" class="faq-toggle" /><label for="faq-n3rmdo" class="faq-summary" role="button" tabindex="0">Can I count unique small-dollar donors from an FEC report?</label><div class="faq-content"><p>Not directly; because sub-threshold gifts are aggregated, analysts must use assumptions or platform disclosures to estimate unique donors and should present results as ranges with clear caveats.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-1m4n72" class="faq-toggle" /><label for="faq-1m4n72" class="faq-summary" role="button" tabindex="0">What should reporters say when publishing an estimate based on unitemized totals?</label><div class="faq-content"><p>Report the filing name and date, state the assumed average gift values, present a low-high range, and add a plain-language caveat that the aggregate does not reveal individual donors.</p></div></section>
+</section><section class="article-ending">Unitemized lines are a valuable transparency feature in FEC reports, but they are not a substitute for donor-level records. Treat unitemized totals as indicators that require careful, documented estimation and, when possible, corroboration from platform or campaign disclosures.
+
+For readers who want to explore filings directly, start with the official FEC filing instructions and the schedules referenced in this article, and always present unitemized-derived estimates as ranges with clear caveats.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.fec.gov/help-candidates-and-committees/filing-reports/what-to-file/" target="_blank" rel="noopener">https://www.fec.gov/help-candidates-and-committees/filing-reports/what-to-file/</a></li><li><a href="https://www.fec.gov/resources/cms-content/documents/fecform3inst.pdf" target="_blank" rel="noopener">https://www.fec.gov/resources/cms-content/documents/fecform3inst.pdf</a></li><li><a href="https://www.opensecrets.org/news/2025/07/how-small-dollar-donors-appear-in-reports/" target="_blank" rel="noopener">https://www.opensecrets.org/news/2025/07/how-small-dollar-donors-appear-in-reports/</a></li><li><a href="https://ballotpedia.org/Campaign_finance_reporting_itemization_aggregation_and_common_pitfalls" target="_blank" rel="noopener">https://ballotpedia.org/Campaign_finance_reporting_itemization_aggregation_and_common_pitfalls</a></li><li><a href="https://www.fec.gov/resources/cms-content/documents/schedule_a_instructions.pdf" target="_blank" rel="noopener">https://www.fec.gov/resources/cms-content/documents/schedule_a_instructions.pdf</a></li><li><a href="https://www.cfrl.org/research/estimating-small-donors-2024" target="_blank" rel="noopener">https://www.cfrl.org/research/estimating-small-donors-2024</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.fec.gov/campaign-finance-data/about-campaign-finance-data/methodology/" target="_blank" rel="noopener">https://www.fec.gov/campaign-finance-data/about-campaign-finance-data/methodology/</a></li><li><a href="https://www.fec.gov/resources/cms-content/documents/policy-guidance/candgui.pdf" target="_blank" rel="noopener">https://www.fec.gov/resources/cms-content/documents/policy-guidance/candgui.pdf</a></li><li><a href="https://lunar.fppc.ca.gov/content/dam/fppc/NS-Documents/TAD/Campaign%20Manuals/Manual_4/Manual_4_Ch_15_Multipurpose_Organizations.pdf" target="_blank" rel="noopener">https://lunar.fppc.ca.gov/content/dam/fppc/NS-Documents/TAD/Campaign%20Manuals/Manual_4/Manual_4_Ch_15_Multipurpose_Organizations.pdf</a></li><li><a href="https://michaelcarbonara.com/donate/" target="_blank" rel="noopener">https://michaelcarbonara.com/donate/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://www.fec.gov/resources/cms-content/documents/policy-guidance/candgui.pdf" target="_blank" rel="noopener">https://www.fec.gov/resources/cms-content/documents/policy-guidance/candgui.pdf</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
