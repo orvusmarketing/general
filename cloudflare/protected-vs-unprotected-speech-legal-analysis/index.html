@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Protected vs Unprotected Speech: Why Context Matters in Legal Analysis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens (from provided style input) */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: color-mix(in srgb, #ae2736 86%, #000 14%);
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* from --mc-panel-2 */
+      --radius: 0px; /* from --mc-radius */
+
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+
+    /* Summary style */
+    .article-body .summary{
+      font-style: italic;
+      color: rgba(255,255,255,.90);
+      margin-bottom: 1.6rem;
+    }
+
+    /* Highlights */
+    .article-body .article-highlights{
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 1.6rem 0;
+    }
+    .article-body .highlight-card{
+      background:
+        radial-gradient(circle at 10% 0%, rgba(255,255,255,.06), transparent 52%),
+        linear-gradient(135deg, rgba(255,255,255,.04) 0%, rgba(255,255,255,.02) 100%);
+      border: 1px solid rgba(255,255,255,.12);
+      border-left: 4px solid var(--accent);
+      padding: 1rem 1.15rem;
+      font-weight: 750;
+      color: var(--text-color);
+      box-shadow: 0 12px 30px rgba(0,0,0,.36);
+    }
+
+    /* Standalone small logo */
+    .article-body figure.special-image-standalone{
+      margin: 1rem auto;
+      text-align: center;
+      max-width: 120px;
+      width: 100%;
+      border: 0 !important;
+      background: transparent !important;
+    }
+    .article-body figure.special-image-standalone img{ width:100%; height:auto; object-fit:contain; }
+
+    /* Side-by-side */
+    .article-body .side-by-side{
+      display:flex;
+      gap: clamp(16px, 3vw, 28px);
+      align-items:flex-start;
+      margin: 1.6rem 0;
+      width:100%;
+    }
+    .article-body .side-by-side img{ max-width: min(100%, 420px); height:auto; display:block; box-shadow: 0 14px 34px rgba(0,0,0,.36); }
+    .article-body .side-by-side .side-text{ flex:1 1 auto; min-width:0; padding:0 0.75rem; }
+    .article-body .side-by-side.special-image-left{ flex-direction: row; }
+    .article-body .side-by-side.product-image-right{ flex-direction: column; align-items:center; text-align:center; gap:0.9rem; margin:1.2rem auto; }
+    .article-body .side-by-side.product-image-right img{ max-width:300px; }
+    .article-body .side-by-side.product-image-right .side-text a{ display:inline-block; background:var(--accent); color:#ffffff; padding:0.6em 1.2em; font-weight:900; text-decoration:none; }
+
+    /* CTA-section inside article (keep subtle) */
+    .article-body .cta-section{ border:1px solid rgba(255,255,255,.10); padding:1rem; margin:1rem 0; background: rgba(255,255,255,.02); }
+    .article-body .cta-section .cta-headline{ display:block; width:fit-content; margin:0.6rem auto; padding:0.45rem 0.65rem; font-weight:900; color:var(--text-color); border-left:4px solid var(--accent); }
+    .article-body .cta-section .cta-button{ background:var(--accent); color:#fff; padding:0.6em 1.1em; font-weight:900; text-decoration:none; display:inline-block; }
+    .article-body .cta-section .cta-button:hover{ background: var(--accent-hover); }
+
+    /* FAQ accordion (scoped) */
+    .article-body .faq-accordion{ border:1px solid rgba(255,255,255,.12); border-left:4px solid var(--accent); padding:0; background: rgba(255,255,255,.02); }
+    .article-body .faq-summary{ padding: 0.9rem 1rem 0.9rem 2.4rem; font-weight:900; color:var(--text-color); display:flex; align-items:center; min-height:56px; }
+    .article-body .faq-summary::before{ content: ''; position:absolute; left:1rem; top:50%; transform:translateY(-50%); border-style:solid; border-width:6px 0 6px 9px; border-color: transparent transparent transparent var(--accent); }
+    .article-body .faq-content{ display:none; padding:0.9rem 1rem; border-top:1px solid rgba(255,255,255,.08); color: rgba(255,255,255,.92); }
+    .article-body .faq-toggle:checked ~ .faq-content{ display:block; }
+
+    /* Tool block (checklist) */
+    .article-body .tool-block{ max-width:720px; margin:1.6rem auto; padding:1rem; border-left:4px solid var(--accent); background: rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.10); }
+    .article-body .tool-checklist-list{ list-style:none; padding:0; margin:0.4rem 0 0 0; display:grid; gap:0.45rem; }
+    .article-body .tool-checklist-item label{ display:flex; align-items:center; gap:0.6rem; padding:0.6rem; background: rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); }
+    .article-body .tool-checklist-item input[type="checkbox"]{ width:18px; height:18px; margin:0; accent-color: var(--accent); }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/protected-vs-unprotected-speech-courthouse.jpg" alt="Courthouse image for Protected vs Unprotected Speech" />
+        </div>
+        <h1 class="title">Protected vs Unprotected Speech: Why Context Matters in Legal Analysis</h1>
+        <p class="subline">A concise guide to how courts separate protected political speech from narrow unprotected categories.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/protected-vs-unprotected-speech-legal-analysis/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">This article explains how U.S. courts distinguish protected from unprotected speech under the First Amendment. It summarizes the core unprotected categories, outlines the tests courts use, and offers a practical checklist readers can use to assess statements. The goal is to inform voters and civic readers, using primary case law and neutral sources for attribution.
+
+The content is informational and not legal advice. Where key doctrines are summarized, the article cites primary Supreme Court opinions and respected legal overviews so readers can review the original texts.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Most political and expressive speech remains protected under the First Amendment, with a few narrow exceptions.</span></div><div class="highlight-card"><span class="highlight-text">Brandenburg sets a strict test for incitement: directed to imminent lawless action and likely to produce it.</span></div><div class="highlight-card"><span class="highlight-text">Context, including intent and audience, often determines whether a close case is protected or unprotected.</span></div>
+     </div>
+  <h2>What protected and unprotected speech mean under the First Amendment (protected vs unprotected speech)</h2><p>The phrase protected vs unprotected speech describes how the First Amendment applies differently to most political and expressive words versus a few narrowly defined exceptions. According to a standard legal overview, most political and expressive speech is protected while limited categories, including incitement, true threats, defamation, obscenity, and fighting words, are treated as unprotected in certain circumstances. <a href="https://www.law.cornell.edu/wex/freedom_of_speech" target="_blank" rel="noopener">Legal Information Institute overview on freedom of speech</a></p><p>Understanding this distinction matters because protection determines whether government regulation, criminal charges, or civil liability may follow from what someone says. Courts derive these boundaries from Supreme Court precedent and then apply them to concrete facts in lower courts. <a href="https://www.law.cornell.edu/wex/freedom_of_speech" target="_blank" rel="noopener">Legal Information Institute overview on freedom of speech</a></p><section class="faq-accordion"><input type="checkbox" id="faq-hruxwk" class="faq-toggle" checked /><label for="faq-hruxwk" class="faq-summary" role="button" tabindex="0">How do courts decide when speech is protected under the First Amendment?</label><div class="faq-content"><p>Courts apply narrow category tests from Supreme Court precedent, then weigh contextual factors like intent, audience, medium, place, and timing to determine whether a specific instance of speech falls outside protection.</p></div></section><p>Lawyers and judges look for bright lines, but the tests are often about context rather than simple labels. That means the same words can be protected in one setting and unprotected in another depending on factors like intent, audience, and timing. <a href="https://www.law.cornell.edu/wex/freedom_of_speech" target="_blank" rel="noopener">Legal Information Institute overview on freedom of speech</a></p><h2>Overview of the main unprotected categories</h2><p>Court doctrine identifies a small set of speech categories that fall outside First Amendment protection, and courts emphasize that these categories are narrow. The usual list includes incitement, true threats, defamation, obscenity, and fighting words. <a href="https://www.law.cornell.edu/wex/freedom_of_speech" target="_blank" rel="noopener">Legal Information Institute overview on freedom of speech</a></p><p>Each category serves a distinct legal purpose: preventing imminent lawless acts, protecting people from credible threats, addressing reputational harm from false statements, and regulating extreme sexual material or direct provocation that incites violence. Courts treat these doctrines as exceptions, not the rule. <a href="https://www.law.cornell.edu/wex/freedom_of_speech" target="_blank" rel="noopener">Legal Information Institute overview on freedom of speech</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Incitement: the Brandenburg test and its limits</h2><p>The leading test for incitement comes from Brandenburg v. Ohio, which holds that advocacy is unprotected only when it is directed to producing imminent lawless action and is likely to produce such action. This rule narrows what counts as incitement by requiring both intent and likelihood. <a href="https://www.law.cornell.edu/supremecourt/text/395/444" target="_blank" rel="noopener">Brandenburg v. Ohio</a> <a href="https://supreme.justia.com/cases/federal/us/395/444/" target="_blank" rel="noopener">See the Supreme Court opinion at Justia</a></p><p>In practice, courts ask whether the speaker intended to provoke immediate illegal conduct and whether the words were likely to cause that conduct right away. Political speech and general advocacy typically remain protected because they lack the required immediacy and directness. <a href="https://www.law.cornell.edu/supremecourt/text/395/444" target="_blank" rel="noopener">Brandenburg v. Ohio</a> <a href="https://firstamendment.mtsu.edu/article/brandenburg-v-ohio/" target="_blank" rel="noopener">See a summary at MTSU Free Speech Center</a></p><p>Simple hypotheticals help: a speech urging long-term political change is usually protected, whereas instructing a crowd to commit violence on the spot meets Brandenburg elements if the other requirements are present. The test thus keeps most advocacy within protection while focusing liability on the most serious, imminent threats to public order. <a href="https://www.law.cornell.edu/supremecourt/text/395/444" target="_blank" rel="noopener">Brandenburg v. Ohio</a></p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Read the primary cases for exact tests and language</h3><div class="cta-intro"><p>For readers using this article to learn, consult the primary cases cited below to see the exact language of the tests; this article is informational and not a substitute for legal advice.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Review case texts</a></div><h2>True threats and speaker intent: lessons from Elonis</h2><p>True threats are assessed by asking whether a reasonable person would view the statement as a serious expression of intent to harm, and courts sometimes probe the speaker's state of mind as part of that inquiry. Context and objective indicators matter heavily in this analysis. <a href="https://www.law.cornell.edu/supremecourt/text/13-983" target="_blank" rel="noopener">Elonis v. United States</a></p><p>Elonis shows that courts may look beyond literal words to consider whether the speaker intended to threaten or was engaging in hyperbole, parody, or crude language. The case highlights the role of mental state in distinguishing protected expression from a punishable threat. <a href="https://www.law.cornell.edu/supremecourt/text/13-983" target="_blank" rel="noopener">Elonis v. United States</a></p><p>Format, audience, and surrounding facts often change how a message is read. A violent phrase sent in private to a specific target will be evaluated differently than a similar phrase published as part of a political rant to a broad public audience. <a href="https://www.law.cornell.edu/wex/freedom_of_speech" target="_blank" rel="noopener">Legal Information Institute overview on freedom of speech</a></p><h2>Defamation and the actual malice standard for public figures</h2><p>Defamation law requires plaintiffs to show falsity and harm, but claims by public officials or public figures face a higher bar under New York Times Co. v. Sullivan: the plaintiff must prove that a defendant acted with actual malice, meaning knowledge of falsity or reckless disregard for the truth. <a href="https://www.law.cornell.edu/supremecourt/text/376/254" target="_blank" rel="noopener">New York Times Co. v. Sullivan</a></p><p>Public-figure status changes the analysis because the Court held that the First Amendment protects open debate about public officials and public matters, even at the cost of some erroneous statements, unless those errors were made with actual malice. That standard narrows the range of successful defamation claims against public figures. <a href="https://www.law.cornell.edu/supremecourt/text/376/254" target="_blank" rel="noopener">New York Times Co. v. Sullivan</a></p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><p>For ordinary private-figure plaintiffs, the burden is lower in many jurisdictions, but falsity and demonstrable harm remain central elements. Readers should note that defamation claims turn on detailed evidence about truth and how statements were published. <a href="https://www.law.cornell.edu/wex/freedom_of_speech" target="_blank" rel="noopener">Legal Information Institute overview on freedom of speech</a></p><h2>Obscenity and fighting words: narrow doctrines with historical roots</h2><p>The fighting words doctrine traces to Chaplinsky v. New Hampshire, where the Court described certain direct, face-to-face words as offering little social value and therefore unprotected. That origin frames a doctrine courts now apply narrowly. <a href="https://www.law.cornell.edu/supremecourt/text/315/568" target="_blank" rel="noopener">Chaplinsky v. New Hampshire</a></p><p>Obscenity is a separate category with its own tests, and modern courts often treat both obscenity and fighting words as limited exceptions that surface rarely in contemporary litigation. The general approach has been to confine government regulation to clearly defined harms. <a href="https://www.law.cornell.edu/wex/freedom_of_speech" target="_blank" rel="noopener">Legal Information Institute overview on freedom of speech</a></p><h2>Contextual factors courts use: speaker, audience, medium, place, and timing</h2><p>When courts decide whether speech falls into a narrow unprotected category, they routinely weigh five contextual factors: speaker intent, audience characteristics, medium (such as online or in-person), location (public forum versus private space), and timing. These elements help judges apply broad tests to particular facts. <a href="https://www.law.cornell.edu/supremecourt/text/395/444" target="_blank" rel="noopener">Brandenburg v. Ohio</a></p><p>Each factor can tip a close case. For example, a speaker's known intent can transform heated rhetoric into actionable incitement if the audience is primed to act immediately. Conversely, satire aimed at a sophisticated audience is often read as nonliteral and protected. <a href="https://www.law.cornell.edu/supremecourt/text/13-983" target="_blank" rel="noopener">Elonis v. United States</a></p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick printable checklist to assess protection status of speech</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-ef4wp4-0">
+                        <input id="tool-check-ef4wp4-0" type="checkbox" />
+                        <span>Identify category</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-k8cqje-1">
+                        <input id="tool-check-k8cqje-1" type="checkbox" />
+                        <span>Check imminence</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-93821m-2">
+                        <input id="tool-check-93821m-2" type="checkbox" />
+                        <span>Evaluate threat indicators</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-gau6cf-3">
+                        <input id="tool-check-gau6cf-3" type="checkbox" />
+                        <span>Verify falsity</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-17y6ae-4">
+                        <input id="tool-check-17y6ae-4" type="checkbox" />
+                        <span>Note forum and speaker status</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Keep as informational guidance</p>
+            </div><p>Medium matters because online posts can spread rapidly and be viewed out of context, while in-person statements allow juries or judges to hear tone and see reactions. Timing also matters: a comment during a volatile event can carry a different risk of harm than the same words months later. <a href="https://www.law.cornell.edu/wex/freedom_of_speech" target="_blank" rel="noopener">Legal Information Institute overview on freedom of speech</a></p><h2>A practical checklist readers can use to evaluate speech</h2><p>Use these ordered steps as an informational guide: identify which category the statement might fall into; for possible incitement, ask whether the speech was directed to immediate lawless action and likely to produce it; for threats, test whether a reasonable person would view it as a serious intent to harm; for defamation, verify falsity and harm; and always note forum and speaker status. <a href="https://www.law.cornell.edu/supremecourt/text/395/444" target="_blank" rel="noopener">Brandenburg v. Ohio</a></p>
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1v7n7bxScxcYpyN8lnvgnm4gMsQUJEQPJ=s1200" alt="Minimalist vector infographic of a podium and microphone with shield and broken speech wave icons illustrating protected vs unprotected speech in Michael Carbonara colors" /></a>
+      <div class="side-text"><p>Step 1: Identify the category. Step 2: If incitement is plausible, assess imminence and likelihood. Step 3: If the statement looks like a threat, check objective indicators and available context. Step 4: For reputational claims, verify whether the statement is false and whether the speaker acted with actual malice if the target is a public figure. Step 5: Record the medium, audience, and timing for later review. <a href="https://www.law.cornell.edu/wex/freedom_of_speech" target="_blank" rel="noopener">Legal Information Institute overview on freedom of speech</a></p></div>
+    </div><p>Remember this checklist is informational and not legal advice; disputes about potential criminal liability or civil claims require case-specific legal analysis from counsel. <a href="https://www.law.cornell.edu/wex/freedom_of_speech" target="_blank" rel="noopener">Legal Information Institute overview on freedom of speech</a> <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">See news for related updates</a></p><h2>Applying traditional tests to online speech and platforms</h2><p>Courts continue to treat established Supreme Court standards as the baseline even as they adapt to online contexts where reposting, anonymity, and rapid spread complicate context. The tests remain the starting point for analysis of online statements. <a href="https://www.law.cornell.edu/wex/freedom_of_speech" target="_blank" rel="noopener">Legal Information Institute overview on freedom of speech</a></p><p>Key challenges online include loss of contextual cues, the speed of amplification, and platform policies that impose different rules than the law. Those practical differences mean content moderation and legal liability follow separate logics. <a href="https://www.aclu.org/issues/free-speech" target="_blank" rel="noopener">ACLU overview on free speech</a></p><p>Elonis provides an example of how courts probe context and mental state for online messages, showing that courts focus on whether a message would be read as a serious threat by a reasonable person and whether the speaker intended that meaning. <a href="https://www.law.cornell.edu/supremecourt/text/13-983" target="_blank" rel="noopener">Elonis v. United States</a></p><h2>Common mistakes and pitfalls when judging speech</h2><p>A frequent error is treating slogans or heated rhetoric as incitement without considering imminence and likelihood. Many political slogans are passionate but not directed to immediate lawless action. <a href="https://www.law.cornell.edu/supremecourt/text/395/444" target="_blank" rel="noopener">Brandenburg v. Ohio</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>Another mistake is misreading jokes, satire, or parody as true threats; context and audience sophistication often show nonliteral intent. Checking surrounding facts can prevent false readings that lead to unwarranted alarm. <a href="https://www.law.cornell.edu/supremecourt/text/13-983" target="_blank" rel="noopener">Elonis v. United States</a></p><p>Failing to check whether a plaintiff is a public figure is also common. Public-figure status matters because of the actual malice requirement in defamation law, which raises the proof needed to succeed in many claims. <a href="https://www.law.cornell.edu/supremecourt/text/376/254" target="_blank" rel="noopener">New York Times Co. v. Sullivan</a></p><h2>Short scenarios: applying the rules to real situations</h2><p>Scenario 1, rally rhetoric: A speaker at a rally urges supporters to "take back the area now" while naming a nearby building and time. Under Brandenburg, courts would examine whether the words were directed to imminent lawless action and likely to produce it; if so, the statement could fall outside protection. <a href="https://www.law.cornell.edu/supremecourt/text/395/444" target="_blank" rel="noopener">Brandenburg v. Ohio</a></p><p>Scenario 2, social media post that looks like a threat: A post contains violent language aimed at a named individual but framed as a joke with ironic hashtags. Courts applying the true-threat framework would weigh whether a reasonable person would view the message as a real intent to harm and may examine the poster's state of mind as Elonis illustrates. <a href="https://www.law.cornell.edu/supremecourt/text/13-983" target="_blank" rel="noopener">Elonis v. United States</a></p><p>Scenario 3, alleged defamation of a public official: A columnist publishes an inaccurate claim about a public official's conduct. Under Sullivan, the official must show the author knew the claim was false or acted with reckless disregard, which narrows the path to liability for statements about public figures. <a href="https://www.law.cornell.edu/supremecourt/text/376/254" target="_blank" rel="noopener">New York Times Co. v. Sullivan</a></p><h2>How courts evaluate evidence, intent, and context in disputes</h2><p>Courts look to recordings, contemporaneous messages, witness testimony, platform metadata, and other evidence to reconstruct what was said and how it was likely understood. Those materials often determine whether speech meets a narrow unprotected category. <a href="https://www.law.cornell.edu/supremecourt/text/13-983" target="_blank" rel="noopener">Elonis v. United States</a></p><p>Judges typically assess objective indicators first, such as the wording and setting, and then consider subjective intent where a doctrine requires it. The mix of evidence needed differs in criminal and civil cases and depends on whether elements like actual malice are at issue. <a href="https://www.law.cornell.edu/supremecourt/text/395/444" target="_blank" rel="noopener">Brandenburg v. Ohio</a></p><h2>Conclusion and where to read primary sources</h2><p>Key takeaway: most expressive speech in the political and public sphere is protected, but a small set of narrow categories can be unprotected when specific tests are met; context often decides close cases. <a href="https://www.michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">See the constitutional rights hub</a></p><p>Primary documents for deeper reading include Brandenburg v. Ohio, New York Times Co. v. Sullivan, Elonis v. United States, Chaplinsky v. New Hampshire, and the general legal overviews linked above. Readers should treat this article as informational and seek counsel for specific disputes. <a href="https://www.law.cornell.edu/supremecourt/text/395/444" target="_blank" rel="noopener">Brandenburg v. Ohio</a> <a href="https://www.oyez.org/cases/1968/492" target="_blank" rel="noopener">See the Oyez case summary</a> <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">Learn more on the About page</a></p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-3981fb" class="faq-toggle" /><label for="faq-3981fb" class="faq-summary" role="button" tabindex="0">How does the law distinguish protected from unprotected speech?</label><div class="faq-content"><p>Most political and expressive speech is protected, while narrow categories like incitement, true threats, defamation, obscenity, and fighting words can be unprotected when specific legal tests are met.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-kxr96p" class="faq-toggle" /><label for="faq-kxr96p" class="faq-summary" role="button" tabindex="0">What is the Brandenburg test for incitement?</label><div class="faq-content"><p>Brandenburg requires that speech be directed to inciting imminent lawless action and likely to produce such action before it can be treated as unprotected incitement.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-qxrms7" class="faq-toggle" /><label for="faq-qxrms7" class="faq-summary" role="button" tabindex="0">When do public figures face higher proof in defamation cases?</label><div class="faq-content"><p>Public officials and public figures must prove actual malice, meaning the defendant knew the statement was false or acted with reckless disregard for the truth.</p></div></section>
+</section><section class="article-ending">If you need case-specific guidance about possible liability or government action, consult a lawyer with experience in First Amendment matters. Primary case texts linked in the article are the best starting point for detailed legal language.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.law.cornell.edu/wex/freedom_of_speech" target="_blank" rel="noopener">https://www.law.cornell.edu/wex/freedom_of_speech</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/395/444" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/395/444</a></li><li><a href="https://supreme.justia.com/cases/federal/us/395/444/" target="_blank" rel="noopener">https://supreme.justia.com/cases/federal/us/395/444/</a></li><li><a href="https://firstamendment.mtsu.edu/article/brandenburg-v-ohio/" target="_blank" rel="noopener">https://firstamendment.mtsu.edu/article/brandenburg-v-ohio/</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/13-983" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/13-983</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/376/254" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/376/254</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/315/568" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/315/568</a></li><li><a href="https://www.aclu.org/issues/free-speech" target="_blank" rel="noopener">https://www.aclu.org/issues/free-speech</a></li><li><a href="https://firstamendment.mtsu.edu/article/brandenburg-v-ohio/" target="_blank" rel="noopener">https://firstamendment.mtsu.edu/article/brandenburg-v-ohio/</a></li><li><a href="https://supreme.justia.com/cases/federal/us/395/444/" target="_blank" rel="noopener">https://supreme.justia.com/cases/federal/us/395/444/</a></li><li><a href="https://www.oyez.org/cases/1968/492" target="_blank" rel="noopener">https://www.oyez.org/cases/1968/492</a></li><li><a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">https://michaelcarbonara.com/constitutional-rights/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
