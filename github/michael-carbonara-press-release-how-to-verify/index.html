@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Reading a Michael Carbonara press release for facts, dates, and attributable claims</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      --text-color: #ffffff;
+      --accent: #ae2736;
+      --accent-hover: #8f202d;
+      --line: rgba(255,255,255,.16);
+      --surface: #0b2664;
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px;
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1xqiZiWOif9xBADxAF88BhGclu-YWB57y" alt="Reading a Michael Carbonara press release banner" />
+        </div>
+        <h1 class="title">Reading a Michael Carbonara press release for facts, dates, and attributable claims</h1>
+        <p class="subline">A concise guide to capturing and verifying claims in a Michael Carbonara campaign press release.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/michael-carbonara-press-release-how-to-verify/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">A campaign press release is the candidate's official account of an event, claim, or position. For readers who want verifiable information, treat the release as a primary source to be captured and checked against public records.
+This guide shows a clear, repeatable verification workflow for a Michael Carbonara press release, including a five-step checklist, precise checks for finance and filing claims, guidance on confirming quotes and multimedia, and an annotated example that demonstrates the process in practice.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Treat a campaign press release as a primary-source statement and preserve the original text and metadata.</span></div><div class="highlight-card"><span class="highlight-text">Verify financial or committee claims against FEC filings and use Ballotpedia for filing context.</span></div><div class="highlight-card"><span class="highlight-text">Use reverse image and video searches and request original datasets when a release cites proprietary material.</span></div>
+     </div>
+  <h2>What a Michael Carbonara press release is and how to treat it</h2><h3>What counts as a campaign press release</h3><p>A press release issued by a campaign is a primary-source campaign statement from the candidate or campaign committee and should be captured exactly as published. The first step is to record the exact text, date, author or byline, and any attached files or links shown on the campaign website, because the release is the campaign's official account of its message.</p><p>When you capture a release, note the press contact and distribution channel listed on the release, and copy filenames or URLs for any attachments so you can return to the original source if the posting changes later. Treating the release this way preserves the original context for later checks against public records or newsroom verification notes. <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">Michael Carbonara campaign website</a> <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">contact page</a></p><h3>Why treat the release as a primary source</h3><p>Treating a release as a primary source means you quote or paraphrase with clear attribution and then corroborate factual claims with independent records. A campaign statement is the starting point, not the final verification, because campaigns may include promotional language or proprietary data that needs outside confirmation. Following a verification workflow reduces the risk of repeating unverified claims.</p><p>A clear verification workflow also helps you log where each claim was checked and which primary public record was used for confirmation. Journalistic verification practices recommend capturing metadata and attachments at the time of download to prevent later changes from affecting your record. <a href="https://www.poynter.org/" target="_blank" rel="noopener">Poynter Institute verification guidance</a></p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">point readers to public guides for release verification</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-5brhbt-0">
+                        <input id="tool-check-5brhbt-0" type="checkbox" />
+                        <span>campaign release capture</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-6x010k-1">
+                        <input id="tool-check-6x010k-1" type="checkbox" />
+                        <span>FEC help pages</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-9cv1gv-2">
+                        <input id="tool-check-9cv1gv-2" type="checkbox" />
+                        <span>Verification Handbook</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use these as first-stop tools</p>
+            </div><p>Keep short notes when you first open the release: who published it, when, whether it links to data or filings, and who is quoted. These items are the metadata you will repeatedly return to when checking quotes, dates, or financial claims.</p><h2>First-pass checklist: capture, flag, confirm</h2><h3>Five-step quick workflow</h3><p>Use a five-step checklist when you first see a release: capture the exact text and date; flag any named sources or datasets; confirm quoted material against recordings or transcripts; verify factual claims through FEC or public records and Ballotpedia; and annotate any unverified or promotional language for readers. This short checklist is designed so reporters, students, and civic readers can apply the same method quickly to any campaign release. <a href="https://apnews.com/hub/fact-check" target="_blank" rel="noopener">AP fact checking resources</a></p><p>Step 1, capture: save a full copy of the release from the campaign website and record the URL and time you retrieved it. If attachments such as spreadsheets or PDF briefs are included, save those files and note their filenames.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>Step 2, flag: mark any named datasets, polls, or third-party sources cited by the release so you can locate the original material. If the release cites FEC totals, treat those claims as financial statements that require direct checks on the FEC site.</p><p>Step 3, confirm quotes: where the release includes direct quotes, seek the original audio, video, or transcript where possible and note any wording differences. If a release quotes a speech or event, capture the event details so you can find the primary recording later. <a href="https://firstdraftnews.org/manuals/verification-handbook/" target="_blank" rel="noopener">Verification Handbook methods</a></p><p>Step 4, verify claims: check factual assertions such as fundraising totals, committee names, or filing dates against FEC filings and Ballotpedia entries, and log the exact record or line item used for confirmation. Document the retrieval date for each public record you consult.</p><p>Step 5, annotate: annotate the release text or your notes to show which claims are confirmed, which are partially verified, and which remain unverified or promotional. This helps readers and editors see the verification status at a glance and preserves transparency about what could not be independently corroborated. <a href="https://www.fec.gov/help-candidates-and-committees/" target="_blank" rel="noopener">FEC help pages</a></p><h3>How to log your findings and sources</h3>
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1_ql5NQiuahO_j43zjp_rESWbRYlntZwK=s1200" alt="Minimalist vector desktop infographic showing a saved press release file beside a browser campaign mockup and a notebook in Michael Carbonara press release aesthetic" /></a>
+      <div class="side-text"><p>Create a simple log for each claim: the quoted text or numeric claim, where you checked it, the date you retrieved the record, and a short note on how you matched the two. A basic spreadsheet with columns for claim text, claim type, source checked, retrieval date, and verification status is enough for routine work and helps avoid confusion when releases are updated.</p></div>
+    </div><p>Keep the original capture and your annotated copy together. When possible, include a screenshot of the release near the top of your file and note the campaign URL so an editor or reader can reproduce your steps later.</p><h2>Verifying fundraising, committee, and ballot claims</h2><h3>Where to check FEC records and what fields matter</h3><p>Financial or committee claims in a campaign release should be verified against FEC filings and the FEC help guidance, checking committee names, reporting periods, and the specific line items that record receipts or disbursements. Public FEC records are the authoritative source for campaign finance and committee activity and should be cited when summarizing totals or committee names. <a href="https://www.fec.gov/help-candidates-and-committees/" target="_blank" rel="noopener">FEC help pages</a></p><p>When you consult the FEC, note the committee name exactly as it appears on the filing, the reporting period, and the line item used to support the claim. Avoid rounding amounts unless the original filing or the release itself uses rounded figures, and record the original line-item code in your notes for transparency. See the FEC candidate overview: <a href="https://www.fec.gov/data/candidate/H6FL25035/" target="_blank" rel="noopener">https://www.fec.gov/data/candidate/H6FL25035/</a></p><section class="faq-accordion"><input type="checkbox" id="faq-05d9xq" class="faq-toggle" checked /><label for="faq-05d9xq" class="faq-summary" role="button" tabindex="0">How should I verify claims in a Michael Carbonara press release?</label><div class="faq-content"><p>Capture the release from the campaign site, flag named sources or datasets, confirm quotes with recordings or transcripts, verify finance and filing claims via FEC and Ballotpedia, and annotate items that remain unverified.</p></div></section><p>For claims that name multiple committees or joint fundraising arrangements, trace each named entity to its FEC ID and confirm which committee reported which receipts during the period cited in the release. That prevents attribution errors when releases combine committee totals.</p><h3>Using Ballotpedia to confirm candidacy status and filing dates</h3><p>To check filing dates, ballot status, or prior runs, consult neutral aggregator pages such as Ballotpedia, which list candidacy status and filing history and are useful for quick confirmation of whether a candidate has officially filed or previously run. When you use Ballotpedia, note the retrieval date so readers can see when the check was made. <a href="https://ballotpedia.org/Michael_Carbonara" target="_blank" rel="noopener">Ballotpedia entry on Michael Carbonara</a></p><p>Ballotpedia is a helpful secondary source for context, but it should not replace primary public records for financial checks. Use Ballotpedia to confirm filing dates and basic electoral context, then go to FEC or state filings for primary documentation of fundraising or committee reports.</p><h2>Checking quotes, dates, and source attribution</h2><h3>Confirming direct quotes against recordings or transcripts</h3><p>When a release attributes a direct quote to the candidate or a campaign official, seek an original recording or transcript of the quoted remarks to confirm exact wording. If the release is the only published version of a quote, annotate that the wording comes from the campaign release and note whether an independent transcript or recording was available for confirmation. <a href="https://www.poynter.org/" target="_blank" rel="noopener">Poynter Institute verification guidance</a></p><p>If the quote appears to be a paraphrase or summary rather than a verbatim excerpt, use attribution phrasing such as according to the campaign site to make clear the origin of the wording. Where possible, include the event name or date to help others find the original source.</p><p>Confirm the release date and time as published on the campaign website, and capture page metadata or download timestamps when you save the release. Publication timestamps help establish the sequence of events when a release responds to external news or a rival statement, and they can be crucial when verifying time-sensitive claims.</p><p>Note whether the release was published to the campaign website only, posted to a press distribution service, or shared via social channels, because distribution channels can affect how widely the release was seen and how quickly independent records are updated.</p><h3>Handling unnamed sources and promotional language</h3><p>Flag unnamed sources and any promotional language as campaign messaging unless the release cites an independent source. Words that read like a slogan or an evaluative claim should be attributed to the campaign and qualified in your notes rather than reported as independent fact.</p><p>When a release makes comparative or causal claims without a named data source, seek the underlying data or document before repeating the claim. If no independent source is available, label the item unverified in your notes and use precise attribution such as according to the campaign statement.</p><h2>Digital verification: images, video, and datasets</h2><h3>Reverse image and video checks</h3><p>For multimedia cited in a release, use reverse image and video search tools to check provenance and prior usage, and follow the Verification Handbook methods to trace where a file first appeared. Provenance checks help determine whether an image or clip is original, previously published, or edited in a way that changes context. <a href="https://firstdraftnews.org/manuals/verification-handbook/" target="_blank" rel="noopener">Verification Handbook digital verification methods</a></p><p>Document the steps you take when checking an image or clip: the search terms used, the tools queried, and the top matching results, and capture screenshots of search results and the original posting to preserve the chain of evidence.</p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Join the campaign updates and verification resources</h3><div class="cta-intro"><p>To use this guide in the field, download the short checklist or view verification resources on the campaign site as a starting reference for checks.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Visit the campaign sign up page</a></div><h3>Requesting original datasets and method notes</h3><p>When a release cites proprietary data, seek the original dataset or a methodology note. If the campaign does not provide raw data or methods, document the request and record the campaign's response or the absence of one. That record shows readers what was available for independent assessment.</p><p>If you cannot obtain the original data, note the limitation in your verification log and explain what steps you took to try to reproduce the result. Transparency about unavailable materials helps readers weigh the claim's reliability.</p><h2>Annotated example: reading a Michael Carbonara press release</h2><h3>Capture the release as published on the campaign site</h3><p>Begin by saving the release from the Michael Carbonara campaign website and recording the exact URL and retrieval time, then save any linked attachments such as spreadsheets or PDF statements. This preserves the campaign's original text and any supporting materials that accompanied the release. <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">Michael Carbonara campaign website</a></p><p>Record the press contact and any byline, and make an initial list of claims that require verification, such as fundraising totals, committee names, filing dates, or quoted statements. Label each claim with a suggested primary record to check, for example FEC filings for finance claims or Ballotpedia for filing and ballot status. See the campaign updates guide: <a href="https://michaelcarbonara.com/michael-carbonara-campaign-updates/" target="_blank" rel="noopener">campaign updates guide</a></p><h3>Walkthrough: claims, checks, and annotation</h3>
+    <div class="side-by-side image-2-right">
+      <div class="side-text">Take a fundraising claim and map it to the FEC filing that should record it. Identify the committee name used in the release, search for that committee on the FEC site, and open the report for the period the release cites. Compare the line-item totals on the FEC report to the release claim and note any differences in wording or rounding. Public FEC records provide detailed line items and filing dates that let you verify amounts precisely. <a href="https://www.fec.gov/help-candidates-and-committees/" target="_blank" rel="noopener">FEC help pages</a></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/18_KCswumKATHW_h-hYpLn5D1qLNwFDq9=s1200" alt="Michael Carbonara press release vector infographic showing five minimalist icons for capture flag confirm verify annotate on deep blue background with white lines and red accents" /></a>
+    </div><p>For a claim about candidacy status or filing dates, check Ballotpedia to confirm whether a formal filing has been recorded and note Ballotpedia's retrieval date. Use Ballotpedia as a verification shortcut for filing history and then cite the primary state or FEC record when you publish a confirmed figure. <a href="https://ballotpedia.org/Michael_Carbonara" target="_blank" rel="noopener">Ballotpedia entry on Michael Carbonara</a></p><h3>How to mark unverified or promotional claims in your notes</h3><p>When you encounter a slogan, promotional language, or a statistic without a named source, annotate it as campaign messaging and add a note stating which document or record would be needed to verify it. If an item remains unverified after reasonable checks, keep it labeled as such in your published notes or internal log.</p><p>Maintain an evidence column in your log that lists the document name, URL, or FEC report number used to verify each claim so that other readers can reproduce your steps and see which claims remain unresolved.</p><h2>Common mistakes and red flags to avoid</h2><h3>Overreliance on campaign-provided numbers</h3><p>Do not accept campaign-provided numbers without checking primary public records. Campaigns may summarize or round figures for readability, so verify financial totals against FEC line items and committee reports rather than relying on the release alone. Public FEC records show the detailed entries you need to confirm totals. <a href="https://www.fec.gov/help-candidates-and-committees/" target="_blank" rel="noopener">FEC help pages</a></p><p>When a release cites a proprietary dataset without methods, request the underlying files or methodology and flag the claim as provisional until you can examine the materials directly.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><h3>Ignoring metadata and attachments</h3><p>Always preserve the release's metadata and any attachments at the time of capture, because web pages can be edited after publication. Download attachments and note their filenames and timestamps so you can show the state of the release when you first saw it.</p><p>Failing to capture metadata can create confusion if a campaign updates a release after you have quoted it, so a screenshot and saved files provide a reliable record of the original posting. <a href="https://firstdraftnews.org/manuals/verification-handbook/" target="_blank" rel="noopener">Verification Handbook methods</a></p><h3>Treating slogans as factual claims</h3><p>Flag slogans and value statements as campaign messaging rather than independent fact. When a release uses slogan-like language, attribute the phrase to the campaign and, if necessary, provide context or a neutral description instead of repeating the slogan as an independent claim.</p><p>Label promotional language clearly in your notes so readers understand what relies on campaign framing and what has independent corroboration.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Conclusion: short verification checklist and next steps</h2>
+<p>When you read a Michael Carbonara press release, use this distilled five-item checklist: capture the exact text and date from the campaign website; flag any named sources or datasets; confirm direct quotes against recordings or transcripts; verify financial or filing claims via FEC and Ballotpedia; and annotate unverified or promotional language in your notes. These steps form a dependable starter workflow for civic readers and reporters alike. <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">Michael Carbonara campaign website</a></p>
+<p>For next steps, keep the original capture and a verification log together, record retrieval dates for all public records, and use precise attribution phrasing such as according to the campaign site or public FEC records show. Also review the campaign <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news page</a> for related updates.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-km8qiq" class="faq-toggle" /><label for="faq-km8qiq" class="faq-summary" role="button" tabindex="0">What is the first thing to do when you read a campaign press release?</label><div class="faq-content"><p>Save the exact text and capture the URL and retrieval time from the campaign website, then note any attachments, press contacts, and quoted attributions.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-0tbrsa" class="faq-toggle" /><label for="faq-0tbrsa" class="faq-summary" role="button" tabindex="0">How do I verify fundraising numbers mentioned in a release?</label><div class="faq-content"><p>Check the named committee and reporting period on the FEC site and compare the specific line-item totals to the release claim, recording retrieval dates.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-bbwhsr" class="faq-toggle" /><label for="faq-bbwhsr" class="faq-summary" role="button" tabindex="0">Can I rely on Ballotpedia for filing dates and candidacy status?</label><div class="faq-content"><p>Ballotpedia is a useful quick reference for filing history, but you should confirm key filing details with primary records such as FEC or state filings.</p></div></section>
+</section><section class="article-ending">Accurate reporting and civic understanding depend on transparent verification. By capturing releases exactly, checking primary public records, and annotating unresolved items, readers and reporters can present clearer, more reliable context about candidate statements.
+Keep records of your checks and always use precise attribution such as according to the campaign site or public FEC records show when you publish or share verified findings.</section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
