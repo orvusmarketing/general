@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Interest Rates vs Inflation: What affects borrowing costs for households</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens (from provided style) */
+      --text-color: #ffffff; /* --mc-ink */
+      --accent: #ae2736;    /* --mc-accent */
+      --accent-hover: #8f1f2d; /* derived darker accent */
+      --line: rgba(255,255,255,.16); /* --mc-line */
+      --surface: #0b2664;   /* --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px;        /* --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      display:block;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/interest-rates-vs-inflation.jpg" alt="Interest Rates vs Inflation banner" />
+        </div>
+        <h1 class="title">Interest Rates vs Inflation: What affects borrowing costs for households</h1>
+        <p class="subline">A neutral, practical guide for households on how rates and inflation affect borrowing costs.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/interest-rates-vs-inflation-borrowing-costs/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">This article explains, in clear terms, how nominal interest rates and inflation interact to change the true cost of borrowing for households. It focuses on practical implications for mortgages, credit cards, and personal loans, and points to the primary data sources readers should check.
+
+The goal is to give voters and local residents a neutral, factual guide so they can assess their own situations. Where applicable, the article links to official releases and surveys readers can consult for current numbers.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">The real interest rate is approximately the nominal rate minus inflation, a key idea for household budgeting.</span></div><div class="highlight-card"><span class="highlight-text">Fixed-rate loans can benefit borrowers if inflation is unexpectedly higher than anticipated.</span></div><div class="highlight-card"><span class="highlight-text">Variable-rate products and credit cards usually reprice faster and pass policy rate moves to consumers.</span></div>
+     </div>
+  <h2>Quick overview: how interest rates and inflation shape household borrowing costs</h2>
+<h3>One-paragraph summary: interest rates vs inflation</h3>
+<p>The headline point: the cost a household feels is the nominal interest rate minus inflation, so rising prices can change the real burden of a loan even when the stated rate does not. For a clear statement of how policy and markets set nominal rates, see the Federal Reserve's policy overview <a href="https://www.federalreserve.gov/monetarypolicy.htm" target="_blank" rel="noopener">Federal Reserve monetary policy page</a>.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay informed on economic issues in Florida's 25th District</h3><div class="cta-intro"><p>Check the latest CPI release and the Fed's policy statement for current context.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign</a></div>
+<h3>Who this matters for</h3>
+<p>This matters for homeowners with fixed or adjustable mortgages, people carrying credit-card balances, and anyone considering refinance or new borrowing. For up-to-date inflation measures that affect real costs, consult the Consumer Price Index page <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">CPI data from the Bureau of Labor Statistics</a>.</p>
+
+<h2>What nominal and real interest rates mean (the Fisher relation)</h2>
+<h3>Definition of nominal rate</h3>
+<p>The nominal interest rate is the rate you see on paper or in a loan offer. It is the stated percentage lenders charge for borrowing and is set in markets and influenced by central bank policy.</p>
+<h3>Definition of real rate and the Fisher relation</h3>
+<p>The real interest rate approximates the nominal rate minus inflation, often called the Fisher relation. That subtraction shows how much borrowing actually costs once price changes are considered, and it is a useful first step for household budgeting and long-term planning. For the central explanation of policy and rates, see the Federal Reserve's discussion of monetary policy <a href="https://www.federalreserve.gov/monetarypolicy.htm" target="_blank" rel="noopener">Federal Reserve monetary policy page</a>. For related measures of consumer inflation expectations see the New York Fed's Center for Microeconomic Data <a href="https://www.newyorkfed.org/microeconomics/topics/inflation" target="_blank" rel="noopener">New York Fed Center for Microeconomic Data</a>.</p>
+<h3>Simple numeric example</h3>
+<p>Example: a 5.0 percent nominal mortgage facing 2.0 percent inflation has an approximate 3.0 percent real cost. If inflation rises to 4.0 percent, the same 5.0 percent nominal rate implies a roughly 1.0 percent real cost. This arithmetic is an approximation and depends on whether inflation is expected or unexpected; for headline inflation data consult the Bureau of Labor Statistics CPI page <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">CPI data from the Bureau of Labor Statistics</a>.</p>
+
+<h2>How central banks change nominal rates and why expectations matter</h2>
+<h3>Policy rate tools and transmission</h3>
+<p>Central banks, including the Federal Reserve, change short-term policy rates to influence demand and inflation. Those policy moves help determine short-term market rates and affect borrowing costs that reset frequently.</p>
+<p>Transmission from policy rates to household borrowing is not instantaneous and depends on how markets and lenders price risk, term, and expectations; for an overview of transmission and expectations see the Bank for International Settlements discussion <a href="https://www.bis.org/publ/" target="_blank" rel="noopener">BIS publications on transmission and expectations</a>.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-buyvte" class="faq-toggle" checked /><label for="faq-buyvte" class="faq-summary" role="button" tabindex="0">How do interest rates and inflation together determine household borrowing costs?</label><div class="faq-content"><p>Nominal interest rates are the stated cost of borrowing, while inflation reduces the purchasing power of money; the real cost to borrowers is roughly the nominal rate minus inflation, and the impact differs by loan type and contract terms.</p></div></section>
+<p>Expectations about future inflation matter because long-term rates and contract pricing factor in what lenders and markets expect will happen to prices, not just current inflation readings. See the Cleveland Fed's inflation expectations page <a href="https://www.clevelandfed.org/indicators-and-data/inflation-expectations" target="_blank" rel="noopener">Cleveland Fed Inflation Expectations</a>.</p>
+
+<h2>Fixed-rate vs variable-rate debt: who gains or loses when inflation changes</h2>
+<h3>How fixed-rate contracts work</h3>
+<p>Fixed-rate mortgages lock the nominal rate for the contract term, so if inflation turns out higher than expected the real burden on the borrower falls. This is a common reason borrowers with long fixed rates can see relative gains if inflation proves persistent.</p>
+<p>The Consumer Financial Protection Bureau explains key features of fixed and adjustable mortgages and how they affect borrower outcomes <a href="https://www.consumerfinance.gov/consumer-tools/mortgages/" target="_blank" rel="noopener">CFPB guide to mortgages</a>.</p>
+
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<h3>How adjustable-rate and variable-rate products reprice</h3>
+<p>Variable-rate loans and credit-card balances typically reprice faster, so policy or market nominal rate increases usually raise monthly payments more quickly for holders of variable debt.</p>
+<p>For data on consumer borrowing trends that highlight sensitivity to rate moves, see the Federal Reserve's consumer credit release <a href="https://www.federalreserve.gov/releases/g19/current/" target="_blank" rel="noopener">G.19 consumer credit data</a>.</p>
+
+<h2>How mortgage rates reflect inflation expectations and market yields</h2>
+<h3>Short-term policy vs long-term mortgage pricing</h3>
+<p>Long-term mortgage rates embed inflation expectations and risk premia, so they may not move in lockstep with short-term policy rates. That means new mortgage offers can reflect different forces than a recent Fed rate move.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>Households often watch Treasury yields and mortgage surveys to gauge where long-term rates are headed; the Primary Mortgage Market Survey provides a regular snapshot of average mortgage rates <a href="https://www.freddiemac.com/pmms" target="_blank" rel="noopener">Freddie Mac Primary Mortgage Market Survey</a>. See our news page <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">News</a>.</p>
+<h3>Where to look for mortgage rate data</h3>
+<p>Weekly mortgage surveys, Treasury market moves, and lender disclosures give practical signals about likely payment changes for new loans. For a consistent weekly benchmark, consult the Prime mortgage surveys such as the Freddie Mac PMMS <a href="https://www.freddiemac.com/pmms" target="_blank" rel="noopener">Freddie Mac Primary Mortgage Market Survey</a>.</p>
+
+<h2>Credit cards, personal loans, and student debt: sensitivity to policy moves</h2>
+<h3>Typical repricing timelines</h3>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1lbdRtgNFumlDSVuH6UWQsH2Ns1F0Yclu=s1200" alt="Michael Carbonara - Image 1" /></a>
+      <div class="side-text"><p>Credit-card APRs and many personal loans tie to short-term indexes or are reset by lender policy, so they often respond quickly to rising nominal rates and push up monthly payments for variable balances.</p></div>
+    </div>
+<p>The Federal Reserve's consumer credit reports describe trends in borrowing and can help readers see how balances change with rate moves <a href="https://www.federalreserve.gov/releases/g19/current/" target="_blank" rel="noopener">G.19 consumer credit data</a>.</p>
+<h3>What borrower contracts usually specify</h3>
+<p>Loan contracts typically show an index, a margin, and repricing frequency; they may also include caps or notice periods that affect how quickly payments change. Reviewing your lender disclosure clarifies the mechanics for your account.</p>
+<p>For consumer-facing explanations of mortgage and loan contract terms, see the CFPB resource on mortgages and loan terms <a href="https://www.consumerfinance.gov/consumer-tools/mortgages/" target="_blank" rel="noopener">CFPB guide to mortgages</a>.</p>
+
+<h2>Practical steps households should consider when rates or inflation move</h2>
+<h3>Immediate checks</h3>
+<p>Start by reviewing your loan contracts and recent account statements for index terms, margin, and repricing rules. Also check the current nominal rates available for new loans and the latest CPI and Fed statements before deciding.</p>
+<p>When comparing offers or thinking about refinancing, use lender Loan Estimates and market surveys to estimate savings and costs; for weekly mortgage benchmarks see the Freddie Mac survey <a href="https://www.freddiemac.com/pmms" target="_blank" rel="noopener">Freddie Mac Primary Mortgage Market Survey</a>.</p>
+<div class="tool-block tool-calculator tool-centered" data-tool-type="calculator"
+              data-formula="Refinance fees/((Current rate-New rate)/100/12)" data-output="Break-even months" data-unit="months">
+              <p class="tool-purpose">Estimate refinance break-even months using current and new rates</p>
+              <div class="tool-calc-grid"><div class="tool-calc-field">
+                <label class="tool-calc-label">Current rate</label>
+                <input class="tool-calc-input" type="number" value="6.5" data-field="Current rate" />
+              </div><div class="tool-calc-field">
+                <label class="tool-calc-label">New rate</label>
+                <input class="tool-calc-input" type="number" value="5.0" data-field="New rate" />
+              </div><div class="tool-calc-field">
+                <label class="tool-calc-label">Remaining term months</label>
+                <input class="tool-calc-input" type="number" value="360" data-field="Remaining term months" />
+              </div><div class="tool-calc-field">
+                <label class="tool-calc-label">Refinance fees</label>
+                <input class="tool-calc-input" type="number" value="3000" data-field="Refinance fees" />
+              </div></div>
+              <div class="tool-calc-output">
+                <span class="tool-calc-output-label">Break-even months:</span>
+                <span class="tool-calc-output-value">-</span>
+                <span class="tool-calc-output-unit">months</span>
+              </div>
+              <p class="tool-notes">Use values from your Loan Estimate</p>
+            </div>
+<h3>When to seek professional advice</h3>
+<p>If the numbers are close, talk with a trusted mortgage counselor or financial advisor and ask for Loan Estimates and fee breakdowns. Professionals can help you apply the break-even calculator to your situation and check tax or prepayment rules.</p>
+
+<h2>Deciding whether to refinance or lock a rate: a practical checklist</h2>
+<h3>Key numbers to compare</h3>
+<p>Compare the current nominal rate on your loan, the quoted rate for a new loan, expected inflation trajectory, remaining term, refinance fees, and the break-even time. Use the Loan Estimate from lenders to ensure apples-to-apples comparisons.</p>
+<p>Freddie Mac's primary mortgage market commentary and surveys can help form expectations about where rates may move for new loans <a href="https://www.freddiemac.com/pmms" target="_blank" rel="noopener">Freddie Mac Primary Mortgage Market Survey</a>.</p>
+<h3>How to use surveys and disclosures</h3>
+<p>Request Loan Estimates, run a simple payback calculation using fees and monthly savings, and consider tax implications or prepayment penalties before locking. Lender disclosures will list the exact fees and timing you need for the calculation.</p>
+<p>For consumer guidance on refinancing mechanics and disclosures, see the CFPB materials on mortgages <a href="https://www.consumerfinance.gov/consumer-tools/mortgages/" target="_blank" rel="noopener">CFPB guide to mortgages</a>.</p>
+
+<h2>Common mistakes households make around inflation and borrowing</h2>
+<h3>Misreading nominal vs real cost</h3>
+<p>A frequent error is treating the nominal rate as the full cost without subtracting inflation; that can misstate how affordable a loan is in real terms over time. Use the nominal-minus-inflation idea to compare real burdens across scenarios.</p>
+<p>For official inflation measures to use in calculations, refer to the Bureau of Labor Statistics CPI page <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">CPI data from the Bureau of Labor Statistics</a>.</p>
+<h3>Underestimating variable-rate risk</h3>
+<p>Other common mistakes are assuming variable-rate loans are always cheaper or ignoring repricing clauses and notice periods. Read your contract and track market rates if you carry variable debt.</p>
+<p>The Federal Reserve's consumer credit release provides context on how balances and rates move for variable products <a href="https://www.federalreserve.gov/releases/g19/current/" target="_blank" rel="noopener">G.19 consumer credit data</a>.</p>
+
+<h2>Short scenarios: homeowner with a fixed mortgage, borrower with variable debt</h2>
+<h3>Scenario A: fixed 30-year mortgage vs rising inflation</h3>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Assume a homeowner has a 30-year fixed mortgage at a 4.5 percent nominal rate. If inflation rises from 2.0 percent to 4.0 percent unexpectedly, the real rate falls from about 2.5 percent to about 0.5 percent, easing the real burden of payments for that borrower.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1sC4bO1L4btWuwkdFKZSNBcSRxMo3Puvu=s1200" alt="Minimal 2D vector infographic showing a nominal rate coin icon minus an inflation gauge icon on deep blue background interest rates vs inflation" /></a>
+    </div>
+<p>This outcome is the direct implication of the nominal-minus-inflation idea; for background on mortgage structure see CFPB mortgage resources <a href="https://www.consumerfinance.gov/consumer-tools/mortgages/" target="_blank" rel="noopener">CFPB guide to mortgages</a>.</p>
+<h3>Scenario B: credit-card borrower facing rising nominal rates</h3>
+<p>A cardholder with a variable APR tied to short-term indexes will likely see higher monthly charges when policy or market short-term rates rise, because credit-card APRs repricing quickly pass costs to the borrower.</p>
+<p>Data on consumer borrowing and rate sensitivity can be reviewed in the Federal Reserve's consumer credit releases <a href="https://www.federalreserve.gov/releases/g19/current/" target="_blank" rel="noopener">G.19 consumer credit data</a>.</p>
+
+<h2>When falling inflation and falling nominal rates change the picture</h2>
+<h3>Winners and losers when both inflation and nominal rates fall</h3>
+<p>Falling nominal rates lower payments for new loans and reduce repricing on variable debt. If inflation falls faster than nominal rates, real rates can rise, which means existing borrowers might face a higher real burden despite lower nominal rates.</p>
+<p>For official policy statements and analysis of how nominal rates are set, see the Federal Reserve monetary policy page <a href="https://www.federalreserve.gov/monetarypolicy.htm" target="_blank" rel="noopener">Federal Reserve monetary policy page</a>.</p>
+<h3>Policy implications for borrowing decisions</h3>
+<p>Households should compare current offers to existing rates and factor in transaction costs when rates change, and remember that expectations about future inflation are central to these calculations.</p>
+
+<h2>What to watch in economic data and central bank signals</h2>
+<h3>Key releases: CPI, PCE, employment</h3>
+<p>Watch CPI releases for direct inflation readings and Federal Reserve statements for guidance on policy direction. Employment and other activity data also shape expectations about where inflation and rates will go.</p>
+<p>The Bureau of Labor Statistics CPI page and the Federal Reserve policy page are primary sources to monitor for these indicators <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">CPI data from the Bureau of Labor Statistics</a>.</p>
+<h3>Where to find reliable primary sources</h3>
+<p>Use official releases from the BLS for CPI, the Fed for policy statements, and Freddie Mac for mortgage rate surveys when estimating likely market moves for new mortgages.</p>
+<p>For an overview of how inflation expectations interact with policy transmission, the Bank for International Settlements provides relevant analysis <a href="https://www.bis.org/publ/" target="_blank" rel="noopener">BIS publications on transmission and expectations</a>. See the St. Louis Fed's discussion of why inflation expectations matter <a href="https://www.stlouisfed.org/open-vault/2025/nov/why-inflation-expectations-are-important-to-policymakers" target="_blank" rel="noopener">Why Inflation Expectations Are Important</a>.</p>
+
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<h2>How candidates and campaigns talk about rates and inflation - what voters should note</h2>
+<h3>Attribution and primary sources</h3>
+<p>When candidates discuss inflation or interest rates, check whether claims are attributed to public data or are campaign statements. The campaign's own site can show a candidate's priorities, but voters should compare claims to primary sources like CPI and Fed releases.</p>
+<p>According to <a href="https://michaelcarbonara.com/republican-candidate-for-congress-michael-car/" target="_blank" rel="noopener">his campaign site</a>, Michael Carbonara emphasizes economic opportunity and accountability; readers should compare such statements to primary data and policy sources before drawing conclusions.</p>
+<h3>Questions to ask candidates</h3>
+<p>Ask candidates which data they cite, how they would link policy changes to household outcomes, and whether their proposals are grounded in official sources. Look for answers that reference primary sources rather than broad assertions.</p>
+
+<h2>Summary: key takeaways about interest rates vs inflation for households</h2>
+<h3>Three-point summary</h3>
+<p>First, the real cost of borrowing is approximately the nominal rate minus inflation; check CPI and Fed statements to see how that arithmetic changes over time.</p>
+<p>Second, fixed-rate debts lock nominal payments while variable-rate debts reprice faster and are more immediately affected by policy and market moves.</p>
+<p>Third, mortgage and long-term loan rates reflect inflation expectations and market yields, so use PMMS and Treasury yields to form realistic expectations about new loan pricing <a href="https://www.freddiemac.com/pmms" target="_blank" rel="noopener">Freddie Mac Primary Mortgage Market Survey</a>.</p>
+<h3>Where to go next</h3>
+<p>Before refinancing or locking a rate, get Loan Estimates, check the latest CPI and Fed statements, and use primary-market surveys to model likely paths for new loan rates. (see <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">michaelcarbonara.com</a>)</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-fujlca" class="faq-toggle" /><label for="faq-fujlca" class="faq-summary" role="button" tabindex="0">How does inflation change the real cost of my loan?</label><div class="faq-content"><p>The real cost is roughly the nominal rate minus inflation; higher inflation reduces the real burden on fixed-rate debt, while variable rates adjust faster.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-sod0f2" class="faq-toggle" /><label for="faq-sod0f2" class="faq-summary" role="button" tabindex="0">Should I refinance if inflation is rising?</label><div class="faq-content"><p>Compare current nominal rates, expected inflation, remaining term, and refinance fees; use lender Loan Estimates and a simple break-even calculation before deciding.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-dp71ad" class="faq-toggle" /><label for="faq-dp71ad" class="faq-summary" role="button" tabindex="0">Which data sources should I monitor for rates and inflation?</label><div class="faq-content"><p>Monitor the Bureau of Labor Statistics CPI releases, Federal Reserve policy statements, Treasury yields, and weekly mortgage surveys for practical rate signals.</p></div></section>
+</section><section class="article-ending">Interest rates and inflation work together to shape what households actually pay. Because expectations and contract details matter, checking official data and lender disclosures is the most reliable way to decide whether to refinance, lock a rate, or manage variable debt.
+
+Keep in mind that uncertainty in inflation expectations means there is rarely a single right answer; gather the numbers, use simple calculations, and consult primary sources before making major changes.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.federalreserve.gov/monetarypolicy.htm" target="_blank" rel="noopener">https://www.federalreserve.gov/monetarypolicy.htm</a></li><li><a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener">https://www.bls.gov/cpi/</a></li><li><a href="https://www.bis.org/publ/" target="_blank" rel="noopener">https://www.bis.org/publ/</a></li><li><a href="https://www.consumerfinance.gov/consumer-tools/mortgages/" target="_blank" rel="noopener">https://www.consumerfinance.gov/consumer-tools/mortgages/</a></li><li><a href="https://www.federalreserve.gov/releases/g19/current/" target="_blank" rel="noopener">https://www.federalreserve.gov/releases/g19/current/</a></li><li><a href="https://www.freddiemac.com/pmms" target="_blank" rel="noopener">https://www.freddiemac.com/pmms</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.newyorkfed.org/microeconomics/topics/inflation" target="_blank" rel="noopener">https://www.newyorkfed.org/microeconomics/topics/inflation</a></li><li><a href="https://www.clevelandfed.org/indicators-and-data/inflation-expectations" target="_blank" rel="noopener">https://www.clevelandfed.org/indicators-and-data/inflation-expectations</a></li><li><a href="https://www.stlouisfed.org/open-vault/2025/nov/why-inflation-expectations-are-important-to-policymakers" target="_blank" rel="noopener">https://www.stlouisfed.org/open-vault/2025/nov/why-inflation-expectations-are-important-to-policymakers</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/republican-candidate-for-congress-michael-car/" target="_blank" rel="noopener">https://michaelcarbonara.com/republican-candidate-for-congress-michael-car/</a></li><li><a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">https://michaelcarbonara.com/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
