@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Michael Carbonara FL-25: A Source-First Guide to Separating Biography, Platform, and Coverage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      --text-color: #ffffff;
+      --accent: #ae2736;
+      --accent-hover: #8f1f2e;
+      --line: rgba(255,255,255,.16);
+      --surface: #0b2664;
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px;
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.85); margin-bottom: 1.6rem; }
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:1rem; margin:1.8rem 0; }
+    .article-body .highlight-card{ background: linear-gradient(135deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.03) 100%); padding:1rem; border-left:4px solid var(--accent); border:1px solid rgba(255,255,255,.14); }
+    .article-body .side-by-side{ display:flex; gap:16px; align-items:flex-start; margin:1.6rem 0; flex-wrap:wrap; }
+    .article-body .side-by-side img{ max-width:320px; box-shadow: 0 14px 34px rgba(0,0,0,.42); }
+    .article-body .side-by-side.product-image-right{ text-align:center; flex-direction:column; }
+    .article-body .cta-section{ background: transparent !important; border:0 !important; padding:0; margin:0; }
+    .article-body .cta-headline{ display:block; font-weight:900; color:var(--text-color); background:transparent; border-left:4px solid var(--accent); padding:8px 10px; margin-top:1.1rem; }
+    .article-body .tool-block{ background: transparent !important; border:1px solid rgba(255,255,255,.10); padding:1rem; }
+    .article-body .faq-accordion{ border:1px solid rgba(255,255,255,.10); }
+    .article-body .ba-refs__title{ margin-top:1.2rem; }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1aZs7MuS9Lp5C1lC78Re4IzclKFvi81rW" alt="Michael Carbonara FL-25 map" />
+        </div>
+        <h1 class="title">Michael Carbonara FL-25: A Source-First Guide to Separating Biography, Platform, and Coverage</h1>
+        <p class="subline">A source-first guide to verify campaign statements, finance filings, and ballot status.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/michael-carbonara-fl-25-source-first-guide/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">This guide separates Michael Carbonara's stated biography and platform language from public records and media coverage. It is written for voters, local residents, and reporters who want a clear, source-first method to verify claims about the candidate.
+
+The sections below point to the primary pages you should check first: the campaign's About and Issues pages, the Federal Election Commission candidate overview, and neutral election listings such as Ballotpedia and the Florida Division of Elections.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Use the campaign's primary pages first for direct quotes and publication dates.</span></div><div class="highlight-card"><span class="highlight-text">FEC candidate pages show committee registrations, reporting periods, and reported receipts and disbursements.</span></div><div class="highlight-card"><span class="highlight-text">Ballotpedia and state election listings are reliable for confirming ballot status and filing deadlines.</span></div>
+     </div>
+  <h2>At a glance: Michael Carbonara FL-25 and how to use this guide</h2><h3>What this article delivers</h3><p>Michael Carbonara FL-25 is listed publicly as a Republican candidate for Florida's 25th Congressional District in the 2026 cycle, and readers should begin verification with primary sources and neutral election listings.</p><p>Ballotpedia lists the candidate entry that tracks the 2026 campaign and status for FL-25, which is a useful starting point for confirming candidacy and context <a href="https://ballotpedia.org/Michael_Carbonara" target="_blank" rel="noopener">Ballotpedia candidate listing</a> and the district calendar <a href="https://ballotpedia.org/Florida%27s_25th_Congressional_District_election,_2026" target="_blank" rel="noopener">Florida's 25th election page</a>.</p>
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1wNKmHVcMbTD7Kx3yliFNmNuHJm5CS31m=s1200" alt="Minimal 2D vector close up of a checklist on a desk with a printed campaign about page and a browser window in the background in michael carbonara fl-25 palette" /></a>
+      <div class="side-text"><p>The campaign's own site presents a short biography and a list of stated priorities such as entrepreneurship, family, resilience, faith, service, accountability, and economic opportunity; use those pages to quote or paraphrase the candidate's language <a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">Michael Carbonara campaign issues</a>.</p></div>
+    </div>
+<h3>What this article delivers</h3><p>Financial and committee details are recorded with the Federal Election Commission; consult the FEC for committee registration and reported receipts or disbursements when checking fundraising claims <a href="https://www.fec.gov/data/candidate/H6FL25035/" target="_blank" rel="noopener">FEC candidate page</a>.</p><p>For state-level filing deadlines, ballot status, and official election timetables, the Florida Division of Elections maintains candidate listings and the relevant calendar for FL-25 <a href="https://dos.myflorida.com/elections/candidates/" target="_blank" rel="noopener">Florida Division of Elections candidate listing</a>.</p><div class="cta-section"><h3 class="cta-headline">Stay informed and get involved with the campaign</h3><div class="cta-intro"><p>Check the sources listed below to confirm dates, quotes, and filings before sharing or reporting.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign</a></div><h3>Quick facts you can verify immediately</h3><p>Ballotpedia and state election listings identify him as a Republican candidate for Florida's 25th District; confirm the listing and its date on Ballotpedia or the state page <a href="https://ballotpedia.org/Michael_Carbonara" target="_blank" rel="noopener">Ballotpedia candidate listing</a>.</p><p>The campaign site summarizes Carbonara's priorities and biography; use the campaign's about and issues pages for direct quotes and publication dates <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">Michael Carbonara campaign about page</a>.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Definition and context: candidacy, district boundaries, and the election calendar</h2><h3>What 'running for FL-25' means in public records</h3><p>A public candidate listing indicates a declared candidacy or filed paperwork, but it is separate from final ballot certification; Ballotpedia and the Florida Division of Elections each publish candidate status and calendar items you can check for filing and qualification steps <a href="https://dos.myflorida.com/elections/candidates/" target="_blank" rel="noopener">Florida Division of Elections candidate listing</a>.</p><p>Use the campaign's published statements for the candidate's narrative about background and priorities, and treat those as the campaign's wording rather than independently verified facts <a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">Michael Carbonara campaign issues</a>.</p><h3>Where to confirm filing and ballot status</h3><p>Ballotpedia maintains an entry with dates and links that can point you to state filings and deadlines; it is a useful neutral starting point for calendar context <a href="https://ballotpedia.org/Michael_Carbonara" target="_blank" rel="noopener">Ballotpedia candidate listing</a>.</p><p>For the official record on filing deadlines and ballot certification, the Florida Division of Elections is the authoritative source for the state's procedures and required paperwork <a href="https://dos.myflorida.com/elections/candidates/" target="_blank" rel="noopener">Florida Division of Elections candidate listing</a>.</p><h2>A source-first verification checklist for reporters and voters</h2><h3>Priority sources and why they matter</h3><p>Start with the campaign's primary materials to capture direct statements of priority and biography; these pages are the primary source for what the campaign claims and when it published those claims <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">Michael Carbonara campaign about page</a>.</p><p>Next check FEC filings for committee registration, reported receipts, disbursements, and filing dates; those records are the authoritative public finance filings for federal campaigns <a href="https://www.fec.gov/data/candidate/H6FL25035/" target="_blank" rel="noopener">FEC candidate page</a>.</p><p>Finally, use Ballotpedia and the Florida Division of Elections for the neutral candidate listing and election calendar to confirm ballot status and filing deadlines <a href="https://ballotpedia.org/Michael_Carbonara" target="_blank" rel="noopener">Ballotpedia candidate listing</a>.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">quick verification steps for campaign claims</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-upxa2r-0">
+                        <input id="tool-check-upxa2r-0" type="checkbox" />
+                        <span>Campaign about page</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-3gq81k-1">
+                        <input id="tool-check-3gq81k-1" type="checkbox" />
+                        <span>Campaign issues page</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-fmnpsg-2">
+                        <input id="tool-check-fmnpsg-2" type="checkbox" />
+                        <span>FEC candidate page</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Run these checks in order</p>
+            </div><h3>Step-by-step checklist you can follow in 10 minutes</h3><p>1) Find the campaign page paragraph or quote you want to verify and note the publication date on the page; use the campaign about or issues page as the primary citation <a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">Michael Carbonara campaign issues</a>.</p><p>2) If the claim involves fundraising or committee activity, open the FEC candidate/committee overview and match the committee name and filing dates to the reported totals <a href="https://www.fec.gov/data/candidate/H6FL25035/" target="_blank" rel="noopener">FEC candidate page</a>.</p><p>3) For ballot status or filing deadline questions, check the candidate list and calendar on the Florida Division of Elections site and corroborate with Ballotpedia if needed <a href="https://dos.myflorida.com/elections/candidates/" target="_blank" rel="noopener">Florida Division of Elections candidate listing</a> or review recent updates on the campaign events page <a href="https://michaelcarbonara.com/events/" target="_blank" rel="noopener">campaign events</a>.</p><p>4) If a local news article is the source of a claim, read the media report but treat it as secondary; corroborate quotes and dates against the campaign pages and FEC filings before repeating them <a href="https://www.miamiherald.com/news/politics-government/article/michael-carbonara-announces-run-for-fl-25.html" target="_blank" rel="noopener">Local coverage of the campaign launch</a>.</p><h2>How to read campaign statements vs. public records</h2><h3>Language cues that need sourcing</h3><p>Campaign statements present priorities and framing; treat them as the campaign's messaging and attribute phrasing to the campaign when you quote or paraphrase <a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">Michael Carbonara campaign issues</a>.</p><p>Look for language that asserts outcomes or causal promises; those phrases should be framed as the campaign's position rather than reported as established facts.</p><h3>Attribution examples to use in reporting</h3><p>Use short, neutral templates such as "According to his campaign site, Carbonara emphasizes entrepreneurship and economic opportunity" when summarizing priorities, and include the campaign page as the citation <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">Michael Carbonara campaign about page</a>.</p><p>When reporting fundraising or committee information, write sentences like "FEC records show the campaign committee registered and filed reports with receipts and disbursements" and link to the FEC candidate overview for attribution <a href="https://www.fec.gov/data/candidate/H6FL25035/" target="_blank" rel="noopener">FEC candidate page</a>.</p><h2>Reading finance disclosures: what the FEC record shows and limits of that data</h2><h3>What to expect in a candidate/committee overview</h3><p>The FEC candidate and committee page lists registration details, reporting periods, and reported receipts and disbursements; use it to locate the committee name, filing dates, and the specific report that contains totals <a href="https://www.fec.gov/data/candidate/H6FL25035/" target="_blank" rel="noopener">FEC candidate page</a>.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-mebe74" class="faq-toggle" checked /><label for="faq-mebe74" class="faq-summary" role="button" tabindex="0">How can I verify claims about Michael Carbonara's biography and campaign activity?</label><div class="faq-content"><p>Start with the campaign's about and issues pages for direct statements, use the FEC candidate page for finance and committee filings, and consult Ballotpedia or the Florida Division of Elections for candidacy status and calendar information.</p></div></section><p>FEC pages provide line items and schedules for itemized receipts and expenditures, but they do not by themselves verify a candidate's business affiliations or independently confirm every donor unless the donor is listed in an itemized report.</p><p>Read the report header for the reporting period and use the cash on hand and total receipts fields to describe the state of the campaign finances as reported for that filing period.</p><h3>Common misreads of fundraising and spending entries</h3><p>Do not conflate a single reporting period total with long-term fundraising capacity; the FEC shows snapshots by reporting period and cumulative totals across filings, and those figures require context when cited.</p><p>Avoid stating individual contribution claims without checking itemized schedules for donor names and amounts; itemized data are available on the FEC report pages for entries above reporting thresholds <a href="https://www.fec.gov/data/candidate/H6FL25035/" target="_blank" rel="noopener">FEC candidate page</a>.</p><h2>Common reporting pitfalls when covering a local campaign</h2><h3>Pitfalls in paraphrase, sourcing, and context</h3><p>Local coverage often summarizes campaign themes; confirm quoted phrasing and publication dates on the campaign's own pages to prevent misattribution, especially when the media story paraphrases a campaign point <a href="https://www.miamiherald.com/news/politics-government/article/michael-carbonara-announces-run-for-fl-25.html" target="_blank" rel="noopener">Local coverage of the campaign launch</a>.</p><p>Do not present campaign language as a factual outcome; where a claim predicts results or consequences, use conditional phrasing and attribute it to the campaign instead of asserting it as fact.</p><h3>How to avoid misleading summaries</h3><p>Do: Check the campaign about or issues page for exact wording and publication dates before quoting. Do not: Repeat a fundraising or business affiliation claim without confirming it in FEC records or public business filings.</p><p>If a local article gives a fundraising headline, cross-check the FEC filing and cite both the media piece and the FEC report for clarity and context <a href="https://www.miamiherald.com/news/politics-government/article/michael-carbonara-announces-run-for-fl-25.html" target="_blank" rel="noopener">Local coverage of the campaign launch</a>.</p><h2>Practical example walkthroughs: verifying a campaign claim step-by-step</h2><h3>Example 1: verifying a policy priority quote</h3><p>Step 1: Locate the quote on the campaign issues or about page and note the exact wording and publication date; treat the campaign page as the primary source for the candidate's phrasing <a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">Michael Carbonara campaign issues</a>.</p><p>Step 2: If a media story repeats the quote, compare the media paraphrase to the campaign text to confirm accuracy and correct any differences in wording or context <a href="https://www.miamiherald.com/news/politics-government/article/michael-carbonara-announces-run-for-fl-25.html" target="_blank" rel="noopener">Local coverage of the campaign launch</a>.</p><p>Step 3: Use the exact campaign language in your reporting with a clear attribution such as "the campaign states" or "according to the campaign's issues page," and include the campaign URL in your citation.</p><h3>Example 2: checking a fundraising headline</h3><p>Step 1: Identify the reporting period named in the media headline and open the matching FEC filing; match the report header to ensure you are reading the same period the article references <a href="https://www.fec.gov/data/candidate/H6FL25035/" target="_blank" rel="noopener">FEC candidate page</a>.</p><p>Step 2: Locate the receipts, disbursements, and cash on hand fields in that report and use the exact label from the filing when describing the numbers in your story to avoid misinterpretation.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><p>Step 3: If the media piece cites a filing, include both the media citation and the FEC report in your sourcing, and make clear the dates and which report the numbers come from.</p><h2>Quick templates: neutral attribution lines and sourcing language you can use</h2><h3>Two-sentence templates for voters and reporters</h3><p>According to his campaign site, Carbonara emphasizes entrepreneurship, family, and economic opportunity; cite the campaign issues or about page for direct quotes <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">Michael Carbonara campaign about page</a>.</p><p>FEC records show that a campaign committee is registered and has filed reports with receipts and disbursements; cite the FEC candidate overview and the specific report date when using finance figures <a href="https://www.fec.gov/data/candidate/H6FL25035/" target="_blank" rel="noopener">FEC candidate page</a>.</p><h3>How to cite FEC, campaign sites, and Ballotpedia</h3><p>Place parenthetical links or footnotes to the campaign's about or issues page for quotes, to the FEC candidate page for finance details, and to Ballotpedia or the Florida Division of Elections for candidacy and calendar context <a href="https://ballotpedia.org/Michael_Carbonara" target="_blank" rel="noopener">Ballotpedia candidate listing</a>.</p><p>When possible, include the publication or filing date in your citation so readers can see when the statement or report was posted.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Closing: next steps for voters, reporters, and where to watch for updates</h2><p>Monitor three primary sources for accurate updates: the campaign pages for statements and priorities, FEC filings for finance and committee records, and Ballotpedia or the Florida Division of Elections for candidacy status and calendar changes <a href="https://ballotpedia.org/Michael_Carbonara" target="_blank" rel="noopener">Ballotpedia candidate listing</a>. Also follow the campaign news page for site updates <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">campaign news</a>.</p><p>Bookmark the campaign's about and issues pages, set alerts for FEC reports, and check the state candidate list around filing deadlines to stay current with changes, and review the campaign donate page if you need to confirm contribution channels <a href="https://michaelcarbonara.com/donate/" target="_blank" rel="noopener">donate</a>.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-j6na14" class="faq-toggle" /><label for="faq-j6na14" class="faq-summary" role="button" tabindex="0">How can I confirm Michael Carbonara is a candidate for FL-25?</label><div class="faq-content"><p>Check neutral listings such as Ballotpedia and the Florida Division of Elections to confirm candidate status and filing dates, and corroborate with the campaign site for statements.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-ftyzfa" class="faq-toggle" /><label for="faq-ftyzfa" class="faq-summary" role="button" tabindex="0">Where do I find Michael Carbonara's stated priorities?</label><div class="faq-content"><p>The campaign's About and Issues pages present the candidate's stated priorities; use those pages for direct quotes and publication dates.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-dw60ff" class="faq-toggle" /><label for="faq-dw60ff" class="faq-summary" role="button" tabindex="0">How do I verify fundraising claims about the campaign?</label><div class="faq-content"><p>Use the FEC candidate and committee overview to find filings, reporting periods, and reported receipts or disbursements, and cite the specific report used.</p></div></section>
+</section><section class="article-ending">A source-first habit helps keep reporting and sharing accurate. Bookmark campaign pages, monitor FEC filings, and check Ballotpedia or state election pages around filing deadlines to stay informed.
+
+Use the templates and checklist in this guide when you need to report or confirm a claim about the campaign.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://ballotpedia.org/Michael_Carbonara" target="_blank" rel="noopener">https://ballotpedia.org/Michael_Carbonara</a></li><li><a href="https://ballotpedia.org/Florida%27s_25th_Congressional_District_election,_2026" target="_blank" rel="noopener">https://ballotpedia.org/Florida%27s_25th_Congressional_District_election,_2026</a></li><li><a href="https://michaelcarbonara.com/issues/" target="_blank" rel="noopener">https://michaelcarbonara.com/issues/</a></li><li><a href="https://www.fec.gov/data/candidate/H6FL25035/" target="_blank" rel="noopener">https://www.fec.gov/data/candidate/H6FL25035/</a></li><li><a href="https://dos.myflorida.com/elections/candidates/" target="_blank" rel="noopener">https://dos.myflorida.com/elections/candidates/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li><li><a href="https://www.miamiherald.com/news/politics-government/article/michael-carbonara-announces-run-for-fl-25.html" target="_blank" rel="noopener">https://www.miamiherald.com/news/politics-government/article/michael-carbonara-announces-run-for-fl-25.html</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/donate/" target="_blank" rel="noopener">https://michaelcarbonara.com/donate/</a></li><li><a href="https://michaelcarbonara.com/events/" target="_blank" rel="noopener">https://michaelcarbonara.com/events/</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
