@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>How the FL-25 primary election shapes the candidate list and ballot choices</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: color-mix(in srgb, #ae2736 86%, #000 14%);
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* from --mc-panel-2 */
+      --radius: 0px; /* from --mc-radius */
+
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease, background .14s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/10D_tDSHXygOhzClG5FPJCafhEeLuRzfP" alt="How the FL-25 primary election shapes the candidate list and ballot choices" />
+        </div>
+        <h1 class="title">How the FL-25 primary election shapes the candidate list and ballot choices</h1>
+        <p class="subline">A procedural guide to who qualifies for the FL-25 primary ballot and where voters can verify candidate lists.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/fl-25-primary-election-how-it-shapes-candidate-list/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+<div class="summary">This guide explains how the FL-25 primary election shapes which candidates appear on the ballot and what voters should check before casting a primary vote.
+
+It focuses on the procedural steps that matter: state qualifying, party nomination rules, and federal filing requirements. The goal is to point readers to primary sources where definitive lists and dates are published.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">State qualifying, party rules, and federal filings together determine who appears on the FL-25 primary ballot.</span></div><div class="highlight-card"><span class="highlight-text">Voters should verify registration and party affiliation early to ensure primary voting eligibility.</span></div><div class="highlight-card"><span class="highlight-text">Cross-check Ballotpedia and local reporting with Division of Elections and FEC records for the final candidate list.</span></div>
+     </div>
+  <h2>How the FL-25 primary election works: a quick overview</h2>
+<p>The FL-25 primary election determines which candidates appear on party ballots and, later, on the general-election ballot. The candidate list is shaped by a combination of state qualifying procedures, party nomination rules, and federal filing requirements, according to official guidance from election authorities. <a href="https://dos.myflorida.com/elections/candidates-committees/candidates/qualifying/" target="_blank" rel="noopener">Florida Division of Elections qualifying page</a></p>
+<p>That mix of steps means the visible candidate list on primary ballots is not set by a single office. To confirm the official candidate list and timing for FL-25, check the Division of Elections qualifying page and the applicable party notices for the current cycle. Voters should verify dates and candidate lists with official sources before relying on any secondary compilation.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Confirm FL-25 qualifying dates and candidate lists</h3><div class="cta-intro"><p>For official qualifying dates and the definitive candidate list, consult the Florida Division of Elections qualifying page and follow the instructions there for the 2026 cycle.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Visit the campaign join page to stay informed</a></div>
+<h2>Who can run and basic candidate eligibility for FL-25</h2>
+<p>To run for U.S. House, an individual must meet the federal eligibility requirements set by law and follow federal filing guidance for candidates and committees. Federal Election Commission resources describe when a person is a candidate and when committee registration and reporting are required, which affects people seeking the FL-25 seat. <a href="https://www.fec.gov/help-candidates-and-committees/becoming-candidate/" target="_blank" rel="noopener">FEC guidance on becoming a candidate</a></p>
+<p>On the state side, appearing on the FL-25 ballot requires completing Florida qualifying steps, which include submitting required documents and any state fees to the Division of Elections or the appropriate filing office. The Division of Elections publishes the official qualifying procedures that explain these steps and where candidates should file. <a href="https://dos.myflorida.com/elections/candidates-committees/candidates/qualifying/" target="_blank" rel="noopener">Division of Elections qualifying instructions</a></p>
+<p>When summarizing biographical or business claims about a candidate, readers should consult primary campaign materials, FEC filings, or reputable neutral profiles for verification rather than rely on unsourced statements.</p>
+<h2>State qualifying procedures and how the ballot order is set in the FL-25 primary</h2>
+<p>State qualifying is the administrative step that places a candidate on the ballot and typically involves submitting specific forms, declarations, and any filing fee to the Division of Elections or designated local filing office. The Division of Elections publishes the qualifying rules and the list of required actions for congressional candidates. <a href="https://dos.myflorida.com/elections/candidates-committees/candidates/qualifying/" target="_blank" rel="noopener">Florida Division of Elections qualifying page</a></p>
+<p>Common actions during state qualifying include filing the candidate qualifying form, providing proof of party affiliation if required, and completing any state-mandated paperwork for ballot access. Exact forms and whether a fee applies depend on the office and the current cycle, so candidates and watchers should consult the official qualifying page for FL-25 to avoid surprises. <a href="https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0090-0099/0099/0099.html" target="_blank" rel="noopener">Florida statutes on primary procedures</a> The State Qualifying Handbook is another useful resource for detailed steps and is available from state archives. <a href="https://files.floridados.gov/media/694101/state-qualifying-handbook.pdf" target="_blank" rel="noopener">State Qualifying Handbook (PDF)</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>Ballot order is another administrative detail handled under Division of Elections rules. Florida describes the method used to determine name order on ballots, and those rules include provisions for random drawings to set order when required. Check the Division of Elections notices near the time ballots are finalized for the official drawing schedule. <a href="https://dos.myflorida.com/elections/candidates-committees/candidates/qualifying/" target="_blank" rel="noopener">Division of Elections ballot drawing guidance</a></p>
+<h2>How party registration and nomination rules affect who votes and who appears in party primaries</h2>
+<p>Florida statutes require appropriate party registration or status to participate in many partisan primaries, so a voter’s party affiliation affects whether they can vote in a given party primary. That requirement shapes which voters can influence nomination choices and therefore indirectly affects FL-25 ballot choices. <a href="https://www.flhouse.gov/Statutes/2025/0099.061/" target="_blank" rel="noopener">Florida Statutes, Chapter 99</a></p>
+<p>For voters, the practical step is to verify registration and party affiliation well before the primary deadline. Many voter questions about primary voting eligibility are resolved by checking registration status with the Division of Elections or a county supervisor of elections office.</p>
+<p>Party nomination rules can also affect which candidates appear on a party ballot. For example, parties may have internal deadlines or certification steps that determine whether a declared candidate appears on a given party’s primary ballot.</p>
+<h2>Federal filing and FEC records: what they show about FL-25 candidates</h2>
+<p>Candidates for U.S. House must meet federal filing requirements with the Federal Election Commission once they raise or spend over federal thresholds or formally become a candidate. The FEC explains the timing and triggers for registering a committee and filing periodic reports, which creates a public record for prospective FL-25 candidates. <a href="https://www.fec.gov/help-candidates-and-committees/becoming-candidate/" target="_blank" rel="noopener">FEC resources on candidate and committee requirements</a></p>
+<p>FEC records are searchable public files where voters and reporters can confirm committee names, finance activity, and filing status for candidates linked to FL-25. These records can clarify whether a person has an active committee and what financial activity has been reported. <a href="https://www.fec.gov/help-candidates-and-committees/becoming-candidate/" target="_blank" rel="noopener">FEC searchable public records guidance</a></p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1v7GkbhOj5jF_KESgiwpctCQc53LWcNfh=s1200" alt="Minimalist 2D vector infographic of a voter information desk with a stack of registration forms and envelopes in white and red on deep blue background FL-25 primary election" /></a>
+      <div class="side-text"><p>When reviewing candidate information, use FEC records alongside official state qualifying lists to get a fuller view of a campaign’s filings and committee activity. Avoid relying on any single secondary list without cross-checking official records.</p></div>
+    </div>
+<h2>Where to track who has filed: Ballotpedia, local reporting, and official lists</h2>
+<p>Ballotpedia maintains an updated candidate list and a district overview that is practical for tracking who has filed or declared for FL-25, though readers should treat it as a secondary source to be cross-checked with official filings. <a href="https://ballotpedia.org/Florida%27s_25th_Congressional_District" target="_blank" rel="noopener">Ballotpedia FL-25 overview</a> You can also consult local campaign pages and event listings such as <a href="https://michaelcarbonara.com/events/" target="_blank" rel="noopener">michaelcarbonara.com/events</a> for additional context.</p>
+<p>Local reporting often adds context such as candidate statements, qualifying events, and deadlines reported by election officials. Local coverage can help identify recent filings and withdrawals ahead of official compilations, but it should be confirmed with the Division of Elections and FEC records when possible. <a href="https://www.miamiherald.com/news/politics-government/article251234567.html" target="_blank" rel="noopener">Local reporting on qualifying and primaries</a></p>
+<p>For the most current official list, consult the Division of Elections and the county supervisor of elections where the district is located; those offices publish certified candidate lists and notices about ballot drawings and deadlines. The Division's Candidate Tracking system is another official tool that tracks filings. <a href="https://dos.elections.myflorida.com/candidates/" target="_blank" rel="noopener">Candidate Tracking system</a> You can also check campaign contact pages such as <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">michaelcarbonara.com/contact/</a> for campaign-provided information.</p>
+<h2>Typical timelines and deadlines that shape the FL-25 primary calendar</h2>
+<p>The Division of Elections sets qualifying windows and other ballot-related deadlines that determine when candidates must file and when ballots are finalized. Because those calendar elements determine who appears on the FL-25 primary ballot, checking the Division of Elections calendar is essential. <a href="https://dos.myflorida.com/elections/candidates-committees/candidates/qualifying/" target="_blank" rel="noopener">Division of Elections qualifying calendar</a></p>
+<p>Timelines to watch include the qualifying window for candidates, the last day to change party registration where applicable, and the finalization date for certified ballots. Missing a filing or registration deadline can prevent a candidate from appearing on the ballot or a voter from participating in a party primary.</p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Verify qualifying windows and voter registration steps for the FL-25 primary</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-pc2ve3-0">
+                        <input id="tool-check-pc2ve3-0" type="checkbox" />
+                        <span>Division of Elections qualifying page</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-g5v15v-1">
+                        <input id="tool-check-g5v15v-1" type="checkbox" />
+                        <span>League of Women Voters primary checklist</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-s3q1v6-2">
+                        <input id="tool-check-s3q1v6-2" type="checkbox" />
+                        <span>County supervisor polling lookup</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-u45umm-3">
+                        <input id="tool-check-u45umm-3" type="checkbox" />
+                        <span>Voter registration lookup</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-kpu0wp-4">
+                        <input id="tool-check-kpu0wp-4" type="checkbox" />
+                        <span>Candidate list page</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use official pages first</p>
+            </div>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Local news summaries and voter groups often compile timeline outlines that highlight these key dates; use them as reminders but confirm each deadline on the official Division of Elections page.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1GiY8sKZCyvifC63ONGVfK7Opbqe0q9Op=s1200" alt="Minimal 2D vector infographic showing five icons for registration party affiliation ballot calendar and magnifying glass for FL-25 primary election on a deep blue background" /></a>
+    </div>
+<h2>Voter checklist: what to verify before the FL-25 primary</h2>
+<p>Before the FL-25 primary, voters should confirm four basic items: registration status, party affiliation, polling location, and the official candidate list. Nonpartisan voter organizations publish clear checklists that cover these items for primary voters. <a href="https://www.lwvfl.org/primary-elections/" target="_blank" rel="noopener">League of Women Voters of Florida primary guide</a></p>
+<p>Check your registration and party status early. If you need to change party affiliation to vote in a particular partisan primary, do that before the state deadline so you are eligible on election day. Confirm your polling place with the county supervisor of elections.</p>
+<p>For candidate verification, cross-check Ballotpedia and local reporting against the official Division of Elections candidate list and FEC records for committee filings to confirm names and filing status. You can also review campaign pages such as <a href="https://michaelcarbonara.com/michael-carbonara-launches-campaign-for-congress/" target="_blank" rel="noopener">campaign announcements</a> for materials provided directly by a campaign.</p>
+<h2>How ballot order is determined and why it can matter to voters</h2>
+<p>The Division of Elections documents the method for determining ballot order and uses random drawings in circumstances the rules specify, so name order is established by an official process rather than ad hoc decisions. For details on procedures, consult the Division of Elections guidance. <a href="https://dos.myflorida.com/elections/candidates-committees/candidates/qualifying/" target="_blank" rel="noopener">Division of Elections ballot order guidance</a></p>
+<p>Ballot order can interest analysts and campaign watchers because position on the ballot may affect visibility, but any effect depends on many factors and should not be assumed to determine outcomes. Voters who are tracking candidate presentation should review official drawing notices and the certified ballot after the drawing is completed.</p>
+<h2>Common mistakes and pitfalls for candidates and voters in FL-25 primaries</h2>
+<p>A frequent issue is missed or incorrect filings during qualifying, which can delay or disqualify a candidate from the ballot. Candidates should follow Division of Elections instructions carefully and confirm receipt of filings. <a href="https://dos.myflorida.com/elections/candidates-committees/candidates/qualifying/" target="_blank" rel="noopener">Qualifying rules and common filing steps</a></p>
+<p>Voters can err by relying solely on a secondary source without checking official lists. Always cross-check Ballotpedia and news coverage against Division of Elections and FEC records to confirm a candidate’s status and any committee filings. <a href="https://www.fec.gov/help-candidates-and-committees/becoming-candidate/" target="_blank" rel="noopener">FEC records for verification</a></p>
+<p>Other practical pitfalls include not checking party affiliation in time and missing registration deadlines, both of which can affect who a voter can support in a primary.</p>
+<h2>Sample scenarios: how candidate lists can change before the FL-25 primary</h2>
+<p>Candidate lists can change when a person files late in the qualifying window, when a candidate withdraws, or when a filing is rejected for incomplete paperwork. Official notices from the Division of Elections typically record these changes and are the primary source for an updated list. <a href="https://dos.myflorida.com/elections/candidates-committees/candidates/qualifying/" target="_blank" rel="noopener">Division of Elections official candidate notices</a></p>
+<p>Local media and sites like Ballotpedia often report new filings, withdrawals, and statements by campaigns as events occur; those sources are useful for tracking the narrative but should be checked against official lists for ballot status. <a href="https://ballotpedia.org/Florida%27s_25th_Congressional_District" target="_blank" rel="noopener">Ballotpedia updates</a></p>
+<p>FEC filings can also show committee-level changes that do not immediately affect ballot placement but do inform the public record about campaign activity and financial reporting for FL-25 candidates. <a href="https://www.fec.gov/help-candidates-and-committees/becoming-candidate/" target="_blank" rel="noopener">FEC guidance on filings</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Using Ballotpedia, local press, and nonpartisan groups to check FL-25 ballot choices</h2>
+<p>Ballotpedia provides a maintained candidate and district overview that is helpful for an initial list of who is running in FL-25, including links to news and filing updates, but it is a secondary compilation and should be confirmed. <a href="https://ballotpedia.org/Florida%27s_25th_Congressional_District" target="_blank" rel="noopener">Ballotpedia district overview</a></p>
+<p>Local press reporting often adds direct candidate quotes, reporting from qualifying events, and context on deadlines. These pieces can point readers to the relevant filings or to the Division of Elections notices that confirm ballot status. <a href="https://www.miamiherald.com/news/politics-government/article251234567.html" target="_blank" rel="noopener">Example local reporting on qualifying</a></p>
+<p>Nonpartisan groups provide plain-language checklists and voting steps that voters can follow to make sure they are eligible and prepared to cast a ballot in the correct party primary. Use these groups for procedural help and confirm official lists with state and federal records. <a href="https://www.lwvfl.org/primary-elections/" target="_blank" rel="noopener">League of Women Voters guidance</a></p>
+<h2>Decision criteria: how voters can evaluate the candidate list before voting</h2>
+<p>When evaluating the FL-25 candidate list, start with primary sources: the Division of Elections for ballot status, FEC records for committee filings, and candidate campaign statements for stated priorities. Those primary sources give the most direct evidence of who is on the ballot and what they have reported. <a href="https://dos.myflorida.com/elections/candidates-committees/candidates/qualifying/" target="_blank" rel="noopener">Division of Elections official lists</a></p>
+<p>Practical research steps include confirming the exact candidate name as it will appear on the ballot, checking FEC filings for committee names and recent reports, and reading recent campaign statements for current positions. Also consider party primary rules when planning to vote. <a href="https://www.fec.gov/help-candidates-and-committees/becoming-candidate/" target="_blank" rel="noopener">FEC filing and committee guidance</a></p>
+<h2>Closing summary and where to verify final FL-25 ballot choices</h2>
+<p>In summary, state qualifying, party nomination rules, and federal filings together determine who appears on the FL-25 primary ballot, and each component has a different role in the process. For official dates and the certified candidate list, rely on the Division of Elections and county supervisors of elections. <a href="https://dos.myflorida.com/elections/candidates-committees/candidates/qualifying/" target="_blank" rel="noopener">Division of Elections qualifying and candidate lists</a></p>
+<p>For committee and finance records, consult FEC filings. For timely reporting and candidate statements, use reputable local reporting and maintained secondary sources such as Ballotpedia, but always cross-check with the official records before making voting decisions. <a href="https://www.fec.gov/help-candidates-and-committees/becoming-candidate/" target="_blank" rel="noopener">FEC public records</a></p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-ad3mf5" class="faq-toggle" /><label for="faq-ad3mf5" class="faq-summary" role="button" tabindex="0">How do I confirm who is officially on the FL-25 primary ballot?</label><div class="faq-content"><p>Check the Florida Division of Elections candidate lists and county supervisor of elections notices, and cross-check committee filings with FEC records.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-fba9dn" class="faq-toggle" /><label for="faq-fba9dn" class="faq-summary" role="button" tabindex="0">Can I vote in the FL-25 primary if I am not registered with a party?</label><div class="faq-content"><p>That depends on the party rules and Florida registration status; verify your registration and party affiliation before the primary with state election offices.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-n8tube" class="faq-toggle" /><label for="faq-n8tube" class="faq-summary" role="button" tabindex="0">Where can I find plain-language steps to prepare for the primary?</label><div class="faq-content"><p>Nonpartisan voter organizations such as the League of Women Voters publish checklists on registration, party status, polling locations, and ballot preparation.</p></div></section>
+</section><section class="article-ending">For the most current information on who will appear on the FL-25 primary ballot, consult the Florida Division of Elections and the FEC for committee filings. Use Ballotpedia and local reporting as helpful secondary resources, and confirm everything with official records before the primary.
+
+If you need campaign contact information or have a question about a specific candidate, refer to official campaign contact pages and public filings for authoritative details.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://dos.myflorida.com/elections/candidates-committees/candidates/qualifying/" target="_blank" rel="noopener">https://dos.myflorida.com/elections/candidates-committees/candidates/qualifying/</a></li><li><a href="https://www.fec.gov/help-candidates-and-committees/becoming-candidate/" target="_blank" rel="noopener">https://www.fec.gov/help-candidates-and-committees/becoming-candidate/</a></li><li><a href="https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0090-0099/0099/0099.html" target="_blank" rel="noopener">https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&amp;URL=0090-0099/0099/0099.html</a></li><li><a href="https://files.floridados.gov/media/694101/state-qualifying-handbook.pdf" target="_blank" rel="noopener">https://files.floridados.gov/media/694101/state-qualifying-handbook.pdf</a></li><li><a href="https://dos.elections.myflorida.com/candidates/" target="_blank" rel="noopener">https://dos.elections.myflorida.com/candidates/</a></li><li><a href="https://www.flhouse.gov/Statutes/2025/0099.061/" target="_blank" rel="noopener">https://www.flhouse.gov/Statutes/2025/0099.061/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://ballotpedia.org/Florida%27s_25th_Congressional_District" target="_blank" rel="noopener">https://ballotpedia.org/Florida%27s_25th_Congressional_District</a></li><li><a href="https://www.miamiherald.com/news/politics-government/article251234567.html" target="_blank" rel="noopener">https://www.miamiherald.com/news/politics-government/article251234567.html</a></li><li><a href="https://www.lwvfl.org/primary-elections/" target="_blank" rel="noopener">https://www.lwvfl.org/primary-elections/</a></li><li><a href="https://michaelcarbonara.com/events/" target="_blank" rel="noopener">https://michaelcarbonara.com/events/</a></li><li><a href="https://michaelcarbonara.com/michael-carbonara-launches-campaign-for-congress/" target="_blank" rel="noopener">https://michaelcarbonara.com/michael-carbonara-launches-campaign-for-congress/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
