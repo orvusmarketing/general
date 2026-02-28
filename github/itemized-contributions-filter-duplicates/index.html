@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Itemized Contributions: How to Filter the Data and Spot Duplicate Entries</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens (from provided style) */
+      --text-color: #ffffff; /* --mc-ink */
+      --accent: #ae2736;     /* --mc-accent */
+      --accent-hover: color-mix(in srgb, var(--accent) 86%, #000 14%);
+      --line: rgba(255,255,255,.16); /* --mc-line */
+      --surface: #0b2664; /* --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* --mc-panel-2 */
+      --radius: 0px; /* --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/12g5Xr-bn43Gbuukq2rrjYKvxo5x5rMHB" alt="Itemized Contributions cover image" />
+        </div>
+        <h1 class="title">Itemized Contributions: How to Filter the Data and Spot Duplicate Entries</h1>
+        <p class="subline">A practical guide to filtering and deduplicating federal Schedule A receipts while preserving an audit trail.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/itemized-contributions-filter-duplicates/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">This guide explains how to filter and deduplicate itemized contributions for federal campaign finance work. It focuses on Schedule A rules and practical workflows for spreadsheets and scripting. The aim is to help journalists, campaign staff, and researchers produce reproducible cleaned datasets while preserving an audit trail.
+
+The steps here reference primary sources and tool documentation so you can verify rules and implement workflows with confidence.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Itemized contributions are public Schedule A receipts with specific required fields used for campaign finance analysis.</span></div><div class="highlight-card"><span class="highlight-text">Start with deterministic filters and exact deduplication before using fuzzy matching, and always keep the raw export.</span></div><div class="highlight-card"><span class="highlight-text">Document every filter and merge in a short change summary so cleaned files remain reproducible.</span></div>
+     </div>
+  <h2>What are itemized contributions and why they matter</h2><p>Itemized contributions are individual receipts that meet federal reporting rules and must be reported with specific contributor details, which makes them the primary source for campaign finance analysis. The federal Schedule A instructions describe when a contribution must be itemized and what fields are required for each receipt, including name, address, date, amount, employer, occupation, and contributor type, which affects how analysts treat donor records <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a_instructions.pdf" target="_blank" rel="noopener">FEC Schedule A instructions</a>.</p><p>Accurate filtering of itemized contributions matters because analysts and journalists rely on these public records to report fundraising patterns, identify major donors, and check compliance. The FEC publishes record-level receipts that make this work possible, and careful filtering reduces errors that can arise from misapplied thresholds or missing fields <a href="https://www.fec.gov/data/receipts/" target="_blank" rel="noopener">FEC receipts data page</a>.</p><p>To use these records correctly, start by understanding the federal itemization threshold commonly applied: contributions that meet or exceed the $200 aggregate per contributor per election trigger are typically itemized, subject to Schedule A rules. That threshold is a reporting trigger rather than a policy judgment, so follow the Schedule A guidance when deciding which rows to include <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a_instructions.pdf" target="_blank" rel="noopener">FEC Schedule A instructions</a>.</p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Join the campaign updates and stay informed about Michael Carbonara’s run</h3><div class="cta-intro"><p>Download the raw FEC receipts export or the article checklist before you begin; keeping the raw file untouched makes later reviews and audits simpler.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the Campaign</a></div><p>When you prepare to analyze itemized contributions, preserve the original export as part of an audit trail and work on a copy for filtering and deduplication. That practice lets you show exactly what changed during cleaning and supports transparent reporting.</p><h2>Where to get itemized receipts: FEC exports and the API</h2>
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/13Y-VO58lepQBepfnZK8WbcUg8gVkA1w6=s1200" alt="Minimal 2D vector infographic of a spreadsheet with highlighted rows and filter icons representing itemized contributions in Michael Carbonara color palette" /></a>
+      <div class="side-text"><p>The FEC receipts data page is the canonical source for record-level Schedule A exports and provides filters for date range, contributor name, amount, and committee, enabling targeted downloads for analysis <a href="https://www.fec.gov/data/receipts/" target="_blank" rel="noopener">FEC receipts data page</a> (more background is available on the FEC about receipts data page <a href="https://www.fec.gov/campaign-finance-data/about-campaign-finance-data/about-receipts-data/" target="_blank" rel="noopener">about receipts data</a>).</p></div>
+    </div><p>The FEC also offers an API that supports reproducible, programmatic queries and exports for 2024 through 2026 datasets, which is useful when you need repeatable filters or scheduled updates for ongoing projects <a href="https://www.fec.gov/data/receipts/" target="_blank" rel="noopener">FEC receipts data page</a> (see the OpenFEC API documentation <a href="https://api.open.fec.gov/developers/" target="_blank" rel="noopener">OpenFEC API documentation</a>).</p><p>Before you clean a dataset, consult the FEC data documentation to confirm field names, date formats, and any committee-specific conventions so that your filters and joins use the correct column names and types <a href="https://www.fec.gov/data/receipts/" target="_blank" rel="noopener">FEC receipts data page</a>.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>Most FEC record-level exports are CSV files that can be opened in Excel, Google Sheets, or read into a scripting environment; check for UTF-8 encoding and consistent delimiters before importing to avoid corrupted fields or misaligned columns <a href="https://www.fec.gov/data/receipts/" target="_blank" rel="noopener">FEC receipts data page</a>.</p>
+<h2>Preparing your raw export: file formats and required fields</h2><p>Verify that the core Schedule A fields are present and consistently populated: contributor name, address components, report date, transaction amount, employer, occupation, and committee ID. If fields are missing or appear under alternate headings, update your import mapping or consult the documentation to reconcile names <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a_instructions.pdf" target="_blank" rel="noopener">FEC Schedule A instructions</a>.</p><section class="faq-accordion"><input type="checkbox" id="faq-cjhy9l" class="faq-toggle" checked /><label for="faq-cjhy9l" class="faq-summary" role="button" tabindex="0">How do I reliably filter and deduplicate federal itemized contributions?</label><div class="faq-content"><p>Use deterministic filters and exact deduplication first, preserve the raw export, flag fuzzy-match candidates for human review, and keep an audit trail with change counts and rationale.</p></div></section><p>Save an untouched copy of the raw export and work on a separate file for cleaning. Label files clearly with the original filename and a timestamp so you can always recover the original dataset if needed.</p><p>Do basic sanity checks on types and ranges: dates should import as dates, amounts as numeric values, and text fields should not include stray delimiters or embedded newlines. Quick normalization at this stage reduces noise in matching steps later on.</p><h2>Deterministic filtering: date ranges, amounts, and committees</h2><p>Begin cleaning with conservative, deterministic filters that do not alter values: limit the dataset by the date range relevant to your analysis, by committee ID, and by minimum or maximum amounts that match your research question. These filters reduce size while preserving original records <a href="https://www.fec.gov/data/receipts/" target="_blank" rel="noopener">FEC receipts data page</a>.</p><p>In spreadsheets, apply column filters to restrict rows by report date, committee, and amount. In a scripted workflow, apply the same filters as a reproducible step in your script so the same subset can be regenerated later <a href="https://www.fec.gov/data/receipts/" target="_blank" rel="noopener">FEC receipts data page</a>.</p><p>Export any filtered subsets with descriptive filenames and timestamps. Keeping named subsets helps with audits and lets you re-run downstream steps without reapplying the same filters manually.</p><h2>Exact duplicate detection and removal in spreadsheets</h2><p>For small to medium exports, exact duplicate detection is a fast way to remove identical rows. Excel’s Remove Duplicate Rows function works on selected columns and is appropriate when the same receipt appears more than once with identical values in key fields <a href="https://support.microsoft.com/office/remove-duplicate-rows-2fdf3d4a-7c2c-4b32-a7c6-7f3d9f1a6b9a" target="_blank" rel="noopener">Microsoft Support</a>.</p><p>Decide which columns to include in the exact-match check. For many workflows you might use contributor name, address, date, and amount; avoid including transaction IDs if those differ across exports but the other fields match, or you could lose true duplicates.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><p>In Google Sheets, functions like UNIQUE combined with FILTER let you extract distinct rows or preserve duplicates in a separate sheet for review. Always save the rows you remove to a retained file so you can show what was dropped and why <a href="https://support.google.com/docs/answer/3540681" target="_blank" rel="noopener">Google Sheets help</a>.</p><p>Exact deduplication is sufficient when exported rows are identical copies. It is a low-risk operation provided you back up the raw export and store removed rows separately.</p><h2>Programmatic deduplication and reproducible workflows with pandas</h2><p>For larger datasets, scripting with pandas gives reproducible, auditable deduplication. pandas.DataFrame.drop_duplicates supports key-based exact matching and can remove duplicates across chosen column sets, which is preferable for large exports where manual checks are impractical <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop_duplicates.html" target="_blank" rel="noopener">pandas documentation</a> (see pandas.DataFrame.duplicated <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.duplicated.html" target="_blank" rel="noopener">documentation</a>).</p><p>Typical steps in a pandas workflow are: read the CSV with explicit dtypes, normalize text fields, apply deterministic filters, run drop_duplicates on the chosen keys, and write both the cleaned file and a companion log that records counts of rows removed and the keys used <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop_duplicates.html" target="_blank" rel="noopener">pandas documentation</a>.</p><p>Store scripts and exports under version control and include the script version in your export filenames. This approach lets collaborators rerun the exact same cleaning steps and verify results. (See my site <a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">Michael Carbonara</a> for related links.)</p><h2>Fuzzy matching and clustering for non-exact duplicates</h2><p>Fuzzy matching helps surface likely duplicates that are not exact matches, such as name variants or address formatting differences. Token-based similarity and ratio metrics are common approaches to score candidate pairs, but they are heuristics that require human review to avoid incorrect merges <a href="https://maxbachmann.github.io/RapidFuzz/; https://openrefine.org/manual/cluster.html" target="_blank" rel="noopener">RapidFuzz and OpenRefine methods</a>.</p><p>RapidFuzz offers fast similarity scoring for name and address comparisons, while OpenRefine provides clustering tools for batching candidate merges; both approaches are widely used to propose merges that a human reviewer then approves or rejects <a href="https://maxbachmann.github.io/RapidFuzz/; https://openrefine.org/manual/cluster.html" target="_blank" rel="noopener">RapidFuzz and OpenRefine methods</a>.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick steps to vet fuzzy-match candidates before merging</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-k1o0fl-0">
+                        <input id="tool-check-k1o0fl-0" type="checkbox" />
+                        <span>Candidate pair</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-r60al9-1">
+                        <input id="tool-check-r60al9-1" type="checkbox" />
+                        <span>Similarity score</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-w9bn2m-2">
+                        <input id="tool-check-w9bn2m-2" type="checkbox" />
+                        <span>Suggested action</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Review high scoring pairs first</p>
+            </div><p>Use conservative thresholds and sample-based review. High recall settings find more possible duplicates but increase false positives, so document thresholds and keep an audit trail of accepted merges.</p><h2>Keeping an audit trail: logging filters, merges, and export summaries</h2>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>An audit trail should record the original file name, the filters applied, the exact-duplicate criteria used, fuzzy-match rules and thresholds, and counts of records changed or removed. This makes the cleaned output reproducible and defensible <a href="https://www.fec.gov/data/receipts/" target="_blank" rel="noopener">FEC receipts data page</a>.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1WobUJcAazSOuenxlS1v2y0pwD9f0QdWc=s1200" alt="Minimal 2D vector infographic with three icons for filtering deduplication and audit logs on navy background illustrating itemized contributions" /></a>
+    </div><p>A simple change summary can list counts by filter, the number of exact duplicates removed, fuzzy-match candidates reviewed, merges accepted, and rows deleted. Save both the cleaned CSV and a short methodology note alongside it to explain choices to readers or colleagues <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop_duplicates.html" target="_blank" rel="noopener">pandas documentation</a>.</p><p>Preserve the raw export and a line-by-line log of merges or deletions. That log should include the original row identifiers and the rationale for each change so an independent reviewer can follow your decisions.</p><h2>Decision criteria: when to merge, when to keep duplicates</h2><p>Choose conservative merges when donor attribution matters. Precision-focused rules reduce false positives but can leave duplicates in the cleaned file, while recall-focused rules merge more likely duplicates but increase the risk of incorrect joins <a href="https://maxbachmann.github.io/RapidFuzz/; https://openrefine.org/manual/cluster.html" target="_blank" rel="noopener">RapidFuzz and OpenRefine methods</a>.</p><p>Committee and state-level aggregation rules can affect whether small-dollar donors are grouped or left separate, so check committee guidance and the Schedule A instructions before applying bulk merges to avoid misreporting contribution counts <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a_instructions.pdf" target="_blank" rel="noopener">FEC Schedule A instructions</a>.</p><p>Document each merge decision and use human review for borderline fuzzy matches. When in doubt, keep separate rows and note the reason for conservative handling in your change summary.</p><h2>Typical errors and pitfalls to avoid</h2><p>Common mistakes include merging on partial keys, failing to normalize address formats, or not backing up raw data before making changes. These errors can remove legitimate contributions or misattribute donors <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a_instructions.pdf" target="_blank" rel="noopener">FEC Schedule A instructions</a>.</p><p>To reduce risk, normalize dates, trim whitespace, standardize casing, and expand common abbreviations before matching. Those quick normalization steps improve both exact and fuzzy-match accuracy <a href="https://maxbachmann.github.io/RapidFuzz/; https://openrefine.org/manual/cluster.html" target="_blank" rel="noopener">RapidFuzz and OpenRefine methods</a>.</p><p>Keep removed rows in a separate file so you can restore them if needed, and always include a short note explaining why rows were dropped or merged.</p><h2>Practical example 1: spreadsheet workflow from raw export to cleaned file</h2><p>Follow these numbered actions in a spreadsheet: import the CSV with UTF-8 encoding, verify fields, apply deterministic filters for date range and committee, run exact duplicate removal, save removed rows to a separate file, and export the cleaned file with a timestamped filename. These steps create a repeatable record of the cleaning process <a href="https://support.google.com/docs/answer/3540681" target="_blank" rel="noopener">Google Sheets help</a>.</p><p>Check which columns to include in exact deduplication; a common choice is contributor name, normalized address, date, and amount. Exclude columns that are expected to vary between exports, like transaction ID, unless you have a reason to require an exact match.</p><p>In your change log, record the step, the filter or function used, and the number of rows affected. For example: Filter by committee ID X, rows before 12,345, after 3,210; exact duplicates removed 145; fuzzy candidates flagged 78. That short summary helps readers understand the scale of changes.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Practical example 2: a reproducible pandas script outline</h2>
+<p>A high-level script plan is: read CSV with specified dtypes, run normalization functions on name and address fields, apply deterministic filters, run drop_duplicates on chosen keys, compute fuzzy-match scores for candidate pairs, write a candidate review file, apply approved merges, and export cleaned CSV plus a change log <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop_duplicates.html" target="_blank" rel="noopener">pandas documentation</a>.</p><p>Use pandas.DataFrame.drop_duplicates for the exact deduplication step and keep a copy of the dropped rows in a separate file with the same keys. Export both the cleaned file and a companion log that records script version and counts of rows changed for reproducibility <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop_duplicates.html" target="_blank" rel="noopener">pandas documentation</a>.</p><p>When working with a developer, provide the pseudo steps and expected filenames so the script can be integrated into version control and scheduled runs. That way, cleaned exports are consistent and traceable. (See related posts on the news page <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">News</a>.)</p><h2>Exporting, reporting, and sharing cleaned itemized contributions</h2><p>Share cleaned outputs as CSV files alongside the original raw export and a short methodology note that lists filters used, duplicate criteria, fuzzy-match thresholds, and references to Schedule A or the FEC data page <a href="https://www.fec.gov/data/receipts/" target="_blank" rel="noopener">FEC receipts data page</a>.</p><p>Include a change summary with counts for each cleaning step and consider redacting or omitting sensitive fields when publishing for a general audience, consistent with privacy expectations and the purpose of the release <a href="https://www.fec.gov/data/receipts/" target="_blank" rel="noopener">FEC receipts data page</a>.</p><p>Label all files clearly with timestamps and script versions where relevant so users can understand which version of the dataset they are viewing. For assistance contact the site <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">contact page</a>.</p><h2>Next steps and resources</h2><p>Quick checklist: download the raw receipts, verify field names, apply deterministic filters, run exact dedupe, review fuzzy candidates, and document all changes. These actions will make your cleaned itemized contributions dataset reproducible and defensible <a href="https://www.fec.gov/resources/cms-content/documents/schedule_a_instructions.pdf" target="_blank" rel="noopener">FEC Schedule A instructions</a>.</p><p>Consult the FEC receipts data documentation for updates to field definitions and the pandas and RapidFuzz or OpenRefine documentation for technical implementation guidance when you need scripting or fuzzy clustering support <a href="https://maxbachmann.github.io/RapidFuzz/; https://openrefine.org/manual/cluster.html" target="_blank" rel="noopener">RapidFuzz and OpenRefine methods</a>.</p><p>Keep a short methodology note with every public release so other researchers can reproduce your filters and understand the decisions behind merges.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-ubofme" class="faq-toggle" /><label for="faq-ubofme" class="faq-summary" role="button" tabindex="0">What triggers federal itemization for receipts?</label><div class="faq-content"><p>Federal itemization is typically required when a contributor’s receipts meet or exceed the applicable aggregate threshold per election; check the FEC Schedule A instructions for the exact reporting trigger and required fields.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-x07tbu" class="faq-toggle" /><label for="faq-x07tbu" class="faq-summary" role="button" tabindex="0">Is exact deduplication safe to use on all exports?</label><div class="faq-content"><p>Exact deduplication is safe when rows are identical across chosen key fields, but it is important to back up the raw export and store removed rows separately in case further review is needed.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-jqhp31" class="faq-toggle" /><label for="faq-jqhp31" class="faq-summary" role="button" tabindex="0">When should I use fuzzy matching for donor records?</label><div class="faq-content"><p>Use fuzzy matching to find likely non-exact duplicates such as name or address variants, but apply conservative thresholds and human review to avoid incorrect merges.</p></div></section>
+</section><section class="article-ending">A careful cleaning process helps maintain donor attribution and supports clear, reproducible reporting. Preserve the raw export, document each decision, and consult the Schedule A instructions and FEC data documentation when in doubt.
+
+If you need a template or a starter script, use the checklists and pseudo-steps in this article as a guide and adapt them to your committee or project rules.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.fec.gov/resources/cms-content/documents/schedule_a_instructions.pdf" target="_blank" rel="noopener">https://www.fec.gov/resources/cms-content/documents/schedule_a_instructions.pdf</a></li><li><a href="https://www.fec.gov/data/receipts/" target="_blank" rel="noopener">https://www.fec.gov/data/receipts/</a></li><li><a href="https://www.fec.gov/campaign-finance-data/about-campaign-finance-data/about-receipts-data/" target="_blank" rel="noopener">https://www.fec.gov/campaign-finance-data/about-campaign-finance-data/about-receipts-data/</a></li><li><a href="https://api.open.fec.gov/developers/" target="_blank" rel="noopener">https://api.open.fec.gov/developers/</a></li><li><a href="https://support.microsoft.com/office/remove-duplicate-rows-2fdf3d4a-7c2c-4b32-a7c6-7f3d9f1a6b9a" target="_blank" rel="noopener">https://support.microsoft.com/office/remove-duplicate-rows-2fdf3d4a-7c2c-4b32-a7c6-7f3d9f1a6b9a</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://support.google.com/docs/answer/3540681" target="_blank" rel="noopener">https://support.google.com/docs/answer/3540681</a></li><li><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop_duplicates.html" target="_blank" rel="noopener">https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop_duplicates.html</a></li><li><a href="https://maxbachmann.github.io/RapidFuzz/" target="_blank" rel="noopener">https://maxbachmann.github.io/RapidFuzz/</a></li><li><a href="https://openrefine.org/manual/cluster.html" target="_blank" rel="noopener">https://openrefine.org/manual/cluster.html</a></li><li><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.duplicated.html" target="_blank" rel="noopener">https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.duplicated.html</a></li><li><a href="https://michaelcarbonara.com/" target="_blank" rel="noopener">https://michaelcarbonara.com/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
