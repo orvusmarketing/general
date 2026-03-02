@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What is a violation of the separation of powers? An explainer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens (from provided style) */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #8f222e;
+      --line: rgba(255,255,255,.16);
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px; /* from --mc-radius */
+
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(255,255,255,.06);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease, background .12s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      background: var(--accent-hover);
+      filter: none;
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.06);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Scoped extras for article internals (safe selectors) */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.90); margin-bottom: 1.4rem; }
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:1rem; margin:1.6rem 0; }
+    .article-body .highlight-card{ background: linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.03)); padding:1rem; border-left:4px solid var(--accent); border:1px solid rgba(255,255,255,.12); }
+    .article-body .faq-accordion{ margin-bottom:1rem; }
+    .article-body .tool-block{ max-width:720px; margin:1.6rem auto; }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1F0XXgjDIvxebfA9uLluihaWmlin_6Kuu" alt="What is a violation of the separation of powers?" />
+        </div>
+        <h1 class="title">What is a violation of the separation of powers? An explainer</h1>
+        <p class="subline">A concise, neutral explainer of what courts and scholars mean by separation-of-powers violations.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/explain-separation-of-power-violation/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">This article explains what legal scholars and courts mean by a violation of the separation of powers. It focuses on the constitutional allocation of legislative, executive, and judicial functions and the Supreme Court frameworks that apply when branch boundaries are disputed.
+
+Readers will find short summaries of the leading cases, a practical checklist to evaluate news claims, and pointers to primary sources for verification. The goal is neutral, source-based information useful to voters, students, and journalists.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">A separation-of-powers violation turns on constitutional text and how courts apply controlling precedents.</span></div><div class="highlight-card"><span class="highlight-text">Youngstown, Chadha, Seila Law, and Nixon are the primary Supreme Court frameworks to consult.</span></div><div class="highlight-card"><span class="highlight-text">Use a simple checklist to map a news claim to the right legal test and the controlling statute.</span></div>
+     </div>
+  <h2>Quick answer: what counts as a separation-of-powers violation?</h2><h3>Short plain-language summary, explain separation of power</h3><p>A separation-of-powers violation occurs when one branch of the federal government acts in a way that improperly displaces the distinct roles the Constitution assigns to Congress, the President, or the federal courts. The Constitution provides the basic allocation of lawmaking, execution, and adjudication powers, and that allocation is the starting point for deciding whether an action crosses the line <a href="https://www.archives.gov/founding-docs/constitution-transcript" target="_blank" rel="noopener">Constitution of the United States: A Transcription</a></p><h3>Why readers should care</h3><p>Where one branch assumes the primary functions of another, the balance of powers that protects liberty and accountability can be altered. Authoritative summaries explain the doctrine and its historical grounding, and courts use those sources to interpret modern disputes <a href="https://www.britannica.com/topic/separation-of-powers" target="_blank" rel="noopener">Separation of powers, Encyclopaedia Britannica</a>. For related content on legal principles and public policy, see the <a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">constitutional rights</a> hub on this site.</p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay connected to campaign updates and events</h3><div class="cta-intro"><p>Read the sections below to see the Supreme Court tests and a short checklist you can use to evaluate news claims about separation-of-powers violations.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign</a></div><p>Whether a particular action is unlawful depends on detailed statutory text, the factual record, and controlling judicial decisions. Single indicators are suggestive, not definitive.</p><h2>What the Constitution and foundational sources say about separation of powers</h2><h3>Relevant constitutional text and structure</h3><p>The Constitution creates separate branches with distinct roles: Congress makes laws, the President executes them, and federal courts resolve disputes. That structural allocation is the first reference point for any claim about constitutional boundaries <a href="https://www.archives.gov/founding-docs/constitution-transcript" target="_blank" rel="noopener">Constitution of the United States: A Transcription</a></p><h3>Secondary scholarly or reference summaries</h3><p><a href="https://scholarship.law.duke.edu/cgi/viewcontent.cgi?article=4064&context=dlj" target="_blank" rel="noopener">Reference works and legal histories</a> describe how the separation of powers evolved and why courts treat the allocation as a core organizing principle of federal government. These summaries help explain why the Constitution does not answer every boundary question by itself and why courts develop tests to apply the principle to new facts <a href="https://www.britannica.com/topic/separation-of-powers" target="_blank" rel="noopener">Separation of powers, Encyclopaedia Britannica</a></p><h2>Core Supreme Court frameworks used to evaluate alleged violations</h2><h3>Overview of the main tests</h3><p>The Supreme Court relies on a small set of doctrinal frameworks when it evaluates claims that one branch has overstepped. Those frameworks map to different factual situations and offer distinct analytical steps courts follow <a href="https://www.law.cornell.edu/supremecourt/text/343/579" target="_blank" rel="noopener">Youngstown Sheet & Tube Co. v. Sawyer</a></p><section class="faq-accordion"><input type="checkbox" id="faq-mxdz1v" class="faq-toggle" checked /><label for="faq-mxdz1v" class="faq-summary" role="button" tabindex="0">What is a violation of the separation of powers?</label><div class="faq-content"><p>A violation occurs when one branch of the federal government unlawfully assumes the core functions assigned by the Constitution to another branch, as determined by constitutional text and controlling Supreme Court tests.</p></div></section><h3>How to read a controlling framework</h3><p>Readers should note what each framework asks: who acted, what legal authority was claimed, and whether Congress expressly authorized or forbade the conduct. Matching facts to the right test is often the key to a correct legal assessment <a href="https://www.law.cornell.edu/supremecourt/text/462/919" target="_blank" rel="noopener">Immigration and Naturalization Service v. Chadha</a></p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure><h2>How the Youngstown framework works when presidents act</h2><h3>The three Youngstown categories in plain language</h3><p>Youngstown establishes a three-part approach for presidential action: (1) actions with explicit or implied congressional authorization enjoy the most deference; (2) actions where Congress is silent are analyzed by approaching text, history, and practice; and (3) actions that are incompatible with Congress's express will face the most skepticism from courts <a href="https://www.law.cornell.edu/supremecourt/text/343/579" target="_blank" rel="noopener">Youngstown Sheet & Tube Co. v. Sawyer</a></p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><h3>Examples of when each category matters</h3><p>When a President claims emergency authority or seeks to exercise powers in an area where Congress has legislated, courts ask whether the statute authorizes that use; if the statute is clear, it controls. If Congress has acted to prohibit a specific executive step, a conflict can create a classic separation-of-powers problem <a href="https://www.law.cornell.edu/supremecourt/text/343/579" target="_blank" rel="noopener">Youngstown Sheet & Tube Co. v. Sawyer</a></p><p>In many modern disputes about executive action, Youngstown provides the roadmap for weighing presidential power against congressional text and intent.</p><h2>INS v. Chadha and legislative limits: bicameralism and presentment</h2><h3>What the Court held in Chadha</h3><p>The Court held that a one-house legislative veto that altered an individual's legal rights without passage by both Houses and presentment to the President was unconstitutional because it bypassed the Constitution's lawmaking procedures <a href="https://www.law.cornell.edu/supremecourt/text/462/919" target="_blank" rel="noopener">Immigration and Naturalization Service v. Chadha</a></p><h3>Why bicameralism and presentment matter</h3><p>The Constitution requires laws to pass both Houses of Congress and be presented to the President for signature or veto. Chadha enforces that procedural requirement by striking down mechanisms that let a single chamber act in a way that has the force of law without those checks <a href="https://www.archives.gov/founding-docs/constitution-transcript" target="_blank" rel="noopener">Constitution of the United States: A Transcription</a></p>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Chadha therefore teaches that some legislative shortcuts are themselves separation-of-powers violations because they deny the interbranch consultation and accountability the Constitution requires.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1azBDL-XFR_D8T_CATU_fbvh4Lsbi5Zw4=s1200" alt="Minimalist vector infographic explain separation of power showing three white icons for legislative executive judicial on deep blue background with white arrows and red accents" /></a>
+    </div>
+  <h2>Seila Law and modern questions about agency independence and removal</h2>
+  <h3>What Seila Law decided about removal protection</h3>
+  <p>Seila Law addressed whether statutory limits on the President's authority to remove certain agency officers are consistent with the Constitution. The Court explained that removal protections can violate the separation of powers when they unduly restrict presidential control over executive officers <a href="https://www.law.cornell.edu/supremecourt/text/593/14-915" target="_blank" rel="noopener">Seila Law v. Consumer Financial Protection Bureau</a> <a href="https://www.supremecourt.gov/opinions/19pdf/19-7_n6io.pdf" target="_blank" rel="noopener">Supreme Court opinion</a></p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Primary-source lookup and quick agency review</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-3emdyk-0">
+                        <input id="tool-check-3emdyk-0" type="checkbox" />
+                        <span>Statute text</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-k96xny-1">
+                        <input id="tool-check-k96xny-1" type="checkbox" />
+                        <span>Removal language</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-yw93sd-2">
+                        <input id="tool-check-yw93sd-2" type="checkbox" />
+                        <span>Judicial precedent</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use with cited opinions</p>
+            </div>
+  <h3>Implications for agency design</h3>
+  <p>Removal protections matter because they shape how accountable agencies are to the executive branch and how insulated they are from political control. Seila Law signals that courts will scrutinize statutory designs that appear to block presidential oversight when the structure conflicts with constitutional allocation of executive power <a href="https://www.oyez.org/cases/2019/19-7" target="_blank" rel="noopener">Seila Law case page on Oyez</a></p>
+  <p>Seila Law fits into a longer line of cases where the Court balances agency independence against the President's constitutional role in executing the law.</p>
+  <h2>United States v. Nixon and the judiciary's role in enforcing limits</h2>
+  <h3>The Nixon decision and executive privilege</h3>
+  <p>The Court held that executive privilege is not absolute and does not allow the President to withhold evidence that is demonstrably relevant to a criminal prosecution when a court has issued a valid subpoena <a href="https://www.law.cornell.edu/supremecourt/text/418/683" target="_blank" rel="noopener">United States v. Nixon</a></p>
+  <h3>How courts balance privilege against judicial process</h3>
+  <p>Nixon shows that when the judicial process requires materials essential to the truth-seeking function of a court, the judiciary can require production despite claims of privilege, consistent with the courts' duty to enforce legal process <a href="https://www.law.cornell.edu/supremecourt/text/418/683" target="_blank" rel="noopener">United States v. Nixon</a></p>
+  <p>The case is a prototypical example of judicial enforcement of separation-of-powers limits in the context of litigation and subpoenas.</p>
+  <h2>How courts assess modern claims: emergencies, delegations, and informal action</h2>
+  <h3>Emergency powers and post-2020 debates</h3>
+  <p>Courts typically apply the established frameworks like Youngstown to emergency claims by asking whether Congress authorized the asserted power or whether the President acted contrary to congressional intent. Results turn on statutory drafting and the specific record presented to a court <a href="https://www.law.cornell.edu/supremecourt/text/343/579" target="_blank" rel="noopener">Youngstown Sheet & Tube Co. v. Sawyer</a></p>
+  <h3>Delegation and informal presidential action</h3>
+  <p>When executive action rests on delegations to agencies or on informal mechanisms, courts examine statutory text and prior precedent such as Seila Law to decide whether the statutory design preserves the constitutional balance between independence and presidential control <a href="https://www.law.cornell.edu/supremecourt/text/593/14-915" target="_blank" rel="noopener">Seila Law v. Consumer Financial Protection Bureau</a></p>
+  <p>Because modern administration involves many informal practices, the application of older tests to new circumstances remains contested in lower courts and scholarship.</p>
+  <h2>Practical decision criteria: signs that an action may violate separation of powers</h2>
+  <h3>A checklist readers can use</h3>
+  <p>Use these indicators as practical signs that courts and analysts will examine whether an action may violate the separation of powers</p>
+  <p>1. Did the actor bypass constitutionally required procedures such as bicameral passage and presentment For questions that invoke legislative authority, Chadha shows why bypassing those steps is significant <a href="https://www.law.cornell.edu/supremecourt/text/462/919" target="_blank" rel="noopener">Immigration and Naturalization Service v. Chadha</a></p>
+  <p>2. Did one branch unilaterally assume functions allocated to another If the executive asserts lawmaking authority without congressional authorization, Youngstown provides the core analytical framework <a href="https://www.law.cornell.edu/supremecourt/text/343/579" target="_blank" rel="noopener">Youngstown Sheet & Tube Co. v. Sawyer</a></p>
+  <p>3. Does a statute delegate authority without required checks or with unusual insulation from oversight Seila Law illustrates how removal protections and agency structure can be decisive in this inquiry <a href="https://www.law.cornell.edu/supremecourt/text/593/14-915" target="_blank" rel="noopener">Seila Law v. Consumer Financial Protection Bureau</a></p>
+  <p>4. Is there interference with an independent adjudicative process or an attempt to block judicial fact-finding Nixon is the leading judicial example of how courts respond when executive assertions impede judicial process <a href="https://www.law.cornell.edu/supremecourt/text/418/683" target="_blank" rel="noopener">United States v. Nixon</a></p>
+  <h3>How to weigh competing indicators</h3>
+  <p>No single indicator proves a constitutional violation. Courts weigh the totality of statutory text, historical practice, and precedent to decide whether an action unlawfully shifts power.</p>
+  <h2>Common mistakes and misunderstandings to avoid</h2>
+  <h3>Where commentary often goes too far</h3>
+  <p>Political claims or slogans sometimes describe a disputed act as a separation-of-powers violation without showing how the claim matches constitutional text or precedent. That leap from rhetoric to legal conclusion is a common error <a href="https://www.archives.gov/founding-docs/constitution-transcript" target="_blank" rel="noopener">Constitution of the United States: A Transcription</a></p>
+  <h3>How to read sources carefully</h3>
+  <p>Avoid treating a single procedural irregularity as dispositive. Instead, check the statute, the full judicial opinion, and how courts have applied the relevant framework before concluding that a violation has occurred <a href="https://www.law.cornell.edu/supremecourt/text/343/579" target="_blank" rel="noopener">Youngstown Sheet & Tube Co. v. Sawyer</a></p>
+  <p>Rely on primary documents where possible rather than secondary summaries when verifying a claim.</p>
+  <h2>Illustrative scenarios and historical examples readers can compare to current claims</h2>
+  <h3>Youngstown-era seizure example</h3>
+  <p>In Youngstown, the Court considered a presidential seizure of private property during a labor dispute and used a tripartite framework to assess whether the President could act consistent with congressional authority; the decision remains central to assessing executive overreach <a href="https://www.law.cornell.edu/supremecourt/text/343/579" target="_blank" rel="noopener">Youngstown Sheet & Tube Co. v. Sawyer</a></p>
+  <h3>Chadha legislative veto example</h3>
+  <p>Chadha involved a legislative mechanism that allowed one chamber to overturn an executive decision without passing a law through both Houses and presenting it to the President; the Court struck that mechanism down as inconsistent with constitutional lawmaking procedures <a href="https://www.law.cornell.edu/supremecourt/text/462/919" target="_blank" rel="noopener">Immigration and Naturalization Service v. Chadha</a></p>
+  <h3>Nixon and judicial process example</h3>
+  <p>Nixon is the canonical example where the judiciary required the President to produce subpoenaed materials, showing how courts can protect their fact-finding and the integrity of judicial proceedings when privilege is asserted <a href="https://www.law.cornell.edu/supremecourt/text/418/683" target="_blank" rel="noopener">United States v. Nixon</a></p>
+  <h2>A practical step-by-step guide: how to evaluate a news claim of a separation-of-powers violation</h2>
+  <h3>Step 1: Identify the branch actions involved</h3>
+  <p>Start by asking which branch acted and which constitutional function is at issue. Is the claim about lawmaking, execution, or adjudication If it involves lawmaking steps, check bicameralism and presentment rules in the Constitution <a href="https://www.archives.gov/founding-docs/constitution-transcript" target="_blank" rel="noopener">Constitution of the United States: A Transcription</a></p>
+  <h3>Step 2: Map the claim to a doctrinal test</h3>
+  <p>Decide which Supreme Court framework fits the facts Youngstown is typically used for executive overreach questions; Chadha governs claims about legislative bypass of procedures; Seila Law guides disputes over agency insulation and removal <a href="https://www.law.cornell.edu/supremecourt/text/593/14-915" target="_blank" rel="noopener">Seila Law v. Consumer Financial Protection Bureau</a></p>
+  <p>Step 3: Read the statute and relevant precedent Step 4: Look at the factual record Step 5: Remember that similar facts can lead to different outcomes depending on statutory language and judicial reasoning</p>
+  <h2>What to watch next: ongoing debates and open questions</h2>
+  <h3>Current lines of disagreement in courts and scholarship</h3>
+  <p>Court decisions continue to address the reach of emergency powers, the design of modern agencies, and the legality of informal presidential initiatives. Scholars and lower courts sometimes diverge on how strictly to apply old tests to new practices <a href="https://www.law.cornell.edu/supremecourt/text/343/579" target="_blank" rel="noopener">Youngstown Sheet & Tube Co. v. Sawyer</a>. Follow developments on the <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">news</a> page for updates and commentary.</p>
+  <h3>How future cases might shape doctrine</h3>
+  <p>Future Supreme Court rulings will refine how Youngstown, Seila Law, and Chadha are applied to contemporary facts. Outcomes will depend heavily on statutory drafting, the record before a court, and how the justices reason about constitutional structure <a href="https://www.law.cornell.edu/supremecourt/text/593/14-915" target="_blank" rel="noopener">Seila Law v. Consumer Financial Protection Bureau</a></p>
+  <p>Because the administrative state and emergency practices keep evolving, staying grounded in primary sources is the most reliable way to track doctrinal change.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure><h2>Summary and practical takeaways</h2><h3>Top-line reminders</h3><p>Separation-of-powers violations are not determined by slogans or politics but by constitutional text and Supreme Court frameworks. Useful precedents to consult include Youngstown, Chadha, Seila Law, and Nixon <a href="https://www.law.cornell.edu/supremecourt/text/343/579" target="_blank" rel="noopener">Youngstown Sheet & Tube Co. v. Sawyer</a></p><h3>Where to find primary sources</h3><p>For verification, go to the Constitution and the cited Supreme Court opinions. Reading the full opinions and the statutory language they interpret is the best way to assess whether a news claim describes a real constitutional problem <a href="https://www.archives.gov/founding-docs/constitution-transcript" target="_blank" rel="noopener">Constitution of the United States: A Transcription</a>. For additional background on institutional design, see <a href="https://michaelcarbonara.com/strength-and-security/" target="_blank" rel="noopener">strength and security</a>.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-5r1kj5" class="faq-toggle" /><label for="faq-5r1kj5" class="faq-summary" role="button" tabindex="0">What is a simple test to spot a possible violation</label><div class="faq-content"><p>Check who acted, what constitutional function was claimed, whether Congress authorized it, and whether the action bypassed bicameralism or presentment.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-7okdt9" class="faq-toggle" /><label for="faq-7okdt9" class="faq-summary" role="button" tabindex="0">Which court cases are most relevant</label><div class="faq-content"><p>Key precedents include Youngstown, Chadha, Seila Law, and United States v. Nixon; those opinions frame most modern disputes.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-08pdjr" class="faq-toggle" /><label for="faq-08pdjr" class="faq-summary" role="button" tabindex="0">Can a political claim alone prove a violation</label><div class="faq-content"><p>No. Political rhetoric does not establish a constitutional violation; legal analysis requires statutory text, precedent, and the factual record.</p></div></section>
+</section><section class="article-ending">Keep primary documents at hand when evaluating claims about separation-of-powers violations. The Constitution and the cited Supreme Court opinions are the best sources to verify whether a disputed action crosses a constitutional boundary.
+
+If you want to follow updates, check primary opinions and neutral summaries as new cases are decided and lower courts apply the established frameworks.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.archives.gov/founding-docs/constitution-transcript" target="_blank" rel="noopener">https://www.archives.gov/founding-docs/constitution-transcript</a></li><li><a href="https://www.britannica.com/topic/separation-of-powers" target="_blank" rel="noopener">https://www.britannica.com/topic/separation-of-powers</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/343/579" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/343/579</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/462/919" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/462/919</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/593/14-915" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/593/14-915</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/418/683" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/418/683</a></li><li><a href="https://scholarship.law.duke.edu/cgi/viewcontent.cgi?article=4064&context=dlj" target="_blank" rel="noopener">https://scholarship.law.duke.edu/cgi/viewcontent.cgi?article=4064&amp;context=dlj</a></li><li><a href="https://www.supremecourt.gov/opinions/19pdf/19-7_n6io.pdf" target="_blank" rel="noopener">https://www.supremecourt.gov/opinions/19pdf/19-7_n6io.pdf</a></li><li><a href="https://www.oyez.org/cases/2019/19-7" target="_blank" rel="noopener">https://www.oyez.org/cases/2019/19-7</a></li><li><a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">https://michaelcarbonara.com/constitutional-rights/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/strength-and-security/" target="_blank" rel="noopener">https://michaelcarbonara.com/strength-and-security/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
