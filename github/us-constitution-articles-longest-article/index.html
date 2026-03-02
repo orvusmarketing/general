@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What is the longest article in the U.S. Constitution?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand tokens derived from provided style */
+      --text-color: #ffffff;         /* from --mc-ink */
+      --accent: #ae2736;             /* from --mc-accent */
+      --accent-hover: #8a1f2b;       /* slightly darker accent for hover */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664;            /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px;                /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1bdqHVEdcqkBd_185oUtyVTP2PiN_277O" alt="What is the longest article in the U.S. Constitution? banner" />
+        </div>
+        <h1 class="title">What is the longest article in the U.S. Constitution?</h1>
+        <p class="subline">A clear, sourced explanation of which Article is longest and why.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/us-constitution-articles-longest-article/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">This article answers a straightforward question for readers who want a clear, sourced explanation of which Article of the U.S. Constitution is longest and why. It is written for voters, students, journalists, and civic readers who need factual, verifiable context about constitutional structure.
+
+The piece summarizes where to find authoritative transcriptions, explains common measurement methods, and offers sample citation phrasing so writers can report counts responsibly. It keeps the explanation neutral and source-forward so readers can verify details independently.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Article I is consistently identified by authoritative sources as the longest Article of the U.S. Constitution.</span></div><div class="highlight-card"><span class="highlight-text">Length can be measured by word count, section count, or page space, and figures vary by edition and formatting.</span></div><div class="highlight-card"><span class="highlight-text">When reporting a precise total, name the edition or transcription used for verification.</span></div>
+     </div>
+  <h2>Short answer: Which Article of the U.S. Constitution is longest?</h2>
+<h3>Quick summary</h3>
+<p>Short answer, Article I of the Constitution is identified by primary sources and major reference works as the longest Article; it contains the most sections and the largest body of substantive provisions, which is why it occupies the most written text in most transcriptions <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">National Archives</a>.</p>
+<h3>Bottom-line answer: us constitution articles</h3>
+<p>That conclusion is consistent across <a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">authoritative transcriptions and annotated resources</a>, though exact word counts differ by edition, transcription choices, and typesetting.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<p>The variation matters if you plan to report an exact number; when a precise count is given, name the <a href="https://constitution.congress.gov/constitution/article-1/" target="_blank" rel="noopener">edition or transcription</a> used so readers can verify the figure.</p>
+<h2>Why Article I contains more text than the other Articles</h2>
+<p>Article I is longer because it creates a bicameral Congress and spells out basic rules for both houses, from membership and elections to procedural duties and enforcement powers. For a clear primary transcription, consult the Legal Information Institute and similar legal resources when you need the text of Article I <a href="https://www.law.cornell.edu/constitution/articlei" target="_blank" rel="noopener">Article I. The Legislative Branch</a>.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay informed and get involved</h3><div class="cta-intro"><p>When checking claims about Article length, consult the primary transcriptions and an annotated edition to see whether counts include section headings or editorial notes.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the Campaign</a></div>
+<p>Beyond membership rules, Article I lists a wide set of enumerated powers that add textual bulk. Specific powers such as taxation, regulation of commerce, coining money, declaring war, and the authority to appropriate funds are named in the Article and expand the document because each power is described and often qualified <a href="https://constitution.congress.gov/browse/essay/articleI/" target="_blank" rel="noopener">Constitution Annotated essay on Article I</a>.</p>
+<p>Article I also contains procedural clauses that require additional language, for example the necessary and proper enabling text that permits Congress to implement its enumerated powers, and rules for impeachment, oath taking, and legislative procedure that together make the Article substantially longer than the provisions that define the executive or judicial branches.</p>
+<h2>How researchers and editors measure the 'length' of an Article</h2>
+<p>There are three common measurement methods: raw word count, counting sections and clauses, and measuring printed page space. Each method answers a different question about length, and they can lead to slightly different rankings depending on transcription choices. For authoritative transcriptions and counting conventions, the Constitution Annotated and legal text resources are commonly used <a href="https://constitution.congress.gov/browse/essay/articleI/" target="_blank" rel="noopener">Constitution Annotated essay on Article I</a>.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-fgys0n" class="faq-toggle" checked /><label for="faq-fgys0n" class="faq-summary" role="button" tabindex="0">What is the longest article in the U.S. Constitution?</label><div class="faq-content"><p>Article I is the longest Article in the U.S. Constitution, because it establishes the structure and powers of Congress and lists numerous specific legislative powers and procedures that together produce more text than any other Article.</p></div></section>
+<p>Word counts are useful when you need a single numeric value, but section and clause counts help readers understand structural complexity; printed page measurements reflect typography and notes, which vary across editions and publishers. For writers who need a precise citation, state whether the number is a <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">raw word count</a>, a section count, or a page-based measurement and name the edition you used.</p>
+<h2>What Article I covers: key provisions in plain language</h2>
+<p>Article I establishes the House of Representatives and the Senate and sets rules for who can serve, how elections are to be managed, and how terms are staggered. For the primary text and phrasing of these membership and election rules, see the National Archives transcription <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">National Archives</a>.</p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick reference list of primary Constitution texts to consult</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-k23ks6-0">
+                        <input id="tool-check-k23ks6-0" type="checkbox" />
+                        <span>National Archives transcription</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-97arnz-1">
+                        <input id="tool-check-97arnz-1" type="checkbox" />
+                        <span>Constitution Annotated essay</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-9hsmpz-2">
+                        <input id="tool-check-9hsmpz-2" type="checkbox" />
+                        <span>Legal Information Institute text</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use these sources to check exact wording and section numbering</p>
+            </div>
+<p>The Article also enumerates principal legislative powers in plain language; examples include the power to levy taxes, regulate interstate and foreign commerce, establish a monetary system, raise and support armies, and provide for the militia. These enumerated powers are a major reason Article I occupies so much space in the constitutional text <a href="https://constitution.congress.gov/browse/essay/articleI/" target="_blank" rel="noopener">Constitution Annotated essay on Article I</a>.</p>
+<p>Procedural and enforcement provisions such as impeachment rules, the oath of office for members, and the processes for legislation and approval add additional paragraphs that increase the Article's length, because these procedures require specific steps and exceptions to be described in the text <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">National Archives</a>.</p>
+<h2>How Articles II through VII compare in scope and size</h2>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1kBD0qDvThs3Jj7GbEOOKRzmryPw3AjS4=s1200" alt="Minimalist vector infographic of a simplified National Archives building facade and stacked archival boxes in Michael Carbonara colors highlighting us constitution articles" /></a>
+      <div class="side-text"><p>Articles II through VII cover the presidency, the federal judiciary, relations among the states, amendment procedures, the supremacy of federal law, and ratification. Each of these Articles is focused on a defined function, and in most transcriptions they occupy significantly less text than Article I <a href="https://www.britannica.com/topic/United-States-Constitution" target="_blank" rel="noopener">Encyclopaedia Britannica overview</a>.</p></div>
+    </div>
+<p>For example, Article II sets the framework for executive powers and the office of the President; Article III establishes the Supreme Court and federal judicial authority; Article V describes the amendment process. Because these Articles provide structural frameworks rather than enumerating many operational powers, they are shorter in most editions and transcriptions.</p>
+<h2>Which primary and annotated editions to use when reporting counts</h2>
+<p>When you report counts, name the edition or transcription. Reliable choices include the National Archives transcription for a faithful primary text and the Constitution Annotated for context and interpretive notes <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">National Archives</a>.</p>
+<p>The Legal Information Institute supplies a widely used plain-text transcription that many writers use for electronic word counts and section references <a href="https://www.law.cornell.edu/constitution/articlei" target="_blank" rel="noopener">Legal Information Institute</a>.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>The U.S. Senate educational resources are also useful when you need guidance about how the Constitution is treated in congressional practice and when distinguishing primary text from editorial additions <a href="https://www.senate.gov/about/powers-procedures/constitution.htm" target="_blank" rel="noopener">U.S. Senate resource on the Constitution</a>.</p>
+<h2>Common reporting errors and pitfalls to avoid</h2>
+<p>A frequent error is mixing editions when reporting a precise word count. Different transcriptions include or exclude headings, punctuation choices, and formatting marks; mixing them without noting the edition produces inconsistent figures. Use a single source and name it when you report numbers <a href="https://www.law.cornell.edu/constitution/articlei" target="_blank" rel="noopener">Legal Information Institute</a>.</p>
+<p>Another common pitfall is counting annotations, editorial headings, or sidebar commentary as if they were part of the constitutional text. Annotated editions are valuable for context, but the annotations are not part of the original text and should not be treated as contributing to a raw word count.</p>
+<h2>Practical examples: sample citations and a concise conclusion</h2>
+<p>Here are <a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">sample phrasing options</a> you can reuse. Use one that matches your measurement method and name the edition. For a raw word count, you might write, "According to the National Archives transcription of the Constitution, Article I contains [word count] words; this figure reflects the National Archives text and does not include annotations." When you use the Constitution Annotated, state that explicitly in the same way <a href="https://constitution.congress.gov/browse/essay/articleI/" target="_blank" rel="noopener">Constitution Annotated essay on Article I</a>.</p>
+<p>For section counts, use wording such as, "Using the Legal Information Institute transcription, Article I is divided into X sections and is longer than any other Article in the primary text." For page-based citations, name the edition and publisher so readers can find the same page layout.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<p>In short, Article I is the longest Article of the Constitution in most authoritative transcriptions and annotated resources. Counts vary with transcription and formatting choices, so name the source and method when you report a precise number to keep reporting accurate and verifiable for <a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">readers</a>.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-d6o84p" class="faq-toggle" /><label for="faq-d6o84p" class="faq-summary" role="button" tabindex="0">Why is Article I usually counted as the longest Article?</label><div class="faq-content"><p>Article I contains the most sections and detailed enumerated powers, plus procedural clauses for the legislature, which together produce more text than Articles II through VII.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-bhrswd" class="faq-toggle" /><label for="faq-bhrswd" class="faq-summary" role="button" tabindex="0">Do all editions report the same word count for Article I?</label><div class="faq-content"><p>No, word counts differ by transcription, formatting, and whether headings or annotations are included; always name the edition you used.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-grei3v" class="faq-toggle" /><label for="faq-grei3v" class="faq-summary" role="button" tabindex="0">Which sources are best when I need a precise count?</label><div class="faq-content"><p>Use primary transcriptions like the National Archives or Legal Information Institute, and an annotated resource such as the Constitution Annotated for context; name the specific edition in your citation.</p></div></section>
+</section><section class="article-ending">Article I is the longest Article in most authoritative transcriptions because it defines Congress, lists detailed legislative powers, and includes procedural provisions that require extended text. For any precise numeric claim, cite the transcription or edition used so readers can check the same source.
+
+If you need a single definitive count for publication, pick a primary transcription or annotated edition and include that citation in your report so readers can verify the number themselves.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">https://www.archives.gov/founding-docs/constitution</a></li><li><a href="https://www.law.cornell.edu/constitution/articlei" target="_blank" rel="noopener">https://www.law.cornell.edu/constitution/articlei</a></li><li><a href="https://constitution.congress.gov/browse/essay/articleI/" target="_blank" rel="noopener">https://constitution.congress.gov/browse/essay/articleI/</a></li><li><a href="https://constitution.congress.gov/constitution/article-1/" target="_blank" rel="noopener">https://constitution.congress.gov/constitution/article-1/</a></li><li><a href="https://www.britannica.com/topic/United-States-Constitution" target="_blank" rel="noopener">https://www.britannica.com/topic/United-States-Constitution</a></li><li><a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">https://michaelcarbonara.com/constitutional-rights/</a></li><li><a href="https://michaelcarbonara.com/news/" target="_blank" rel="noopener">https://michaelcarbonara.com/news/</a></li><li><a href="https://michaelcarbonara.com/about/" target="_blank" rel="noopener">https://michaelcarbonara.com/about/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.senate.gov/about/powers-procedures/constitution.htm" target="_blank" rel="noopener">https://www.senate.gov/about/powers-procedures/constitution.htm</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
