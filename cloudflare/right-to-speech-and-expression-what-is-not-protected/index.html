@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What speech is not protected?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736;     /* from --mc-accent */
+      --accent-hover: color-mix(in srgb, #ae2736 86%, #000 14%);
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1LjyS7YCkkPpMeWYg_CMpAJ5FkKvcgG4N" alt="Courthouse exterior representing right to speech and expression" />
+        </div>
+        <h1 class="title">What speech is not protected?</h1>
+        <p class="subline">Explains which categories of speech the First Amendment does not protect and why limits exist.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/right-to-speech-and-expression-what-is-not-protected/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">This article explains which categories of speech the First Amendment does not protect and why those limits exist. It summarizes the leading Supreme Court tests, illustrates how courts apply them, and provides a practical checklist readers can use to evaluate borderline cases.
+The focus is legal and explanatory. Readers who need case specific advice should consult primary opinions and a licensed attorney.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Five core categories often treated as unprotected are incitement, true threats, defamation, obscenity, and fighting words.</span></div><div class="highlight-card"><span class="highlight-text">Brandenburg, Miller, Sullivan, Chaplinsky, and Elonis are the leading Supreme Court tests readers should consult.</span></div><div class="highlight-card"><span class="highlight-text">Whether speech is unprotected depends on context, intent, the medium, and the speaker's status.</span></div>
+     </div>
+  <h2>What the right to speech and expression covers and why limits exist</h2><h3>Short definition and scope</h3><p>The right to speech and expression is a constitutional guarantee under the First Amendment that protects a wide range of public and private communication. Courts have long held that this right is robust, but they also recognize narrow categories of speech that can be regulated because they cause or are likely to cause concrete harms.</p><p>Limits exist because some forms of communication can lead to imminent physical harm, invade others rights, or create legally cognizable injuries that civil law can remedy. For accessible context on where courts draw the line, consult a neutral overview from a civil liberties organization for summaries of the doctrine and categories. See the Brandenburg test on LII <a href="https://www.law.cornell.edu/wex/brandenburg_test" target="_blank" rel="noopener">Brandenburg test - LII</a>.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">A brief three step checklist to evaluate speech categories</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-np91av-0">
+                        <input id="tool-check-np91av-0" type="checkbox" />
+                        <span>Category</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-lpzl8y-1">
+                        <input id="tool-check-lpzl8y-1" type="checkbox" />
+                        <span>Required elements</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-vnybv8-2">
+                        <input id="tool-check-vnybv8-2" type="checkbox" />
+                        <span>Context and status</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use as a starting guide</p>
+            </div><p>The outline below follows leading case law and neutral summaries so readers can locate primary opinions and follow the tests courts apply. See the constitutional rights hub <a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">constitutional rights</a>.</p><h3>Why the law recognizes some limits</h3><p>The law permits limits when speech is tied to a specific, demonstrable harm that legal rules are designed to prevent. These limits are not broad exceptions but targeted responses where the balance of rights and harms favors regulation or private remedy instead of absolute protection.</p><h3>How courts balance speech and public safety</h3><p>Judges evaluate the category of speech, the context in which it occurred, whether the speaker intended harm, and the status of the speaker. Those factors shape whether speech is treated as protected political or expressive conduct, or instead falls into a recognized unprotected category.</p><h2>How courts decide when speech is protected: the key tests</h2><h3>Overview of controlling standards</h3><p>Several Supreme Court tests guide modern analysis. The Brandenburg standard controls incitement law, the Miller test governs obscenity, Sullivan sets the actual malice rule for public figures in defamation cases, and Chaplinsky established the original fighting words concept. These tests are the starting point for most court inquiries and help explain why some speech receives less protection than other speech.</p><p>Criminal and civil contexts differ: criminal cases focus on statutes and often require proof of a culpable mental state, while civil defamation claims use tort standards to determine fault and damages.</p><h3>Differences between criminal and civil contexts</h3><p>In criminal prosecutions the government must prove elements of a statute and often a mens rea element. In civil suits plaintiffs must prove the elements of defamation or other torts and show harm, usually through damages or equitable remedies. The burden of proof and the legal elements vary across contexts.</p><h3>Role of the speaker's status and intent</h3><p>The speaker's status as a public or private figure changes the fault standard in defamation cases, and courts often examine intent or likelihood when determining criminal liability for speech that risks harm.</p><h2>When advocacy becomes unprotected incitement under Brandenburg</h2><h3>The imminence and likelihood requirement</h3><p>Speech is unprotected as incitement when it is directed to producing imminent lawless action and is likely to produce such action. That two part test requires both intent to incite and a real, near term likelihood that the speech will cause unlawful conduct, under the Supreme Court's Brandenburg standard <a href="https://www.law.cornell.edu/supremecourt/text/395/444" target="_blank" rel="noopener">Brandenburg v. Ohio opinion</a>.</p><p>Because both elements are required, mere advocacy of an idea or even advocacy of illegal conduct at a nonimminent time is usually protected political or rhetorical speech.</p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Learn more from primary sources and neutral summaries</h3><div class="cta-intro"><p>The primary opinion provides the controlling test courts use for incitement inquiries and is the best place to start when evaluating claims of unlawful advocacy.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Read official opinions and summaries</a></div><h3>How Brandenburg is applied by courts</h3><p>Court applications focus on context, timing, and the speaker's apparent purpose. Judges ask whether the words were targeted to immediate action and whether the circumstances made unlawful action likely. Courts treat the determination as highly fact specific and often review the parties' records and surrounding conduct closely.</p><h3>Examples of conduct that has been found to be incitement</h3><p>Illustrative examples in decisions typically involve speech that directed a crowd to commit violent acts in the immediate setting or specific instructions timed to produce unrest. Hypothetical or abstract calls for illegal behavior have repeatedly been held protected where they lack immediacy or clear likelihood of causing lawless action.</p><h2>True threats and threatening speech after Elonis</h2><h3>What courts mean by a true threat</h3><p>True threats are statements where a reasonable person would interpret the communication as a serious expression of intent to harm another person. These communications can be prosecuted or otherwise regulated because they place individuals in fear and can produce real danger.</p><h3>The Elonis decision and mens rea</h3><p>The Supreme Court in Elonis emphasized that criminal liability for threatening speech turns on the speaker's mental state in many contexts, not solely on whether a reasonable listener would have felt threatened <a href="https://www.law.cornell.edu/supremecourt/text/13-983" target="_blank" rel="noopener">Elonis opinion</a>. That decision narrowed some lines of criminal liability by highlighting mens rea considerations.</p><h3>How courts treat online threats</h3><p>Online posts raise special questions about intent, audience, and immediacy. Courts examining digital threats often scrutinize the speaker's purpose and surrounding facts to determine whether a communication qualifies as a true threat under established tests.</p><h2>Defamation: how libel and slander are treated differently for public and private figures</h2><h3>Elements of defamation and remedies</h3><p>A defamation claim requires a false statement of fact, publication to a third party, fault by the speaker, and damages or other legally cognizable harm. Civil remedies for defamation typically include damages and, in some cases, injunctive relief or corrections.</p><section class="faq-accordion"><input type="checkbox" id="faq-7b7led" class="faq-toggle" checked /><label for="faq-7b7led" class="faq-summary" role="button" tabindex="0">What kinds of speech does the First Amendment not protect?</label><div class="faq-content"><p>Courts commonly identify five categories that receive little or no First Amendment protection: incitement to imminent lawless action, true threats, defamation, obscenity, and fighting words, subject to fact specific tests and judicial interpretation.</p></div></section><p>When the plaintiff is a public official or public figure, the Supreme Court requires proof of actual malice under New York Times Co. v. Sullivan, meaning the statement was made with knowledge of falsity or with reckless disregard for the truth <a href="https://www.law.cornell.edu/supremecourt/text/376/254" target="_blank" rel="noopener">New York Times Co. v. Sullivan opinion</a>. Private-figure plaintiffs face a lower fault standard set by state law, and states vary in how they allocate fault and damages.</p><h3>Actual malice standard for public figures</h3><p>The actual malice requirement raises the bar for public-figure plaintiffs because it demands clear proof about the speaker's knowledge or reckless conduct. That standard reflects a balance between protecting reputation and preserving robust public debate about government and public affairs.</p><h3>State law standards for private-figure claims</h3><p>Private-figure plaintiffs generally need only show negligence or another lower fault standard under state tort law. State courts handle those inquiries, and remedies can be awarded for harm to reputation when the elements are met.</p><h2>Obscenity and the Miller test</h2><h3>The three Miller prongs</h3><p>Obscenity is excluded from First Amendment protection when material satisfies the Miller three part test: (1) whether the average person, applying contemporary community standards, would find that the work appeals to prurient interest; (2) whether the work depicts or describes sexual conduct in a patently offensive way; and (3) whether the work lacks serious literary, artistic, political, or scientific value. These criteria come from Miller v. California and remain the controlling framework for obscenity inquiries <a href="https://www.law.cornell.edu/supremecourt/text/413/15" target="_blank" rel="noopener">Miller v. California opinion</a>.</p><h3>Community standards and serious value</h3><p>Because the first Miller prong uses local community standards, outcomes can vary by place and audience. The third prong requires courts to consider whether the material has any legitimate social value, which can keep many works from being labeled obscene even if they are explicit.</p><h3>How obscenity differs from protected sexual expression</h3><p>Not all sexual expression is obscene; material with redeeming literary, artistic, political, or scientific value can remain protected even if it is controversial or offensive to some readers. The Miller test is therefore applied carefully and with attention to context.</p><h2>Fighting words and the Chaplinsky principle</h2><h3>Chaplinsky and the original fighting words doctrine</h3><p>Chaplinsky identified a class of face to face abusive words that by their utterance inflict injury or tend to breach the peace, a category treated as outside First Amendment protection in that original decision <a href="https://www.law.cornell.edu/supremecourt/text/315/568" target="_blank" rel="noopener">Chaplinsky opinion</a>. The idea was that some personally abusive words provoke immediate violence and can be limited to preserve public order.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><h3>How modern courts have narrowed the doctrine</h3><p>Over time, courts have narrowed the fighting words doctrine, applying it in fewer cases and often requiring context showing a real risk of breach of the peace. Many kinds of offensive speech, including insults or harsh rhetoric, remain protected unless they meet the stricter factual tests courts now require.</p><h3>When speech near 'fighting words' may still be protected</h3><p>Speech that is abusive or insulting does not automatically lose protection. Courts look to whether the words were likely to produce immediate violence in the specific setting, and whether the exchange was truly face to face and provocative in the narrow sense Chaplinsky contemplated.</p><h2>Applying these categories online and on social platforms</h2><h3>Why medium and context matter</h3><p>The online medium can affect imminence, reach, and how a message is understood. A digital statement may reach far more people and be archived indefinitely, but those differences do not change the core legal tests; they change the facts judges assess when applying the tests.</p><h3>Challenges in policing online threats and incitement</h3><p>Courts have noted that online posts can complicate the imminence analysis because calls to action might lack the temporal or geographic immediacy that Brandenburg requires, and because mens rea can be harder to prove. Elonis demonstrated the Court's attention to mental state in online threat cases, which influences how prosecutors and judges approach digital communications <a href="https://www.law.cornell.edu/supremecourt/text/13-983" target="_blank" rel="noopener">Elonis opinion</a>. See recent discussion of incitement regulation in the internet era at NYU <a href="https://proceedings.nyumootcourt.org/2022/12/the-inadequacy-of-brandenburgs-imminence-incitement-regulation-in-the-internet-era/" target="_blank" rel="noopener">Incitement Regulation in the Internet Era</a>.</p><h3>How courts have treated online speech in recent rulings</h3><p>Decisions emphasize fact specific inquiry and the need to examine context, audience, and the speaker's intent. Platform moderation and private terms of service are separate from constitutional rules and can limit or remove speech even when the Constitution would not permit government restriction.</p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1pmmiemKz6eiLmut65mhjeHvL0aRnAz5q=s1200" alt="Minimal 2D vector infographic of a library table with open law books laptop scales of justice and speech icon in Michael Carbonara style representing right to speech and expression" /></a>
+      <div class="side-text"><p>Decisions emphasize fact specific inquiry and the need to examine context, audience, and the speaker's intent. Platform moderation and private terms of service are separate from constitutional rules and can limit or remove speech even when the Constitution would not permit government restriction.</p></div>
+    </div><h2>A practical framework to decide whether speech might be unprotected</h2><h3>Step 1: Identify the category</h3><p>Start by asking which doctrinal bucket the communication might fit into: incitement, true threats, defamation, obscenity, or fighting words. Each category has distinct elements drawn from leading cases.</p><h3>Step 2: Test for required elements</h3><p>Apply the controlling test for that category. For incitement use the Brandenburg imminence and likelihood test <a href="https://www.law.cornell.edu/supremecourt/text/395/444" target="_blank" rel="noopener">Brandenburg v. Ohio opinion</a>. For obscenity use Miller. For defamation note whether the plaintiff is a public figure and whether Sullivan requires actual malice. For threats and fighting words examine intent and immediacy as the cases require.</p><h3>Step 3: Consider speaker status and medium</h3><p>Assess whether the speaker is a public figure, whether the speech was online or face to face, and whether the context suggests real, near term danger. These contextual factors often determine whether a technically problematic statement becomes legally actionable.</p><h2>Common mistakes and legal pitfalls to avoid</h2><h3>Mistaking unpopular speech for unprotected speech</h3><p>One common error is treating offensive or hateful speech as categorically unprotected. Much offensive speech remains protected unless it meets the specific elements of a recognized exception identified by the courts.</p><h3>Relying on platform enforcement as a legal determination</h3><p>Platform takedowns do not equal illegality. Companies enforce their own terms. Those private actions operate independently of constitutional limits on government and do not determine whether speech is legally protected.</p><h3>Assuming criminal liability without intent evidence</h3><p>Criminal consequences usually require proof of mens rea or other statutory elements. Before assuming a statement will lead to prosecution, consider whether the government can show the required intent or likelihood elements under the controlling cases.</p><h2>Practical, hypothetical scenarios readers can use to test protections</h2><h3>Hypothetical: political rally speech</h3><p>Hypothetical: A speaker at a rally uses heated rhetoric urging protest but offers no plan or timing for illegal action. Under the Brandenburg framework that speech is likely protected because there is no clear intent to prompt imminent lawless action.</p><h3>Hypothetical: an online post that threatens another person</h3><p>Hypothetical: An online poster writes a message that could be read as a serious threat. Readers should apply the true threat standard and consider whether the post shows intent to threaten, whether a reasonable person would feel threatened, and whether mens rea evidence exists to support criminal liability.</p><h3>Hypothetical: graphic sexual material distributed locally</h3><p>Hypothetical: Graphic sexual content distributed in a way that a jury could find lacks serious literary or artistic value may meet the Miller prongs and be treated as obscene, but the community standards and the value prong make outcomes fact specific.</p><h2>Consequences and remedies: criminal charges, civil suits, and platform actions</h2><h3>Criminal prosecution standards</h3><p>When speech crosses into criminal territory, prosecutors pursue charges under statutes that typically require proof of intent or other elements beyond the words themselves. For incitement and threats, courts examine the relevant mens rea and imminence components before allowing criminal punishment.</p><h3>Civil remedies for defamation</h3><p>Defamation actions are civil claims brought by harmed parties who seek damages or corrections. The standards differ for public and private figures, which affects the plaintiff's burden and the nature of the proof required in court <a href="https://www.law.cornell.edu/supremecourt/text/376/254" target="_blank" rel="noopener">New York Times Co. v. Sullivan opinion</a>.</p><h3>Role of platforms and private moderation</h3><p>Platforms enforce their rules and may remove content for policy reasons even if the content is legally protected from government regulation. That distinction matters for users considering whether to challenge removals through policy processes or through legal channels.</p><h2>Where to look for reliable primary sources and further reading</h2><h3>Official opinions and law libraries</h3><p>Primary Supreme Court opinions are the authoritative sources for these legal tests. Start with the Court's opinions in Brandenburg, Miller, Sullivan, Chaplinsky, and Elonis to read the holdings and the legal tests courts use <a href="https://www.law.cornell.edu/supremecourt/text/395/444" target="_blank" rel="noopener">Brandenburg v. Ohio opinion</a>. You can also read the Brandenburg opinion on Justia <a href="https://supreme.justia.com/cases/federal/us/395/444/" target="_blank" rel="noopener">Brandenburg v. Ohio - Justia</a>.</p><h3>Neutral overviews from civil liberties groups</h3><p>Neutral summaries from civil liberties organizations provide accessible explanations of doctrines and typical applications. Those overviews help interpret the holdings and place them in modern context without substituting for primary law <a href="https://www.aclu.org/other/what-does-first-amendment-protect" target="_blank" rel="noopener">ACLU overview of First Amendment protections</a>. For discussion of social media and moderation, see our freedom-of-expression-and-social-media analysis <a href="https://michaelcarbonara.com/freedom-of-expression-and-social-media/" target="_blank" rel="noopener">freedom of expression and social media</a>.</p><h3>How to read a case opinion</h3>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>When reading an opinion, focus on the holding and the test the Court announces, then look at the facts the Court relied on. Distinguish holdings from dicta and use that analysis to compare your facts to the controlling precedent.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1Dhmy3slbaRFAfud4uZupPWPGp3HuUeGM=s1200" alt="Minimalist 2D vector infographic with three icons for speech law and online media on navy background representing right to speech and expression" /></a>
+    </div><h2>If you think you or someone else is at legal risk</h2><h3>When to seek a lawyer</h3><p>Consult a licensed attorney for case specific questions and before taking any legal action. This article is explanatory and not a substitute for legal advice.</p><h3>What information to collect before consulting counsel</h3><p>Document dates, full texts or screenshots of the communication, context details, and any witnesses or records of related conduct. Clear documentation helps counsel evaluate whether speech may meet a recognized exception to protection.</p><h3>Alternatives to litigation</h3><p>Consider dispute resolution, public corrections, or platform appeal processes as alternatives to lawsuits. Those nonlegal responses can resolve some conflicts without court involvement.</p><h2>Key takeaways</h2><h3>Summary of categories not protected</h3><p>Five core categories courts treat as unprotected or subject to lesser protection are incitement, true threats, defamation, obscenity, and fighting words. Each category has a distinct test developed in Supreme Court opinions and refined over time.</p><h3>Final cautions</h3><p>Whether speech falls outside First Amendment protection depends heavily on context, the speaker's intent or mental state, the medium used, and the speaker's status. Fact specific analysis and judicial interpretation determine outcomes in most disputes.</p><h3>Next steps for readers</h3><p>To learn more, read the primary opinions and neutral overviews cited above, and consult a lawyer for a case specific determination if you believe a communication may be unlawful or expose you to legal risk. See the First Amendment explained <a href="https://michaelcarbonara.com/first-amendment-explained-five-freedoms/" target="_blank" rel="noopener">First Amendment explained</a>.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-onuavq" class="faq-toggle" /><label for="faq-onuavq" class="faq-summary" role="button" tabindex="0">When is speech considered incitement?</label><div class="faq-content"><p>Speech is considered incitement when it is intended to and likely to produce imminent lawless action; both elements are required under the Brandenburg test.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-397qug" class="faq-toggle" /><label for="faq-397qug" class="faq-summary" role="button" tabindex="0">Is a threat on social media always a crime?</label><div class="faq-content"><p>No. Courts look at the speaker's intent and the context; online messages may be prosecuted as true threats if they show a serious intent to harm and the required mental state can be proven.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-zcd6wm" class="faq-toggle" /><label for="faq-zcd6wm" class="faq-summary" role="button" tabindex="0">Can a private company remove content that is legally protected?</label><div class="faq-content"><p>Yes. Platforms have their own terms of service and may remove content even when the Constitution would not permit government restriction.</p></div></section>
+</section><section class="article-ending">Determining whether speech is unprotected requires careful, fact specific analysis. Primary court opinions and neutral summaries are the best sources for verification, and legal counsel can advise on individual situations.
+This article aims to give readers clear guidance and references to follow up with primary law and reputable summaries.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.law.cornell.edu/wex/brandenburg_test" target="_blank" rel="noopener">https://www.law.cornell.edu/wex/brandenburg_test</a></li><li><a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">https://michaelcarbonara.com/constitutional-rights/</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/395/444" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/395/444</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/13-983" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/13-983</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/376/254" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/376/254</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/413/15" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/413/15</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/315/568" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/315/568</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://proceedings.nyumootcourt.org/2022/12/the-inadequacy-of-brandenburgs-imminence-incitement-regulation-in-the-internet-era/" target="_blank" rel="noopener">https://proceedings.nyumootcourt.org/2022/12/the-inadequacy-of-brandenburgs-imminence-incitement-regulation-in-the-internet-era/</a></li><li><a href="https://supreme.justia.com/cases/federal/us/395/444/" target="_blank" rel="noopener">https://supreme.justia.com/cases/federal/us/395/444/</a></li><li><a href="https://www.aclu.org/other/what-does-first-amendment-protect" target="_blank" rel="noopener">https://www.aclu.org/other/what-does-first-amendment-protect</a></li><li><a href="https://michaelcarbonara.com/freedom-of-expression-and-social-media/" target="_blank" rel="noopener">https://michaelcarbonara.com/freedom-of-expression-and-social-media/</a></li><li><a href="https://michaelcarbonara.com/first-amendment-explained-five-freedoms/" target="_blank" rel="noopener">https://michaelcarbonara.com/first-amendment-explained-five-freedoms/</a></li>
+    </ul>
+  </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
