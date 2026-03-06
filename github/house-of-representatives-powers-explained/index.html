@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Does the House have more power than the President?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-mapped tokens from provided style */
+      --text-color: #ffffff;            /* from --mc-ink */
+      --accent: #ae2736;                /* from --mc-accent */
+      --accent-hover: #8f232d;         /* derived hover (slightly darker) */
+      --line: rgba(255,255,255,.16);    /* from --mc-line */
+      --surface: #0b2664;               /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* from --mc-panel-2 */
+      --radius: 0px;                    /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.88); margin-bottom: 1.6rem; }
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:1rem; margin:1.6rem 0; }
+    .article-body .highlight-card{ background: linear-gradient(135deg, rgba(255,255,255,.03), rgba(255,255,255,.02)); padding:0.9rem 1rem; border-left:4px solid var(--accent); border:1px solid rgba(255,255,255,.10); }
+    .article-body .side-by-side{ display:flex; gap:16px; align-items:flex-start; margin:1.6rem 0; flex-wrap:wrap; }
+    .article-body .side-by-side img{ max-width:320px; box-shadow:0 12px 34px rgba(0,0,0,.36); }
+    .article-body .side-text{ flex:1 1 220px; }
+    .article-body .cta-section{ border-left:4px solid var(--accent); }
+    .article-body .cta-headline{ display:block; font-weight:900; color: var(--text-color); margin-top:1.6rem; }
+    .article-body .tool-block{ border-left:4px solid var(--accent); }
+    .article-body .faq-accordion{ border-left:4px solid var(--accent); }
+    .article-body .article-ending{ margin-top:1.6rem; padding-top:0.8rem; border-top:1px solid var(--line); font-style:italic; }
+
+    .cta-button:focus{ outline: 3px solid rgba(174,39,54,.40); }
+    .cta-button:hover{ background: var(--accent-hover); }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/194MjeyMhV2iPQvmN_1kYDiiQ8zDGu5j5" alt="Does the House have more power than the President?" />
+        </div>
+        <h1 class="title">Does the House have more power than the President?</h1>
+        <p class="subline">A sourced explainer on how constitutional text and institutional practice divide authority between Congress and the President.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/house-of-representatives-powers-explained/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">The U.S. Constitution divides power between Congress and the President, but practice determines how those divisions operate day to day. This article explains where the House of Representatives holds specific authorities and where presidential prerogatives remain distinct.
+
+The aim is to provide voters and civic readers with a clear, sourced explanation of institutional roles. Readers will find references to the Constitution, CRS analysis, and CBO materials to verify the procedural points discussed.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">The Constitution assigns legislative power to Congress and executive power to the President, creating distinct but overlapping authorities.</span></div><div class="highlight-card"><span class="highlight-text">The House uniquely originates revenue bills and can initiate impeachment, but outcomes depend on Senate and presidential action.</span></div><div class="highlight-card"><span class="highlight-text">Budget control, oversight, and litigation are the practical arenas where the House can check the President.</span></div>
+     </div>
+  <h2>What the Constitution and practice say about separated powers</h2><p><a href="https://michaelcarbonara.com/us-house-of-representatives-powers/" target="_blank" rel="noopener">The house of representatives powers</a> begin with the Constitution, which assigns legislative authority to Congress and executive authority to the President. The text frames a separation of powers that creates distinct roles for each branch while leaving many specifics to statutes and institutional practice, a point that is clear from the founding document itself <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">U.S. Constitution</a>.</p><p>The constitutional clauses in Articles I and II set a baseline. Article I vests legislative power in Congress and establishes the legislative process. Article II vests executive power in the President and outlines executive functions. Those textual allocations matter because they define who has formal authority to write laws, raise revenue, and administer federal programs, and they are the primary anchor for later statutory and judicial interpretation <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">U.S. Constitution</a>.</p><p>Beyond text, practice fills in many details. Statutes define how Congress delegates authority, how agencies operate, and how the President carries out duties. Courts interpret constitutional boundaries when conflicts arise, and institutional conventions shape day-to-day power sharing. That mix of text, statute, precedent, and convention determines how the formal separation of powers functions in ordinary governance <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">U.S. Constitution</a>.</p><p>Congressional tools matter for how those powers operate. When Congress chooses to act through legislation, appropriations, or oversight, it can change the practical balance between legislative and executive branches. Conversely, when Congress declines to act, executive discretion can expand. This interplay means the constitutional assignment of roles is necessary but not always sufficient to predict outcomes in modern governance <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">U.S. Constitution</a>.</p><h2>How the House differs from the Senate and the President in formal authorities</h2><p>The House of Representatives has several authorities that distinguish it from both the Senate and the President. Constitutionally, the House must originate revenue-raising bills and holds the sole power to impeach federal officers, which gives it institutional roles that the Senate and the President do not share <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">U.S. Constitution</a>.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>The Senate complements the House on some matters. The Senate conducts trials after impeachments and has advice and consent responsibilities for treaties and many senior appointments. Those differences mean that power over a given outcome often requires cooperation or separate action by both chambers of Congress, rather than unilateral action by the House alone <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">U.S. Constitution</a>.</p><p>At the same time, the President has exclusive constitutional responsibilities that the House does not share. The President serves as commander-in-chief of the armed forces and directs foreign policy and executive administration. Those roles give the President certain operational prerogatives that Congress can check but does not directly exercise as an executive function <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">U.S. Constitution</a>.</p><p>The practical effect is that the House has unique levers, especially over spending and impeachment initiation, while the President retains authority over administration and foreign affairs. Each branch relies on different constitutional text and institutional tools to advance or protect its priorities, and many disputes turn on how those tools intersect in practice <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">U.S. Constitution</a>.</p><div class="cta-section"><h3 class="cta-headline">Stay informed and review primary sources</h3><div class="cta-intro"><p>Read the primary documents and candidate materials listed later to see how constitutional language and institutional practice inform contemporary debates.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Learn how to follow developments</a></div><p>For example, the House’s exclusive role in originating revenue measures gives it a procedural priority in budget work, but Senate and presidential involvement remain essential to final outcomes. That distribution means the House can shape fiscal proposals early in the process but cannot complete spending without broader congressional and executive agreement <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">U.S. Constitution</a>.</p><h2>Budget, appropriations, and the House’s leverage over the purse</h2><p>The Constitution requires that revenue-raising bills originate in the House, a rule that historically gives the House an early and formal role in setting tax policy and related revenue decisions. This textual point provides the initial basis for the House’s special connection to federal finances <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">U.S. Constitution</a>. See the Origination Clause analysis <a href="https://www.congress.gov/crs-product/R46558" target="_blank" rel="noopener">on Congress.gov</a> for detail.</p>
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1GzOGAWHtrXebj78LjL3Rbp0ru_dTyz_V=s1200" alt="Minimalist 2D vector infographic on navy background showing white gavel document coins magnifying glass icons representing house of representatives powers with red accents" /></a>
+      <div class="side-text"><p>Modern budget practice builds on that textual foundation. Congress follows an annual budget and appropriations process in which the House plays a central part, particularly in initiating revenue measures and beginning appropriations work. The Congressional Budget Office and other institutional processes support Congress by estimating costs and providing fiscal analysis that inform decisions across chambers <a href="https://www.cbo.gov/publication/53504" target="_blank" rel="noopener">CBO budget primer</a>.</p></div>
+    </div><p>Practically, the House’s role in appropriations gives it leverage because funding is how policy is implemented. When the House controls appropriations decisions or ties funding to particular policy terms, it can affect how and whether the executive branch can carry out programs. The ability to set conditions on spending is a primary way Congress checks executive priorities <a href="https://www.cbo.gov/publication/53504" target="_blank" rel="noopener">CBO budget primer</a>.</p><p>The appropriations process also has procedural stages where the House can influence outcomes. Appropriations bills typically begin in the House Appropriations Committee and then move through committee and floor consideration before the Senate acts. If the chambers do not agree by a deadline, Congress can pass a continuing resolution to extend funding at existing levels, a tool that reduces immediate change but still reflects congressional control over funding levels <a href="https://www.cbo.gov/publication/53504" target="_blank" rel="noopener">CBO budget primer</a>.</p><p>Riders and policy conditions attached to spending bills are another practical lever. House drafters can attach provisions to appropriations that direct agencies or limit how funds are used, and those riders can shape executive action when they survive the bicameral and executive review process. The impact of riders depends on negotiation with the Senate and the President, and on whether courts are asked to interpret ambiguous language <a href="https://www.cbo.gov/publication/53504" target="_blank" rel="noopener">CBO budget primer</a>.</p><p>However, originating revenue bills and setting appropriations do not mean the House can unilaterally impose all fiscal policy. The Senate must pass appropriations or a compromise along with the House, and the President may sign or veto bills. When disagreement persists, Congress can override a veto with two-thirds majorities in both chambers, a high threshold that constrains unilateral legislative outcomes <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">U.S. Constitution</a>.</p><p>Timing and political will determine how much leverage the House can exert. If the House uses its appropriations authority aggressively, it can force choices on funding and oversight. If the House lacks the votes to carry its provisions through the Senate or to override a veto, its leverage is limited in practice. Institutional tools are most effective when coupled with majority support across relevant bodies or when used to shape public debate and judicial review <a href="https://www.cbo.gov/publication/53504" target="_blank" rel="noopener">CBO budget primer</a>.</p><h2>Impeachment, oversight, and political checks</h2><p>The House holds the sole constitutional power to impeach federal officers. Impeachment is a formal accusation, not a removal, and the constitutional structure makes clear that the House and Senate share a two-step process: the House brings charges and the Senate tries the case and may remove an official on conviction <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">U.S. Constitution</a>.</p><p>Historically, the House has used impeachment both as a legal mechanism and as a political tool to hold officials accountable. The House historian’s overview of impeachment shows that the process combines constitutional text with political judgment, and that removal requires the separate action of the Senate, which helps explain why impeachment is as much a political decision as a legal one <a href="https://history.house.gov/Institution/Impeachment/" target="_blank" rel="noopener">House historian overview of impeachment</a>.</p><section class="faq-accordion"><input type="checkbox" id="faq-dln4js" class="faq-toggle" checked /><label for="faq-dln4js" class="faq-summary" role="button" tabindex="0">Does the House have more power than the President?</label><div class="faq-content"><p>The House has specific constitutional powers that can check the President, such as originating revenue bills and initiating impeachment, but whether it has more power in practice depends on political alignment, Senate action, presidential response, and judicial review.</p></div></section><p>Beyond impeachment, the House uses oversight tools such as hearings, subpoenas, investigations, and committee review to check executive action. Those tools can uncover information, create public pressure, and, in some cases, lead to legislative or legal remedies. Oversight can be sustained even without pursuing impeachment, and it frequently shapes executive behavior through public scrutiny and formal demands for records <a href="https://www.gao.gov/products/gao-15-368" target="_blank" rel="noopener">GAO overview of oversight tools</a>.</p><p>Practical constraints affect how far oversight can go. Litigation can delay or block subpoenas, and partisanship can limit cooperation in obtaining documents or testimony. The ability of House committees to enforce subpoenas depends on judicial interpretation and on whether the majority in the House is willing to press matters through the courts or negotiate with the executive branch <a href="https://www.gao.gov/products/gao-15-368" target="_blank" rel="noopener">GAO overview of oversight tools</a>.</p><p>In short, impeachment is an important constitutional power, but it is neither instantaneous nor sufficient by itself to remove an official. Oversight offers a range of other tools that the House can deploy to check the executive, and the effectiveness of those tools depends on legal remedies, political alignment, and institutional persistence <a href="https://history.house.gov/Institution/Impeachment/" target="_blank" rel="noopener">House historian overview of impeachment</a>.</p><h2>Commander-in-chief, foreign affairs, and limits on unilateral executive action</h2><p>The Constitution names the President commander-in-chief and gives the executive certain responsibilities in foreign affairs and administration. Those discrete authorities give the President operational control of the armed forces and a central role in conducting diplomacy, functions that the House does not exercise directly <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">U.S. Constitution</a>.</p><p>Congress retains important war-related powers, including the authority to declare war and to fund or withhold funds for military operations. While Presidents may deploy forces in certain circumstances, Congress’s control over appropriations and its constitutional war-declaring power remain tools to influence or limit prolonged military engagement <a href="https://crsreports.congress.gov/product/pdf/IF/IF11111" target="_blank" rel="noopener">CRS war powers primer</a>.</p><p>Courts have long placed limits on unilateral executive action as well. The Supreme Court’s decision in the Youngstown case remains a foundational precedent used to evaluate claims of sweeping executive authority. Youngstown provides a framework for assessing when executive actions exceed statutory or constitutional bounds and therefore may be subject to judicial review <a href="https://supreme.justia.com/cases/federal/us/343/579/" target="_blank" rel="noopener">Youngstown decision on Justia</a>.</p><p>In practice, presidential prerogatives in foreign affairs and the use of military force interact with congressional choices about funding and oversight. If Congress exercises its appropriations authority or passes statutes limiting particular actions, it can constrain executive options. That constraint is often realized through a mix of statutory text, funding decisions, and, where necessary, litigation that clarifies legal boundaries <a href="https://crsreports.congress.gov/product/pdf/IF/IF11111" target="_blank" rel="noopener">CRS war powers primer</a>. For background on the Youngstown opinion text see the public report <a href="https://www.govinfo.gov/content/pkg/USREPORTS-343/pdf/USREPORTS-343-579.pdf" target="_blank" rel="noopener">here</a>.</p><h2>How context, partisanship, and litigation shape who has the upper hand</h2><p>Formal powers are an important baseline, but who prevails in a dispute often depends on partisan alignment between the House, the Senate, and the President. When a single party controls both chambers and the presidency, the President can generally implement priorities more easily. When control is divided, Congress gains leverage through legislation, appropriations, and oversight <a href="https://crsreports.congress.gov/product/pdf/IF/IF11111" target="_blank" rel="noopener">CRS war powers primer</a>.</p><p>Litigation and judicial interpretation also influence outcomes. Courts may be asked to resolve disputes about statutory authority or constitutional boundaries, and precedents such as Youngstown guide those decisions. Legal challenges can delay executive actions or clarify limits on presidential authority, making litigation a consequential arena for separation of powers conflicts <a href="https://www.oyez.org/cases/1951/20" target="_blank" rel="noopener">Youngstown decision on Oyez</a>.</p><p>Institutional support and analysis matter as well. Offices like the Congressional Research Service and the Congressional Budget Office provide lawmakers with nonpartisan analysis that shapes legislative choices and public debate. Those reports can influence how committees draft legislation, how appropriators set spending levels, and how leaders prioritize oversight work <a href="https://crsreports.congress.gov/product/pdf/IF/IF11111" target="_blank" rel="noopener">CRS war powers primer</a>.</p><p>Political will is the final ingredient. Even when the House has tools such as appropriations control or impeachment authority, it must choose to use them and often must coordinate with the Senate or accept judicial review. That reality means practical leverage often depends on strategic choices, institutional persistence, and the willingness to bear political consequences for aggressive action <a href="https://www.gao.gov/products/gao-15-368" target="_blank" rel="noopener">GAO overview of oversight tools</a>.</p><p>For readers tracking candidates and local campaigns, context matters. Michael Carbonara is a South Florida candidate whose campaign materials frame his priorities around entrepreneurship and accountability, and readers seeking candidate statements can consult <a href="https://michaelcarbonara.com/michael-carbonara-fl-25-verify-claims/" target="_blank" rel="noopener">campaign pages</a> for direct claims and platforms. The campaign site and public filings are separate sources of candidate statements and should be compared with institutional documents for full context.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><p>Recent sessions show how these dynamics play out. When Congress is divided, appropriations fights and continuing resolutions become frequent, and when it is unified, legislation can more readily advance the President’s agenda. Observers should watch both institutional action and judicial rulings to assess who has the upper hand in any given dispute <a href="https://crsreports.congress.gov/product/pdf/IF/IF11111" target="_blank" rel="noopener">CRS war powers primer</a>.</p><p>Analysts and reporters often look to CBO and CRS products for impartial costs and legal interpretation because those offices provide technical support rather than partisan guidance. Their work does not decide policy, but it does shape legislative choices by clarifying consequences of different paths <a href="https://www.cbo.gov/publication/53504" target="_blank" rel="noopener">CBO budget primer</a>.</p><h2>Common misconceptions and practical pitfalls when assessing power</h2>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>A common misunderstanding is to treat impeachment as an automatic removal tool. The Constitution gives the House the power to impeach, but removal requires a Senate trial and conviction. That two-step design means impeachment is a charge and not, by itself, a complete remedy for alleged misconduct <a href="https://history.house.gov/Institution/Impeachment/" target="_blank" rel="noopener">House historian overview of impeachment</a>.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19YwRPKTTWvAUExfJkzjXSidOTA_yoi5w=s1200" alt="Minimalist vector infographic of three civic icons representing legislation appropriations and judicial review illustrating house of representatives powers in Michael Carbonara color palette" /></a>
+    </div><p>Another pitfall is assuming that the House’s role in originating revenue bills means it can set spending or tax policy alone. The appropriations process requires bicameral agreement and the President’s signature or a congressional override, so originating a bill is a first procedural step, not the last word on fiscal policy <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">U.S. Constitution</a>.</p><p>Finally, it is easy to conflate legal authority with immediate effect. Even when statutes or the Constitution give a branch a power, political realities, court challenges, and timing can delay or alter the practical result. Effective checks often require sustained action across branches, not a single procedural move <a href="https://www.cbo.gov/publication/53504" target="_blank" rel="noopener">CBO budget primer</a>.</p><h2>Key takeaways and where to watch next</h2><p>The House has specific constitutional powers that can check the President, notably the ability to originate revenue bills and to initiate impeachment. Those powers are meaningful when the House uses them in coordination with the Senate and through statutory and appropriations processes <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">U.S. Constitution</a>.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">guide to primary institutional sources</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-90fbh2-0">
+                        <input id="tool-check-90fbh2-0" type="checkbox" />
+                        <span>U.S. Constitution</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-h0habg-1">
+                        <input id="tool-check-h0habg-1" type="checkbox" />
+                        <span>CRS reports</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-82j8he-2">
+                        <input id="tool-check-82j8he-2" type="checkbox" />
+                        <span>CBO budget primer</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">use these sources for verification</p>
+            </div><p>Presidential authority in foreign affairs and as commander-in-chief remains significant, and courts have established limits on unilateral executive action, with Youngstown serving as a central precedent. Watch congressional appropriations, oversight actions, and relevant litigation to see how these checks play out in practice <a href="https://www.oyez.org/cases/1951/20" target="_blank" rel="noopener">Youngstown decision on Oyez</a>.</p><p>For verification, consult the primary texts and institutional reports cited throughout this article, including the Constitution, CRS summaries, and CBO materials. Those documents provide the factual basis for the procedural points summarized here <a href="https://www.cbo.gov/publication/53504" target="_blank" rel="noopener">CBO budget primer</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-nbxbxu" class="faq-toggle" /><label for="faq-nbxbxu" class="faq-summary" role="button" tabindex="0">Can the House remove a President on its own?</label><div class="faq-content"><p>No. The House can impeach and bring formal charges, but removal requires a Senate trial and conviction.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-f5mwpi" class="faq-toggle" /><label for="faq-f5mwpi" class="faq-summary" role="button" tabindex="0">Does the House control federal spending by itself?</label><div class="faq-content"><p>No. The House originates revenue bills and begins appropriations work, but final spending requires agreement with the Senate and the President or a veto override.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-eas7t3" class="faq-toggle" /><label for="faq-eas7t3" class="faq-summary" role="button" tabindex="0">Can the President act without limits in foreign affairs?</label><div class="faq-content"><p>The President has significant authority in foreign affairs, but Congress can constrain actions through funding decisions and statutes, and courts may review disputed claims of executive power.</p></div></section>
+</section><section class="article-ending">Understanding separation of powers requires attention to both constitutional text and institutional practice. The House has meaningful tools to check the President, especially over revenue and through impeachment, but political alignment, timing, and courts shape real outcomes.
+
+Follow the cited primary sources for verification and watch appropriations, oversight activity, and litigation to track how these checks develop in practice.</section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
