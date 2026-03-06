@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Is profanity protected by the First Amendment?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736;     /* from --mc-accent */
+      --accent-hover: #871f2c; /* derived darker accent (optional) */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664;    /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* from --mc-panel-2 */
+      --radius: 0px;        /* from --mc-radius */
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease, background .12s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      background: var(--accent-hover);
+      filter: none;
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Small scoped additions for article interactivity; only allowed selectors used */
+    .article-body .faq-accordion{ border-left-color: var(--accent); }
+    .article-body .highlight-card{ border-left-color: var(--accent); }
+    .article-body .tool-block{ border-left-color: var(--accent); }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://financepolice.com/wp-content/uploads/2026/01/1st-amendment-simplified-courthouse.jpg" alt="Courthouse illustration for First Amendment" />
+        </div>
+        <h1 class="title">Is profanity protected by the First Amendment?</h1>
+        <p class="subline">A concise, sourced guide to when profane language is protected under the First Amendment.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/1st-amendment-simplified-profanity-protection/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">This article explains in simple terms when profane language is protected by the First Amendment and when it is not. It summarizes the major Supreme Court tests and explains the practical difference between government limits and private moderation.
+
+The goal is to provide voters, students, and civic readers with clear, sourced guidance they can use to evaluate common scenarios. For specific legal problems, consult qualified counsel or civil liberties organizations.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">The First Amendment restricts government action, not private companies or employers.</span></div><div class="highlight-card"><span class="highlight-text">Cohen protects expressive profanity used to convey a political message, but context matters.</span></div><div class="highlight-card"><span class="highlight-text">Fighting words, obscenity, true threats, and incitement are distinct exceptions to protection.</span></div>
+     </div>
+  <h2>What the First Amendment protects, 1st amendment simplified</h2>
+<p>The First Amendment limits what government actors may do about speech, not what private companies or private employers may do. For a practical primer on the government-private distinction, see the ACLU guidance on free speech for a clear explanation of how constitutional rules apply to public officials and not to private platforms or private employers.<a href="https://www.aclu.org/know-your-rights/free-speech" target="_blank" rel="noopener">ACLU guidance on free speech</a></p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Stay informed and involved</h3><div class="cta-intro"><p>Please note: this piece explains legal principles, not legal advice. If you face a specific removal or discipline issue, document notices and consult qualified resources for guidance.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign updates</a></div>
+<h3>Basic scope: government action only</h3>
+<p>The First Amendment restricts government conduct. That means official acts by police, public schools, and elected officials can raise First Amendment questions when they limit speech. Private platforms, private employers, and most nonstate actors are not bound by the First Amendment in the same way, and they can set and enforce their own rules about profanity and other content.</p>
+<h3>Why expressive profanity can be protected</h3>
+<p>Courts have long recognized that profanity can carry expressive, political, or emotive value and that kind of speech often gets First Amendment protection when the government moves to punish it. The landmark Cohen decision explains that words used to convey a message are typically part of protected expression rather than mere noise.<a href="https://www.law.cornell.edu/supremecourt/text/403/15" target="_blank" rel="noopener">Cohen v. California at Cornell Law</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h3>How courts balance context and message</h3>
+<p>Protection for profanity is not automatic. Courts look at context, the speaker's intent, the audience, and competing government interests such as public safety or order. Time, place, and manner rules can validly limit speech in narrowly tailored ways when the government demonstrates a significant interest and leaves open adequate alternative channels for communication.</p>
+
+<h2>Cohen v. California and expressive profanity</h2>
+<p>In Cohen, a man wore a jacket bearing a profane phrase in a public courthouse corridor to protest draft policies. The Supreme Court held that the state could not criminally punish him simply for displaying that emotive message, because the phrase expressed a political viewpoint and was not obscene in the legal sense. For the decision and opinion text, see the Supreme Court opinion hosted by Cornell Law.<a href="https://www.law.cornell.edu/supremecourt/text/403/15" target="_blank" rel="noopener">Cohen v. California at Cornell Law</a> For an accessible synopsis and case page see <a href="https://www.oyez.org/cases/1970/299" target="_blank" rel="noopener">Oyez: Cohen v. California</a>.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-kf5fpy" class="faq-toggle" checked /><label for="faq-kf5fpy" class="faq-summary" role="button" tabindex="0">When is profanity protected by the First Amendment?</label><div class="faq-content"><p>Profanity is protected when used as expressive, political, or emotive speech under doctrines like Cohen, but protection ends when speech falls into narrowly defined exceptions such as fighting words, obscenity, true threats, or incitement.</p></div></section>
+<p>The core idea in Cohen is that emotive or political swearing can be protected when it conveys a message rather than aiming to provoke immediate violence. Courts treat such expressive profanity as part of the marketplace of ideas when it serves communicative purposes rather than as conduct that can be suppressed without showing a strong government interest.</p>
+<p>That protection has practical limits. A court will ask whether the words were reasonably likely to produce disorder at the time and place they were used. A public demonstration with clear political content is more likely to receive protection than speech that appears intended to intimidate or provoke a specific immediate breach of the peace.</p>
+
+<h2>Fighting words and immediate-provocation limits (Chaplinsky)</h2>
+<h3>Chaplinsky doctrine explained</h3>
+<p>The fighting-words doctrine comes from Chaplinsky, where the Court identified a category of words which, by their very utterance, inflict injury or tend to incite an immediate breach of the peace. That category allows government regulation of speech that is likely to trigger immediate violence rather than contribute to public debate.<a href="https://www.law.cornell.edu/supremecourt/text/315/568" target="_blank" rel="noopener">Chaplinsky v. New Hampshire at Cornell Law</a></p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<h3>When words lose protection as fighting words</h3>
+<p>Fighting words are narrowly defined. The assessment focuses on whether the words were addressed to an individual in a way that would likely provoke an immediate violent reaction. Courts compare the specific context to the audience and setting, and the threshold for calling speech fighting words is high.</p>
+<h3>How courts assess likely immediate violence</h3>
+<p>In practice, most rude, insulting, or profane words do not meet the fighting-words test. Courts require evidence that the speech is likely to produce immediate disorder or violence; generalized insults shouted to a crowd or political swearing aimed at a broad audience usually remain protected under Cohen-style analysis.</p>
+
+<h2>Obscenity and narrow content exceptions (Miller)</h2>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Help readers check if material might meet an obscenity test</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-baomf0-0">
+                        <input id="tool-check-baomf0-0" type="checkbox" />
+                        <span>sexually explicit content</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-uwmbb3-1">
+                        <input id="tool-check-uwmbb3-1" type="checkbox" />
+                        <span>community standards</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-xmug7f-2">
+                        <input id="tool-check-xmug7f-2" type="checkbox" />
+                        <span>serious value</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use as an initial screening, not legal advice</p>
+            </div>
+<h3>How Miller defines obscenity</h3>
+<p>Miller defines a three-part test for obscenity: (1) whether the average person, using contemporary community standards, would find the work appeals to prurient interest; (2) whether the work depicts sexual conduct in a patently offensive way as defined by law; and (3) whether the work lacks serious literary, artistic, political, or scientific value. See the Miller opinion for the test language and context.<a href="https://www.law.cornell.edu/supremecourt/text/413/15" target="_blank" rel="noopener">Miller v. California at Cornell Law</a></p>
+<h3>Why ordinary profanity rarely meets the Miller test</h3>
+<p>Ordinary profane words, even when crude, do not typically satisfy the Miller criteria. The obscenity test targets sexually explicit material that meets all three Miller prongs; casual or political swear words usually fail to meet the threshold needed to be classified as obscene under the test.</p>
+<h3>Practical takeaways for speech with sexual content</h3>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1ttipSDr10yJhoUQIyAStl4EtkOtjF3hy=s1200" alt="1st amendment simplified minimalist 2D vector infographic showing a microphone and blank protest sign on dark blue background with white icons and red accents" /></a>
+      <div class="side-text"><p>If speech includes explicit sexual depictions, the Miller test becomes a relevant legal question. For most public political expression that uses profanity to emphasize a message, observers and courts treat the language under expressive-speech doctrines rather than under the narrower obscenity standard.</p></div>
+    </div>
+<h2>True threats and incitement: Elonis and Brandenburg</h2>
+<h3>Difference between threats and profanity</h3>
+<p>Not all offensive words are treated the same. Statements that constitute true threats or targeted intimidation fall outside First Amendment protection. Courts ask whether a reasonable listener would view the statement as a serious expression of intent to harm another person rather than mere rhetorical insult.</p>
+<h3>Brandenburg incitement standard</h3>
+<p>The Brandenburg framework protects advocacy unless it is directed to inciting imminent lawless action and is likely to produce such action. Speech that urges immediate violence and is likely to succeed loses constitutional protection under that test, which aims to draw a clear line for incitement claims.<a href="https://www.scotusblog.com/2024/11/first-amendment-online-speech-developments/" target="_blank" rel="noopener">SCOTUSblog analysis on First Amendment developments</a></p>
+<h3>Elonis and mens rea in threats cases</h3>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Elonis clarified that criminal liability for threats often requires proof of the defendant's mental state beyond mere words posted online. The decision shows courts scrutinize intent and context in determining whether speech amounts to a true threat rather than protected expression.<a href="https://www.law.cornell.edu/supremecourt/text/575/723" target="_blank" rel="noopener">Elonis v. United States at Cornell Law</a></p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1cw-wSc7RezrKb0vZOXyd1HqQPZpVd-IM=s1200" alt="Minimalist 2D vector infographic showing five simple icons representing the legal tests Cohen Chaplinsky Miller Brandenburg Elonis on deep navy background 1st amendment simplified" /></a>
+    </div>
+
+<h2>Government limits versus private moderation: what workplaces and platforms can do</h2>
+<h3>Constitutional limits bind the government, not private actors</h3>
+<p>The First Amendment constrains government action; it does not require private platforms or private employers to host or tolerate profane speech. For a clear discussion of the distinction, see the ACLU guidance on how free speech rights apply differently to state actors and private entities.<a href="https://www.aclu.org/know-your-rights/free-speech" target="_blank" rel="noopener">ACLU guidance on free speech</a></p>
+<h3>How employers and platforms lawfully regulate profanity</h3>
+<p>Private employers commonly enforce workplace codes of conduct that limit profanity when it disrupts operations or creates a hostile environment. Likewise, online platforms may remove content under their terms of service, using rules that apply across users or by using moderation tools targeted at particular behaviors.</p>
+<h3>Where public policy and platform rules intersect with free speech debates</h3>
+<p>Debate continues about how public-interest concerns and platform rules interact. Litigation and policy discussion increasingly focus on whether platforms act as state actors in some contexts, how much transparency is required, and the fairness of automated removal systems when they misread context.</p>
+
+<h2>Applying old tests to new online speech problems</h2>
+<h3>Automated removal and moderation algorithms</h3>
+<p>Automated moderation systems can strip context from a message, making it harder to apply doctrinal tests that rely on audience, intent, and setting. Courts and scholars caution that algorithmic enforcement may misclassify emotive, political, or context-sensitive speech, raising concerns about overbroad removal.</p>
+<h3>How courts may adapt Cohen, Chaplinsky, Miller, Brandenburg to online contexts</h3>
+<p>Legal commentators and recent case law show courts are wrestling with how to apply traditional tests to digital speech. That discussion is ongoing, and SCOTUSblog provides summaries of recent developments and the open questions about adapting old precedents to new mediums.<a href="https://www.scotusblog.com/2024/11/first-amendment-online-speech-developments/" target="_blank" rel="noopener">SCOTUSblog analysis on First Amendment developments</a></p>
+<h3>Practical questions to ask if your content is removed</h3>
+<p>If a platform removes your content, check the notice and the terms that were cited, document the removal, and use the platform's appeal options where available. If the removal raises possible government action or civil rights concerns, consult civil liberties resources or qualified counsel for case-specific guidance rather than relying on general statements. See the site's discussion of <a href="https://michaelcarbonara.com/freedom-of-expression-and-social-media-impact/" target="_blank" rel="noopener">freedom of expression and social media</a> for related context.</p>
+
+<h2>Typical mistakes and common confusions</h2>
+<p>One common error is assuming profanity is always protected. Context and legal category matter: emotive political profanity can be protected under Cohen, while fighting words and true threats may be unprotected under other doctrines.<a href="https://www.law.cornell.edu/supremecourt/text/403/15" target="_blank" rel="noopener">Cohen v. California at Cornell Law</a></p>
+<p>Another frequent confusion is mixing constitutional rules with private rules. The First Amendment limits government action; private employers and platforms can set and enforce rules independently of constitutional constraints.<a href="https://www.aclu.org/know-your-rights/free-speech" target="_blank" rel="noopener">ACLU guidance on free speech</a></p>
+<p>Finally, readers sometimes misread case law by taking isolated phrases out of context. For precise holdings, consult the primary decisions discussed here rather than summaries alone. Additional case material is available at <a href="https://globalfreedomofexpression.columbia.edu/cases/cohen-v-california/" target="_blank" rel="noopener">Global Freedom of Expression</a>.</p>
+
+<h2>Practical scenarios: short examples and likely outcomes</h2>
+<h3>Profane jacket at a public protest</h3>
+<p>A protester who wears a profanity-bearing jacket in a public forum to express political disagreement is likely to receive First Amendment protection under the Cohen framework, because the speech conveyed a political message rather than intending immediate provocation.<a href="https://www.law.cornell.edu/supremecourt/text/403/15" target="_blank" rel="noopener">Cohen v. California at Cornell Law</a> For another case overview see <a href="https://supreme.justia.com/cases/federal/us/403/15/" target="_blank" rel="noopener">Justia: Cohen v. California</a>.</p>
+<h3>Threatening social posts versus heated insults</h3>
+<p>A social post that includes a direct, targeted statement of intent to kill or seriously harm someone may be treated as a true threat and fall outside protection, particularly where the speaker's intent and the reasonable perception of the target support that view; cases like Elonis show courts examine mens rea closely in these situations.<a href="https://www.law.cornell.edu/supremecourt/text/575/723" target="_blank" rel="noopener">Elonis v. United States at Cornell Law</a></p>
+<h3>Employer discipline for profanity at work</h3>
+<p>An employer may discipline an employee for profanity used in the workplace if the words disrupt operations or create a hostile environment, because private workplace rules are generally enforceable and the First Amendment typically does not stop private employers from taking such action.</p>
+
+<h2>How to challenge or get help when speech is restricted</h2>
+<h3>Appeal routes on platforms</h3>
+<p>Start with the platform's appeals or review process and keep records of the content and any notices you received. Many platforms provide an initial review step that can restore content if the removal was an error or if context was not considered.</p>
+<h3>When to seek legal counsel</h3>
+<p>If a restriction involves government action or raises civil rights concerns, consider consulting qualified counsel for case-specific guidance; see the <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">contact page</a> for how to reach legal resources in specific cases. Legal help is especially important when a removal or penalty implicates official actors, public employment, or formal sanctions.</p>
+<h3>Civil liberties resources and references</h3>
+<p>Civil liberties groups and primary case pages are useful starting points for understanding protections and limits; see the <a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">constitutional rights</a> hub for related materials. The ACLU guidance and the Supreme Court opinions cited above provide authoritative explanations of the core doctrines discussed in this guide.<a href="https://www.aclu.org/know-your-rights/free-speech" target="_blank" rel="noopener">ACLU guidance on free speech</a></p>
+
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Conclusion: key takeaways, 1st amendment simplified</h2>
+<p>Profanity can be protected speech when it conveys political or emotive messages, as explained in Cohen, but narrowly defined exceptions like fighting words, obscenity, true threats, and incitement remove protection in specific circumstances.<a href="https://www.law.cornell.edu/supremecourt/text/403/15" target="_blank" rel="noopener">Cohen v. California at Cornell Law</a></p>
+<p>The First Amendment limits government action, while private employers and online platforms have broader authority to restrict or remove profane content. For unsettled questions about online moderation and automated enforcement, follow ongoing litigation and reliable legal summaries.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-cet9ck" class="faq-toggle" /><label for="faq-cet9ck" class="faq-summary" role="button" tabindex="0">Is any profanity always protected by the First Amendment?</label><div class="faq-content"><p>No. Protection depends on context and legal category; some profane speech is protected as expressive political speech, while fighting words, true threats, obscenity, and incitement may be unprotected.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-2odnun" class="faq-toggle" /><label for="faq-2odnun" class="faq-summary" role="button" tabindex="0">Can my employer fire me for using profanity?</label><div class="faq-content"><p>Yes. Private employers generally may enforce workplace conduct rules that restrict profanity, subject to specific employment laws and contracts.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-fkwyj9" class="faq-toggle" /><label for="faq-fkwyj9" class="faq-summary" role="button" tabindex="0">What should I do if a platform removes my post?</label><div class="faq-content"><p>Document the removal, use the platform&#39;s appeals process, and consult civil liberties organizations or qualified counsel if government action or civil rights issues are involved.</p></div></section>
+</section><section class="article-ending">If you want to read the primary sources, check the Supreme Court opinions and civil liberties guidance cited in the article. For case-specific questions, a qualified attorney or a civil liberties group can provide tailored advice.
+
+This article aims to inform, not to offer legal representation or definitive legal advice.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.aclu.org/know-your-rights/free-speech" target="_blank" rel="noopener">https://www.aclu.org/know-your-rights/free-speech</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/403/15" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/403/15</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/315/568" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/315/568</a></li><li><a href="https://www.oyez.org/cases/1970/299" target="_blank" rel="noopener">https://www.oyez.org/cases/1970/299</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/413/15" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/413/15</a></li><li><a href="https://www.scotusblog.com/2024/11/first-amendment-online-speech-developments/" target="_blank" rel="noopener">https://www.scotusblog.com/2024/11/first-amendment-online-speech-developments/</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/575/723" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/575/723</a></li><li><a href="https://globalfreedomofexpression.columbia.edu/cases/cohen-v-california/" target="_blank" rel="noopener">https://globalfreedomofexpression.columbia.edu/cases/cohen-v-california/</a></li><li><a href="https://michaelcarbonara.com/freedom-of-expression-and-social-media-impact/" target="_blank" rel="noopener">https://michaelcarbonara.com/freedom-of-expression-and-social-media-impact/</a></li><li><a href="https://supreme.justia.com/cases/federal/us/403/15/" target="_blank" rel="noopener">https://supreme.justia.com/cases/federal/us/403/15/</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/315/568" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/315/568</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
