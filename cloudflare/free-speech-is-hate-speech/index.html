@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Does free speech allow hate speech?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #95212e; /* derived darker */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Scoped tweaks for article internals */
+    .article-body .summary{ font-style: italic; color: color-mix(in srgb, var(--text-color) 80%, #0000); margin-bottom: 2rem; }
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:1rem; margin:2.2rem 0; }
+    .article-body .highlight-card{ padding:1.15rem 1.35rem; border-left:4px solid var(--accent); background: linear-gradient(135deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.06); font-weight:700; }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1Gi2Ek6YakI_94q9Ze10zviW5PPcZ8Tin" alt="Does free speech allow hate speech? — banner" />
+        </div>
+        <h1 class="title">Does free speech allow hate speech?</h1>
+        <p class="subline">A concise, neutral overview comparing legal tests, international guidance, and platform policies.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/free-speech-is-hate-speech/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">This article explains the common claim that free speech allows hate speech and compares legal and policy approaches. It clarifies key terms and provides readers with a practical framework to assess when speech may be punishable.
+The goal is to present neutral, sourced information so readers can distinguish slogans from legal standards and find primary documents for verification.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">U.S. law requires intent and imminence for criminalizing speech, which protects most hateful expression.</span></div><div class="highlight-card"><span class="highlight-text">International guidance and European courts focus on proportionality and context, permitting broader restrictions in some cases.</span></div><div class="highlight-card"><span class="highlight-text">Platforms apply policy rules that can remove content even when speech remains lawful under domestic standards.</span></div>
+     </div>
+  <h2>What people mean when they say "free speech is hate speech"</h2><p>The phrase free speech is hate speech is often used as a slogan to claim that broad protections for expression allow hateful and offensive remarks to go unpunished. In public debate the phrase can signal frustration with perceived legal or platform failures, or it can be a rhetorical shortcut that conflates moral judgment with legal status.</p><p>As a slogan it is not a precise legal term. Different jurisdictions apply different tests and limits, so the phrase does not map to a single legal outcome. For an international policy baseline, analysts often point to guidance that urges narrow criminalization only when speech meets a high threshold of incitement, which helps explain why the slogan can mislead without context <a href="https://www.ohchr.org/sites/default/files/Documents/Issues/Opinion/Legislative/Guidelines/Rabat_plan_of_action.pdf" target="_blank" rel="noopener">Rabat Plan of Action</a></p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Compare slogan use and legal standards across jurisdictions</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-07vurc-0">
+                        <input id="tool-check-07vurc-0" type="checkbox" />
+                        <span>Jurisdiction</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-1gw6i3-1">
+                        <input id="tool-check-1gw6i3-1" type="checkbox" />
+                        <span>Intent</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-ckk8zk-2">
+                        <input id="tool-check-ckk8zk-2" type="checkbox" />
+                        <span>Likelihood</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-xoeu5x-3">
+                        <input id="tool-check-xoeu5x-3" type="checkbox" />
+                        <span>Context</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-2gre2p-4">
+                        <input id="tool-check-2gre2p-4" type="checkbox" />
+                        <span>Protected status</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use to guide sourcing and reporting</p>
+            </div><p>Clarity matters for policy and conversation. When writers or speakers use the phrase, attribute whether they mean a political complaint, a platform moderation concern, or a claim about criminal law. Attribution helps readers understand whether a statement reflects opinion, policy, or a legal test.</p><h3>Common uses of the phrase in public debate</h3><p>People use the phrase to describe cases ranging from insulting rhetoric to explicit calls for violence. Without precise terms this range becomes confusing; commentators may group distinct behaviors under the same label even though legal responses differ.</p>
+
+
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<h3>Distinguishing slogan usage from legal definitions: free speech is hate speech</h3><p>In reporting or analysis, label the phrase as a slogan when it is used rhetorically and cite the controlling legal standard when making claims about punishability. This avoids conflating public outrage with legal thresholds and helps preserve accurate public information.</p><h3>Why clarity matters for policy and conversation</h3><p>Policy design and public debate function better when participants separate moral reaction from legal criteria. Clear language reduces the risk that laws or platform rules will be drafted or applied in ways that confuse offensiveness with criminality.</p><h2>How U.S. law treats hateful speech: the Brandenburg test and limits</h2>
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1sLnLbwDZjl-Q8X0oF0ppPbd7DKJtfxg1=s1200" alt="Minimal 2D vector courthouse facade in Michael Carbonara palette navy background #0b2664 white elements and red accents #ae2736 neutral lighting clean minimalist composition free speech is hate speech" /></a>
+      <div class="side-text"><p>In U.S. constitutional law the key test comes from Brandenburg v. Ohio, which holds that speech is protected unless it is intended to and likely to produce imminent lawless action. This two part standard focuses on intent and imminence, which sets a high bar for criminalizing speech under the First Amendment <a href="https://supreme.justia.com/cases/federal/us/395/444/" target="_blank" rel="noopener">Brandenburg v. Ohio, 395 U.S. 444 (1969)</a> and other case summaries such as <a href="https://globalfreedomofexpression.columbia.edu/cases/brandenburg-v-ohio/" target="_blank" rel="noopener">Global Freedom of Expression, Columbia</a>.</p></div>
+    </div><p>Because of Brandenburg, much hateful or offensive expression remains constitutionally protected in the United States. Courts treat clear calls to immediate violence differently from general praise of violence, and the line often hinges on context and the specific evidence of intent.</p><h3>Brandenburg v. Ohio explained</h3><p>The Brandenburg test requires demonstration that the speaker intended to incite unlawful action and that the speech was likely to succeed in producing imminent lawless behavior. Both elements are necessary for criminal liability, and courts analyze the factual record to determine whether those elements are present. See additional case summaries at <a href="https://www.oyez.org/cases/1968/492" target="_blank" rel="noopener">Oyez</a> for background on the decision.</p><h3>Narrow exceptions to First Amendment protection</h3><p>U.S. law recognizes categories that are not protected, such as true threats and incitement to imminent violence. These exceptions are narrowly defined and have developed through decades of case law, so outcomes depend on how courts apply the specific facts in each case <a href="https://supreme.justia.com/cases/federal/us/395/444/" target="_blank" rel="noopener">Brandenburg v. Ohio, 395 U.S. 444 (1969)</a></p><h3>Practical implications for most offensive speech</h3>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>For everyday expressions that are offensive but not direct calls to immediate violence, prosecution is rare under U.S. criminal law. That does not mean platforms or employers cannot respond under their own rules, but it does explain why legal punishments are limited for many hateful statements.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1-jNw9Ni3CCRiMaaA_R_DdAp5_DcT6sIG=s1200" alt="Minimal vector infographic showing balanced law scales platform icons and global arrows representing content flow moderation in Michael Carbonara color palette free speech is hate speech" /></a>
+    </div><h2>How international and European law approaches hate speech</h2><p>International human-rights guidance and European jurisprudence use different balances than U.S. constitutional law. Documents such as the Rabat Plan of Action recommend criminalization only when speech reaches a threshold of intent and likelihood to cause discrimination, hostility, or violence, and they emphasize narrow, proportionate measures <a href="https://www.ohchr.org/sites/default/files/Documents/Issues/Opinion/Legislative/Guidelines/Rabat_plan_of_action.pdf" target="_blank" rel="noopener">Rabat Plan of Action</a></p><p>The Council of Europe and the European Court of Human Rights apply Article 10(2) balancing that allows wider restrictions in certain cases, using proportionality and context based assessments to weigh expression against protection from harm <a href="https://www.coe.int/en/web/freedom-expression/hate-speech" target="_blank" rel="noopener">Council of Europe guidance</a></p><section class="faq-accordion"><input type="checkbox" id="faq-bi7f6z" class="faq-toggle" checked /><label for="faq-bi7f6z" class="faq-summary" role="button" tabindex="0">Does free speech protection extend to hateful speech, and when can hate speech be punished?</label><div class="faq-content"><p>Free expression protections vary by system. In the United States most hateful speech is protected unless it is intended to and likely to produce imminent lawless action. International and European frameworks and platform policies use different tests, often emphasizing proportionality, context, and the likely harm of the speech.</p></div></section><p>These frameworks still require careful fact specific analysis. European systems permit more restrictions than the U.S. standard in some situations, but courts routinely stress proportionality and consider audience, medium, and likely effects when upholding limits <a href="https://www.echr.coe.int/documents/factsheet_freedom_of_expression_eng.pdf" target="_blank" rel="noopener">ECHR factsheet on freedom of expression</a></p><h3>Rabat Plan of Action and UN guidance</h3><p>The Rabat guidance advises states to criminalize only a narrow subset of speech that is intentionally aimed at producing serious harm, and it urges assessment of context and likelihood before imposing penalties <a href="https://www.ohchr.org/sites/default/files/Documents/Issues/Opinion/Legislative/Guidelines/Rabat_plan_of_action.pdf" target="_blank" rel="noopener">Rabat Plan of Action</a></p><h3>Council of Europe and ECHR proportionality approach</h3><p>The European Court applies a proportionality test when states restrict speech under Article 10(2). That analysis considers whether the restriction is necessary in a democratic society and whether it is proportionate to the legitimate aim of protecting rights and public order <a href="https://www.coe.int/en/web/freedom-expression/hate-speech" target="_blank" rel="noopener">Council of Europe guidance</a></p><h3>Key differences from U.S. law</h3><p>In short, the U.S. approach emphasizes very broad protections and narrow exceptions, while international and European frameworks permit somewhat wider restrictions where proportionality and context support them. Readers should avoid assuming the same rules apply in every country.</p><h2>Platform policies: how online services define and act on hate speech</h2><p>Online <a href="https://michaelcarbonara.com/freedom-of-expression-and-social-media-section-230" target="_blank" rel="noopener">platforms</a> define hate speech as a policy category that often includes dehumanization of protected groups and direct calls for violence. These policies are not identical to legal standards, and platforms may remove content on the basis of their own rules even when the speech is legally protected in a given jurisdiction <a href="https://www.osce.org/odihr/449167" target="_blank" rel="noopener">OSCE guidance on addressing hate speech</a></p><p>Enforcement and transparency vary. Some platforms publish regular transparency reports and provide appeals mechanisms, while others give less public detail about enforcement rates and decision making. This unevenness affects user expectations and public debate <a href="https://www.pewresearch.org/internet/2024/07/10/public-views-on-free-speech-and-hate-speech/" target="_blank" rel="noopener">Pew Research Center survey</a></p><h3>Typical policy elements and prohibited content categories</h3><p>Common elements include bans on explicit calls for violence, content that dehumanizes members of protected groups, and content that organizes or praises violent action. Platforms also set rules for context, intent, and repeat offenses, but policies differ in language and scope.</p><h3>Enforcement practices, transparency, and appeals</h3><p>Transparency reports can provide data on removals, appeals, and regional enforcement patterns. Civil society guidance encourages clear notice and appeal processes so users understand why content was removed and how to challenge errors <a href="https://www.osce.org/odihr/449167" target="_blank" rel="noopener">OSCE guidance on addressing hate speech</a></p><h3>Tension between legal limits and platform rules</h3><p>Platforms must navigate differing national laws while applying global policies. That tension can result in content being available in some jurisdictions but blocked in others, and in enforcement choices that reflect both legal and policy judgments.</p><h2>A practical framework for deciding when speech may be punishable</h2><p>Start by identifying the <a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">jurisdiction</a> and the applicable law or policy. Different legal systems apply different tests, and platform rules may resolve similar questions in other ways, so jurisdiction is the first and crucial step in any assessment.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><p>Second, assess intent and likelihood. Ask whether the speaker intended to cause unlawful action or discrimination and whether the speech was likely to produce imminent harm. These concepts are central to both the Brandenburg test in the U.S. and to international guidance that recommends narrow criminalization <a href="https://supreme.justia.com/cases/federal/us/395/444/" target="_blank" rel="noopener">Brandenburg v. Ohio, 395 U.S. 444 (1969)</a></p><p>Third, consider context, audience, and whether the target is a protected class. Context includes the medium, the speaker s influence, and the circumstances surrounding the statement. These factors matter to courts and to platforms when they judge harm and necessity <a href="https://www.coe.int/en/web/freedom-expression/hate-speech" target="_blank" rel="noopener">Council of Europe guidance</a></p><h3>Step 1 identify the jurisdiction and applicable law</h3><p>Check statutes, <a href="https://michaelcarbonara.com/first-amendment-explained-five-freedoms/" target="_blank" rel="noopener">leading court decisions</a>, or platform policies that apply where the content was published or where enforcement is sought. Primary sources such as court opinions or international guidance should guide legal conclusions.</p><h3>Step 2 assess intent, likelihood of harm, context, and target</h3><p>Establish whether there is evidence of intent to cause harm and whether the speech was likely to result in imminent lawless action or serious discrimination. Include the medium and audience in this assessment.</p><h3>Step 3 check proportionality and possible legal exceptions</h3><p>Determine whether any proposed restriction is proportionate to the harm it seeks to prevent. International and European frameworks explicitly require proportionality analysis before limiting expression <a href="https://www.ohchr.org/sites/default/files/Documents/Issues/Opinion/Legislative/Guidelines/Rabat_plan_of_action.pdf" target="_blank" rel="noopener">Rabat Plan of Action</a></p><h2>Key criteria courts and platforms use to evaluate speech</h2><p>Across frameworks common criteria include intent, likelihood or imminence of harm, context, and whether the target is a protected class. These elements shape judicial and platform decisions, though the weight given to each varies by system <a href="https://www.ohchr.org/sites/default/files/Documents/Issues/Opinion/Legislative/Guidelines/Rabat_plan_of_action.pdf" target="_blank" rel="noopener">Rabat Plan of Action</a></p><p>Intent covers mens rea considerations, which ask what the speaker meant. Likelihood and imminence assess whether the speech could plausibly produce immediate harm. Context includes audience size, medium, and the speaker s role. Protected status of the target affects whether conduct is treated as hate speech under many policies and laws <a href="https://www.echr.coe.int/documents/factsheet_freedom_of_expression_eng.pdf" target="_blank" rel="noopener">ECHR factsheet on freedom of expression</a></p><h3>Intent and mens rea considerations</h3><p>Intent may be direct, such as a call to action, or inferred from surrounding conduct and history. Courts examine available evidence to determine whether criminal liability is appropriate.</p><h3>Likelihood and imminence of harm</h3><p>Many legal tests require a showing that harm was likely and imminent, not merely possible at some future time. This criterion separates general advocacy from actionable incitement.</p><h3>Context, audience, and status of the target</h3><p>Whether the target is a protected class can change enforcement options under hate speech laws. The medium and audience matter because a large, sympathetic audience may increase the likelihood of harm.</p><h2>Common mistakes and enforcement pitfalls</h2><p>A frequent mistake is to equate offensiveness with illegality. Laws typically demand stronger evidence of intent and likelihood before punishing speech, so many offensive statements remain outside criminal reach <a href="https://www.pewresearch.org/internet/2024/07/10/public-views-on-free-speech-and-hate-speech/" target="_blank" rel="noopener">Pew Research Center survey</a></p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Review primary sources before drawing legal conclusions</h3><div class="cta-intro"><p>For legal conclusions, consult the primary sources in the resources section and review the governing statutes or court decisions for the relevant jurisdiction</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Read the primary documents</a></div><p>Overbroad moderation is another pitfall. When platforms remove content that is lawful and newsworthy, they can chill legitimate debate. Conversely, weak enforcement can allow harmful content to spread. Balancing these outcomes is difficult and requires transparency and clear rules <a href="https://www.osce.org/odihr/449167" target="_blank" rel="noopener">OSCE guidance on addressing hate speech</a></p><p>Cross border content and AI generated posts complicate enforcement. Content created by synthetic systems or posted from another country can challenge which laws apply and how platforms should act, creating legal and technical dilemmas.</p><h3>Conflating offensiveness with illegality</h3><p>Offense alone rarely satisfies criminal thresholds. Courts and policymakers distinguish hateful rhetoric from actionable incitement based on evidence and context.</p><h3>Overbroad moderation that censors legitimate debate</h3><p>Policies that lack narrow definitions or that rely on automated removal risk silencing lawful commentary. Procedures for notice and appeal help reduce that risk.</p><h3>Misreading jurisdiction when content crosses borders</h3><p>Applying domestic law to cross border content requires attention to where the publisher, audience, and relevant servers are located, as each factor can affect which law applies.</p><h2>Examples and scenarios: clarifying borderline cases</h2><p>Scenario 1, protected rhetorical praise versus immediate call to act. A speech that praises violence in abstract terms may be offensive but still protected. By contrast, a targeted call urging an audience to commit a specific violent act at a named time may meet the Brandenburg imminence test in the United States or similar thresholds elsewhere <a href="https://supreme.justia.com/cases/federal/us/395/444/" target="_blank" rel="noopener">Brandenburg v. Ohio, 395 U.S. 444 (1969)</a></p><p>Scenario 2, dehumanizing language aimed at a protected group. Dehumanization increases the risk that speech will be treated as hate speech under platform policies and in some European cases, particularly when it is likely to increase hostility or violence <a href="https://www.coe.int/en/web/freedom-expression/hate-speech" target="_blank" rel="noopener">Council of Europe guidance</a></p><p>Scenario 3, harsh political criticism. Strong political rhetoric that criticizes public officials or policies is often protected on free expression grounds, but context is decisive if it edges into threats or incitement.</p><h3>Short hypothetical examples illustrating outcomes</h3><p>These vignettes are hypothetical and meant to show how the tests operate. Legal outcomes depend on jurisdiction, evidence, and judicial interpretation, so consult primary materials for definitive conclusions.</p><h2>Public attitudes and the policy trade offs</h2><p>Surveys show substantial disagreement in public views about when to limit offensive speech. Some respondents support restrictions in particular contexts, while others prioritize broad protections, which makes consensus on policy difficult <a href="https://www.pewresearch.org/internet/2024/07/10/public-views-on-free-speech-and-hate-speech/" target="_blank" rel="noopener">Pew Research Center survey</a></p><p>Divided public opinion complicates lawmaking and platform governance because policymakers must weigh competing values and political pressures. That division also influences how courts and platforms justify decisions.</p><h3>Survey evidence on public support for restrictions</h3><p>Public polling provides useful context but cannot substitute for legal analysis. Use survey results to understand public priorities, not to define legal thresholds.</p><h3>Why public disagreement complicates law and policy</h3><p>Where citizens disagree about trade offs, legislators and platforms face difficult choices about definitions, enforcement, and remedies, and they risk unintended consequences if guidelines are too vague.</p><h2>Emerging challenges: AI generated content and cross border moderation</h2><p>AI generated content can obscure authorship and intent, making it harder to apply intent based tests. Automated systems can amplify harmful material quickly, increasing risks of real world harm while complicating attribution.</p><p>Cross border moderation forces platforms to reconcile different national standards. What is lawful in one country may be illegal in another, and platforms must decide whether to geo block, remove globally, or apply local rules.</p><h3>How synthetic content complicates attribution and intent</h3><p>Synthetic speech may lack a clear human author, which raises questions about whether traditional intent based legal tests can be applied without additional evidence about who directed or profited from the content.</p><h3>Platform enforcement across jurisdictions</h3><p>Platforms face operational choices when laws conflict. Some adopt local takedowns while keeping content available elsewhere, and others use stricter global policies to reduce legal risk.</p><h3>Policy questions for harmonizing standards</h3><p>Harmonization efforts must balance respect for national law with commitments to expression. International guidance and multistakeholder initiatives seek common principles but have not produced uniform legal rules.</p><h2>How to discuss hate speech responsibly: a short guide for readers</h2><p>Attribute specific claims to named sources. When describing legal status cite court decisions or official guidance rather than relying on slogans. Use phrasing like according to or public records show to signal source attribution.</p><p>Avoid absolute language and sweeping claims. Label slogans as slogans and avoid presenting them as legal conclusions. When in doubt, consult primary sources and legal counsel for jurisdiction specific questions.</p><h3>Attribution and sourcing practices</h3><p>Cite primary documents such as court opinions, statutes, and international guidance when making legal claims. Secondary summaries are useful but should not replace primary sources for definitive conclusions.</p><h3>Language to avoid and safe phrasing examples</h3><p>Use neutral formulations such as according to the decision or guidance suggests rather than definitive assertions. Model phrases help maintain accuracy and reduce rhetorical overreach.</p><h3>When to consult primary legal sources</h3><p>Consult primary sources when the legal status of specific speech affects rights or liabilities, for example in litigation, criminal investigations, or formal policy drafting.</p><h2>Resources and primary sources to consult</h2><p>Key primary sources include leading court decisions, the Rabat Plan of Action, Council of Europe materials, ECHR factsheets, OSCE guidance, and public opinion reports from reputable research centers. Reviewing these documents helps readers verify claims and understand legal tests <a href="https://supreme.justia.com/cases/federal/us/395/444/" target="_blank" rel="noopener">Brandenburg v. Ohio, 395 U.S. 444 (1969)</a></p><p>For platform practices consult the specific service s transparency reports and community standards. For jurisdiction specific law, read the governing statutes and appellate decisions.</p>
+
+
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<h2>Conclusion: balancing free expression and protection from harm</h2><p>U.S. constitutional law tends to protect most hateful expression under the Brandenburg imminence and intent test, while international and European frameworks allow broader restrictions when proportionality and context support them, so the legal landscape varies by place and legal test <a href="https://www.ohchr.org/sites/default/files/Documents/Issues/Opinion/Legislative/Guidelines/Rabat_plan_of_action.pdf" target="_blank" rel="noopener">Rabat Plan of Action</a></p><p>Platforms operate by policy and may remove content that courts would not criminalize, which adds a separate layer of moderation to the legal picture. Readers should consult the primary sources listed and the governing jurisdiction s law before drawing legal conclusions.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-5epmw9" class="faq-toggle" /><label for="faq-5epmw9" class="faq-summary" role="button" tabindex="0">Is hateful speech always illegal in the United States?</label><div class="faq-content"><p>No. Under U.S. law most hateful or offensive speech is protected unless it meets narrow exceptions such as incitement to imminent lawless action or true threats.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-t1rv6k" class="faq-toggle" /><label for="faq-t1rv6k" class="faq-summary" role="button" tabindex="0">Do European countries allow wider restrictions on hate speech?</label><div class="faq-content"><p>Yes. European human rights law and Council of Europe guidance permit wider restrictions in certain cases, applying proportionality and context based balancing.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-kir25c" class="faq-toggle" /><label for="faq-kir25c" class="faq-summary" role="button" tabindex="0">Can platforms remove hate speech even if it is legal?</label><div class="faq-content"><p>Yes. Platforms set their own community standards and may remove content that violates those rules even when the same content is legally protected in a jurisdiction.</p></div></section>
+</section><section class="article-ending">Laws and policies vary by jurisdiction and by platform. Before reaching firm conclusions about legality, consult the cited primary sources and the governing law in the relevant jurisdiction.
+If you are dealing with a specific legal question, seek advice from a qualified legal professional and review the original court decisions and policy texts cited above.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.ohchr.org/sites/default/files/Documents/Issues/Opinion/Legislative/Guidelines/Rabat_plan_of_action.pdf" target="_blank" rel="noopener">https://www.ohchr.org/sites/default/files/Documents/Issues/Opinion/Legislative/Guidelines/Rabat_plan_of_action.pdf</a></li><li><a href="https://supreme.justia.com/cases/federal/us/395/444/" target="_blank" rel="noopener">https://supreme.justia.com/cases/federal/us/395/444/</a></li><li><a href="https://globalfreedomofexpression.columbia.edu/cases/brandenburg-v-ohio/" target="_blank" rel="noopener">https://globalfreedomofexpression.columbia.edu/cases/brandenburg-v-ohio/</a></li><li><a href="https://www.oyez.org/cases/1968/492" target="_blank" rel="noopener">https://www.oyez.org/cases/1968/492</a></li><li><a href="https://www.coe.int/en/web/freedom-expression/hate-speech" target="_blank" rel="noopener">https://www.coe.int/en/web/freedom-expression/hate-speech</a></li><li><a href="https://www.echr.coe.int/documents/factsheet_freedom_of_expression_eng.pdf" target="_blank" rel="noopener">https://www.echr.coe.int/documents/factsheet_freedom_of_expression_eng.pdf</a></li><li><a href="https://www.osce.org/odihr/449167" target="_blank" rel="noopener">https://www.osce.org/odihr/449167</a></li><li><a href="https://www.pewresearch.org/internet/2024/07/10/public-views-on-free-speech-and-hate-speech/" target="_blank" rel="noopener">https://www.pewresearch.org/internet/2024/07/10/public-views-on-free-speech-and-hate-speech/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://michaelcarbonara.com/freedom-of-expression-and-social-media-section-230" target="_blank" rel="noopener">https://michaelcarbonara.com/freedom-of-expression-and-social-media-section-230</a></li><li><a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">https://michaelcarbonara.com/constitutional-rights/</a></li><li><a href="https://michaelcarbonara.com/first-amendment-explained-five-freedoms/" target="_blank" rel="noopener">https://michaelcarbonara.com/first-amendment-explained-five-freedoms/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
