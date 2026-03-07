@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Can you be fired for what you say?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens (from provided style) */
+      --text-color: #ffffff;       /* from --mc-ink */
+      --accent: #ae2736;          /* from --mc-accent */
+      --accent-hover: #8f1f2b;    /* derived darker hover */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664;         /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* from --mc-panel-2 */
+      --radius: 0px;              /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/180KWtgV7BnhuHx4vDjjwz4hkyZPawug9" alt="Can you be fired for what you say? — banner image" />
+        </div>
+        <h1 class="title">Can you be fired for what you say?</h1>
+        <p class="subline">This article explains when public versus private employer rules and whether speech concerns workplace conditions or protected characteristics change legal risk.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/free-speech-and-hate-speech-can-you-be-fired/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">This article explains when speaking at work can put a job at risk. It separates constitutional free-speech protections from the rules employers enforce and offers practical steps readers can take before posting or responding to discipline.
+
+The focus is on clear distinctions: whether an employer is a government body or a private company, whether speech concerns workplace conditions, and whether comments target protected characteristics. Each factor changes legal exposure.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Constitutional free-speech rules limit government employers but not most private employers.</span></div><div class="highlight-card"><span class="highlight-text">The NLRA can protect certain social-media complaints that are concerted and about workplace conditions.</span></div><div class="highlight-card"><span class="highlight-text">Speech targeting protected groups can lawfully lead to discipline under harassment standards.</span></div>
+     </div>
+  <h2>What people mean by free speech and hate speech at work</h2><h3>Definitions: free speech, hate speech, harassment</h3><p>When readers ask about free speech and hate speech at work they are often mixing distinct ideas: <a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">constitutional free speech</a> limits government action, while employer rules and workplace harassment standards govern most job settings.</p><p>Legal and civil liberties groups explain that constitutional protections apply to government actors, and private employers generally set workplace rules that can limit employee statements in ways the First Amendment does not control <a href="https://www.aclu.org/news/free-speech/free-speech-in-the-workplace-rights-and-limits/" target="_blank" rel="noopener">ACLU guidance on workplace speech</a>.</p><h3>Why workplace context changes the rules</h3><p>In workplace settings the same words can be treated differently depending on who speaks, where they speak, and whether the speech targets coworkers or touches on job duties.</p><p>Hate speech is a social term for hateful or demeaning expression about a protected group, while harassment in workplace law refers to conduct that is severe or pervasive enough to create a hostile environment for employees who share protected characteristics, and federal agency guidance explains how employers evaluate such claims <a href="https://www.eeoc.gov/harassment" target="_blank" rel="noopener">EEOC harassment guidance</a>.</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick pause and review before posting</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-6dw4xe-0">
+                        <input id="tool-check-6dw4xe-0" type="checkbox" />
+                        <span>Pause</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-zs2hbu-1">
+                        <input id="tool-check-zs2hbu-1" type="checkbox" />
+                        <span>Identify audience</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-8z2lmn-2">
+                        <input id="tool-check-8z2lmn-2" type="checkbox" />
+                        <span>Check employer policy</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-9mux48-3">
+                        <input id="tool-check-9mux48-3" type="checkbox" />
+                        <span>Consider impact</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use stepwise review before public posts</p>
+            </div><p>Plainly put, a public employer cannot always discipline speech the way a private employer can, so an early question is whether the employer is a government body or a private company. That distinction affects the legal framework that applies.</p><h2>Public employees: the Garcetti and Pickering framework</h2><h3>When courts protect public-employee speech</h3><p>Public employees who speak on matters of public concern can sometimes challenge discipline by relying on precedent that asks whether the speech involves a public issue and balances the employee interest against the employer interest.</p>
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1HCVOp_SecNe7s-RgaCAOd-E2nceL25yZ=s1200" alt="Minimalist 2D vector close up of a noticeboard with blurred pinned notes and a nearby smartphone on a navy background in Michael Carbonara palette illustrating free speech and hate speech" /></a>
+      <div class="side-text"><p>The Supreme Court has set out the test known from Pickering v. Board of Education, which weighs whether the employee spoke as a citizen on a public matter against the government employer's interest in efficient operations <a href="https://supreme.justia.com/cases/federal/us/391/563/" target="_blank" rel="noopener">Pickering v. Board of Education</a>.</p></div>
+    </div><h3>Limits: speech made as part of official duties</h3><p>Courts also follow the Garcetti decision, which draws a key line: speech made pursuant to official job duties is less likely to receive First Amendment protection because it is not treated as citizen speech on a matter of public concern <a href="https://www.supremecourt.gov/opinions/05pdf/04-473.pdf" target="_blank" rel="noopener">Garcetti v. Ceballos</a>.</p><p>Outcomes under this framework are fact dependent; courts apply a balancing test and results can vary based on the employee role, the content of the statement, and the workplace context.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure><h2>Private-sector workers and at-will employment</h2><h3>What at-will employment means for speech</h3><p>Most private employees work under at-will employment, which generally allows an employer to terminate for many reasons, including off-duty or political speech, unless another law or contract prevents that action.</p><p>Guidance and legal analysis for employers and workers emphasize that at-will status leaves private employees comparatively vulnerable to discipline for public statements about politics or personal views, absent statutory protections or contracts that say otherwise <a href="https://www.shrm.org/resourcesandtools/legal-and-compliance/employment-law/pages/can-you-be-fired-for-your-social-media-posts.aspx" target="_blank" rel="noopener">SHRM explanation of social media and firing</a>. The Boston Bar Journal also provides a practical overview of employer rights and risks in the social-media era <a href="https://bostonbar.org/journal/employer-rights-risks-and-obligations-in-the-modern-age-of-social-media/" target="_blank" rel="noopener">Employer rights, risks, and obligations</a>.</p><h3>Exceptions that can protect private workers</h3><p>There are exceptions to at-will termination that can protect private workers, including collective-bargaining agreements, state statutes, and federal labor protections for concerted activity.</p><p>Workers should check employment contracts, union agreements, and relevant state laws to see if an employer has limited its ability to fire for speech in a particular situation.</p><h2>The NLRA and social media: what counts as concerted activity</h2><h3>When social-media posts are protected</h3><p>The National Labor Relations Act protects concerted activity about wages, hours, and working conditions, and that protection can extend to online posts when employees act together to raise workplace issues.</p><p>The NLRB describes employee rights under the NLRA and explains that certain social-media complaints about pay or conditions can qualify as protected concerted activity, even when posted publicly <a href="https://www.nlrb.gov/about-nlrb/rights-we-protect/employee-rights" target="_blank" rel="noopener">NLRB employee rights</a>. See the NLRB's guidance on social media for more detail <a href="https://www.nlrb.gov/about-nlrb/rights-we-protect/the-law/employees/social-media" target="_blank" rel="noopener">Social media | National Labor Relations Board</a>.</p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div><h3>Recent NLRB guidance and practical signals</h3><p>The board and related decisions through 2024 have shown practical signals about what counts as protected concerted activity, and they often focus on whether posts concern workplace terms or invite collective action.</p><p>Not every political or personal post is protected; distinctions often turn on whether the post addresses or seeks to improve workplace conditions or whether it is an individual expression of politics.</p><h2>When speech can lawfully lead to discipline: harassment and hostile work environment</h2><h3>Federal anti-discrimination standards</h3><p>Speech that targets protected classes can cross into unlawful harassment if it is severe or pervasive enough to create a hostile work environment under federal standards.</p><p>The EEOC explains how harassment is assessed, and employers often rely on that guidance when they investigate and enforce harassment policies in the workplace <a href="https://www.eeoc.gov/harassment" target="_blank" rel="noopener">EEOC harassment guidance</a>.</p><h3>How employers evaluate harassment claims</h3><p>Evaluations look at the content, frequency, and context of remarks, whether they were directed at coworkers, and whether they unreasonably interfered with an employee's work environment.</p>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>Because harassment assessments are fact intensive, similar words can lead to different outcomes depending on timing, relationship among employees, and other circumstances.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1xS0ErJJ09LpNn12zM-eub3Q6ZMk2Cx3t=s1200" alt="Minimal vector infographic with balance scales speech bubble and shield on navy background illustrating free speech and hate speech moderation and balance" /></a>
+    </div><h2>Remedies and where to bring a claim</h2><h3>Options for public employees: Section 1983</h3><p>Public employees who believe they were disciplined for protected speech may seek remedies under 42 U.S.C. section 1983 against government actors, which allows suits alleging that a government employer violated First Amendment rights.</p><div class="cta-section"><h3 class="cta-headline">Join the campaign for local engagement and updates</h3><div class="cta-intro"><p>Consider checking agency guidance and your employer policies, and consult HR or counsel to understand filing options for NLRB or EEOC processes</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Sign up to join</a></div><p>Section 1983 claims involve constitutional law and municipal defendants, and remedies and timelines differ from administrative filings available to private employees.</p><h3>Options for private employees: NLRB, EEOC, and state claims</h3><p>Private employees typically pursue NLRB charges for NLRA issues, EEOC complaints for discrimination or harassment, or state wrongful-termination or contract claims when applicable.</p><p>Each forum has different deadlines, processes, and burden of proof, and available remedies vary significantly depending on the legal basis and the facts of the case <a href="https://www.nlrb.gov/about-nlrb/rights-we-protect/employee-rights" target="_blank" rel="noopener">NLRB employee rights</a>.</p><h2>A short checklist to assess your risk before you post</h2><h3>Who is your employer: public or private?</h3><p>Ask whether your employer is a government body or a private company, since different legal tests and protections apply and that distinction is critical to risk assessment.</p><p>Check your employer policy and any union or contract terms that might limit at-will termination.</p><p>Is the post about workplace conditions or a protected class; that distinction matters for NLRA and EEOC analysis.</p><section class="faq-accordion"><input type="checkbox" id="faq-6tjt6q" class="faq-toggle" checked /><label for="faq-6tjt6q" class="faq-summary" role="button" tabindex="0">Can you be fired for what you say?</label><div class="faq-content"><p>Whether you can be fired for what you say depends on whether your employer is a government actor or private, whether the speech is concerted or about workplace conditions, and whether it targets protected characteristics; each factor affects legal protections and remedies.</p></div></section><p>Before posting, review whether your comments are concerted, whether they target a protected characteristic, and whether they relate to job duties or personal politics; these factors change legal exposure <a href="https://www.nlrb.gov/about-nlrb/rights-we-protect/employee-rights" target="_blank" rel="noopener">NLRB employee rights</a>.</p><h2>Common mistakes people make that raise firing risk</h2><h3>Equating constitutional speech protections with immunity at private jobs</h3><p>One common error is assuming the First Amendment prevents private employers from disciplining employees for speech, which is not the case for most private-sector roles.</p><p>Legal and HR guidance explains that private employers may lawfully discipline employees for off-duty or political speech unless a specific statute, contract, or collective agreement protects the employee <a href="https://www.shrm.org/resourcesandtools/legal-and-compliance/employment-law/pages/can-you-be-fired-for-your-social-media-posts.aspx" target="_blank" rel="noopener">SHRM on social media and firing</a>.</p><h3>Posting targeted or harassing content about coworkers</h3><p>Another frequent mistake is venting about coworkers in public posts using slurs or targeted attacks, which can meet harassment standards and justify discipline under employer policies that mirror federal guidance.</p><p>Pausing before posting and reviewing company <a href="https://michaelcarbonara.com/freedom-of-expression-and-social-media/" target="_blank" rel="noopener">social-media rules</a> are simple preventive actions that reduce risk and preserve workplace relationships.</p><h2>Short scenarios: how the law can play out in real examples</h2><h3>Public school teacher criticizes district policy on social media</h3><p>Imagine a public school teacher who posts criticism of a district policy on their personal account; if the speech addresses a matter of public concern, courts apply the Pickering balancing test to decide whether discipline violated the teacher's First Amendment rights <a href="https://supreme.justia.com/cases/federal/us/391/563/" target="_blank" rel="noopener">Pickering v. Board of Education</a>.</p><p>If the teacher's post was part of official duties, Garcetti may limit protection and the result will turn on whether the speech was made as a citizen or as an employee carrying out job functions <a href="https://www.supremecourt.gov/opinions/05pdf/04-473.pdf" target="_blank" rel="noopener">Garcetti v. Ceballos</a>.</p><h3>Retail worker complains about pay and coworkers online</h3><p>A retail worker who posts complaints about pay or scheduling and who invites coworkers to join a discussion may engage in concerted activity protected by the NLRA, according to board guidance and practical summaries for employers <a href="https://www.nlrb.gov/about-nlrb/rights-we-protect/employee-rights" target="_blank" rel="noopener">NLRB employee rights</a>.</p><p>By contrast, a purely personal political rant about unrelated matters would be less likely to receive NLRA protection and more likely to be treated as an at-will employment risk.</p><h3>Speech that targets a protected class and leads to discipline</h3><p>Consider an employee who directs repeated slurs at coworkers of a protected class; employers can investigate and discipline under harassment policies because such conduct can create a hostile work environment based on federal anti-discrimination standards <a href="https://www.eeoc.gov/harassment" target="_blank" rel="noopener">EEOC harassment guidance</a>.</p><p>Context, frequency, and severity drive the legal analysis in these scenarios; similar words used once in private between friends will not always trigger the same response as overt, public attacks at work.</p><h2>If you are disciplined or fired: practical next steps</h2><h3>Document, save records, and review policy</h3><p>After discipline or termination preserve copies of posts, employer notices, and any relevant messages or witness names; documentation matters for any later administrative filing or court claim.</p><p>Immediately review employer policy, any contract or collective-bargaining agreement, and the timelines for NLRB or EEOC filings in your jurisdiction, since time limits can be strict <a href="https://www.eeoc.gov/harassment" target="_blank" rel="noopener">EEOC harassment guidance</a>.</p><h3>Where to file complaints and deadlines</h3><p>Private employees with NLRA issues can file NLRB charges, discrimination claims typically go to the EEOC, and public employees asserting First Amendment claims may pursue Section 1983 litigation; each path has different procedures and timeframes.</p><p>Because remedies and burdens of proof vary, many people consult an employment lawyer or a union representative early to understand next steps and filing deadlines.</p><h2>State laws and open questions for 2026</h2><h3>How state statutes interact with federal rules</h3><p>Some states have adopted statutes affecting political speech or social-media discipline, and those laws can change protections for workers depending on local rules and how courts interpret them.</p><p>Readers should watch how state statutes are applied in practice because the interaction with federal labor law and discrimination law remains an evolving area.</p><h3>Areas where case law is still evolving</h3><p>Courts and agencies continue to refine tests for social-media posts and concerted activity, so precise boundaries can shift with new decisions and administrative guidance.</p><p>Until major new precedents or statutes appear, the safest approach for readers uncertain about risk is to check current state law and agency guidance before acting on contentious public speech.</p><h2>Employer best practices summary for fair speech policies</h2><h3>Drafting neutral, clear policies</h3><p>Employers can reduce legal risk by drafting narrowly tailored social-media and harassment policies that reflect NLRA and EEOC guidance and avoid overbroad bans on employee expression.</p><p>Clear rules that focus on conduct affecting workplace operations, rather than viewpoint, help employers apply standards consistently and limit claims of viewpoint discrimination <a href="https://www.shrm.org/resourcesandtools/legal-and-compliance/employment-law/pages/can-you-be-fired-for-your-social-media-posts.aspx" target="_blank" rel="noopener">SHRM guidance</a>.</p><h3>Training and consistent enforcement</h3><p>Consistent training and documented enforcement help employers demonstrate neutral application of policies, which reduces the risk of claims from employees who assert selective discipline.</p><p>When employers update policies for social media trends they should consult counsel to align with NLRA and EEOC standards and to avoid unintended restrictions on protected concerted activity. Recent employer guidance discusses considerations for updating social-media policies <a href="https://www.bradley.com/insights/publications/2025/01/you-posted-what-considerations-for-employers-social-media-policies-in-2025" target="_blank" rel="noopener">You Posted What?!</a>.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure><h2>Key takeaways: how to balance expression and workplace risk</h2><p>Public versus private matters: government employers are subject to Pickering and Garcetti balances, while private employers rely on at-will rules unless statutes or contracts provide limits.</p><p>The NLRA protects certain concerted workplace complaints, and the EEOC standards allow employers to address harassment that targets protected classes; both frameworks shape when speech can lead to discipline <a href="https://www.nlrb.gov/about-nlrb/rights-we-protect/employee-rights" target="_blank" rel="noopener">NLRB employee rights</a>.</p><p>Before posting, review employer policy, consider whether speech is concerted or targets a protected group, and preserve evidence if discipline occurs as steps that can affect any later claim.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-qc46um" class="faq-toggle" /><label for="faq-qc46um" class="faq-summary" role="button" tabindex="0">Does the First Amendment protect employees from firing for their speech?</label><div class="faq-content"><p>The First Amendment protects against government action, so public employees have limited protections under court tests; private employees are generally governed by at-will rules unless other laws apply.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-h43r5z" class="faq-toggle" /><label for="faq-h43r5z" class="faq-summary" role="button" tabindex="0">Can social-media posts about work be protected?</label><div class="faq-content"><p>Yes, posts about wages, hours, or working conditions may be protected as concerted activity under the NLRA, but purely personal political posts are less likely to be protected.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-gohc2y" class="faq-toggle" /><label for="faq-gohc2y" class="faq-summary" role="button" tabindex="0">What should I do immediately after being disciplined for speech?</label><div class="faq-content"><p>Save copies of posts and communications, review employer policy and any contracts or union terms, and consider timely filings with the NLRB or EEOC or consulting legal counsel.</p></div></section>
+</section><section class="article-ending">Decisions about public statements at work turn on factual details and the legal framework that applies to a particular employer. For serious disputes consider counsel, union representation, or the relevant agency guidance.
+
+This article summarizes general rules and points readers to primary sources for formal filings and further information.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">https://michaelcarbonara.com/constitutional-rights/</a></li><li><a href="https://www.aclu.org/news/free-speech/free-speech-in-the-workplace-rights-and-limits/" target="_blank" rel="noopener">https://www.aclu.org/news/free-speech/free-speech-in-the-workplace-rights-and-limits/</a></li><li><a href="https://www.eeoc.gov/harassment" target="_blank" rel="noopener">https://www.eeoc.gov/harassment</a></li><li><a href="https://supreme.justia.com/cases/federal/us/391/563/" target="_blank" rel="noopener">https://supreme.justia.com/cases/federal/us/391/563/</a></li><li><a href="https://www.supremecourt.gov/opinions/05pdf/04-473.pdf" target="_blank" rel="noopener">https://www.supremecourt.gov/opinions/05pdf/04-473.pdf</a></li><li><a href="https://www.shrm.org/resourcesandtools/legal-and-compliance/employment-law/pages/can-you-be-fired-for-your-social-media-posts.aspx" target="_blank" rel="noopener">https://www.shrm.org/resourcesandtools/legal-and-compliance/employment-law/pages/can-you-be-fired-for-your-social-media-posts.aspx</a></li><li><a href="https://www.nlrb.gov/about-nlrb/rights-we-protect/employee-rights" target="_blank" rel="noopener">https://www.nlrb.gov/about-nlrb/rights-we-protect/employee-rights</a></li><li><a href="https://www.nlrb.gov/about-nlrb/rights-we-protect/the-law/employees/social-media" target="_blank" rel="noopener">https://www.nlrb.gov/about-nlrb/rights-we-protect/the-law/employees/social-media</a></li><li><a href="https://bostonbar.org/journal/employer-rights-risks-and-obligations-in-the-modern-age-of-social-media/" target="_blank" rel="noopener">https://bostonbar.org/journal/employer-rights-risks-and-obligations-in-the-modern-age-of-social-media/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://michaelcarbonara.com/freedom-of-expression-and-social-media/" target="_blank" rel="noopener">https://michaelcarbonara.com/freedom-of-expression-and-social-media/</a></li><li><a href="https://michaelcarbonara.com/first-amendment-explained-five-freedoms/" target="_blank" rel="noopener">https://michaelcarbonara.com/first-amendment-explained-five-freedoms/</a></li><li><a href="https://www.bradley.com/insights/publications/2025/01/you-posted-what-considerations-for-employers-social-media-policies-in-2025" target="_blank" rel="noopener">https://www.bradley.com/insights/publications/2025/01/you-posted-what-considerations-for-employers-social-media-policies-in-2025</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
