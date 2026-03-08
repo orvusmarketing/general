@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Can one branch overrule another?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: #8f222c; /* derived darker accent */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* from --mc-panel-2 */
+      --radius: 0px; /* from --mc-radius */
+
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease, background .12s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      background: var(--accent-hover);
+      filter: none;
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; color: color-mix(in srgb, var(--text-color) 92%, #0000); }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    /* Scoped adjustments to reflect brand style tokens for article elements */
+    .article-body .summary{
+      font-style: italic;
+      color: rgba(255,255,255,.80);
+      margin-bottom: 2rem;
+    }
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:1rem; margin: 2.2rem 0; }
+    .article-body .highlight-card{
+      background: linear-gradient(135deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.03) 100%);
+      border: 1px solid rgba(255,255,255,.14);
+      border-left: 4px solid var(--accent);
+      padding: 1.15rem 1.35rem;
+      border-radius: var(--radius);
+      font-weight: 750;
+      color: var(--text-color);
+      box-shadow: 0 14px 34px rgba(0,0,0,.40);
+    }
+
+    .article-body .faq-accordion{ border: 1px solid rgba(255,255,255,.14); border-left: 4px solid var(--accent); border-radius: var(--radius); margin-bottom: 1.2rem; overflow: hidden; background: linear-gradient(135deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.03) 100%); box-shadow: 0 16px 40px rgba(0,0,0,.42); }
+    .article-body .faq-summary{ padding: 1.25rem 1.2rem 1.25rem 2.9rem; font-weight: 950; cursor: pointer; position: relative; color: var(--text-color); margin: 0; display:flex; align-items:center; min-height:64px; line-height:1.35; }
+    .article-body .faq-content{ display:block; padding: 1.05rem 1.2rem 1.15rem 1.2rem; border-top:1px solid rgba(255,255,255,.12); color: rgba(255,255,255,.92); }
+
+    .article-body .tool-block{ max-width:720px; margin:2.3rem auto; background: linear-gradient(135deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.03) 100%); border:1px solid rgba(255,255,255,.14); border-left:4px solid var(--accent); padding:1.3rem; border-radius:var(--radius); box-shadow:0 18px 46px rgba(0,0,0,.45); }
+    .article-body .tool-purpose{ margin:0 0 .9rem 0 !important; color: rgba(255,255,255,.86); font-style: italic; }
+    .article-body .tool-checklist-item input[type="checkbox"]{ width: 18px; height: 18px; margin:0; accent-color: var(--accent); }
+
+    .article-body .side-by-side{ display:flex; gap:clamp(16px, 3vw, 28px); align-items:flex-start; margin:2rem 0; width:100%; }
+    .article-body .side-by-side img{ flex:0 0 auto; max-width: min(100%,420px); border-radius: var(--radius); box-shadow: 0 14px 34px rgba(0,0,0,.40); border: 1px solid rgba(255,255,255,.10); }
+    .article-body .side-by-side .side-text{ flex:1 1 auto; min-width:0; padding: 0 0.75rem; }
+
+    .article-body .special-image-standalone{ margin:1.4rem auto; text-align:center; max-width:120px; width:100%; }
+    .article-body .special-image-standalone img{ width:100%; height:auto; object-fit:contain; border-radius:0 !important; border:0 !important; }
+
+    @media (max-width: 768px){
+      .page-shell{ border-radius: 0; border-left: 0; border-right: 0; }
+      .content-wrapper{ padding-left: 0; padding-right: 0; }
+      .top, .cta-wrap, .main{ padding-left: clamp(14px, 4.6vw, 20px); padding-right: clamp(14px, 4.6vw, 20px); }
+      .article-body{ max-width: 100%; }
+      .article-body img{ max-width: 100% !important; }
+      .article-body .side-by-side{ flex-direction: column !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1K37jgCQhpgnSsmr1G4lFihLRDOh4_qu2" alt="Can one branch overrule another?" />
+        </div>
+        <h1 class="title">Can one branch overrule another?</h1>
+        <p class="subline">A concise primer on how constitutional design and political tools resolve interbranch conflicts.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/different-government-branches-can-one-branch-overrule-another/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">Understanding when one branch can overrule another starts with the constitutional design. This primer explains the main legal mechanisms and political tools that resolve interbranch conflicts. It seeks to point readers to primary sources and clear summaries so they can verify claims independently.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">The Constitution allocates different powers to Congress, the president, and the courts as the baseline for disputes.</span></div><div class="highlight-card"><span class="highlight-text">Marbury v. Madison set the judiciary's role in reviewing the constitutionality of laws and executive acts.</span></div><div class="highlight-card"><span class="highlight-text">Congress can override a presidential veto with a two thirds vote in both chambers to reverse executive policy.</span></div>
+     </div>
+  <h2>What 'different government branches' means: definition and constitutional context</h2><p>When people ask about different government branches they mean the three separate federal institutions created by the Constitution: Congress, the president, and the federal courts. The Constitution assigns lawmakers, executives, and judges different types of authority, and that allocation is the starting point for any legal question about whether one branch can set aside or reverse the action of another. For a direct reading of the text that establishes those powers, consult the U.S. Constitution as a primary document <a href="https://www.archives.gov/founding-docs/constitution-transcript" target="_blank" rel="noopener">U.S. Constitution</a></p><p>Separation of powers is a structural feature of the federal system rather than a single procedural tool. It means that the branches operate with distinct roles and that a system of checks and balances helps prevent concentration of power. That structural principle frames how disputes are tested in courts, debated in Congress, and resolved through politics, as summarized by established reference works <a href="https://www.britannica.com/topic/separation-of-powers" target="_blank" rel="noopener">Encyclopaedia Britannica on separation of powers</a></p><p>For readers checking candidate materials, the campaign states basic civic principles consistently. This article does not evaluate policy promises. It aims to explain how legal and political mechanisms interact when questions arise about different government branches.</p><div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Read primary sources and authoritative summaries</h3><div class="cta-intro"><p>The paragraph above links to primary documents and authoritative summaries that are useful starting points for verification.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Visit the campaign join page for updates</a></div><h2>How courts can overrule actions by other branches: judicial review and its scope</h2><p>Judicial review gives courts the authority to decide whether a statute or an executive act conflicts with the Constitution. The practice traces to the early Supreme Court decision that articulated the federal judiciary's role in constitutional interpretation, as explained in Marbury v. Madison <a href="https://www.oyez.org/cases/1789-1850/5us137" target="_blank" rel="noopener">Marbury v. Madison</a>. See the Federal Judicial Center for an overview <a href="https://www.fjc.gov/history/administration/judicial-review-executive-orders" target="_blank" rel="noopener">Judicial Review of Executive Orders</a></p><p>When a court applies judicial review it can declare a law or an executive action unconstitutional. That does not mean the court writes new policy. Instead, judges interpret constitutional text and applicable statutes to determine if an action fits within legal limits. Remedies after a finding of unconstitutionality commonly include injunctions or declaratory judgments, and courts can remand matters to agencies or lower courts to resolve specific legal questions.</p><p>Courts exercise judicial review within limits. Judges do not rewrite statutes; they read them and apply constitutional tests. When a question turns on statutory meaning rather than clear constitutional text, courts may interpret the statute in a way that avoids raising constitutional questions, or they may defer to an administrative agency's reasonable interpretation when that approach fits controlling precedent.</p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure><h2>Limits on executive authority: Youngstown and practical constraints</h2><p>The Supreme Court has set practical bounds on unilateral executive action. A leading example is the Court's decision limiting presidential authority in Youngstown Sheet & Tube Co. v. Sawyer, where the Court examined whether the president could take certain actions without statutory or constitutional authorization <a href="https://www.oyez.org/cases/1940-1955/343us579" target="_blank" rel="noopener">Youngstown Sheet & Tube Co. v. Sawyer</a> (see the full opinion on Justia <a href="https://supreme.justia.com/cases/federal/us/343/579/" target="_blank" rel="noopener">Youngstown on Justia</a>)</p><p>Courts analyze executive claims by looking at statutory text and constitutional provisions. When the president acts with clear statutory authorization the courts give more weight to the executive position. When the action lacks statute or clear constitutional grant, the courts may find the action exceeds executive power.</p><section class="faq-accordion"><input type="checkbox" id="faq-gl4b1x" class="faq-toggle" checked /><label for="faq-gl4b1x" class="faq-summary" role="button" tabindex="0">Can one branch of the federal government legally overrule another?</label><div class="faq-content"><p>Courts can invalidate actions that violate the Constitution, Congress can change statutes or override vetoes to reverse executive policy, and political and oversight tools often resolve disputes in practice</p></div></section><p>Beyond court rulings, practical constraints also shape executive choices. Public reaction, congressional oversight, and the need to work with agencies and Federal officials create political and administrative limits that often matter as much as legal rulings for whether an order can be implemented.</p><h2>How Congress can overrule or check other branches: lawmaking, oversight and veto override</h2><p>Congress can change or clarify statutory law to authorize, limit, or reverse executive practice. When statutory language controls an issue, legislation is often the direct route to settle a dispute about authority; see <a href="https://michaelcarbonara.com/how-a-bill-becomes-law/" target="_blank" rel="noopener">how a bill becomes law</a>. That basic legislative power flows from the Constitution's allocation of lawmaking to Congress and underlies many separation-of-powers resolutions.</p>
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1swMUWHWw5xy_HcAmRFMZDB6-ifRwzDzM=s1200" alt="Minimal flat vector infographic showing three simple icons representing different government branches on navy background with white shapes and red accents" /></a>
+      <div class="side-text"><p>The president has the power to veto legislation, but Congress can override a veto with a two thirds vote in both chambers. The Senate explains the mechanics of vetoes and the override process, which is a core legislative tool for reversing executive policy without going to court <a href="https://www.senate.gov/about/powers-procedures/vetoes.htm" target="_blank" rel="noopener">United States Senate veto overview</a></p></div>
+    </div><p>Other congressional tools include funding choices, oversight hearings, and, in extreme cases, impeachment. Those tools operate in the political and institutional layer of checks and balances and can lead to practical changes in executive behavior even when the courts have not issued a final ruling.</p><h2>How separation-of-powers disputes are actually resolved: legal paths and political remedies</h2><p>In practice, disputes about which branch controls a question are resolved by several routes, often working together. Litigation can produce a definitive constitutional ruling, but many conflicts are handled through legislation, congressional oversight, budgetary limits, or negotiated administrative changes. Analysts summarize this mixed approach as the normal course of separation-of-powers disputes <a href="https://www.britannica.com/topic/separation-of-powers" target="_blank" rel="noopener">Encyclopaedia Britannica on separation of powers</a></p><p>Which path applies in a particular case depends on the statutes at issue, the legal question presented, and the incentives facing the institutions. Some matters go quickly to courts because a plaintiff can show concrete harm. Others are resolved by Congress changing the statute or by agencies adjusting policy after hearings and public attention.</p><p>
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div></p><h2>Typical mistakes and misconceptions about when one branch 'overrules' another</h2><p>A common mistake is to equate political or administrative change with a legal overruling. When an agency voluntarily changes course after pressure from Congress or public backlash, the result may look like a judicial invalidation but it is often an administrative or political reversal. Distinguishing a court invalidating an action from a political or administrative change is central to accurate reporting and analysis.</p><p>Another misconception is to read a court opinion as broader than its holding. Court decisions resolve the matters before them, and many opinions include narrow legal reasoning tied to specific facts. Readers should rely on the text of the opinion and, where available, authoritative summaries rather than campaign claims or media shorthand when judging the legal effect of a ruling <a href="https://www.scotusblog.com/2010/09/separation-of-powers/" target="_blank" rel="noopener">SCOTUSBlog separation of powers primer</a></p><p>Finally, avoid treating slogans or campaign statements as legal findings. Legal overruling requires a constitutional or statutory basis and an appropriate judicial, legislative, or administrative procedure to be authoritative.</p><h2>Practical examples and scenarios: historical cases and contemporary disputes</h2><p>Marbury v. Madison remains the prototype for judicial invalidation of laws contrary to the Constitution. That early case articulated the judiciary's role in reviewing the legality of actions by other branches and is the historical starting point for modern judicial review <a href="https://www.oyez.org/cases/1789-1850/5us137" target="_blank" rel="noopener">Marbury v. Madison</a></p><p>Youngstown shows how the Court has limited executive action when the president lacked statutory or constitutional authority. The case frames modern analysis of presidential overreach and remains a touchstone when lawyers and judges assess executive orders and similar unilateral acts <a href="https://www.oyez.org/cases/1940-1955/343us579" target="_blank" rel="noopener">Youngstown Sheet & Tube Co. v. Sawyer</a> (analysis at <a href="https://constitution.congress.gov/browse/essay/artII-S1-C1-5/ALDE_00013794/" target="_blank" rel="noopener">constitution.congress.gov</a>)</p><div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick checklist to find case law and statutes for separation of powers research</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-0610f9-0">
+                        <input id="tool-check-0610f9-0" type="checkbox" />
+                        <span>Case name lookup</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-r4d39v-1">
+                        <input id="tool-check-r4d39v-1" type="checkbox" />
+                        <span>Statute search</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-lavofr-2">
+                        <input id="tool-check-lavofr-2" type="checkbox" />
+                        <span>Opinion PDF</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use official court and legislative sites when possible</p>
+            </div><p>Congressional responses illustrate a different path. When Congress disagrees with executive practice it can pass clarifying legislation or restrict funding to change implementation. The veto and override process creates a formal opportunity to reverse policy through law, and historical episodes show Congress using legislation and oversight to alter executive practice <a href="https://www.senate.gov/about/powers-procedures/vetoes.htm" target="_blank" rel="noopener">United States Senate veto overview</a></p><h2>What remains unsettled and where to look next: agency authority, removal protections, and primary sources</h2><p>Several areas remained actively contested through 2024 to 2026, including the scope of administrative agency authority and protections that limit the president's ability to remove certain executive officials. Legal scholarship and recent litigation track these debates and note that some core questions are likely to return to the courts or Congress over time <a href="https://www.scotusblog.com/2010/09/separation-of-powers/" target="_blank" rel="noopener">SCOTUSBlog separation of powers primer</a></p><p>For readers seeking primary documents, start with the <a href="https://michaelcarbonara.com/read-the-us-constitution-online/" target="_blank" rel="noopener">Constitution</a> and named Supreme Court opinions. Authoritative summaries such as encyclopedias and court-focused blogs provide useful context for how courts and scholars frame unsettled issues <a href="https://www.britannica.com/topic/separation-of-powers" target="_blank" rel="noopener">Encyclopaedia Britannica on separation of powers</a></p>
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure><h2>Key takeaways and how to verify claims about interbranch authority</h2><p>Checklist to verify an "overrule" claim: identify the asserted action, find the controlling statute or constitutional provision, look for a court opinion that addresses the claim or for enacted legislation that changes the law, and consult reputable summaries (see constitutional rights resources <a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">constitutional rights</a>). Start with primary texts for legal findings and then confirm interpretation with respected secondary sources <a href="https://www.archives.gov/founding-docs/constitution-transcript" target="_blank" rel="noopener">U.S. Constitution</a></p>
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>In short, courts can invalidate statutes or executive acts that violate the Constitution through judicial review, Congress can change statutory law or override a veto to reverse executive policy, and political tools such as oversight and funding choices often settle disputes in practice. Use primary documents and named decisions when reporting or evaluating claims about which institution controls an issue.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1VQ8XucnmZV1OHlzKVUAD0FQRArzcohzM=s1200" alt="Minimal 2D vector infographic showing three columns with icons representing the different government branches on deep blue background with white and red accents" /></a>
+    </div>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-wbt4kt" class="faq-toggle" /><label for="faq-wbt4kt" class="faq-summary" role="button" tabindex="0">When can a court overrule Congress or the president?</label><div class="faq-content"><p>A court can declare a statute or executive action unconstitutional when it conflicts with the Constitution, with remedies such as injunctions or declaratory judgments based on judicial review.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-rm8zl7" class="faq-toggle" /><label for="faq-rm8zl7" class="faq-summary" role="button" tabindex="0">Can Congress reverse an executive action without going to court?</label><div class="faq-content"><p>Yes. Congress can change statutory law, use funding decisions or oversight, and override a presidential veto with two thirds of both chambers to reverse or limit executive actions.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-u18m2h" class="faq-toggle" /><label for="faq-u18m2h" class="faq-summary" role="button" tabindex="0">Does a political change equal a legal overruling?</label><div class="faq-content"><p>Not necessarily. Administrative or political changes can have similar practical effects, but legal overruling requires a court judgment or a change in law through legislation.</p></div></section>
+</section><section class="article-ending">Use the Constitution and named Supreme Court opinions as primary verification for legal claims, and consult authoritative primers for context. For reporting or civic discussion, rely on primary texts and careful sourcing rather than slogans.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.archives.gov/founding-docs/constitution-transcript" target="_blank" rel="noopener">https://www.archives.gov/founding-docs/constitution-transcript</a></li><li><a href="https://www.britannica.com/topic/separation-of-powers" target="_blank" rel="noopener">https://www.britannica.com/topic/separation-of-powers</a></li><li><a href="https://www.oyez.org/cases/1789-1850/5us137" target="_blank" rel="noopener">https://www.oyez.org/cases/1789-1850/5us137</a></li><li><a href="https://www.oyez.org/cases/1940-1955/343us579" target="_blank" rel="noopener">https://www.oyez.org/cases/1940-1955/343us579</a></li><li><a href="https://www.senate.gov/about/powers-procedures/vetoes.htm" target="_blank" rel="noopener">https://www.senate.gov/about/powers-procedures/vetoes.htm</a></li><li><a href="https://www.scotusblog.com/2010/09/separation-of-powers/" target="_blank" rel="noopener">https://www.scotusblog.com/2010/09/separation-of-powers/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://supreme.justia.com/cases/federal/us/343/579/" target="_blank" rel="noopener">https://supreme.justia.com/cases/federal/us/343/579/</a></li><li><a href="https://www.fjc.gov/history/administration/judicial-review-executive-orders" target="_blank" rel="noopener">https://www.fjc.gov/history/administration/judicial-review-executive-orders</a></li><li><a href="https://constitution.congress.gov/browse/essay/artII-S1-C1-5/ALDE_00013794/" target="_blank" rel="noopener">https://constitution.congress.gov/browse/essay/artII-S1-C1-5/ALDE_00013794/</a></li><li><a href="https://michaelcarbonara.com/how-a-bill-becomes-law/" target="_blank" rel="noopener">https://michaelcarbonara.com/how-a-bill-becomes-law/</a></li><li><a href="https://michaelcarbonara.com/read-the-us-constitution-online/" target="_blank" rel="noopener">https://michaelcarbonara.com/read-the-us-constitution-online/</a></li><li><a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">https://michaelcarbonara.com/constitutional-rights/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
