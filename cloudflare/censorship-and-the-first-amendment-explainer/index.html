@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>How does censorship relate to the First Amendment?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      --text-color: #ffffff;
+      --accent: #ae2736;
+      --accent-hover: #8d222e;
+      --line: rgba(255,255,255,.16);
+      --surface: #0b2664;
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px;
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+
+    .article-highlights{ display:flex; flex-direction:column; gap:1rem; margin: 1.6rem 0; }
+    .highlight-card{ background: linear-gradient(135deg, rgba(255,255,255,.03) 0%, rgba(255,255,255,.01) 100%); border-left:4px solid var(--accent); padding:1rem; border:1px solid var(--line); color:var(--text-color); font-weight:750; }
+
+    .summary{ font-style:italic; color: rgba(255,255,255,.9); margin-bottom:1.4rem; }
+    .article-ending{ margin-top:2rem; padding-top:1rem; border-top:1px solid var(--line); font-style:italic; }
+
+    .cta-section .cta-button{ background:var(--accent); }
+    .cta-section .cta-button:hover{ background:var(--accent-hover); filter:brightness(1.0); }
+
+    .side-by-side{ display:flex; gap:18px; align-items:flex-start; margin:1.8rem 0; }
+    .side-by-side img{ max-width:420px; box-shadow:0 14px 34px rgba(0,0,0,.42); border:1px solid rgba(255,255,255,.10); }
+    .side-by-side.product-image-right{ flex-direction:column; align-items:center; text-align:center; }
+    .tool-block{ max-width:720px; margin:1.8rem auto; padding:1rem; border-left:4px solid var(--accent); border:1px solid var(--line); background: linear-gradient(135deg, rgba(255,255,255,.03) 0%, rgba(255,255,255,.01) 100%); }
+    .tool-checklist-item label{ display:flex; gap:0.6rem; padding:0.6rem; background: rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.06); }
+
+    .faq-accordion{ border-left:4px solid var(--accent); border:1px solid var(--line); background: linear-gradient(135deg, rgba(255,255,255,.03) 0%, rgba(255,255,255,.01) 100%); padding:0; }
+    .faq-summary{ padding:1rem 1rem 1rem 2.4rem; font-weight:800; color:var(--text-color); display:flex; align-items:center; min-height:56px; }
+    .faq-content{ padding:1rem; color: rgba(255,255,255,.92); }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1Ru3SpOCdGrnh-JZPRTbRcv2X2YOHu6dN" alt="Scale representing censorship and the First Amendment" />
+        </div>
+        <h1 class="title">How does censorship relate to the First Amendment?</h1>
+        <p class="subline">A concise explainer on how the First Amendment distinguishes government censorship from private moderation.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/censorship-and-the-first-amendment-explainer/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+          <div class="summary">This article explains how constitutional law treats censorship in the United States and why the distinction between government action and private moderation matters. It summarizes key Supreme Court tests and offers practical guidance for readers who want to evaluate claims about censorship.
+
+The goal is to present clear, source‑anchored explanations so readers can check the primary cases and decide whether a specific instance involves government censorship or private moderation.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">The First Amendment limits government censorship, not ordinary private moderation.</span></div><div class="highlight-card"><span class="highlight-text">Brandenburg protects advocacy unless it is intended to cause imminent lawless action and likely to do so.</span></div><div class="highlight-card"><span class="highlight-text">Content-based laws face strict scrutiny after Reed, requiring a compelling interest and narrow tailoring.</span></div>
+     </div>
+  <h2>What censorship and the First Amendment mean</h2>
+<h3>Basic legal definition</h3>
+<p>In constitutional law, censorship generally refers to government suppression or restriction of speech, not every removal of content by private companies; the First Amendment restricts government action and explains who is covered by that protection, according to a legal summary at the Legal Information Institute <a href="https://www.law.cornell.edu/wex/first_amendment" target="_blank" rel="noopener">Legal Information Institute summary</a>.</p>
+<p>That distinction matters because many everyday disputes involve <a href="https://michaelcarbonara.com/censorship-vs-moderation-first-amendment/" target="_blank" rel="noopener">private platforms</a> rather than state actors; when people say "censorship," it helps to know whether a public official or a private company took the action in question.</p>
+<p>Public debates over content moderation and platform practices have made the government-versus-private actor line practically important for voters and journalists, since <a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">constitutional rules</a> apply to government decisions but not directly to most private moderation choices.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>Readers should therefore start by asking who acted, and whether the action came from a government office, an official, or a private actor acting under clear governmental authority.</p>
+<h2>How the First Amendment limits government censorship</h2>
+<h3>Content-based vs content-neutral rules</h3>
+<p>The First Amendment constrains the government rather than private actors, so the first step in any analysis is to ask whether the challenged actor is a state actor or a private party; legal summaries explain this government actor requirement and how it frames subsequent review <a href="https://www.law.cornell.edu/wex/first_amendment" target="_blank" rel="noopener">Legal Information Institute summary</a>.</p>
+<p>When the government regulates speech, courts ask whether the law is content-based, meaning it targets speech because of its subject or viewpoint; content-based rules are treated with far greater skepticism by courts than content-neutral rules, which regulate time, place, or manner without regard to message.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Find primary cases and a quick checklist</h3><div class="cta-intro"><p>See the checklist and primary cases below to help evaluate whether a challenged action is government censorship or private moderation.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Learn how to check claims</a></div>
+<p>If a regulation is content-based, modern Supreme Court doctrine requires strict scrutiny: the government must show a compelling interest and that the law is narrowly tailored to that interest. That heightened review often proves fatal for laws that single out particular speech.</p>
+<h3>When the government is treated as the censor</h3>
+<p>Court inquiry looks beyond labels to the facts: formal government directives, law, or coercive action can convert a private decision into state action that the First Amendment reaches, while ordinary private moderation generally remains outside the Amendment's scope <a href="https://www.law.cornell.edu/wex/first_amendment" target="_blank" rel="noopener">Legal Information Institute summary</a>.</p>
+<p>Concrete examples include a city ordinance limiting signs, a law banning particular speakers from public property, or a government office using its regulatory powers to compel speech restrictions; in each situation the identity and authority of the actor determines whether constitutional limits apply.</p>
+<h2>Core legal test: Brandenburg and the incitement standard</h2>
+<h3>What Brandenburg requires</h3>
+<p>The <a href="https://www.law.cornell.edu/wex/brandenburg_test" target="_blank" rel="noopener">Brandenburg test</a> says speech advocating illegal action can be punished only if it is directed to inciting imminent lawless action and is likely to produce such action; that standard protects much advocacy that is merely unpopular or inflammatory <a href="https://supreme.justia.com/cases/federal/us/395/444/" target="_blank" rel="noopener">Brandenburg v. Ohio opinion</a>.</p>
+<p>Under Brandenburg, the government cannot criminalize advocacy simply because it is extreme or offensive; instead the state must show both intent to cause imminent lawless action and a real likelihood that the speech will produce it.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-48i7g9" class="faq-toggle" checked /><label for="faq-48i7g9" class="faq-summary" role="button" tabindex="0">How does the First Amendment constrain censorship in the United States?</label><div class="faq-content"><p>The First Amendment limits government suppression of speech; it does not generally bind private moderation by platforms. Core tests like Brandenburg for incitement and Reed for content-based laws define when government restrictions are constitutionally permissible.</p></div></section>
+<h3>How imminent lawless action differs from unpopular advocacy</h3>
+<p>An illustrative contrast: a public call to change policy through protest or persuasion is generally protected advocacy, while a targeted, timed instruction to armed listeners to commit a specific crime immediately would meet the Brandenburg standard and could be punished.</p>
+<p>That bright-line focus on imminence narrows the category of punishable incitement and preserves broad protections for political argument and persuasion in public debate.</p>
+<h2>Content-based laws and strict scrutiny (Reed and related doctrine)</h2>
+<h3>What strict scrutiny requires</h3>
+<p>The Supreme Court ruled in Reed v. Town of Gilbert that a law is content-based if it applies to particular speech because of the topic or message, and such laws are presumptively invalid and subject to strict scrutiny <a href="https://supreme.justia.com/cases/federal/us/576/15-}" target="_blank" rel="noopener">Reed v. Town of Gilbert opinion</a>.</p>
+<p>Strict scrutiny asks whether the government has a compelling interest and whether the law is narrowly tailored to serve that interest; if the government cannot meet both elements, courts will strike down the restriction.</p>
+<h3>Examples of content-based regulation</h3>
+<p>A hypothetical sign ordinance that bans signs on certain subjects but allows others would be content-based and would likely fail under Reed, because it treats messages differently based on subject matter rather than neutral time, place, or manner rules.</p>
+<p>By contrast, reasonable restrictions on noise during certain hours that apply regardless of viewpoint are content-neutral and typically face lower judicial scrutiny, though they still must leave open ample channels for communication.</p>
+<h2>Censorship and public schools: the Tinker standard</h2>
+<h3>Tinker v. Des Moines explained</h3>
+<p>Student speech in public schools is protected but subject to special rules; <a href="https://www.oyez.org/cases/1968/492" target="_blank" rel="noopener">Tinker v. Des Moines</a> holds that student expression may not be suppressed unless it would materially and substantially disrupt school activities or infringe on the rights of others <a href="https://supreme.justia.com/cases/federal/us/393/503/" target="_blank" rel="noopener">Tinker v. Des Moines opinion</a>.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>That means a peaceful student protest or symbolic expression is often protected under Tinker, but schools retain authority to address speech that causes real disruption or poses safety concerns.</p>
+<h3>When schools can regulate student speech</h3>
+<p>Court precedents after Tinker have carved narrower exceptions for particular school contexts, so whether a school may limit speech can depend on the setting, the audience, and the likely effect on school operations.</p>
+<p>Readers should view student-speech disputes as fact intensive: courts weigh the specific context, including whether the speech occurred on campus, whether instruction was interrupted, and whether other students' rights were affected.</p>
+
+    <div class="side-by-side special-image-left">
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1nJVAyYjvPz6nVkdCYdB7-7OV22jUSE0b=s1200" alt="Minimal vector infographic showing a public library facade with a courthouse column in the background and legal icons illustrating censorship and the first amendment" /></a>
+      <div class="side-text"><p>The First Amendment applies to government action, not to ordinary private moderation decisions by social-media companies, so platforms can remove or label content under their own terms without triggering the Amendment's restrictions in most cases <a href="https://www.law.cornell.edu/wex/first_amendment" target="_blank" rel="noopener">Legal Information Institute summary</a>.</p></div>
+    </div>
+<p>Readers should be careful before labeling platform decisions as "censorship" in a constitutional sense; many content-moderation choices reflect private policy rather than state compulsion.</p>
+<p>Signs that a private action may involve government include formal directives, laws that require or authorize the conduct, or clear coercion that leaves the private actor with no real choice; courts look at the degree of government entanglement to determine whether state action exists.</p>
+<p>When public officials coordinate with platforms in ways that are nonbinding or advisory, the presence of mere requests does not automatically create state action; factual context matters for the constitutional analysis.</p>
+<h2>Common misunderstandings and pitfalls when people say 'censorship'</h2>
+<h3>Frequent confusions to avoid</h3>
+<p>A common mistake is equating content removal by a private company with government censorship without evidence of state action; checking who acted and whether there was official authority is the crucial first step.</p>
+<p>Another frequent error is assuming that any regulation is content-based; the text and purpose of a law matter, and many rules regulate conduct or time and place rather than targeting specific viewpoints.</p>
+<h3>How to check claims quickly</h3>
+<p>Quick heuristics include asking: who acted, was there a government policy or formal order, does the rule single out particular messages, and could the speech be incitement under Brandenburg?</p>
+<p>Those steps help separate ordinary moderation disputes from constitutional questions that require court review, and they guide readers toward appropriate primary sources for verification.</p>
+<h2>Practical examples and scenarios</h2>
+<h3>Landmark cases as touchstones</h3>
+<p>Brandenburg, Reed, and Tinker each offer clear touchstones: <a href="https://teachingamericanhistory.org/document/brandenburg-v-ohio-2/" target="_blank" rel="noopener">Brandenburg</a> protects advocacy absent imminent lawless action, Reed requires strict scrutiny for content-based rules, and Tinker limits when schools may discipline student speech <a href="https://supreme.justia.com/cases/federal/us/395/444/" target="_blank" rel="noopener">Brandenburg v. Ohio opinion</a>.</p>
+<p>Using those cases as starting points helps readers see how legal standards apply without assuming unresolved disputes have been decided.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<p>Example 1, protest: A city cannot ban a peaceful political march simply because officials dislike the message; a content-based ban would trigger strict scrutiny under Reed and related doctrine.</p>
+
+<p>Example 2, social media: A platform's decision to remove a post under its terms is generally private moderation and not government censorship unless a government actor has clearly coerced or compelled the platform to act.</p>
+<p>Example 3, school event: A student wearing a political armband at school will likely be protected under Tinker unless the armband materially disrupts classes or infringes other students' rights.</p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick verification steps for readers to assess censorship claims</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-4jejlz-0">
+                        <input id="tool-check-4jejlz-0" type="checkbox" />
+                        <span>Identify actor</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-6azs30-1">
+                        <input id="tool-check-6azs30-1" type="checkbox" />
+                        <span>Check for state action</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-u97835-2">
+                        <input id="tool-check-u97835-2" type="checkbox" />
+                        <span>Is the rule content-based</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-mfwymq-3">
+                        <input id="tool-check-mfwymq-3" type="checkbox" />
+                        <span>Incitement under Brandenburg</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-5lrxtu-4">
+                        <input id="tool-check-5lrxtu-4" type="checkbox" />
+                        <span>Consult primary sources</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Start with who acted</p>
+            </div>
+<p>Follow these concise steps when you encounter a claim that someone was censored: identify the actor, check for government involvement, determine whether the rule targets content, consider whether the speech meets the Brandenburg incitement standard, and consult primary sources such as the cited Supreme Court opinions.</p>
+<p>Primary sources and reputable legal summaries are the most reliable way to verify whether an action implicates the First Amendment; secondary commentary can help contextually but should not replace the primary texts.</p>
+
+    <div class="side-by-side image-2-right">
+      <div class="side-text"><p>The First Amendment's division between government censorship and private moderation matters for how citizens, journalists, and public officials talk about speech disputes; careful factual analysis helps prevent mislabeling routine moderation as constitutional suppression <a href="https://www.law.cornell.edu/wex/first_amendment" target="_blank" rel="noopener">Legal Information Institute summary</a>.</p></div>
+      <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/1o6AFAEEWmINlC0UPZFz3DYyqO8qwg7m6=s1200" alt="Minimal 2D vector infographic showing three icons representing government platforms and schools on a blue background about censorship and the first amendment" /></a>
+    </div>
+<p>Core tests like Brandenburg and Reed set the legal boundaries for government restrictions, while school cases such as Tinker show how context can permit greater regulation in specific settings.</p>
+<p>For readers who want to go deeper, the primary Supreme Court opinions cited in this article are the best starting points, followed by <a href="https://michaelcarbonara.com/first-amendment-explained-five-freedoms/" target="_blank" rel="noopener">reputable legal reference pages</a> that summarize doctrine and track developments.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-gcbru2" class="faq-toggle" /><label for="faq-gcbru2" class="faq-summary" role="button" tabindex="0">Does the First Amendment limit social-media companies?</label><div class="faq-content"><p>Generally no; the First Amendment restricts government actors, not private companies. Platform moderation is usually governed by private terms and contract law unless there is clear government coercion.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-ya9jha" class="faq-toggle" /><label for="faq-ya9jha" class="faq-summary" role="button" tabindex="0">When can the government limit speech?</label><div class="faq-content"><p>The government may limit speech only under defined exceptions such as incitement to imminent lawless action, or when a content-neutral rule meets constitutional standards; content-based laws face strict scrutiny.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-qc2v2y" class="faq-toggle" /><label for="faq-qc2v2y" class="faq-summary" role="button" tabindex="0">Are student speech rules the same as for adults?</label><div class="faq-content"><p>No; student speech in public schools is protected but can be regulated if it materially and substantially disrupts school activities or infringes others' rights under Tinker.</p></div></section>
+</section><section class="article-ending">Understanding the line between government censorship and private moderation helps citizens and journalists discuss speech controversies with greater precision. When in doubt, consult the primary cases cited here and reputable legal summaries to verify whether an action implicates the First Amendment.
+
+For questions about local disputes, consider looking at the cited opinions and official statements before drawing conclusions about censorship.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://www.law.cornell.edu/wex/first_amendment" target="_blank" rel="noopener">https://www.law.cornell.edu/wex/first_amendment</a></li><li><a href="https://michaelcarbonara.com/censorship-vs-moderation-first-amendment/" target="_blank" rel="noopener">https://michaelcarbonara.com/censorship-vs-moderation-first-amendment/</a></li><li><a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">https://michaelcarbonara.com/constitutional-rights/</a></li><li><a href="https://www.law.cornell.edu/wex/brandenburg_test" target="_blank" rel="noopener">https://www.law.cornell.edu/wex/brandenburg_test</a></li><li><a href="https://supreme.justia.com/cases/federal/us/395/444/" target="_blank" rel="noopener">https://supreme.justia.com/cases/federal/us/395/444/</a></li><li><a href="https://supreme.justia.com/cases/federal/us/576/15-}" target="_blank" rel="noopener">https://supreme.justia.com/cases/federal/us/576/15-}</a></li><li><a href="https://www.oyez.org/cases/1968/492" target="_blank" rel="noopener">https://www.oyez.org/cases/1968/492</a></li><li><a href="https://supreme.justia.com/cases/federal/us/393/503/" target="_blank" rel="noopener">https://supreme.justia.com/cases/federal/us/393/503/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://teachingamericanhistory.org/document/brandenburg-v-ohio-2/" target="_blank" rel="noopener">https://teachingamericanhistory.org/document/brandenburg-v-ohio-2/</a></li><li><a href="https://michaelcarbonara.com/first-amendment-explained-five-freedoms/" target="_blank" rel="noopener">https://michaelcarbonara.com/first-amendment-explained-five-freedoms/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
