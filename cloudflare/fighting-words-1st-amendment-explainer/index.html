@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Are fighting words protected by the First Amendment? A clear explainer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-mapped tokens derived from provided style */
+      --text-color: #ffffff;           /* from --mc-ink */
+      --accent: #ae2736;               /* from --mc-accent */
+      --accent-hover: #8f1f2b;         /* derived darker accent */
+      --line: rgba(255,255,255,.16);   /* from --mc-line */
+      --surface: #0b2664;              /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px;                   /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area */
+    .article-body .summary{ font-style: italic; color: rgba(255,255,255,.88); margin-bottom: 1.6rem; }
+    .article-body .article-highlights{ display:flex; flex-direction:column; gap:1rem; margin:1.8rem 0; }
+    .article-body .highlight-card{ background: linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border-left:4px solid var(--accent); padding:1rem; border:1px solid rgba(255,255,255,.10); }
+    .article-body .tool-block{ max-width:720px; margin:1.6rem auto; }
+    .article-body .side-by-side.product-image-right img{ max-width:300px; }
+    .article-body .faq-summary{ color: var(--text-color); }
+    .article-body .article-ending{ color: rgba(255,255,255,.88); }
+    .article-body .cta-section .cta-button{ background: var(--accent); }
+    .article-body .cta-section .cta-button:hover{ background: var(--accent-hover); }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1OIBCfmCEfEqoCuSzPZHIkBrjKnOFos4U" alt="Are fighting words protected by the First Amendment?" />
+        </div>
+        <h1 class="title">Are fighting words protected by the First Amendment? A clear explainer</h1>
+        <p class="subline">A neutral, source-based explainer tying Supreme Court precedent to a practical checklist for readers.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/fighting-words-1st-amendment-explainer/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+          <div class="summary">This article explains whether fighting words are protected by the First Amendment. It anchors the explanation in Supreme Court precedent and recent commentary, and aims to give readers a practical way to assess incidents.
+
+The focus is neutral and source based. Readers who want to follow a particular incident should collect primary records and consult the Chaplinsky and Cohen opinions as well as modern summaries.</div>
+
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Chaplinsky established fighting words as a narrow exclusion, focused on direct insults that provoke immediate violence.</span></div><div class="highlight-card"><span class="highlight-text">Cohen limited prosecutions for offensive speech, protecting many provocative expressions without imminent risk of harm.</span></div><div class="highlight-card"><span class="highlight-text">Online speech raises unsettled questions about immediacy and audience reaction, so courts decide these cases carefully.</span></div>
+     </div>
+  <h2>Short answer: fighting words 1st amendment</h2>
+  <p>The short answer is this: fighting words are a narrow, historically recognized category of <a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">unprotected speech</a>, but modern courts apply the concept rarely and with caution.</p>
+  <p>The Supreme Court first described the category in Chaplinsky v. New Hampshire as words that by their utterance inflict injury or tend to incite an immediate breach of the peace, and that case remains the doctrinal origin of the term <a href="https://www.law.cornell.edu/supremecourt/text/315/568" target="_blank" rel="noopener">Chaplinsky opinion</a>.</p>
+  <p>Later decisions, most notably Cohen v. California, limited prosecutions for offensive expression and pushed courts to protect many provocative statements unless they present a direct, immediate risk of violence or fall into other narrow exceptions <a href="https://www.law.cornell.edu/supremecourt/text/403/15" target="_blank" rel="noopener">Cohen opinion</a>.</p>
+
+  <h2>Definition and origin: Chaplinsky and the fighting words doctrine</h2>
+  <p>Chaplinsky v. New Hampshire is the starting point for the fighting words doctrine. The Court described fighting words as those that by their utterance inflict injury or tend to incite an immediate breach of the peace, forming a categorical exclusion from First Amendment protection <a href="https://www.law.cornell.edu/supremecourt/text/315/568" target="_blank" rel="noopener">Chaplinsky opinion</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+  <p>The 1942 Court justified the category by focusing on words that are likely to cause violent reaction in a face to face encounter, and it treated the exclusion as a way to balance free expression against public order in particular circumstances <a href="https://www.law.cornell.edu/supremecourt/text/315/568" target="_blank" rel="noopener">Chaplinsky opinion</a>.</p>
+  <p>In plain terms, Chaplinsky draws a line around a specific kind of speech: direct, personal insults that make a violent response likely at the moment they are spoken. That line arises from case law rather than a specific textual amendment provision, so courts have interpreted and adjusted it over time <a href="https://www.law.cornell.edu/supremecourt/text/315/568" target="_blank" rel="noopener">Chaplinsky opinion</a>.</p>
+
+  <div class="cta-section">
+    <h3 class="cta-headline">Find the primary opinions and neutral summaries</h3>
+    <div class="cta-intro"><p>The Chaplinsky and Cohen opinions are primary sources that help explain the legal test and its limits; readers wanting the original language should consult the Supreme Court opinions and modern summaries.</p></div>
+    <a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Read the Chaplinsky and Cohen opinions</a>
+  </div>
+
+  <h2>How later cases narrowed the scope - Cohen and related rulings</h2>
+  <p>Cohen v. California made a key change by protecting expressions that are offensive but not threatening in a way likely to provoke immediate violence; the Court emphasized expressive value and the risk of chilling speech when mere offensiveness is punished <a href="https://www.law.cornell.edu/supremecourt/text/403/15" target="_blank" rel="noopener">Cohen opinion</a>.</p>
+  <p>After Cohen, courts have required more than hurt feelings or crude language before treating speech as unprotected fighting words. The ruling signaled that many expletives and insults, especially those with political or expressive content, remain within First Amendment protection unless they directly provoke immediate disorder <a href="https://www.scotusblog.com/2024/06/what-are-fighting-words/" target="_blank" rel="noopener">SCOTUSblog overview</a>.</p>
+  <p>That narrowing means prosecutors and courts now look for immediacy, specificity toward a listener, and a real risk of immediate violence rather than punishing broad offensiveness alone <a href="https://www.scotusblog.com/2024/06/what-are-fighting-words/" target="_blank" rel="noopener">SCOTUSblog overview</a>.</p>
+
+  <h2>How courts apply the fighting words test today</h2>
+  <p>In current practice, courts rarely rest a conviction solely on a fighting words theory; instead they often use related doctrines such as incitement, true threats, or harassment when speech poses clearer risks, and modern commentary notes this shift <a href="https://www.scotusblog.com/2024/06/what-are-fighting-words/" target="_blank" rel="noopener">SCOTUSblog overview</a>.</p>
+  <p>The American Civil Liberties Union and other civil liberties organizations report that prosecutions relying only on the classic Chaplinsky framework are uncommon and that courts tend to prefer doctrines that better fit the facts, such as whether speech intentionally incites imminent lawless action or constitutes a true threat <a href="https://www.aclu.org/know-your-rights/free-speech" target="_blank" rel="noopener">ACLU free speech guide</a>.</p>
+  <p>At the same time, fighting words still appear in case law when the speech is direct, face to face, and aimed at a specific listener in a way that a reasonable person would expect to provoke immediate violence <a href="https://www.law.cornell.edu/supremecourt/text/315/568" target="_blank" rel="noopener">Chaplinsky opinion</a>.</p>
+
+  <div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">a short checklist to assess whether speech may fall outside First Amendment protection</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-7rzltc-0">
+                        <input id="tool-check-7rzltc-0" type="checkbox" />
+                        <span>Immediacy</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-qcfa8k-1">
+                        <input id="tool-check-qcfa8k-1" type="checkbox" />
+                        <span>Directness</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-j80v5k-2">
+                        <input id="tool-check-j80v5k-2" type="checkbox" />
+                        <span>Likelihood of Violence</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-cfmfdx-3">
+                        <input id="tool-check-cfmfdx-3" type="checkbox" />
+                        <span>Contextual Indicators</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-lt53bm-4">
+                        <input id="tool-check-lt53bm-4" type="checkbox" />
+                        <span>Alternative Doctrines</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-kn9yxk-5">
+                        <input id="tool-check-kn9yxk-5" type="checkbox" />
+                        <span>Notes</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use with primary sources</p>
+            </div>
+
+  <h2>Fighting words and the digital age: key uncertainties</h2>
+  <p>The core problem online is that Chaplinsky depends on immediacy and a face to face audience reaction, and those elements are harder to map to social media and other digital platforms where speech is amplified and dispersed <a href="https://harvardlawreview.org/2025/11/fighting-words-in-the-digital-age/" target="_blank" rel="noopener">Harvard Law Review analysis</a>.</p>
+  <p>Scholars writing in 2024 and 2025 highlight that rapid, <a href="https://techpolicy.press/tracing-the-speech-regulation-patterns-of-2025" target="_blank" rel="noopener">amplified posts</a> can produce harms but do not fit neatly into the immediacy requirement; courts have struggled to decide when an online provocation is equivalent to a face to face taunt likely to produce immediate violence <a href="https://harvardlawreview.org/2025/11/fighting-words-in-the-digital-age/" target="_blank" rel="noopener">Harvard Law Review analysis</a>.</p>
+  <p>The uncertainty means that close cases involving online harassment, targeted attacks, or coordinated amplification may be resolved under incitement or true threat doctrines instead, while some instances remain protected speech depending on context and intent <a href="https://www.c-span.org/program/public-affairs-event/freedom-of-speech-in-the-digital-age/661916" target="_blank" rel="noopener">online harassment</a>.</p>
+
+  <h2>Practical checklist: when speech may fall outside First Amendment protection</h2>
+  <p>Use this <a href="https://michaelcarbonara.com/freedom-of-speech-examples/" target="_blank" rel="noopener">four step checklist</a> to evaluate whether particular speech might be unprotected: first, ask whether the speech was likely to produce immediate violence; second, check whether it was directly addressed to a listener in a face to face setting; third, evaluate the likelihood that a reasonable person would react violently; fourth, look for indicators that the speech fits another unprotected category such as incitement or a true threat <a href="https://www.law.cornell.edu/supremecourt/text/315/568" target="_blank" rel="noopener">Chaplinsky opinion</a>.</p>
+  <p>These factors track Chaplinsky and later clarifications: immediacy and directness matter most, but context and alternative doctrines are often decisive <a href="https://www.law.cornell.edu/supremecourt/text/403/15" target="_blank" rel="noopener">Cohen opinion</a>.</p>
+  <p>The Congressional Research Service groups fighting words with other narrow unprotected categories and advises careful fact specific analysis, which is why legal practitioners recommend documenting exact words, setting, and audience reaction before drawing conclusions <a href="https://crsreports.congress.gov/product/pdf/LSB/LSB10527" target="_blank" rel="noopener">Congressional Research Service report</a>.</p>
+
+  <h2>Examples and hypotheticals: face-to-face insults, threats, and online harassment</h2>
+  <p>Likely unprotected, classic example: a person at a crowded public event steps toward another and shouts a direct, targeted epithet intended to provoke immediate violence. Courts have treated similar face to face provocations as within the fighting words zone when the context makes a violent reaction likely <a href="https://www.law.cornell.edu/supremecourt/text/315/568" target="_blank" rel="noopener">Chaplinsky opinion</a>.</p>
+  <p>Likely protected, offensive political speech: <a href="https://michaelcarbonara.com/first-amendment-explained-five-freedoms/" target="_blank" rel="noopener">a protester wearing an expletive T-shirt criticizing a public official</a> is typically protected after Cohen, because the statement is expressive political criticism without a direct, immediate provocation of violence <a href="https://www.law.cornell.edu/supremecourt/text/403/15" target="_blank" rel="noopener">Cohen opinion</a>.</p>
+  <p>Borderline online scenario: a rapid stream of highly provocative posts aimed at a private person that include insults and harassment. Scholarship so far suggests courts will look for signs of coordination, intent to provoke immediate violence, or credible threats before treating such material as outside First Amendment protection <a href="https://harvardlawreview.org/2025/11/fighting-words-in-the-digital-age/" target="_blank" rel="noopener">Harvard Law Review analysis</a>.</p>
+
+  <section class="faq-accordion"><input type="checkbox" id="faq-vjy614" class="faq-toggle" checked /><label for="faq-vjy614" class="faq-summary" role="button" tabindex="0">Are fighting words protected by the First Amendment?</label><div class="faq-content"><p>Fighting words are a narrow, historically recognized category of unprotected speech under Chaplinsky, but modern courts have narrowed its practical scope and now resolve many cases under related doctrines; outcomes depend on immediacy, directness, and context.</p></div></section>
+  <p>Another borderline case is a call to action posted publicly that uses inflammatory language; whether it is treated as fighting words will likely depend on evidence that it was intended and likely to produce imminent lawless action under the incitement test.</p>
+
+  <h2>Common mistakes and courtroom pitfalls</h2>
+  <p>A frequent error is to treat mere offensiveness as enough to punish speech. Cohen makes clear that offensiveness alone does not remove First Amendment protection, and courts will reject prosecutions that rely only on a listener feeling insulted <a href="https://www.law.cornell.edu/supremecourt/text/403/15" target="_blank" rel="noopener">Cohen opinion</a>.</p>
+  <p>Another pitfall is reading immediacy into remote or online contexts where the speaker and audience are not face to face; recent scholarship warns against applying Chaplinsky in a way that ignores the original emphasis on instant, physical reaction <a href="https://harvardlawreview.org/2025/11/fighting-words-in-the-digital-age/" target="_blank" rel="noopener">Harvard Law Review analysis</a>.</p>
+  <p>Courts often prefer doctrines like incitement or true threats where the factual record supports intent or a credible threat, because those tests align better with modern concerns about coordinated or amplified speech and the risk of harm <a href="https://crsreports.congress.gov/product/pdf/LSB/LSB10527" target="_blank" rel="noopener">Congressional Research Service report</a>.</p>
+
+  <h2>How to evaluate a real case: step-by-step approach for readers</h2>
+  <p>Step 1, collect primary materials: record the exact words used, the setting, whether the exchange was face to face, and any contemporaneous reactions from listeners or bystanders. Primary sources matter for later interpretation and for any legal review <a href="https://www.law.cornell.edu/supremecourt/text/315/568" target="_blank" rel="noopener">Chaplinsky opinion</a>.</p>
+  <p>Step 2, apply the checklist: test for immediacy, directness, and a realistic likelihood of provoking immediate violence. If the speech appears directed and imminent, also check whether it meets incitement or true threat standards before concluding it is unprotected <a href="https://crsreports.congress.gov/product/pdf/LSB/LSB10527" target="_blank" rel="noopener">Congressional Research Service report</a>.</p>
+  <p>Step 3, consult primary legal commentary and case law. Neutral summaries such as SCOTUSblog and the ACLU's guides help place incidents in doctrinal context, and legal scholars' recent work can clarify how courts view online incidents <a href="https://www.scotusblog.com/2024/06/what-are-fighting-words/" target="_blank" rel="noopener">SCOTUSblog overview</a>.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+
+  <h2>Conclusion: key takeaways about fighting words 1st amendment</h2>
+  <p>Chaplinsky created the fighting words doctrine as a narrow category of unprotected speech, but Cohen and later decisions narrowed its practical scope and protected many offensive expressions that do not pose an immediate risk of violence <a href="https://www.law.cornell.edu/supremecourt/text/315/568" target="_blank" rel="noopener">Chaplinsky opinion</a>.</p>
+  <p>Today, courts rarely rely on a pure fighting words theory and often resolve risky speech under doctrines like incitement or true threats; questions remain about how to apply the doctrine to online, amplified communication and courts will continue to assess those cases fact by fact <a href="https://harvardlawreview.org/2025/11/fighting-words-in-the-digital-age/" target="_blank" rel="noopener">Harvard Law Review analysis</a>.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+  <p>For readers following incidents in the news, the most reliable approach is to gather primary records, use a checklist focused on immediacy and directness, and consult the Chaplinsky and Cohen opinions and neutral modern commentary for context <a href="https://www.law.cornell.edu/supremecourt/text/403/15" target="_blank" rel="noopener">Cohen opinion</a>.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-mgbf4i" class="faq-toggle" /><label for="faq-mgbf4i" class="faq-summary" role="button" tabindex="0">What are fighting words?</label><div class="faq-content"><p>Fighting words are direct, personal insults that by their utterance are likely to cause an immediate breach of the peace. The concept comes from Chaplinsky and is a narrow, case law based category.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-rryw11" class="faq-toggle" /><label for="faq-rryw11" class="faq-summary" role="button" tabindex="0">Does offensive speech automatically lose First Amendment protection?</label><div class="faq-content"><p>No. Mere offensiveness is not enough. Since Cohen, courts usually protect offensive or provocative speech unless it poses a direct, immediate risk of violence or fits another narrow exception.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-dzkeit" class="faq-toggle" /><label for="faq-dzkeit" class="faq-summary" role="button" tabindex="0">Can a social media post be treated as fighting words?</label><div class="faq-content"><p>It is uncertain. Courts and scholars note that digital speech challenges the immediacy and face to face elements of the doctrine, so online cases are decided case by case under related doctrines when appropriate.</p></div></section>
+</section>
+
+<section class="article-ending">If you are tracking a local incident or a news story, document the exact words, setting, and any immediate reactions. That information is essential for understanding how courts are likely to treat the speech.
+
+Legal outcomes depend on facts and court interpretation, so consult primary sources and neutral legal summaries for the most reliable context.</section>
+
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">https://michaelcarbonara.com/constitutional-rights/</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/315/568" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/315/568</a></li><li><a href="https://www.law.cornell.edu/supremecourt/text/403/15" target="_blank" rel="noopener">https://www.law.cornell.edu/supremecourt/text/403/15</a></li><li><a href="https://www.scotusblog.com/2024/06/what-are-fighting-words/" target="_blank" rel="noopener">https://www.scotusblog.com/2024/06/what-are-fighting-words/</a></li><li><a href="https://www.aclu.org/know-your-rights/free-speech" target="_blank" rel="noopener">https://www.aclu.org/know-your-rights/free-speech</a></li><li><a href="https://harvardlawreview.org/2025/11/fighting-words-in-the-digital-age/" target="_blank" rel="noopener">https://harvardlawreview.org/2025/11/fighting-words-in-the-digital-age/</a></li><li><a href="https://techpolicy.press/tracing-the-speech-regulation-patterns-of-2025" target="_blank" rel="noopener">https://techpolicy.press/tracing-the-speech-regulation-patterns-of-2025</a></li><li><a href="https://www.c-span.org/program/public-affairs-event/freedom-of-speech-in-the-digital-age/661916" target="_blank" rel="noopener">https://www.c-span.org/program/public-affairs-event/freedom-of-speech-in-the-digital-age/661916</a></li><li><a href="https://michaelcarbonara.com/freedom-of-speech-examples/" target="_blank" rel="noopener">https://michaelcarbonara.com/freedom-of-speech-examples/</a></li><li><a href="https://michaelcarbonara.com/first-amendment-explained-five-freedoms/" target="_blank" rel="noopener">https://michaelcarbonara.com/first-amendment-explained-five-freedoms/</a></li><li><a href="https://crsreports.congress.gov/product/pdf/LSB/LSB10527" target="_blank" rel="noopener">https://crsreports.congress.gov/product/pdf/LSB/LSB10527</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
