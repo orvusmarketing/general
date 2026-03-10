@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Why is the press not free?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand tokens derived from provided style */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736;     /* from --mc-accent */
+      --accent-hover: color-mix(in srgb, #ae2736 86%, #000 14%);
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1Gdr0-VzhLEcbPRL7p54DKYk6OTje4A44" alt="Why is the press not free? - banner" />
+        </div>
+        <h1 class="title">Why is the press not free?</h1>
+        <p class="subline">An evidence-based review of monitoring reports explaining why press freedom is under strain and what readers can do.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/freedom-of-press-speech-why-press-not-free/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">Press freedom matters because independent reporting is essential for public accountability and informed civic decision making. Monitoring organisations report a decline or strain in media freedom in many places in 2024, and this article uses those public assessments to explain why that is happening and what readers can do.
+
+The article summarizes findings from public indices and research produced by Reporters Without Borders, Freedom House, the Reuters Institute, the Committee to Protect Journalists and UNESCO, and it focuses on legal, economic, safety and digital mechanisms that shape reporting capacity and independence.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Global monitoring reports from 2024 and 2025 show press freedom is under strain for several interacting reasons.</span></div><div class="highlight-card"><span class="highlight-text">Economic pressures and ownership concentration reduce local reporting capacity, increasing reliance on fewer outlets.</span></div><div class="highlight-card"><span class="highlight-text">Practical reader actions include diversifying sources, supporting independent outlets and advocating for journalist safety.</span></div>
+     </div>
+  <h2>Introduction: Why press freedom matters and why it is under strain</h2>
+<p>Monitoring organisations that track media freedom show that press independence is under strain in many countries, with a net decline among the number of states rated as having high media freedom in 2024, and a mix of legal, political and economic factors driving that change. <a href="https://rsf.org/en/ranking/2024" target="_blank" rel="noopener">World Press Freedom Index 2024</a></p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>This article uses public monitoring and research to explain those mechanisms and to point readers to practical steps they can take to evaluate news and support local reporting. The review draws on the major annual indices and reports from Reporters Without Borders, Freedom House and the Reuters Institute to keep conclusions evidence based. <a href="https://freedomhouse.org/report/freedom-press/2024" target="_blank" rel="noopener">Freedom of the Press 2024</a></p>
+<p>The aim here is explanatory, not prescriptive: the article summarizes findings from monitoring documents and research, outlines how press freedom is measured, and identifies recommended actions for readers and civic actors.</p>
+<h2>What we mean by press freedom and how it is measured</h2>
+<h3>Core definitions used by major indices, including freedom of press speech</h3>
+<p>Major indices frame press freedom as a mix of legal protections for speech, editorial independence, safety for journalists and the practical capacity to produce independent news; in other words, it is not only a legal right but also a set of institutional conditions that allow journalism to function. <a href="https://rsf.org/en/ranking/2024" target="_blank" rel="noopener">World Press Freedom Index 2024</a></p>
+<h3>Key indicators and methodological caveats</h3>
+<p>Indices use different indicators, such as laws on media regulation, documented cases of harassment or violence, market conditions for newsrooms and online information accessibility, and methodological differences can change country rankings from year to year; readers should treat rankings as summaries built on specific criteria rather than absolute scores. <a href="https://freedomhouse.org/report/freedom-press/2024" target="_blank" rel="noopener">Freedom of the Press 2024</a></p>
+<p>For example, some measures emphasize legal constraints while others weight journalistic safety or economic capacity more heavily, so looking at multiple reports gives a fuller picture than any single index. The Reuters Institute materials explain how newsroom economics and audience behavior are tracked alongside civic indicators, which helps explain observed trends in reporting capacity. <a href="https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2024" target="_blank" rel="noopener">Digital News Report 2024</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h2>Legal and political mechanisms that limit reporting</h2>
+<h3>Legal restrictions, licensing and procedural barriers</h3>
+<p>States can limit reporting through laws that restrict speech, burdensome licensing regimes for broadcasters, and procedural hurdles that make it risky or costly for independent outlets to operate; monitoring reports document how such legal tools are used to narrow the space for critical coverage. <a href="https://rsf.org/en/ranking/2024" target="_blank" rel="noopener">World Press Freedom Index 2024</a></p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Explore monitoring reports and consider joining civic efforts</h3><div class="cta-intro"><p>Consult the primary reports cited in this article to compare legal indicators across countries and to track changes in media law and practice.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the campaign updates</a></div>
+<p>Regulatory controls often start with formal requirements, such as licensing or accreditation, and can extend to administrative harassment or fines that disproportionately affect smaller outlets, reducing diversity in the public sphere. <a href="https://freedomhouse.org/report/freedom-press/2024" target="_blank" rel="noopener">Freedom of the Press 2024</a></p>
+<h3>Political pressure, regulatory control and owner interference</h3>
+<p>Political pressure can take direct forms, such as government interference with editorial decisions, or indirect forms, including selective application of tax rules or advertising controls that create incentives for self-censorship among editors and reporters. <a href="https://rsf.org/en/ranking/2024" target="_blank" rel="noopener">World Press Freedom Index 2024</a></p>
+<p>Owner interference and consolidation can also narrow editorial independence when owners or major sponsors exert influence over coverage priorities; monitoring and research link concentrated ownership with greater risks of owner-driven constraints on reporting. <a href="https://www.pewresearch.org/journalism/2024/01/10/state-of-news-media-2024/" target="_blank" rel="noopener">The State of News Media 2024</a></p>
+<h3>How these measures interact in the same markets</h3>
+<p>In many countries, legal, political and ownership pressures overlap and reinforce one another, so a market that appears to have limited legal restrictions may still show weak press freedom because of ownership concentration or informal political influence. <a href="https://rsf.org/en/ranking/2024" target="_blank" rel="noopener">World Press Freedom Index 2024</a></p>
+<p>Understanding these interactions helps explain why press freedom can decline even without a single dramatic event: gradual changes in regulation, market structure and safety conditions combine to reduce the practical ability of reporters to pursue independent stories.</p>
+<h2>How economic pressures and media ownership shape what gets reported</h2>
+<h3>Declining advertising, audience fragmentation and newsroom cutbacks</h3>
+<p>Declining advertising revenue, combined with audience fragmentation across digital platforms, has reduced newsroom staff and local reporting capacity, making it harder for outlets to sustain labor intensive investigative and watchdog work. <a href="https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2024" target="_blank" rel="noopener">Digital News Report 2024</a></p>
+<p>Newsroom cutbacks frequently mean fewer reporters covering local government, courts and community institutions, which reduces routine oversight that citizens rely on to check local power.</p>
+<h3>Concentration of media ownership and editorial consequences</h3>
+<p>When ownership concentrates, editorial independence can narrow because owners may prioritize commercial relationships, political ties or reputational concerns over investigative reporting, and research links concentration with increased risk of self-censorship or curated coverage. <a href="https://www.pewresearch.org/journalism/2024/01/10/state-of-news-media-2024/" target="_blank" rel="noopener">The State of News Media 2024</a></p>
+<p>Consolidation also raises barriers for independent entrants, reducing the range of voices in a market and making it more difficult for public interest journalism to find sustainable funding.</p>
+<h3>Effects on local reporting and watchdog journalism</h3>
+<p>The cumulative effect of economic pressures and ownership patterns is most visible at the local level, where fewer reporters and thinner budgets mean slower investigations, less coverage of local institutions and reduced capacity to follow complex stories over time. <a href="https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2024" target="_blank" rel="noopener">Digital News Report 2024</a></p>
+<p>This pattern is part of the broader trend that monitoring bodies highlight when they assess press freedom, because the practical ability to report independently depends on both legal safeguards and economic resources.</p>
+<h2>Safety, impunity and how threats change reporting choices</h2>
+<h3>Patterns in physical attacks, arrests and legal harassment</h3>
+<p>Physical attacks, arrests and legal harassment of journalists remain a persistent problem documented by monitoring organisations, and these direct threats shape what reporters are able to investigate and publish. <a href="https://cpj.org/reports/2024/impunity-and-safety-of-journalists/" target="_blank" rel="noopener">Impunity and the Safety of Journalists 2024</a></p>
+<p>Journalists facing repeated threats may avoid certain subjects or regions, and newsrooms often reassign or censor coverage to reduce risk to staff.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-su4kzh" class="faq-toggle" checked /><label for="faq-su4kzh" class="faq-summary" role="button" tabindex="0">Why is the press not free?</label><div class="faq-content"><p>Press freedom is limited by a mix of legal restrictions, safety threats and impunity, economic pressures that reduce newsroom capacity, and digital-era moderation and disinformation dynamics; these interacting factors combine to limit the practical ability of journalists to report independently.</p></div></section>
+<p>Impunity for attacks is a particular worry because when crimes against journalists are not investigated or prosecuted, the deterrent effect is lost and threats become more effective at silencing reporting. <a href="https://en.unesco.org/themes/safety-journalists" target="_blank" rel="noopener">Safety of Journalists and the Issue of Impunity</a></p>
+<p>UNESCO and related bodies emphasize that improving protection and accountability is essential to preserving the practical conditions for independent journalism.</p>
+<h2>Online censorship, platform moderation and emerging AI risks</h2>
+<h3>State-ordered takedowns and platform compliance</h3>
+<p>Online takedowns and state-ordered removal requests have become a prominent means of limiting access to news, and monitoring reports document increasing interactions between state demands and platform compliance that shape which stories reach audiences. <a href="https://rsf.org/en/ranking/2024" target="_blank" rel="noopener">World Press Freedom Index 2024</a></p>
+<h3>Private moderation choices and deplatforming</h3>
+<p>Private platforms make content and account moderation decisions that can result in deplatforming of outlets or journalists, and those moderation choices have practical effects on visibility and audience reach even when they are not state driven. <a href="https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2024" target="_blank" rel="noopener">Digital News Report 2024</a></p>
+<h3>Generative AI, disinformation and effects on journalism</h3>
+<p>Generative AI introduces new questions about both disinformation dynamics and newsroom economics, including how automated content can flood attention and how AI tools might alter reporting workflows, and monitoring bodies list AI as an open area of concern for 2026. <a href="https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2024" target="_blank" rel="noopener">Digital News Report 2024</a></p>
+<p>These technological changes interact with existing pressures, so platforms, policymakers and funders are debating how to balance moderation, transparency and support for journalism in the face of rapid change.</p>
+<h2>What readers can do: evaluate news and support independent reporting</h2>
+<h3>Practical steps for evaluating reliability and bias</h3>
+<p>Readers can improve judgment by diversifying sources, checking an outlet's transparency about funding and corrections, and looking for independent local reporting that cites primary documents or named sources; these steps are widely recommended across monitoring and research documents. <a href="https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2024" target="_blank" rel="noopener">Digital News Report 2024</a></p>
+<p>When evaluating stories, prefer outlets that publish clear corrections policies, staff lists and funding disclosures, and cross-check claims against primary materials where possible.</p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">A short verification checklist for evaluating news outlets</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-91wp4b-0">
+                        <input id="tool-check-91wp4b-0" type="checkbox" />
+                        <span>Source transparency</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-7ampyy-1">
+                        <input id="tool-check-7ampyy-1" type="checkbox" />
+                        <span>Funding and ownership</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-h8hx7f-2">
+                        <input id="tool-check-h8hx7f-2" type="checkbox" />
+                        <span>Local reporting depth</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-i2sctz-3">
+                        <input id="tool-check-i2sctz-3" type="checkbox" />
+                        <span>Corrections and accountability</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-xdj4qb-4">
+                        <input id="tool-check-xdj4qb-4" type="checkbox" />
+                        <span>Journalist safety policies</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use this checklist when choosing a source</p>
+            </div>
+<h3>Ways to support local and independent outlets</h3>
+<p>Supporting independent outlets can include subscribing, donating, sharing fact-based stories and encouraging local institutions to prioritize press access; researchers and monitoring organisations emphasize direct support for local reporting as a practical intervention. <a href="https://cpj.org/reports/2024/impunity-and-safety-of-journalists/" target="_blank" rel="noopener">Impunity and the Safety of Journalists 2024</a></p>
+<p>Small contributions and regular subscriptions can help sustain reporting that would otherwise be vulnerable to market and ownership pressures.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h3>Civic and policy actions readers can advocate</h3>
+<p>Readers can also advocate for legal protections for journalists, improved transparency in platform moderation and stronger enforcement against crimes targeting reporters, and these civic steps are part of the range of policy responses discussed in the literature. <a href="https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2024" target="_blank" rel="noopener">Digital News Report 2024</a></p>
+<p>Advocacy does not require specialist knowledge: contacting representatives about media freedom principles or supporting organizations that work on journalist safety are practical starting points.</p>
+<h2>Conclusion: balancing realism and policy options going into 2026</h2>
+<p>The evidence shows four interacting drivers behind the decline or strain in press freedom: legal and political limits, safety risks and impunity, economic pressures on newsrooms, and digital-era moderation and disinformation dynamics. <a href="https://rsf.org/en/ranking/2024" target="_blank" rel="noopener">World Press Freedom Index 2024</a></p>
+<p>Policy and philanthropic options under discussion include legal reforms to protect journalists, funding models to sustain local reporting, platform transparency measures and targeted safety initiatives; monitoring organisations recommend that responses combine legal protection with practical economic support. <a href="https://www.pewresearch.org/journalism/2024/01/10/state-of-news-media-2024/" target="_blank" rel="noopener">The State of News Media 2024</a></p>
+<p>As we approach 2026, the key questions to watch are how platforms and generative AI reshape audience attention and funding, whether governments strengthen accountability for crimes against journalists, and how sustainable local reporting can be supported through a mix of public, philanthropic and market mechanisms. <a href="https://michaelcarbonara.com/press-of-freedom-us-2026/" target="_blank" rel="noopener">press-of-freedom-us-2026</a></p>
+<p>For readers, the practical takeaway is that press freedom is shaped by many interacting factors, and independent reporting is preserved through legal safeguards, safety protections and viable economic models. <a href="https://michaelcarbonara.com/press-of-freedom-who-is-responsible/" target="_blank" rel="noopener">support local reporting</a></p>
+<p>Additional monitoring and commentary are available from outside sources that summarize recent global trends and analysis: <a href="https://gijn.org/stories/global-press-freedom-at-unprecedented-critical-low-reporters-without-borders/" target="_blank" rel="noopener">report coverage</a>, <a href="https://www.cfr.org/articles/world-press-freedom-continues-decline-time-upheaval" target="_blank" rel="noopener">policy analysis</a>, and the Reporters Without Borders 2025 index <a href="https://rsf.org/en/world-press-freedom-index-2025-over-half-worlds-population-red-zones" target="_blank" rel="noopener">summary</a>.</p>
+<p>For readers, the practical takeaway is that press freedom is shaped by many interacting factors, and independent reporting is preserved through legal safeguards, safety protections and viable economic models.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-ehr0b9" class="faq-toggle" /><label for="faq-ehr0b9" class="faq-summary" role="button" tabindex="0">How do monitoring reports measure press freedom?</label><div class="faq-content"><p>Monitoring reports combine legal indicators, incidents of harassment or violence, editorial independence measures and assessments of newsroom capacity to produce a composite view of press freedom.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-zo97p9" class="faq-toggle" /><label for="faq-zo97p9" class="faq-summary" role="button" tabindex="0">What can readers do to support local journalism?</label><div class="faq-content"><p>Readers can diversify sources, subscribe or donate to independent outlets, check transparency and corrections policies, and contact representatives to urge stronger legal protections for journalists.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-8fyr1m" class="faq-toggle" /><label for="faq-8fyr1m" class="faq-summary" role="button" tabindex="0">Does platform moderation count as censorship?</label><div class="faq-content"><p>Platform moderation can limit access to news in practice, and when platforms comply with state demands or have opaque rules it can have similar effects to censorship, though legal and policy distinctions matter.</p></div></section>
+</section><section class="article-ending">Protecting independent reporting requires attention to legal safeguards, journalist safety and sustainable funding models. Readers can follow monitoring reports, support local outlets and advocate for clearer platform rules and accountability to help preserve a healthy information environment.
+
+The next major indicators to watch are the annual indices from Reporters Without Borders and Freedom House, regular CPJ safety updates, and research from the Reuters Institute on news consumption trends.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://rsf.org/en/ranking/2024" target="_blank" rel="noopener">https://rsf.org/en/ranking/2024</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://freedomhouse.org/report/freedom-press/2024" target="_blank" rel="noopener">https://freedomhouse.org/report/freedom-press/2024</a></li><li><a href="https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2024" target="_blank" rel="noopener">https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2024</a></li><li><a href="https://www.pewresearch.org/journalism/2024/01/10/state-of-news-media-2024/" target="_blank" rel="noopener">https://www.pewresearch.org/journalism/2024/01/10/state-of-news-media-2024/</a></li><li><a href="https://cpj.org/reports/2024/impunity-and-safety-of-journalists/" target="_blank" rel="noopener">https://cpj.org/reports/2024/impunity-and-safety-of-journalists/</a></li><li><a href="https://en.unesco.org/themes/safety-journalists" target="_blank" rel="noopener">https://en.unesco.org/themes/safety-journalists</a></li><li><a href="https://michaelcarbonara.com/press-of-freedom-us-2026/" target="_blank" rel="noopener">https://michaelcarbonara.com/press-of-freedom-us-2026/</a></li><li><a href="https://michaelcarbonara.com/press-of-freedom-who-is-responsible/" target="_blank" rel="noopener">https://michaelcarbonara.com/press-of-freedom-who-is-responsible/</a></li><li><a href="https://michaelcarbonara.com/freedom-of-expression-and-social-media-impact/" target="_blank" rel="noopener">https://michaelcarbonara.com/freedom-of-expression-and-social-media-impact/</a></li><li><a href="https://rsf.org/en/world-press-freedom-index-2025-over-half-worlds-population-red-zones" target="_blank" rel="noopener">https://rsf.org/en/world-press-freedom-index-2025-over-half-worlds-population-red-zones</a></li><li><a href="https://gijn.org/stories/global-press-freedom-at-unprecedented-critical-low-reporters-without-borders/" target="_blank" rel="noopener">https://gijn.org/stories/global-press-freedom-at-unprecedented-critical-low-reporters-without-borders/</a></li><li><a href="https://www.cfr.org/articles/world-press-freedom-continues-decline-time-upheaval" target="_blank" rel="noopener">https://www.cfr.org/articles/world-press-freedom-continues-decline-time-upheaval</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
