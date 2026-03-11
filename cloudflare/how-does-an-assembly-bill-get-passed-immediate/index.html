@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Can a bill be passed immediately? A practical guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736; /* from --mc-accent */
+      --accent-hover: color-mix(in srgb, #ae2736 86%, #000 14%);
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04); /* from --mc-panel-2 */
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+      border: 1px solid rgba(0,0,0,.06);
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      filter: brightness(.98);
+      background: var(--accent-hover);
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+      border: 1px solid rgba(0,0,0,.06);
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent derived scoped CSS area
+       Only allowed selectors: .article-body ... and .cta-button ... */
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/1xyjdPwEazw_zDNUekloY76x5C89hmQoj" alt="Can a bill be passed immediately?" />
+        </div>
+        <h1 class="title">Can a bill be passed immediately? A practical guide</h1>
+        <p class="subline">A concise explainer of when legislative rules allow bills to skip ordinary steps.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/how-does-an-assembly-bill-get-passed-immediate/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">Legislative processes balance deliberation with the ability to act quickly in limited situations. This guide explains how does an assembly bill get passed and when procedural shortcuts can shorten that timeline.
+
+It is written for voters, students, journalists, and civic readers who want a practical checklist to decide whether a particular bill could move faster than the ordinary path.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">Ordinary lawmaking follows a multi-step path of committee review, floor readings, and recorded votes.</span></div><div class="highlight-card"><span class="highlight-text">Few procedural tools can produce near-immediate passage; each has clear limits such as vote thresholds or subject-matter rules.</span></div><div class="highlight-card"><span class="highlight-text">State rules vary widely, so check the chamber’s written rules and recent floor precedents for a specific bill.</span></div>
+     </div>
+  <h2>What immediate passage means and why it is rare</h2>
+<p>In ordinary practice, legislatures move a bill through several formal stages before it becomes law: introduction, committee review, one or more floor readings, and recorded votes in each chamber. According to the House clerk and legislative summaries, this multi-step path is the standard approach used by Congress and many state assemblies.</p>
+<p>When people ask whether a bill can be passed immediately, they are usually contrasting that ordinary path with rules that allow waivers, expedited tracks, or emergency enactment. These procedural tools can compress or skip steps, but they require specific conditions and often higher vote thresholds to be used.</p>
+<h3>how does an assembly bill get passed</h3>
+<p>The phrase "<a href="https://michaelcarbonara.com/how-a-bill-becomes-law/" target="_blank" rel="noopener">how does an assembly bill get passed</a>" points to the same core stages: introduction, committee work, and floor action, and understanding that pattern is the starting point for evaluating any request to speed a bill’s progress.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Check the rule checklist</h3><div class="cta-intro"><p>Check the checklist later in this article to see the specific rule checks that determine whether a bill can move faster than the normal path.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Review the checklist</a></div>
+<p>Even where chambers allow expedited action, routine lawmaking remains the default. The rules of the House and the Senate, and typical state rules, make the standard path the expected process to give members time to review text and hold hearings.</p>
+<p>Procedural shortcuts exist so legislatures can act in clear-cut, urgent, or widely supported cases, but they are intentionally limited to protect deliberation and minority rights in the chamber’s operating rules.</p>
+
+<h2>Step-by-step: the normal legislative path explained</h2>
+<h3>Introduction and sponsorship</h3>
+<p>Most bills start when a legislator files or introduces a draft and names one or more sponsors, then the chamber clerk or secretary records the filing and assigns a bill number; the public record begins at that point, and interested committees receive the referral information.</p>
+<p>That initial filing begins public notice and allows stakeholders to track the bill text as it moves forward, which matters for transparency and for meeting the expectations set in chamber rules about notice and amendment timing.</p>
+
+<h3>Committee consideration and hearings</h3>
+<p>After introduction the bill is normally referred to one or more committees for study, hearings, and a markup session where members may propose amendments and either report the bill to the floor or leave it in committee; committee review is a central part of the ordinary legislative path.</p>
+<p>Committee reports and hearings provide the factual record and permit floor members to rely on findings when voting, and both House and Senate procedural descriptions emphasize committees as the core deliberative stage.</p>
+<p>When a committee reports a bill to the floor, chamber leaders schedule it for floor readings, debate, and a recorded vote, and those steps are the formal opportunity for the full body to accept, amend, or reject the measure.</p>
+<p>Recorded votes create a public record of who supported or opposed a bill, which is why most chambers keep this step even when other stages are compressed.</p>
+
+
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<h3>Conference or reconciliation between chambers</h3>
+<p>If the two chambers pass different versions of a measure, they typically either send negotiators to a conference committee or use a reconciliation mechanism to resolve differences before issuing a final bill for signature or enactment; that interchamber work closes the ordinary path.</p>
+<p>The rules for conference committees and reconciliation procedures are part of the official process that ensures both chambers agree on final text before a bill reaches an executive for signature.</p>
+
+<h2>Procedural tools that can speed or produce near-immediate passage</h2>
+<h3>House: suspension of the rules</h3>
+<p>In the U.S. House, leaders can move a bill under a "suspension of the rules" procedure to compress debate and speed floor action, but the method is limited to noncontroversial measures and requires a two-thirds affirmative vote for passage, according to <a href="https://www.cbo.gov/publication/60726" target="_blank" rel="noopener">CBO</a>.</p>
+<p>Because of the higher threshold and the constraints on debate and amendments under suspension, the tactic is typically used for broadly supported, routine measures rather than complex or divisive policy changes.</p>
+
+<h3>Senate: unanimous consent and unanimous-consent agreements</h3>
+<p>The U.S. Senate commonly clears business through unanimous consent requests that waive formal debate and procedural steps when no senator objects, and when they succeed they can shorten consideration dramatically, according to <a href="https://en.wikipedia.org/wiki/Suspension_of_the_rules_in_the_United_States_Congress" target="_blank" rel="noopener">descriptions of Senate practice</a>.</p>
+<p>Unanimous consent is effective for routine items but is fragile because a single objection can return a measure to the full formal calendar and require longer floor time.</p>
+<section class="faq-accordion"><input type="checkbox" id="faq-0a12z3" class="faq-toggle" checked /><label for="faq-0a12z3" class="faq-summary" role="button" tabindex="0">Can a bill be passed immediately?</label><div class="faq-content"><p>A bill can be passed nearly immediately only when chamber rules and political conditions align to allow a waiver, unanimous consent, reconciliation, or an emergency process; otherwise the ordinary multi-step path applies.</p></div></section>
+<h3>Budget reconciliation in Congress</h3>
+<p>Congress also has a specific expedited track called budget reconciliation that limits debate in the Senate and can allow passage by a simple majority for qualifying budgetary provisions; reconciliation is restricted to items that meet defined budget and subject-matter tests.</p>
+<p>Because reconciliation is limited to budget-related matters, it is not a general shortcut for broad policy measures but can be decisive for fiscal bills that meet the procedural test.</p>
+
+<h2>How state legislatures approach emergency and expedited procedures</h2>
+<p>State legislatures vary widely in how they handle emergency or expedited measures; many states provide for suspension or emergency enactment but the triggers and required vote thresholds differ across jurisdictions, so generalizations are risky.</p>
+<p>The National Conference of State Legislatures provides a state-by-state overview that is a useful starting point for jurisdiction-specific rules and common emergency triggers.</p>
+<p>Some states allow a declaration of emergency to speed enactment or to allow an immediate effective date, while others restrict emergency use tightly or require supermajorities for both the enactment and the effective-date waiver.</p>
+<p>Practical evaluation always requires checking the precise text of a state’s rules and any recent precedent on how leaders have used emergency options in practice.</p>
+
+<h2>A practical checklist: can this particular bill be passed immediately?</h2>
+<p>To decide whether a single bill could move immediately, ask these four core questions: does the chamber’s written rules allow waivers or suspension, what vote thresholds apply to those waived steps, is unanimous consent realistic, and does the measure fit any expedited track such as reconciliation or emergency legislation.</p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>Begin by locating the chamber’s official rules page and the clerk or secretary summaries for floor procedures; these pages state the formal options for waiving steps and the vote math required to do so. See the <a href="https://michaelcarbonara.com/how-a-bill-becomes-law-house-stage-guide/" target="_blank" rel="noopener">house stage guide</a> on this site for a quick reference to common floor steps.</p>
+<p>Next, calculate the vote thresholds needed under the specific rule at issue, and match that math against current member alignment; a rule allowing a waiver is only meaningful if the supporting votes are actually available.</p>
+<p>Also review recent floor precedents to see whether leaders have used the waiver or expedited option in practice, because rules that exist on paper may rarely be used due to political caution or custom.</p>
+
+<h2>Common errors and misunderstandings when people ask "can a bill be passed immediately?"</h2>
+<p>A frequent mistake is to treat a written rule as a guarantee that leaders will use it; in practice political context, fairness concerns, and member objections often prevent shortcuts even when rules permit them.</p>
+<p>Another common error is to assume federal procedures apply at the state level; state rules vary and what is routine in one legislature may be forbidden or rare in another.</p>
+<p>Observers also sometimes conflate emergency enactment language with a procedural shortcut; an emergency clause changes effective date or priority but does not by itself erase required votes or committee steps unless the rules specifically allow that effect.</p>
+
+<h2>Short scenarios: examples of fast-track passage and why they worked or failed</h2>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">Quick rule checklist to assess fast-track eligibility</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-vg554x-0">
+                        <input id="tool-check-vg554x-0" type="checkbox" />
+                        <span>Rule page</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-67kvnd-1">
+                        <input id="tool-check-67kvnd-1" type="checkbox" />
+                        <span>Vote threshold</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-6a4pbd-2">
+                        <input id="tool-check-6a4pbd-2" type="checkbox" />
+                        <span>Unanimous-consent likelihood</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-58e1ek-3">
+                        <input id="tool-check-58e1ek-3" type="checkbox" />
+                        <span>Reconciliation fit</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-pj5b39-4">
+                        <input id="tool-check-pj5b39-4" type="checkbox" />
+                        <span>Emergency trigger</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use as an initial screening tool</p>
+            </div>
+<p>Hypothetical House scenario: a noncontroversial naming or ceremonial bill is placed on the floor under suspension of the rules, and because it draws broad bipartisan support it clears with the required two-thirds majority; suspension limits debate and amendments and is designed for this sort of routine measure.</p>
+<p>In contrast, a Senate example shows how unanimous consent can clear many routine items quickly when no senator objects, but a single objection can force the item back into regular order and require time-consuming debate and votes.</p>
+<p>A reconciliation-style scenario illustrates the scope limitation: if the sponsors frame changes as budgetary instructions or revenue adjustments that meet reconciliation rules, the Senate can adopt them with a simple majority, but policy elements that do not meet the budget test must follow full debate rules and cannot rely on reconciliation alone.</p>
+<p>These short examples show that success depends on both rule fit and political alignment: procedure might permit speed, but the votes or lack of objections determine whether leaders attempt the shortcut.</p>
+
+
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<h2>Where to look: authoritative sources and how to verify for your chamber</h2>
+<p>At the federal level, start with the <a href="https://www.congress.gov/legislative-process/house-floor" target="_blank" rel="noopener">House Rules</a> and the Senate procedural overview and use the Office of the Clerk for detailed process explanations; these primary sources describe the specific waivers and thresholds you will need to confirm.</p>
+<p>For state questions, the National Conference of State Legislatures maintains summaries that point to each state’s rules and emergency power statements, which is a practical state-by-state research map.</p>
+<p>When verifying, locate the bill text and the chamber rule that governs floor procedure, then search recent chamber calendars and roll-call histories to find precedents where similar rules were used.</p>
+<p>Always attribute conclusions with language like "according to" or "the rules state" and cite the primary rule page or clerk explanation that supports your assessment.</p>
+
+<h2>Summary and what readers can do next</h2>
+<p>Key takeaway: the ordinary multi-step legislative process is the default, and only a few narrow, rule-based tools can produce near-immediate passage; those tools require either supermajorities, unanimous consent, or specific subject-matter fits that limit their use.</p>
+<p>To determine whether a particular measure could be passed immediately, use the checklist in this article: check written rules for waivers, confirm vote thresholds, assess unanimous-consent plausibility, and verify whether the bill qualifies for an expedited track like reconciliation or an emergency clause.</p>
+<p>Concrete next steps are practical: consult the chamber’s rules page, read clerk or secretary summaries, examine recent floor precedents for similar uses of waivers, and, for state matters, use the NCSL state-by-state overview to identify local triggers and thresholds.</p>
+<p>Careful rule reading and a modest review of recent precedents will usually tell you whether "immediate" passage is theoretically possible and whether it is politically likely in practice.</p>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-qe5ovv" class="faq-toggle" /><label for="faq-qe5ovv" class="faq-summary" role="button" tabindex="0">What does &quot;suspension of the rules&quot; mean in the House?</label><div class="faq-content"><p>Suspension of the rules is a House procedure that limits debate and amendments to speed noncontroversial measures but requires a two-thirds affirmative vote for passage.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-m3o1a3" class="faq-toggle" /><label for="faq-m3o1a3" class="faq-summary" role="button" tabindex="0">How does unanimous consent work in the Senate?</label><div class="faq-content"><p>Unanimous consent allows the Senate to waive formal debate and move quickly when no senator objects, but any single objection can block it and return the measure to regular order.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-u782m4" class="faq-toggle" /><label for="faq-u782m4" class="faq-summary" role="button" tabindex="0">Is budget reconciliation a general fast-track for any bill?</label><div class="faq-content"><p>No. Reconciliation applies only to qualifying budgetary matters and is limited by budget rules, so it is not a general shortcut for all policy changes.</p></div></section>
+</section><section class="article-ending">If you want to pursue a specific case, start by reading the chamber’s rule page and recent roll-call records. Those primary sources usually reveal whether an immediate path is legally available and how often leaders have used it.
+
+For state-level questions, the NCSL summaries are a helpful next step because they collect each state’s emergency and expedited rules in one place.</section>
+  <section class="ba-refs">
+    <h3 class="ba-refs__title">References</h3>
+    <ul class="ba-refs__list">
+      <li><a href="https://michaelcarbonara.com/how-a-bill-becomes-law/" target="_blank" rel="noopener">https://michaelcarbonara.com/how-a-bill-becomes-law/</a></li><li><a href="https://michaelcarbonara.com/how-a-bill-becomes-law-house-stage-guide/" target="_blank" rel="noopener">https://michaelcarbonara.com/how-a-bill-becomes-law-house-stage-guide/</a></li><li><a href="https://michaelcarbonara.com/how-a-bill-becomes-law-7-steps/" target="_blank" rel="noopener">https://michaelcarbonara.com/how-a-bill-becomes-law-7-steps/</a></li><li><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">https://michaelcarbonara.com/contact/</a></li><li><a href="https://www.cbo.gov/publication/60726" target="_blank" rel="noopener">https://www.cbo.gov/publication/60726</a></li><li><a href="https://en.wikipedia.org/wiki/Suspension_of_the_rules_in_the_United_States_Congress" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Suspension_of_the_rules_in_the_United_States_Congress</a></li><li><a href="https://www.congress.gov/legislative-process/house-floor" target="_blank" rel="noopener">https://www.congress.gov/legislative-process/house-floor</a></li>
+    </ul>
+  </section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
