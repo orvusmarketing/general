@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>What is the separation of powers simplified? A clear guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --container-max: 980px;
+      --container-pad-x: clamp(16px, 4vw, 44px);
+      --container-pad-y: clamp(20px, 3vw, 44px);
+
+      /* Brand-derived tokens */
+      --text-color: #ffffff; /* from --mc-ink */
+      --accent: #ae2736;     /* from --mc-accent */
+      --accent-hover: #8f232d; /* derived darker accent */
+      --line: rgba(255,255,255,.16); /* from --mc-line */
+      --surface: #0b2664; /* from --mc-bg */
+      --surface-2: rgba(255,255,255,.04);
+      --radius: 0px; /* from --mc-radius */
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --shadow: 0 10px 28px rgba(0,0,0,.10);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.08);
+      --measure: 72ch;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: var(--font);
+      color: var(--text-color);
+      background: var(--surface);
+    }
+
+    .content-wrapper{
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-shell{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    }
+
+    .banner{
+      text-align:center;
+      margin: 0 0 clamp(16px, 2.4vw, 22px);
+    }
+    .banner img{
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display:block;
+      margin:0 auto;
+      border-radius: calc(var(--radius) - 2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title{
+      text-align:center;
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      color: var(--text-color);
+    }
+
+    .subline{
+      margin: .75rem auto 0;
+      text-align:center;
+      max-width: var(--measure);
+      line-height: 1.65;
+      color: color-mix(in srgb, var(--text-color) 80%, #fff 20%);
+      font-size: 1rem;
+    }
+
+    .cta-wrap{
+      padding: clamp(18px, 2.6vw, 28px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .cta-section{
+      max-width: min(560px, 100%);
+      margin: 0 auto;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      padding: 18px 16px;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-soft);
+    }
+    .cta-section h2{
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      letter-spacing: .01em;
+      color: var(--text-color);
+    }
+    .cta-button{
+      display:inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .82em 1.6em;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: calc(var(--radius) - 6px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: transform .14s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta-button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.18);
+      background: var(--accent-hover);
+      filter: none;
+    }
+
+    .main{
+      padding: clamp(18px, 2.6vw, 28px);
+      background: var(--surface);
+    }
+
+    /* Safety layer */
+    .article-body,
+    .article-body *{ box-sizing: border-box; }
+
+    .article-body{
+      max-width: var(--measure);
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .article-body img,
+    .article-body picture,
+    .article-body svg{
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .article-body iframe,
+    .article-body video,
+    .article-body embed,
+    .article-body object{
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    .article-body table{
+      width: 100% !important;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-body pre{
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 1rem;
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    .article-body blockquote{
+      margin: 1.2rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid color-mix(in srgb, var(--accent) 70%, #0000);
+      background: var(--surface-2);
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--line);
+    }
+
+    /* Readability hierarchy */
+    .article-body h2{
+      margin-top: 2rem;
+      margin-bottom: .8rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
+      color: var(--text-color);
+    }
+    .article-body h3{
+      margin-top: 1.4rem;
+      margin-bottom: .6rem;
+      line-height: 1.3;
+      font-size: 1.12rem;
+      color: var(--text-color);
+    }
+    .article-body p{ margin: 0 0 1rem; }
+    .article-body ul, .article-body ol{ margin: 0 0 1.1rem 1.25rem; }
+    .article-body li{ margin: .25rem 0; }
+
+    .article-body a{
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      font-weight: 650;
+      word-break: break-word;
+    }
+
+    /* Article images sizing intent: about 1/3 width on desktop */
+    .article-body img{
+      max-width: min(100%, 320px) !important;
+      margin: 1rem auto;
+    }
+
+    @media (max-width: 768px){
+      .page-shell{
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+      .content-wrapper{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .top, .cta-wrap, .main{
+        padding-left: clamp(14px, 4.6vw, 20px);
+        padding-right: clamp(14px, 4.6vw, 20px);
+      }
+      .article-body{
+        max-width: 100%;
+      }
+      .article-body img{
+        max-width: 100% !important;
+      }
+    }
+
+    /* Agent scoped additions for article internals */
+    .article-highlights{ display:flex; flex-direction:column; gap:1rem; margin:1.6rem 0; }
+    .highlight-card{ background:transparent; padding:1rem; border-left:4px solid var(--accent); }
+    .summary{ font-style:italic; color: color-mix(in srgb, var(--text-color) 84%, #0000); margin-bottom:1.2rem; }
+    .article-ending{ margin-top:1.8rem; padding-top:1rem; border-top:1px solid var(--line); font-style:italic; }
+
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div class="page-shell">
+
+      <header class="top">
+        <div class="banner">
+          <img src="https://lh3.googleusercontent.com/d/16WZWeuShFkXeMJEshTVIJj3lrep_n0k-" alt="Banner for \"What is the separation of powers simplified? A clear guide\"" />
+        </div>
+        <h1 class="title">What is the separation of powers simplified? A clear guide</h1>
+        <p class="subline">A concise, source-backed explanation of how federal authority is divided.</p>
+      </header>
+
+      <section class="cta-wrap">
+        <div class="cta-section">
+          <h2>To the original article</h2>
+          <a href="https://michaelcarbonara.com/function-of-separation-of-power-simplified/"
+             class="cta-button"
+             target="_blank"
+             rel="noopener"
+             aria-label="Open original article">Read original</a>
+        </div>
+      </section>
+
+      <main class="main">
+        <div class="article-body">
+
+  <div class="summary">This guide explains the function of separation of power in straightforward terms so readers can understand how the federal government divides authority. It links founding texts and modern summaries to practical examples voters and students can recognize.
+
+The goal is neutral, source backed explanation, not policy advocacy. Readers who want to dig deeper will find references to the Constitution, Federalist No. 51, and recent legal summaries helpful starting points for primary documents and further context.</div>
+  <div class="article-highlights">
+       <div class="highlight-card"><span class="highlight-text">The Constitution divides federal power among three branches so each can limit the others.</span></div><div class="highlight-card"><span class="highlight-text">Marbury v. Madison established judicial review, a key tool courts use to interpret boundaries.</span></div><div class="highlight-card"><span class="highlight-text">Everyday checks include vetoes, confirmations, oversight hearings, and court rulings.</span></div>
+     </div>
+  <h2>What the function of separation of power means, simply</h2>
+<p>The function of separation of power is the constitutional design that divides federal authority among three separate branches so no single part of government can concentrate unchecked power. The Constitution sets out that structure in its articles and clauses, giving distinct roles to each branch and enabling limits on action, as seen in the <a href="https://michaelcarbonara.com/us-constitution-exact-words-where-to-read-and-cite/" target="_blank" rel="noopener">constitutional text</a>.</p>
+<p>The basic division is straightforward: the legislative branch makes laws, the executive enforces those laws, and the judicial branch interprets them. For example, Congress passes a law, the President enforces it, and a federal court may review whether the law fits the Constitution.</p>
+<p>To read the original language that creates this framework, consult <a href="https://michaelcarbonara.com/separation-of-powers-in-the-constitution-explainer/" target="_blank" rel="noopener">the Constitution</a> and the writings of the Founders for context and intent, which explain both the structure and the purpose behind it. <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">National Archives, the U.S. Constitution</a></p>
+<h3>Short definition</h3>
+<p>At its simplest, the function of separation of power assigns different work to separate institutions so they check each other while carrying out government responsibilities.</p>
+<h3>Why it matters for liberty</h3>
+<p>Separating powers helps prevent the concentration of power that can threaten individual freedom. By dividing tasks and allowing each branch to limit the others, the system creates friction that protects rights and accountability.</p>
+<p>That protective design is part of the Founders reasoning about how to prevent abuses and maintain ordered liberty. <a href="https://avalon.law.yale.edu/18th_century/fed51.asp" target="_blank" rel="noopener">Federalist No. 51, Avalon Project</a></p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+<h3>Primary sources to consult</h3>
+<p>Primary materials to read include the <a href="https://michaelcarbonara.com/constitutional-rights/" target="_blank" rel="noopener">constitutional articles</a> that allocate duties to Congress, the President, and the federal judiciary, and Federalist No. 51 for the founders perspective on checks and balances.</p>
+<p>These texts remain the starting point for understanding the function of separation of power and for judging later legal and political developments.</p>
+<h2>Why the founders built the function of separation of power into the Constitution</h2>
+<p>James Madison and other Federalist authors argued that separating powers and building mutual checks prevents concentration of power and helps protect liberty, and they put those ideas into the design of the new federal government. Madison explained that ambition must be made to counteract ambition so no single branch dominates.</p>
+<div class="cta-section"><h3 class="cta-headline" style="text-align:center;margin-left:auto;margin-right:auto;">Join updates and support Michael Carbonara&#39;s campaign</h3><div class="cta-intro"><p>Read the Federalist No. 51 or the Constitution linked below for original text.</p></div><a href="https://michaelcarbonara.com/join/" target="_blank" rel="noopener" class="cta-button">Join the Campaign</a></div>
+<p>Federalist No. 51 lays out the central argument that each department should have the constitutional means and personal motives to resist encroachments by the others, making checks and balances a deliberate feature of the system. <a href="https://avalon.law.yale.edu/18th_century/fed51.asp" target="_blank" rel="noopener">Federalist No. 51, Avalon Project</a></p>
+<p>The Constitution translates that theory into concrete structure by assigning lawmaking to Congress, execution to the President, and interpretation to the courts, with specific provisions such as the impeachment process and the Senate role in confirmations as built in limits and balances.</p>
+<p>Reading the constitutional text alongside the Federalist essays helps readers see both the institutional mechanics and the normative reasons behind them. <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">National Archives, the U.S. Constitution</a></p>
+<h2>How the three branches function in practice</h2>
+<p>Congress, the legislative branch, passes statutes, controls appropriations, conducts oversight, and has the power to impeach federal officials. Its lawmaking and budget powers make it the principal legislative actor in the federal system.</p>
+<p>Descriptions of Congress roles are rooted in the constitutional allocation of <a href="https://www.ncsl.org/about-state-legislatures/separation-of-powers-an-overview" target="_blank" rel="noopener">legislative power</a> and in longstanding practice that connects lawmaking to oversight and representation. <a href="https://www.britannica.com/topic/separation-of-powers" target="_blank" rel="noopener">Encyclopaedia Britannica, separation of powers</a></p>
+<section class="faq-accordion"><input type="checkbox" id="faq-ij9m8m" class="faq-toggle" checked /><label for="faq-ij9m8m" class="faq-summary" role="button" tabindex="0">What is the separation of powers and why does it matter for how government works?</label><div class="faq-content"><p>The separation of powers is the constitutional system that divides authority among the legislative, executive, and judicial branches so each can check the others. It matters because that division and the checks between branches reduce the risk of concentrated power and create mechanisms for accountability and rights protection.</p></div></section>
+<p>The executive branch, led by the President, enforces federal law, directs federal agencies, and makes appointments to executive and judicial offices subject to Senate confirmation. The President also has the veto power on legislation, which is a direct check on Congress.</p>
+<p>The constitutional clauses that describe executive power give the President authority to ensure laws are faithfully executed, while other provisions subject many executive actions to congressional or judicial checks. <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">National Archives, the U.S. Constitution</a></p>
+<p>The judicial branch, including the Supreme Court and lower federal courts, interprets statutes and the Constitution, resolving disputes and determining whether government acts exceed constitutional bounds. Courts often decide if a law or action is lawful under constitutional principles.</p>
+<p>Learned summaries and reference works provide concise descriptions of judicial functions and the practical effects of court decisions on the balance among branches. <a href="https://www.law.cornell.edu/wex/separation_of_powers" target="_blank" rel="noopener">Legal Information Institute, Separation of Powers</a></p>
+<h2>Checks and balances: the mechanisms that make the function of separation of power work</h2>
+<p>The Constitution and later practice set out several specific checks that allow each branch to limit the others. Core mechanisms include the presidential veto, Congress override of a veto, Senate advice and consent on nominations, congressional oversight and impeachment, and judicial review by the federal courts.</p>
+<p>For example, the President can veto a bill, but Congress can override a veto with a supermajority; the Senate reviews major appointments while the House may initiate impeachment proceedings for serious misconduct. These mechanisms are interlocked so no single actor can act entirely without constraint. <a href="https://www.archives.gov/founding-docs/constitution" target="_blank" rel="noopener">National Archives, the U.S. Constitution</a></p>
+<p>Practical tools of oversight include congressional hearings, subpoenas, and budget controls that allow legislators to examine executive actions and agency operations. Courts may then evaluate whether laws or executive practices conform to constitutional requirements.</p>
+<p>When courts interpret the Constitution and strike down unlawful actions, they use judicial review as a boundary setting tool that enforces constitutional limits on both Congress and the President. <a href="https://www.oyez.org/cases/1803/5-2" target="_blank" rel="noopener">Oyez, Marbury v. Madison</a></p>
+
+    <div class="side-by-side product-image-right">
+      <div class="side-text"><a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener">Contact Michael Carbonara</a></div>
+      <a href="https://michaelcarbonara.com/contact/" target="_blank" rel="noopener"><img src="https://lh3.googleusercontent.com/d/19k1CPuzH0olHdVBGyuV3n0df-QsS4Jfm" alt="Contact Michael Carbonara" /></a>
+    </div>
+<p>These constitutional checks are the citizen facing features of the system; voters see them when they follow a veto vote, a confirmation hearing, an oversight inquiry, or a court ruling that decides whether a government action is permitted.</p>
+<h2>Marbury v. Madison and the judicial role in defining the function of separation of power</h2>
+<p>Marbury v. Madison is the landmark Supreme Court case that clarified judicial review, the power of courts to interpret the Constitution and to invalidate laws that conflict with it. The decision, authored by Chief Justice John Marshall in 1803, established that it is the duty of the judiciary to say what the law is.</p>
+<p>The case explains how the judiciary can decline to apply a law that violates constitutional limits, making judicial review a central mechanism for enforcing the separation of powers in practice. <a href="https://www.oyez.org/cases/1803/5-2" target="_blank" rel="noopener">Oyez, Marbury v. Madison</a></p>
+<div class="tool-block tool-checklist tool-centered" data-tool-type="checklist">
+              <p class="tool-purpose">a quick research aid for reading case summaries</p>
+              <ul class="tool-checklist-list">
+          <li class="tool-checklist-item">
+                      <label for="tool-check-x7zakx-0">
+                        <input id="tool-check-x7zakx-0" type="checkbox" />
+                        <span>Case name</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-q8eet0-1">
+                        <input id="tool-check-q8eet0-1" type="checkbox" />
+                        <span>Key holding</span>
+                      </label>
+                    </li><li class="tool-checklist-item">
+                      <label for="tool-check-chwwgo-2">
+                        <input id="tool-check-chwwgo-2" type="checkbox" />
+                        <span>Constitutional question</span>
+                      </label>
+                    </li>
+        </ul>
+              <p class="tool-notes">Use reliable summaries for clarity</p>
+            </div>
+<p>Scholars and legal summaries note that Marbury framed the court role in a way that endures, but they also point out ongoing debates about how broadly courts should exercise that power and how judicial decisions interact with political processes.</p>
+<p>For readers, learning the basics of Marbury helps recognize when courts are resolving institutional disputes among branches or deciding individual rights issues, and it shows why judicial opinions often shape the balance of federal authority.</p>
+<h2>How the function of separation of power interacts with the modern administrative state</h2>
+<p>Federal agencies carry out much of the everyday work of implementing and administering laws, which raises questions about how separation of powers applies to agency authority. Agencies execute statutes, issue regulations, and make routine decisions that affect the public.</p>
+<p>Because agencies combine rulemaking, enforcement, and adjudication functions, scholars and policymakers debate how to draw lines that respect constitutional allocations of power while allowing efficient administration. <a href="https://crsreports.congress.gov/product/pdf/LSB/LSB10445" target="_blank" rel="noopener">Congressional Research Service, Separation of Powers overview</a> <a href="https://harvardlawreview.org/print/vol-139/separating-the-powers-in-the-administrative-state-article-i/" target="_blank" rel="noopener">Recent authoritative reviews</a> explain these tensions and summarize where officials and courts disagree. <a href="https://www.theregreview.org/2019/12/18/rappaport-stronger-separation-powers-administrative-agencies/" target="_blank" rel="noopener">The Regulatory Review</a></p>
+<p>One practical issue is how much discretion an agency has when a statute is ambiguous and how courts should review those agency interpretations. Different legal doctrines and statutory designs influence whether agencies act with broad authority or under closer judicial supervision.</p>
+<p>Readers seeking a concise overview of these debates will find legal encyclopedias and CRS reports useful starting points that lay out competing views without advocating for a single policy approach. <a href="https://www.law.cornell.edu/wex/separation_of_powers" target="_blank" rel="noopener">Legal Information Institute, Separation of Powers</a></p>
+<h2>Everyday examples: how to spot the function of separation of power around you</h2>
+<p>One simple sign of separation of powers is a president signing or vetoing a bill, which shows the executive branch checking legislative action. Watching the outcome of a veto and any congressional override attempt clarifies which branch is acting as a check on the other. <a href="https://www.britannica.com/topic/separation-of-powers" target="_blank" rel="noopener">Encyclopaedia Britannica, separation of powers</a></p>
+<p>Another common example is a Senate confirmation vote for a presidential nominee, which demonstrates the Senate using advice and consent to check executive appointments. Confirmation hearings and roll call votes give citizens a visible procedural check on appointments.</p>
+<p>Congressional oversight, such as committee hearings, investigations, and subpoenas, is a routine way legislators examine executive implementation and hold officials accountable for their management of programs and agencies.</p>
+<p>Court rulings that find a statute or executive action inconsistent with the Constitution are the judicial form of a check. When courts issue such rulings they clarify boundaries and can require other branches to change course or adapt practices.</p>
+<h2>Common misunderstandings, decision checks, and how to evaluate claims about branch power</h2>
+<p>A frequent misunderstanding is assuming a single branch can act without legal limits or that judicial review resolves every dispute. In practice, many questions about authority involve statutory interpretation, political constraints, and institutional incentives as well as constitutional text.</p>
+<p>To check a claim about who has authority, consult primary sources first, then a neutral case summary or legal encyclopedia, and finally look for statutory language that authorizes an action. This sequence helps separate constitutional questions from policy disagreements. <a href="https://www.law.cornell.edu/wex/separation_of_powers" target="_blank" rel="noopener">Legal Information Institute, Separation of Powers</a></p>
+<p>Short checklist for readers: 1) Look for the constitutional clause or statute cited, 2) read a case summary if courts are involved, 3) check whether Congress has delegated authority to an agency, and 4) consult a neutral legal summary for context.</p>
+<p>Using primary documents and authoritative summaries helps voters, students, and journalists evaluate claims about branch power without relying on incomplete explanations.</p>
+
+    <figure class="special-image-standalone">
+      <a href="https://michaelcarbonara.com" target="_blank" rel="noopener">
+        <img src="https://lh3.googleusercontent.com/d/1eomrpqryWDWU8PPJMN7y_iqX_l1jOlw9=s250" alt="Michael Carbonara Logo" />
+      </a>
+    </figure>
+
+<section class="faq-section" aria-label="Frequently Asked Questions">
+  <section class="faq-accordion"><input type="checkbox" id="faq-yay1zj" class="faq-toggle" /><label for="faq-yay1zj" class="faq-summary" role="button" tabindex="0">What is the separation of powers in one sentence?</label><div class="faq-content"><p>The separation of powers divides federal authority among legislative, executive, and judicial branches so each can check the others and prevent concentration of power.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-v6mhpi" class="faq-toggle" /><label for="faq-v6mhpi" class="faq-summary" role="button" tabindex="0">Does judicial review mean courts control policy?</label><div class="faq-content"><p>Judicial review lets courts interpret the Constitution and invalidate laws that conflict with it, but courts operate within legal doctrine and political context and do not directly make policy choices.</p></div></section>
+  <section class="faq-accordion"><input type="checkbox" id="faq-i8stln" class="faq-toggle" /><label for="faq-i8stln" class="faq-summary" role="button" tabindex="0">How can I check a claim about which branch has authority?</label><div class="faq-content"><p>Start with the Constitution or the statute cited, read a neutral case summary if courts are involved, and consult legal encyclopedias or official reports for context.</p></div></section>
+</section><section class="article-ending">Separation of powers is a working design that relies on institutions, law, and citizen attention to function. Reading the Constitution and the Founders writings together with modern summaries helps clarify current debates about authority.
+
+If you want primary texts and accessible summaries, start with the Constitution, Federalist No. 51, and reputable legal encyclopedias or congressional reports for up to date discussion.</section>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>
